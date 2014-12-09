@@ -1,0 +1,17 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: 'dynamica-development'
+  pool: 5
+  host: localhost
+  username:
+  password:
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: 'dynamica-test'
+  pool: 5
+  host: localhost
+  username:
+  password:
