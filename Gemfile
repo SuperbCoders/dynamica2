@@ -38,4 +38,12 @@ gem 'spring',        group: :development
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'factory_girl_rails'
 end
+
+gem 'devise'
+gem 'cancancan'
+gem 'rabl'
+gem 'oj'
+gem 'workflow'
+gem 'rinruby'
