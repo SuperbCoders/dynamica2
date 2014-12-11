@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root to: 'welcome#index'
+
   # Mount Devise. But currently we do not need any of its routes
   devise_for :users, skip: [:sessions, :passwords, :registrations]
 
