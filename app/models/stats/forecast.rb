@@ -7,13 +7,13 @@ module Stats
 
       @period = options[:period].try(:to_sym) || :day
       @depth = options[:depth] || 5
-      @from = options[:from].try(:to_time) || Date.today.ago(1.year)
-      @to = options[:to].try(:to_time) || Date.today
+      @from = options[:from].try(:to_time).try(:utc) || Date.today.ago(1.year).utc
+      @to = options[:to].try(:to_time).try(:utc) || Date.today.utc
       @group_method = options[:group_method].try(:to_sym) || :sum
 
       @interval = case @period
-      when :day then -> (date) { date.to_time + 1.day }
-      when :month then -> (date) { date.to_time.next_month.beginning_of_month }
+      when :day then -> (date) { date.to_time.utc + 1.day }
+      when :month then -> (date) { date.to_time.utc.next_month.beginning_of_month }
       end
 
       @time_format = case @period
@@ -52,8 +52,8 @@ module Stats
       values = {}
       [prediction].flatten.each_with_index do |e, i|
         key = @to
-        (i + 1).times { key = @interval.call(key).strftime(@time_format) }
-        values[key] = e
+        (i + 1).times { key = @interval.call(key) }
+        values[key.strftime(@time_format)] = e
       end
       values
     end
@@ -68,7 +68,7 @@ module Stats
       # @return [Array<String>] list of dates
       def series_dates
         result = []
-        date = @from.to_time
+        date = @from.to_time.utc
         while date <= @to
           result << date.strftime(@time_format)
           date = @interval.call(date)
