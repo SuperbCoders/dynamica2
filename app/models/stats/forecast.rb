@@ -34,7 +34,7 @@ module Stats
     def series_with_timestamps
       result = {}
       series_dates.each do |date|
-        result[date] = series_quantities[date] || 0
+        result[date] = series_quantities[date].to_f || 0
       end
       result
     end
