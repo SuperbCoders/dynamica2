@@ -2,7 +2,7 @@ class Forecast < ActiveRecord::Base
   include Workflow
 
   PERIODS = %w(day week month)
-  GROUP_METHODS = %w(sum avg)
+  GROUP_METHODS = %w(sum average)
 
   belongs_to :item
 
