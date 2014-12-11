@@ -10,6 +10,7 @@ Rails.application.routes.draw do
         resources :values, only: :create
         resources :items, only: [] do
           resources :forecasts, only: [:index, :create]
+          delete :values, on: :member
         end
       end
       resources :forecasts, only: [] do

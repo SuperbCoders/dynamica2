@@ -10,6 +10,10 @@ class Ability
       user.project_ids.include?(project.id)
     end
 
+    can :manage, Item do |item|
+      user.project_ids.include?(item.project_id)
+    end
+
     can :manage, Value do |value|
       user.project_ids.include?(value.item.project_id)
     end
