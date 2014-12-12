@@ -13,22 +13,22 @@ module API
         authorize! :create_value, @project
         authorize! :create, Value
         find_or_create_item
-        @value = @item.values.build(value_params)
-        if @value.save
-          render status: :created
-        else
-          render json: @value.errors, status: :unprocessable_entity
+        @values = []
+        Value.transaction do
+          params[:values].each do |value_params|
+            @values << @item.values.build(value_params.permit(:value, :timestamp))
+            @values.last.save!
+          end
         end
+        render status: :created
+      rescue ActiveRecord::RecordInvalid
+        render json: @values.map(&:errors).reject(&:empty?), status: :unprocessable_entity
       end
 
       private
 
         def set_project
           @project = Project.find_by!(slug: params[:project_id])
-        end
-
-        def value_params
-          params.require(:value).permit(:value, :timestamp)
         end
 
     end

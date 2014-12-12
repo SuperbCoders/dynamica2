@@ -1,5 +1,2 @@
-object @value
+collection @values
 attributes :value, :timestamp
-child :item do
-  attributes :sku, :name
-end

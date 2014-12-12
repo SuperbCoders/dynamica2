@@ -22,6 +22,10 @@ RSpec.describe 'Values API' do
     end
 
     context 'valid data' do
+      let :values_data do
+        [{ value: 0, timestamp: '2014-01-01 00:00:00' },
+         { value: 2, timestamp: '2014-01-02 00:00:00' }]
+      end
       let(:headers) { user_headers(user, common_headers) }
       let(:action) { post url, data.to_json, headers }
 
@@ -33,7 +37,7 @@ RSpec.describe 'Values API' do
       end
 
       context 'use new SKU' do
-        let(:data) { { item: { sku: Time.now.to_i.to_s, name: 'New item' }, value: { value: 0, timestamp: '2014-01-01 00:00:00' } } }
+        let(:data) { { item: { sku: Time.now.to_i.to_s, name: 'New item' }, values: values_data } }
 
         it_behaves_like 'successfull request'
 
@@ -44,25 +48,20 @@ RSpec.describe 'Values API' do
           expect(item.name).to eq data[:item][:name]
         end
 
+        it 'creates new values' do
+          expect { action }.to change(Value, :count).by(2)
+        end
+
         it 'responds with JSON' do
-          expected_response = {
-            value: {
-              value: data[:value][:value].to_f,
-              timestamp: '2014-01-01T00:00:00.000Z',
-              item: {
-                sku: data[:item][:sku],
-                name: data[:item][:name]
-              }
-            }
-          }
+          expected_response = [{value: {value: 0.0, timestamp: "2014-01-01T00:00:00.000Z"}}, {value: {value: 2.0, timestamp: "2014-01-02T00:00:00.000Z"}}]
           action
-          expect(response.body).to eq(expected_response.to_json)
+          expect(json).to eq(expected_response)
         end
       end
 
       context 'use SKU of the existing item' do
         let!(:item) { FactoryGirl.create(:item, project: project) }
-        let(:data) { { item: { sku: item.sku, name: 'It should not change!' }, value: { value: 0, timestamp: '2014-01-01 00:00:00' } } }
+        let(:data) { { item: { sku: item.sku, name: 'It should not change!' }, values: values_data } }
 
         it_behaves_like 'successfull request'
 
@@ -70,19 +69,14 @@ RSpec.describe 'Values API' do
           expect { action }.not_to change(Item, :count)
         end
 
+        it 'creates new values' do
+          expect { action }.to change(Value, :count).by(2)
+        end
+
         it 'responds with JSON' do
-          expected_response = {
-            value: {
-              value: data[:value][:value].to_f,
-              timestamp: '2014-01-01T00:00:00.000Z',
-              item: {
-                sku: item.sku,
-                name: item.name
-              }
-            }
-          }
+          expected_response = [{value: {value: 0.0, timestamp: "2014-01-01T00:00:00.000Z"}}, {value: {value: 2.0, timestamp: "2014-01-02T00:00:00.000Z"}}]
           action
-          expect(response.body).to eq(expected_response.to_json)
+          expect(json).to eq(expected_response)
         end
       end
     end
@@ -90,7 +84,11 @@ RSpec.describe 'Values API' do
     context 'unprocessable data' do
       let(:headers) { user_headers(user, common_headers) }
       let(:action) { post url, data.to_json, headers }
-      let(:data) { { item: { sku: Time.now.to_i.to_s, name: 'New item' }, value: { value: nil } } }
+      let :values_data do
+        [{ value: 0, timestamp: '2014-01-01 00:00:00' },
+         { value: 2 }]
+      end
+      let(:data) { { item: { sku: Time.now.to_i.to_s, name: 'New item' }, values: values_data } }
 
       it 'responds with 422 code' do
         action
@@ -103,7 +101,7 @@ RSpec.describe 'Values API' do
 
       it 'renders errors list' do
         action
-        expected_response = { value: ["can't be blank"], timestamp: ["can't be blank"] }
+        expected_response = [{ timestamp: ["can't be blank"] }]
         expect(response.body).to eq(expected_response.to_json)
       end
     end
