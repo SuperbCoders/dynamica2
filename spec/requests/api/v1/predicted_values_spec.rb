@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'PredictedValues API' do
-  let(:forecast) { FactoryGirl.create(:finished_forecast) }
+  let(:forecast) { FactoryGirl.create(:finished_forecast, from: (Time.now - 2.days), to: Time.now) }
   let(:user) { FactoryGirl.create(:user, with_projects: [forecast.item.project]) }
   let(:other_user) { FactoryGirl.create(:user) }
 

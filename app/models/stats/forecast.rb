@@ -7,8 +7,8 @@ module Stats
 
       @period = options[:period].try(:to_sym) || :day
       @depth = options[:depth] || 5
-      @from = options[:from].try(:to_time).try(:utc) || Date.today.ago(1.year).utc
-      @to = options[:to].try(:to_time).try(:utc) || Date.today.utc
+      @from = options[:from].try(:to_time).try(:utc) || Date.today.ago(1.year).to_time.utc
+      @to = options[:to].try(:to_time).try(:utc) || Date.today.to_time.utc
       @group_method = options[:group_method].try(:to_sym) || :sum
 
       @interval = case @period

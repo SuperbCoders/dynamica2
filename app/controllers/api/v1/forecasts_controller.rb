@@ -33,7 +33,7 @@ module API
         end
 
         def forecast_params
-          params.require(:forecast).permit(:period, :depth, :group_method, :planned_at)
+          params.require(:forecast).permit(:period, :depth, :group_method, :from, :to, :planned_at)
         end
 
     end
