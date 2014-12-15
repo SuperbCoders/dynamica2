@@ -1,0 +1,9 @@
+= simple_form_for @project, html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+  - if @project.new_record?
+    = f.input :slug
+  = f.input :name
+
+  .form-group
+    .col-sm-offset-3.col-sm-9
+      => f.button :submit, @project.new_record? ? t('shared.create') : t('shared.save'), class: 'btn btn-primary'
+      => link_to t('shared.cancel'), projects_path, class: 'btn'

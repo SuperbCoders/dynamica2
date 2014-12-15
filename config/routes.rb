@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: 'customized_devise/registrations', sessions: 'customized_devise/sessions', passwords: 'customized_devise/passwords' }
 
-  resources :projects, only: :index
+  resources :projects
 
   namespace :api do
     namespace :v1 do

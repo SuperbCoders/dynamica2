@@ -1,4 +1,7 @@
 class Project < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :slug, use: :slugged
+
   has_many :permissions, dependent: :destroy
   has_many :users, through: :permissions
 

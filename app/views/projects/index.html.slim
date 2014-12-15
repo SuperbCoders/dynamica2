@@ -1,3 +1,17 @@
-h1= t '.title'
+h1
+  => t '.title'
+  => link_to t('.new'), new_project_path, class: 'btn btn-sm btn-success'
 
-p Soon
+table.table
+  - @projects.each do |project|
+    tr
+      td
+        =link_to project.name, project
+        br/
+        small= project.slug
+      td
+        - if can? :update, project
+          = link_to t('.edit'), edit_project_path(project), class: 'btn'
+        - if can? :destroy, project
+          = link_to project_path(project), method: :delete, class: 'btn btn-danger btn-sm', data: { confirm: t('.destroy-confirmation') } do
+            i.glyphicon.glyphicon-trash
