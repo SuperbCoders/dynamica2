@@ -45,8 +45,16 @@ en:
       forecasting: Forecasting
       manage: Manage
       api: API-access
+      invite_user: Invite user
+      save: Save
+      invite: Invite
+      invite_cancel: Cancel
     permission:
       destroy-confirmation: "Do you really want to revoke access for this user? This action is irreversible."
+
+  permission_mailer:
+    invite_user:
+      subject: "You were invited to the Dynamica project"
 
   shared:
     save: Save

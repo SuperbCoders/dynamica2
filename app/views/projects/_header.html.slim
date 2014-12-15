@@ -10,5 +10,6 @@ ul.nav.nav-pills
     = link_to t('projects.header.forecasts'), '#'
   li role='presentation'
     = link_to t('projects.header.items'), '#'
-  li role='presentation' class=('active' if params[:controller] == 'permissions' && params[:action] == 'index')
-    = link_to t('projects.header.team'), project_permissions_path(@project)
+  - if can? :manage, @project
+    li role='presentation' class=('active' if params[:controller] == 'permissions' && params[:action] == 'index')
+      = link_to t('projects.header.team'), project_permissions_path(@project)

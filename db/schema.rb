@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141215112533) do
+ActiveRecord::Schema.define(version: 20141215135826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,22 @@ ActiveRecord::Schema.define(version: 20141215112533) do
 
   add_index "items", ["project_id", "sku"], name: "index_items_on_project_id_and_sku", unique: true, using: :btree
   add_index "items", ["project_id"], name: "index_items_on_project_id", using: :btree
+
+  create_table "pending_permissions", force: true do |t|
+    t.string   "email"
+    t.integer  "project_id"
+    t.boolean  "manage"
+    t.boolean  "forecasting"
+    t.boolean  "read"
+    t.boolean  "api"
+    t.string   "token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pending_permissions", ["project_id", "email"], name: "index_pending_permissions_on_project_id_and_email", unique: true, using: :btree
+  add_index "pending_permissions", ["project_id"], name: "index_pending_permissions_on_project_id", using: :btree
+  add_index "pending_permissions", ["token"], name: "index_pending_permissions_on_token", unique: true, using: :btree
 
   create_table "permissions", force: true do |t|
     t.integer  "user_id"

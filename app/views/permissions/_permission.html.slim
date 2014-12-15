@@ -1,4 +1,4 @@
-tr.permission id="permission-#{permission.id}"
+tr.permission id="permission-#{permission.id}" data-id=permission.id
   td= permission.user.email
   td= '✓' if permission.read?
   td= '✓' if permission.forecasting?

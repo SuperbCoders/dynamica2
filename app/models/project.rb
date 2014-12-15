@@ -6,6 +6,7 @@ class Project < ActiveRecord::Base
   belongs_to :user
 
   has_many :permissions, dependent: :destroy
+  has_many :pending_permissions, dependent: :destroy
   has_many :users, through: :permissions
 
   has_many :items, dependent: :destroy

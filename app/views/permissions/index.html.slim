@@ -21,5 +21,21 @@ table.table.permissions
               td width='15%'= f.check_box :manage
               td width='15%'= f.check_box :api
               td width='10%'
-                => f.submit 'Save', class: 'btn btn-primary btn-sm'
+                => f.submit t('.save'), class: 'btn btn-primary btn-sm'
                 => link_to 'Cancel', '#', class: 'js-edit-permission-toggle btn btn-sm', data: { id: permission.id }
+  = render partial: 'permissions/pending_permission', collection: @pending_permissions, as: :permission
+  tr id="new-pending-permission"
+    td.new-permission-wrapper colspan=6
+      = link_to t('.invite_user'), '#', class: 'js-new-pending-permission-toggle js-invite btn btn-success btn-sm'
+      = form_for [@project, @pending_permission], remote: true do |f|
+        table width='100%'
+          tr
+            td width='30%'= f.email_field :email, placeholder: 'E-mail'
+            td width='15%'= f.check_box :read
+            td width='15%'= f.check_box :forecasting
+            td width='15%'= f.check_box :manage
+            td width='15%'= f.check_box :api
+            td width='10%'
+              => f.submit t('.invite'), class: 'btn btn-success btn-sm'
+              => link_to '#', class: 'js-new-pending-permission-toggle btn btn-sm' do
+                i.glyphicon.glyphicon-remove

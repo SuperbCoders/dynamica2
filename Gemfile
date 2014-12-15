@@ -50,6 +50,9 @@ group :development, :test do
   gem 'factory_girl_rails'
 end
 
+# Use letter opener for test emails
+gem 'letter_opener', group: :development
+
 gem 'devise'
 gem 'cancancan'
 gem 'rabl'

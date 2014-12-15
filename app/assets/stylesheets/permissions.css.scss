@@ -2,4 +2,13 @@ table.permissions {
   tr.edit-permission {
     display: none;
   }
+
+  tr#new-pending-permission {
+    form {
+      display: none;
+    }
+    input#pending_permission_email {
+      width: 90%;
+    }
+  }
 }
