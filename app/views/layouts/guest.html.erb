@@ -15,15 +15,15 @@
     </div>
 
     <ul class="nav navbar-nav navbar-right">
-      <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
+      <li><%= link_to 'Sign in', new_user_session_path %></li>
     </ul>
+
+    <%= link_to 'Sign up', new_user_registration_path, class: 'btn btn-info navbar-btn navbar-right' %>
 
   </div>
 </nav>
 
-<div class="container">
-  <%= yield %>
-</div>
+<%= yield %>
 
 </body>
 </html>

@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   root to: 'welcome#index'
 
-  # Mount Devise. But currently we do not need any of its routes
-  devise_for :users, skip: [:sessions, :passwords, :registrations]
+  devise_for :users, controllers: { registrations: 'customized_devise/registrations', sessions: 'customized_devise/sessions', passwords: 'customized_devise/passwords' }
+
+  resources :projects, only: :index
 
   namespace :api do
     namespace :v1 do
