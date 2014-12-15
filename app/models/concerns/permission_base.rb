@@ -62,6 +62,6 @@ module PermissionBase
 
     # Permission should give at least one action
     def validate_actions
-      errors.add(:base, :should_give_at_least_one_action) if !manage? && forecasting? && !read? && !api?
+      errors.add(:base, :should_give_at_least_one_action) if !manage? && !forecasting? && !read? && !api?
     end
 end

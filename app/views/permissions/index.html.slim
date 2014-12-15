@@ -30,7 +30,7 @@ table.table.permissions
       = form_for [@project, @pending_permission], remote: true do |f|
         table width='100%'
           tr
-            td width='30%'= f.email_field :email, placeholder: 'E-mail'
+            td width='30%'= f.email_field :email, class: 'form-control', placeholder: 'E-mail'
             td width='15%'= f.check_box :read
             td width='15%'= f.check_box :forecasting
             td width='15%'= f.check_box :manage

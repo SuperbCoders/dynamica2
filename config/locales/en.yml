@@ -7,10 +7,13 @@ en:
 
     errors:
       models:
-        permission:
+        permission: &permission
           attributes:
             base:
               owner_should_be_able_to_manage_project: Project owner should be able to manage project
+              should_give_at_least_one_action: There should be at least one permission
+        pending_permission:
+          <<: *permission
 
   projects:
     index:

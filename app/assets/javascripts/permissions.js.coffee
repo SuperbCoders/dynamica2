@@ -44,14 +44,16 @@ $ ->
       clearNewPendingPermissionForm()
 
     $('body').on 'ajax:error', 'form#new_pending_permission', (event, error, status) ->
-      alert error.responseJSON.base.join(',')
+      errors = error.responseJSON
+      $('#pending_permission_email').closest('form').addClass('has-error')
+      alert(errors.base.join(',')) unless errors.base is undefined
 
     $('body').on 'ajax:success', '.js-destroy-pending-permission', (event, data, status) ->
       $(this).closest('tr.pending-permission').hide()
 
     clearNewPendingPermissionForm = ->
       $form = $('tr#new-pending-permission').find('form')
-      $form.find('#pending_permission_email').val('')
+      $form.find('#pending_permission_email').val('').closest('form').removeClass('has-error')
       $form.find('#pending_permission_read').prop('checked', true)
       $form.find('#pending_permission_forecasting').prop('checked', false)
       $form.find('#pending_permission_manage').prop('checked', false)
