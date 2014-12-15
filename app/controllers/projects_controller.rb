@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
     authorize! :create, Project
     @project = current_user.projects.build(project_create_params)
     if @project.save
-      current_user.permissions.create!(project: @project)
+      current_user.permissions.create!(project: @project, all: true)
       redirect_to projects_url, notice: I18n.t('projects.create.flash.success')
     else
       render :new

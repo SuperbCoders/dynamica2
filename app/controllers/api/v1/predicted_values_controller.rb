@@ -2,10 +2,11 @@ module API
   module V1
     class PredictedValuesController < API::APIController
       before_action :set_forecast
+      before_action :set_project
 
       # POST /api/v1/forecasts/:forecast_id/predicted_values
       def index
-        authorize! :read, @forecast
+        authorize! :api_access, @project
         @values = @forecast.calculator.series_with_timestamps.map do |key, value| 
           { timestamp: key, value: value, predicted: false }
         end
@@ -22,6 +23,10 @@ module API
 
         def set_forecast
           @forecast = Forecast.find(params[:forecast_id])
+        end
+
+        def set_project
+          @project = @forecast.item.project
         end
 
     end

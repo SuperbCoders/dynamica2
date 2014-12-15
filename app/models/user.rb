@@ -7,6 +7,9 @@ class User < ActiveRecord::Base
   has_many :permissions, dependent: :restrict_with_error
   has_many :projects, through: :permissions
 
+  # @return [Array<Project>] project that were created by the user
+  has_many :own_projects, class_name: 'Project', dependent: :restrict_with_error
+
   validates :api_token, uniqueness: true, if: :api_token
 
   before_create :set_api_token

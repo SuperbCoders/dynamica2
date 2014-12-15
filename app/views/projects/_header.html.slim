@@ -1,0 +1,14 @@
+.page-header
+  h1
+    => @project.name
+    small=> @project.slug
+
+ul.nav.nav-pills
+  li role='presentation' class=('active' if params[:controller] == 'projects' && params[:action] == 'show')
+    = link_to t('projects.header.overview'), project_path(@project)
+  li role='presentation'
+    = link_to t('projects.header.forecasts'), '#'
+  li role='presentation'
+    = link_to t('projects.header.items'), '#'
+  li role='presentation' class=('active' if params[:controller] == 'permissions' && params[:action] == 'index')
+    = link_to t('projects.header.team'), project_permissions_path(@project)

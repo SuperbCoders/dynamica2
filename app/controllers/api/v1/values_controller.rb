@@ -10,8 +10,7 @@ module API
       #   It could be a new item or the existing one
       # @required value [Float] value that should be stored
       def create
-        authorize! :create_value, @project
-        authorize! :create, Value
+        authorize! :api_access, @project
         find_or_create_item
         @values = []
         Value.transaction do

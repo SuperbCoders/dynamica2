@@ -5,12 +5,24 @@ en:
         slug: Project ID
         name: Name
 
+    errors:
+      models:
+        permission:
+          attributes:
+            base:
+              owner_should_be_able_to_manage_project: Project owner should be able to manage project
+
   projects:
     index:
       title: My projects
       new: New project
       edit: Edit
-      destroy-confirmation: Do you really want to destroy this project? This action is irreversible.
+      destroy-confirmation: "Do you really want to destroy this project? This action is irreversible."
+    header:
+      overview: Overview
+      forecasts: Forecasts
+      items: Items
+      team: Team
     new:
       title: New project
     create:
@@ -25,6 +37,16 @@ en:
       flash:
         success: Project was destroyed
         fail: Project could not be destroyed
+
+  permissions:
+    index:
+      user: User
+      read: Read
+      forecasting: Forecasting
+      manage: Manage
+      api: API-access
+    permission:
+      destroy-confirmation: "Do you really want to revoke access for this user? This action is irreversible."
 
   shared:
     save: Save

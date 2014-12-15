@@ -6,14 +6,13 @@ module API
 
       # GET /api/v1/projects/:project_id/items/:item_id/forecasts
       def index
-        authorize! :read_forecasts, @project
+        authorize! :api_access, @project
         @forecasts = @item.forecasts.order(created_at: :asc)
       end
 
       # POST /api/v1/projects/:project_id/items/:item_id/forecasts
       def create
-        authorize! :create_forecast, @project
-        authorize! :create, Forecast
+        authorize! :api_access, @project
         @forecast = @item.forecasts.build(forecast_params)
         if @forecast.save
           render status: :created

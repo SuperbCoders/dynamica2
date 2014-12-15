@@ -12,7 +12,7 @@ FactoryGirl.define do
 
     after(:create) do |user, evaluator|
       evaluator.with_projects.each do |project|
-        user.permissions.create!(project: project)
+        user.permissions.create!(project: project, all: true)
       end
     end
   end

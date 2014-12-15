@@ -6,7 +6,7 @@ module API
 
       # DELETE /api/v1/projects/:project_id/items/:item_id/values
       def values
-        authorize! :destroy_values, @item
+        authorize! :api_access, @project
         @item.values.destroy_all
         head 204
       end

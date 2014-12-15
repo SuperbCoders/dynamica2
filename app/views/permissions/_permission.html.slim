@@ -1,0 +1,13 @@
+tr.permission id="permission-#{permission.id}"
+  td= permission.user.email
+  td= '✓' if permission.read?
+  td= '✓' if permission.forecasting?
+  td= '✓' if permission.manage?
+  td= '✓' if permission.api?
+  td
+    - if can? :update, permission
+      => link_to '#', class: 'js-edit-permission-toggle', data: { id: permission.id } do
+        i.glyphicon.glyphicon-cog
+    - if can?(:destroy, permission) && permission.user_id != permission.project.user_id
+      => link_to permission_path(permission), class: 'js-destroy-permission', method: :delete, remote: true, data: { id: permission.id, confirm: t('.destroy-confirmation') } do
+        i.glyphicon.glyphicon-trash

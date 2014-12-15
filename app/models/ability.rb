@@ -11,16 +11,12 @@ class Ability
         user.project_ids.include?(project.id)
       end
 
-      can :manage, Item do |item|
-        user.project_ids.include?(item.project_id)
+      can :api_access, Project do |project|
+        user.permissions.where(api: true).map(&:project_id).include?(project.id)
       end
 
-      can :manage, Value do |value|
-        user.project_ids.include?(value.item.project_id)
-      end
-
-      can :manage, Forecast do |forecast|
-        user.project_ids.include?(forecast.item.project_id)
+      can :manage, Permission do |permission|
+        user.permissions.where(manage: true).map(&:project_id).include?(permission.project_id)
       end
     end
   end
