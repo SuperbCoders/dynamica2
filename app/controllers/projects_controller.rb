@@ -15,13 +15,13 @@ class ProjectsController < ApplicationController
   # GET /projects/new
   def new
     authorize! :create, Project
-    @project = current_user.projects.build
+    @project = current_user.own_projects.build
   end
 
   # POST /projects
   def create
     authorize! :create, Project
-    @project = current_user.projects.build(project_create_params)
+    @project = current_user.own_projects.build(project_create_params)
     if @project.save
       current_user.permissions.create!(project: @project, all: true)
       redirect_to projects_url, notice: I18n.t('projects.create.flash.success')
