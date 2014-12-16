@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :projects do
     resources :permissions, only: [:index, :update, :destroy], shallow: true, on: :member
     resources :pending_permissions, only: [:create, :destroy], on: :member
+    resources :items, only: [:index, :create, :destroy], on: :member
   end
 
   resources :permissions, only: [] do

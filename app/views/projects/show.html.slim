@@ -1,3 +1,4 @@
 = render 'header'
 
-p Soon
+- if @project.items.empty?
+  .well=t('.no_items', api_docs: link_to(t('.no_items_api_docs'), '#'), upload_data: link_to(t('.no_items_upload_data'), project_items_path(@project))).html_safe

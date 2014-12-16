@@ -1,0 +1,29 @@
+= render partial: 'projects/header'
+
+p Export your data to CSV file (there is <a href="#">an example</a>) and choose it on your computer to upload.
+p One file for one item. We will build graph for each item and summary graph.
+
+table.table.items
+  - @items.each do |item|
+    tr.item id="item-#{item.id}"
+      td width='30%'= item.name
+      td width='30%'= item.sku
+      td width='20%'
+      td
+  tr.new-item
+    td colspan=3
+      .button
+        = link_to 'Add an item', '#', class: 'js-new-item-toggle btn btn-success btn-sm'
+      .form
+        = form_for [@project, Item.new] do |f|
+          table width='100%'
+            tr
+              td width='30%'= f.text_field :name, class: 'form-control', placeholder: 'Name'
+              td width='30%'= f.text_field :sku, class: 'form-control', placeholder: 'SKU (unique identifier)'
+              td.text-center width='20%'
+                | Choose file on <a href="#">your computer</a>
+                br/
+                | or drag here
+              td
+                = f.submit 'Add', class: 'btn btn-success btn-sm'
+                = link_to 'Cancel', '#', class: 'js-new-item-toggle btn'

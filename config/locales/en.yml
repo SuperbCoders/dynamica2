@@ -16,16 +16,20 @@ en:
           <<: *permission
 
   projects:
-    index:
-      title: My projects
-      new: New project
-      edit: Edit
-      destroy-confirmation: "Do you really want to destroy this project? This action is irreversible."
     header:
       overview: Overview
       forecasts: Forecasts
       items: Items
       team: Team
+    index:
+      title: My projects
+      new: New project
+      edit: Edit
+      destroy-confirmation: "Do you really want to destroy this project? This action is irreversible."
+    show:
+      no_items: 'There is no time series data yet. Check out %{api_docs} or %{upload_data} to start.'
+      no_items_api_docs: API documentation
+      no_items_upload_data: upload your data
     new:
       title: New project
     create:
