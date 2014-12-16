@@ -33,7 +33,7 @@ module PermissionBase
     validate :validate_actions
 
     before_validation :set_nested_actions
-    before_create :check_all_flag
+    before_validation :check_all_flag
   end
 
   private
