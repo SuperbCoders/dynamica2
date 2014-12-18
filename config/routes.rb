@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :permissions, only: [:index, :update, :destroy], shallow: true, on: :member
     resources :pending_permissions, only: [:create, :destroy], on: :member
     resources :items, only: [:index, :create, :destroy], on: :member
+    resources :attachments, only: :create
   end
 
   resources :permissions, only: [] do

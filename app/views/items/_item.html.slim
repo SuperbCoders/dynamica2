@@ -1,0 +1,15 @@
+tr.item id="item-#{item.id}"
+  td width='30%'
+    - if item.with_parsing_errors
+      a.warning href="#" data-toggle="tooltip" data-placement="top" title=t('.parsing_errors_warning')
+        i.glyphicon.glyphicon-warning-sign>
+    = item.name
+  td width='30%'= item.sku
+  td width='20%'
+    = link_to project_item_path(@project, item), class: 'js-destroy-item', method: :delete, remote: true, data: { confirm: t('.destroy_confirmation') } do
+      i.glyphicon.glyphicon-trash
+  td
+
+- if item.with_parsing_errors
+  coffee:
+     $('[data-toggle="tooltip"]').tooltip()

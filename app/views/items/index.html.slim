@@ -4,26 +4,27 @@ p Export your data to CSV file (there is <a href="#">an example</a>) and choose 
 p One file for one item. We will build graph for each item and summary graph.
 
 table.table.items
-  - @items.each do |item|
-    tr.item id="item-#{item.id}"
-      td width='30%'= item.name
-      td width='30%'= item.sku
-      td width='20%'
-      td
+  = render @items
   tr.new-item
     td colspan=4
       .button
         = link_to 'Add an item', '#', class: 'js-new-item-toggle btn btn-success btn-sm'
       .form
-        = form_for [@project, Item.new] do |f|
+        = form_for [@project, Item.new], remote: true do |f|
           table width='100%'
             tr
               td width='30%'= f.text_field :name, class: 'form-control', placeholder: 'Name'
               td width='30%'= f.text_field :sku, class: 'form-control', placeholder: 'SKU (unique identifier)'
-              td.text-center width='20%'
-                | Choose file on <a href="#">your computer</a>
-                br/
-                | or drag here
+              td.file.text-center width='20%'
+                .select
+                  = t('.choose_file').html_safe
+                  = f.hidden_field :attachment_id
+                .loading
+                  .progress
+                    .progress-bar aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" role="progressbar" style=("width: 0%;")
+                .done OK
               td
                 = f.submit 'Add', class: 'btn btn-success btn-sm'
                 = link_to 'Cancel', '#', class: 'js-new-item-toggle btn'
+        = form_for [@project, Attachment.new] do |f|
+          = f.file_field :file, style: 'visibility:hidden;'

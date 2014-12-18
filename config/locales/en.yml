@@ -59,6 +59,13 @@ en:
     permission:
       destroy-confirmation: "Do you really want to revoke access for this user? This action is irreversible."
 
+  items:
+    item:
+      parsing_errors_warning: "There were errors during CSV file parsing. Please, check the results"
+      destroy_confirmation: "Do you really want to destroy this item? This action is irreversible."
+    index:
+      choose_file: 'Choose file on <a class="js-choose-file" href="#">your computer</a><br />or drag here'
+
   permission_mailer:
     invite_user:
       subject: "You were invited to the Dynamica project"

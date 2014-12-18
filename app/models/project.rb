@@ -12,6 +12,8 @@ class Project < ActiveRecord::Base
   has_many :items, dependent: :destroy
   has_many :forecasts, through: :items
 
+  has_many :attachments, dependent: :destroy
+
   validates :user, presence: true
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[-_A-Za-z0-9]+\z/ }
