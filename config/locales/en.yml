@@ -66,6 +66,19 @@ en:
     index:
       choose_file: 'Choose file on <a class="js-choose-file" href="#">your computer</a><br />or drag here'
 
+  forecasts:
+    index:
+      planned_at: Date
+      workflow_state: Status
+      show: Show
+
+  forecast:
+    workflow_state:
+      planned: Planned
+      pending: Pending
+      started: Started
+      finished: Finished
+
   permission_mailer:
     invite_user:
       subject: "You were invited to the Dynamica project"

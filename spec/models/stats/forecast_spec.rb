@@ -33,18 +33,21 @@ RSpec.describe Stats::Forecast, type: :model do
 
   describe '#series_dates' do
     let(:result) { subject.send(:series_dates) }
+    let(:mapped_result) do
+      result.map { |k| k[:timestamp] }
+    end
 
     context 'by days' do
       subject { Stats::Forecast.new(item, period: :day, from: Time.parse('01-01-2014 00:00:00 UTC'), to: Time.parse('05-01-2014 00:00:00 UTC')) }
       it 'generates list of dates for time series' do
-        expect(result).to eq ['2014-01-01', '2014-01-02', '2014-01-03', '2014-01-04', '2014-01-05']
+        expect(mapped_result).to eq ['2014-01-01', '2014-01-02', '2014-01-03', '2014-01-04', '2014-01-05']
       end
     end
 
     context 'by months' do
       subject { Stats::Forecast.new(item, period: :month, from: Time.parse('01-01-2014 00:00:00 UTC'), to: Time.parse('01-03-2014 00:00:00 UTC')) }
       it 'generates list of dates for time series' do
-        expect(result).to eq ['2014-01', '2014-02', '2014-03']
+        expect(mapped_result).to eq ['2014-01', '2014-02', '2014-03']
       end
     end
   end
@@ -71,20 +74,25 @@ RSpec.describe Stats::Forecast, type: :model do
 
   describe '#calculate' do
     let(:result) { subject.send(:calculate) }
+    let(:mapped_result) do
+      new_result = {}
+      result.each { |k, v| new_result[k[:timestamp]] = v }
+      new_result
+    end
 
     context 'by days' do
-      subject { Stats::Forecast.new(item, period: :day, depth: 3, from: Time.parse('01-01-2014 00:00:00 UTC'), to: Time.parse('05-01-2014 00:00:00 UTC')) }
+      subject { Stats::Forecast.new(item, period: :day, depth: 3, from: Time.parse('01-01-2014 00:00:00 UTC'), to: Time.parse('05-01-2014 23:59:59 UTC')) }
       before { StatsHelper.generate_values(5, item: item) }
       it 'generates list of predictions' do
-        expect(result).to eq({'2014-01-06' => 6.0, '2014-01-07' => 7.0, '2014-01-08' => 8.0})
+        expect(mapped_result).to eq({'2014-01-06' => 6.0, '2014-01-07' => 7.0, '2014-01-08' => 8.0})
       end
     end
 
     context 'by month' do
-      subject { Stats::Forecast.new(item, period: :month, depth: 1, from: Time.parse('01-01-2014 00:00:00 UTC'), to: Time.parse('01-03-2014 00:00:00 UTC')) }
+      subject { Stats::Forecast.new(item, period: :month, depth: 1, from: Time.parse('01-01-2014 00:00:00 UTC'), to: Time.parse('31-03-2014 00:00:00 UTC')) }
       before { StatsHelper.generate_values(5, item: item) }
       it 'generates list of predictions' do
-        expect(result).to eq({'2014-04' => 6.123380718525147})
+        expect(mapped_result).to eq({'2014-04' => 6.123380718525147})
       end
     end
   end

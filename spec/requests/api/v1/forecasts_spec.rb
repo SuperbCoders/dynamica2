@@ -27,16 +27,16 @@ RSpec.describe 'Forecasts API' do
     it_behaves_like 'non authorized user'
     it_behaves_like 'user without permission'
 
-    let(:url) { "/api/v1/projects/#{project.slug}/items/#{item.sku}/forecasts" }
+    let(:url) { "/api/v1/projects/#{project.slug}/forecasts" }
 
     context 'authorized user' do
       let(:headers) { user_headers(user, common_headers) }
       let(:action) { get url, data.to_json, headers }
-      let(:another_item) { FactoryGirl.create(:item, project: project) }
+      let(:another_project) { FactoryGirl.create(:project) }
 
-      let!(:forecast_1) { FactoryGirl.create(:forecast, item: item) }
-      let!(:forecast_2) { FactoryGirl.create(:finished_forecast, item: item) }
-      let!(:forecast_3) { FactoryGirl.create(:forecast, item: another_item) }
+      let!(:forecast_1) { FactoryGirl.create(:forecast, project: project) }
+      let!(:forecast_2) { FactoryGirl.create(:finished_forecast, project: project) }
+      let!(:forecast_3) { FactoryGirl.create(:forecast, project: another_project) }
 
       context 'without params' do
         let(:data) { {} }
@@ -56,7 +56,7 @@ RSpec.describe 'Forecasts API' do
     it_behaves_like 'non authorized user'
     it_behaves_like 'user without permission'
 
-    let(:url) { "/api/v1/projects/#{project.slug}/items/#{item.sku}/forecasts" }
+    let(:url) { "/api/v1/projects/#{project.slug}/forecasts" }
 
     context 'authorized user' do
       let(:headers) { user_headers(user, common_headers) }

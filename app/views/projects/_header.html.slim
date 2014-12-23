@@ -8,8 +8,8 @@ ul.nav.nav-pills
     = link_to t('projects.header.overview'), project_path(@project)
   li role='presentation' class=('active' if params[:controller] == 'items')
     = link_to t('projects.header.items'), project_items_path(@project)
-  li role='presentation'
-    = link_to t('projects.header.forecasts'), '#'
+  li role='presentation' class=('active' if params[:controller] == 'forecasts')
+    = link_to t('projects.header.forecasts'), project_forecasts_path(@project)
   - if can? :manage, @project
     li role='presentation' class=('active' if params[:controller] == 'permissions' && params[:action] == 'index')
       = link_to t('projects.header.team'), project_permissions_path(@project)

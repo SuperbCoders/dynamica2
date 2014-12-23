@@ -3,20 +3,16 @@ module API
     class PredictedValuesController < API::APIController
       before_action :set_forecast
       before_action :set_project
+      before_action :set_items
 
       # POST /api/v1/forecasts/:forecast_id/predicted_values
       def index
         authorize! :api_access, @project
-        @values = @forecast.calculator.series_with_timestamps.map do |key, value| 
-          { timestamp: key, value: value, predicted: false }
+        @predictions = @forecast.predicted_values.where(forecast_lines: { item_id: @item_ids }).order(timestamp: :asc).includes(:forecast_line).group_by do |value|
+          value.forecast_line.item
+        end.map do |item, values|
+          Prediction.new(item: item, values: values)
         end
-        @forecast.predicted_values.each do |predicted_value|
-          @values << { timestamp: predicted_value.timestamp, value: predicted_value.value, predicted: true }
-        end
-        @values.sort! do |a, b|
-          a[:timestamp] <=> b[:timestamp]
-        end
-        render json: @values
       end
 
       private
@@ -26,7 +22,14 @@ module API
         end
 
         def set_project
-          @project = @forecast.item.project
+          @project = @forecast.project
+        end
+
+        def set_items
+          item_skus = [params[:items]].flatten.select(&:present?)
+          @items = @project.items
+          @items = @items.where(sku: item_skus) if item_skus.any?
+          @item_ids = @items.pluck(:id)
         end
 
     end

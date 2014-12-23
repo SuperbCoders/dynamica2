@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :permissions, only: [:index, :update, :destroy], shallow: true, on: :member
     resources :pending_permissions, only: [:create, :destroy], on: :member
     resources :items, only: [:index, :create, :destroy], on: :member
+    resources :forecasts, only: [:index, :show]
     resources :attachments, only: :create
   end
 
@@ -17,9 +18,14 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :projects, only: [] do
+        resources :forecasts, only: [:index, :create] do
+          resources :predicted_values, only: :index
+        end
+
+
+
         resources :values, only: :create
         resources :items, only: [] do
-          resources :forecasts, only: [:index, :create]
           delete :values, on: :member
         end
       end

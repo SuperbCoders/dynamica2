@@ -34,7 +34,7 @@ module Stats
     def series_with_timestamps
       result = {}
       series_dates.each do |date|
-        result[date] = series_quantities[date].to_f || 0
+        result[date] = series_quantities[date[:timestamp]].to_f || 0
       end
       result
     end
@@ -53,7 +53,7 @@ module Stats
       [prediction].flatten.each_with_index do |e, i|
         key = @to
         (i + 1).times { key = @interval.call(key) }
-        values[key.strftime(@time_format)] = e
+        values[to_value(key)] = e
       end
       values
     end
@@ -70,10 +70,20 @@ module Stats
         result = []
         date = @from.to_time.utc
         while date <= @to
-          result << date.strftime(@time_format)
+          result << to_value(date)
           date = @interval.call(date)
         end
         result
+      end
+
+      # Converts date to hash with :from, :to and :timestamp values
+      # @param date [Time] orignial date
+      # @return [Hash] { from: [Time], to: [Time], timestamp: [String] }
+      def to_value(date)
+        case @period
+        when :day then { from: date.beginning_of_day.utc, to: date.end_of_day.utc, timestamp: date.strftime('%Y-%m-%d') }
+        when :month then { from: date.beginning_of_month.utc, to: date.end_of_month.utc, timestamp: date.strftime('%Y-%m') }
+        end
       end
 
   end

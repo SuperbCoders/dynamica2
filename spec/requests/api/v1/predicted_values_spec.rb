@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe 'PredictedValues API' do
-  let(:forecast) { FactoryGirl.create(:finished_forecast, from: (Time.now - 2.days), to: Time.now) }
-  let(:user) { FactoryGirl.create(:user, with_projects: [forecast.item.project]) }
+  let(:project) { FactoryGirl.create(:project) }
+  let(:item) { FactoryGirl.create(:item, project: project) }
+  let(:forecast) { FactoryGirl.create(:finished_forecast, project: project, item: item, from: (Time.now - 2.days), to: Time.now) }
+  let(:user) { FactoryGirl.create(:user, with_projects: [project]) }
   let(:other_user) { FactoryGirl.create(:user) }
 
   let(:common_headers) { { 'CONTENT_TYPE' => Mime::JSON.to_s } }
@@ -33,16 +35,11 @@ RSpec.describe 'PredictedValues API' do
       let(:action) { get url, data.to_json, headers }
       let(:data) { {} }
 
-      before do
-        3.times do |i|
-          FactoryGirl.create(:value, item: forecast.item, timestamp: (Time.now - i.days).strftime('%Y-%m-%d'), value: 3 - i)
-        end
-      end
-
       it 'returns series of original and predicted values' do
         action
         expect(response.status).to eq(200)
-        expect(json.size).to eq(8)
+        expect(json.size).to eq(1)
+        expect(json[0][:prediction][:predicted_values].size).to eq(5)
       end
     end
   end

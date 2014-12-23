@@ -4,11 +4,12 @@ class Forecast < ActiveRecord::Base
   PERIODS = %w(day week month)
   GROUP_METHODS = %w(sum average)
 
-  belongs_to :item
+  belongs_to :project
 
-  has_many :predicted_values, dependent: :destroy
+  has_many :forecast_lines, dependent: :destroy
+  has_many :predicted_values, through: :forecast_lines
 
-  validates :item, presence: true
+  validates :project, presence: true
   validates :period, presence: true, inclusion: { in: PERIODS }
   validates :group_method, presence: true, inclusion: { in: GROUP_METHODS }
   validates :depth, numericality: { only_integer: true, greater_than: 0 }
@@ -36,19 +37,16 @@ class Forecast < ActiveRecord::Base
   end
 
   def self.start_planned
-    @forecasts = Forecast.where(workflow_state: %w(planned)).where('planned_at <= ?', Time.now)
-    @forecasts.find_each(batch_size: 10) do |forecast|
+    forecasts = Forecast.where(workflow_state: %w(planned)).where('planned_at <= ?', Time.now)
+    forecasts.find_each(batch_size: 10) do |forecast|
       forecast.start!
     end
-  end
-
-  def calculator
-    Stats::Forecast.new(item, period: period, depth: depth, from: from, to: to, group_method: group_method)
   end
 
   private
 
     def start
+      setup_forecast_lines
       self.started_at = Time.now
       save!
     end
@@ -59,14 +57,19 @@ class Forecast < ActiveRecord::Base
     end
 
     def calculate
-      calculator.calculate.each do |timestamp, value|
-        predicted_values.where(timestamp: timestamp).first_or_initialize(value: value).save!
+      forecast_lines.find_each(batch_size: 10) do |forecast|
+        forecast.calculate
       end
       finish!
     end
 
     def set_default_values
-      self.from ||= item.values.order(timestamp: :asc).limit(1).pluck(:timestamp).first
-      self.to ||= item.values.order(timestamp: :desc).limit(1).pluck(:timestamp).first
+      self.planned_at = Time.now
+    end
+
+    def setup_forecast_lines
+      project.items.each do |item|
+        forecast_lines.create(item: item)
+      end
     end
 end

@@ -1,7 +1,13 @@
 class PredictedValue < ActiveRecord::Base
-  belongs_to :forecast
+  belongs_to :forecast_line
 
-  validates :forecast, presence: true
+  validates :forecast_line, presence: true
   validates :value, presence: true
-  validates :timestamp, presence: true, uniqueness: { scope: :forecast_id }
+  validates :timestamp, presence: true, uniqueness: { scope: :forecast_line_id }
+  validates :from, presence: true
+  validates :to, presence: true
+
+  def to_flot
+    [from.to_i * 1000, value]
+  end
 end

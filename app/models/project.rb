@@ -10,7 +10,7 @@ class Project < ActiveRecord::Base
   has_many :users, through: :permissions
 
   has_many :items, dependent: :destroy
-  has_many :forecasts, through: :items
+  has_many :forecasts, dependent: :destroy
 
   has_many :attachments, dependent: :destroy
 

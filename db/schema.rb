@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141216131944) do
+ActiveRecord::Schema.define(version: 20141222094226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,8 +25,18 @@ ActiveRecord::Schema.define(version: 20141216131944) do
 
   add_index "attachments", ["project_id"], name: "index_attachments_on_project_id", using: :btree
 
-  create_table "forecasts", force: true do |t|
+  create_table "forecast_lines", force: true do |t|
+    t.integer  "forecast_id"
     t.integer  "item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "forecast_lines", ["forecast_id", "item_id"], name: "index_forecast_lines_on_forecast_id_and_item_id", unique: true, using: :btree
+  add_index "forecast_lines", ["forecast_id"], name: "index_forecast_lines_on_forecast_id", using: :btree
+  add_index "forecast_lines", ["item_id"], name: "index_forecast_lines_on_item_id", using: :btree
+
+  create_table "forecasts", force: true do |t|
     t.boolean  "scheduled",      default: false
     t.string   "period"
     t.integer  "depth"
@@ -39,9 +49,10 @@ ActiveRecord::Schema.define(version: 20141216131944) do
     t.datetime "updated_at"
     t.datetime "from"
     t.datetime "to"
+    t.integer  "project_id"
   end
 
-  add_index "forecasts", ["item_id"], name: "index_forecasts_on_item_id", using: :btree
+  add_index "forecasts", ["project_id"], name: "index_forecasts_on_project_id", using: :btree
 
   create_table "items", force: true do |t|
     t.integer  "project_id"
@@ -86,15 +97,18 @@ ActiveRecord::Schema.define(version: 20141216131944) do
   add_index "permissions", ["user_id"], name: "index_permissions_on_user_id", using: :btree
 
   create_table "predicted_values", force: true do |t|
-    t.integer  "forecast_id"
+    t.integer  "forecast_line_id"
     t.string   "timestamp"
     t.float    "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "predicted",        default: false
+    t.datetime "from"
+    t.datetime "to"
   end
 
-  add_index "predicted_values", ["forecast_id", "timestamp"], name: "index_predicted_values_on_forecast_id_and_timestamp", unique: true, using: :btree
-  add_index "predicted_values", ["forecast_id"], name: "index_predicted_values_on_forecast_id", using: :btree
+  add_index "predicted_values", ["forecast_line_id", "timestamp"], name: "index_predicted_values_on_forecast_line_id_and_timestamp", unique: true, using: :btree
+  add_index "predicted_values", ["forecast_line_id"], name: "index_predicted_values_on_forecast_line_id", using: :btree
 
   create_table "projects", force: true do |t|
     t.string   "slug"
