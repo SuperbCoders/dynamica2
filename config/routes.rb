@@ -22,8 +22,6 @@ Rails.application.routes.draw do
           resources :predicted_values, only: :index
         end
 
-
-
         resources :values, only: :create
         resources :items, only: [] do
           delete :values, on: :member

@@ -16,4 +16,5 @@
 //= require bootstrap/tooltip
 //= require jquery.flot
 //= require jquery.flot.time
+//= require jquery.flot.tooltip
 //= require_tree .
