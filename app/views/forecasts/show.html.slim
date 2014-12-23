@@ -9,7 +9,7 @@ h1= @project.name
   .forecast-chart id="forecast-chart-#{forecast_line.id}" style="height:240px"
   
   javascript:
-    var data#{forecast_line.id} = #{forecast_line.predicted_values.map(&:to_flot)};
+    var data#{forecast_line.id} = #{forecast_line.predicted_values.order(from: :asc).map(&:to_flot)};
     $.plot("#forecast-chart-#{forecast_line.id}", [data#{forecast_line.id}], {
       series: {
         lines: {
