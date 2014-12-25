@@ -7,6 +7,8 @@ class PredictedValue < ActiveRecord::Base
   validates :from, presence: true
   validates :to, presence: true
 
+  default_scope -> { order(from: :asc) }
+
   def to_flot
     [from.to_i * 1000, value]
   end
