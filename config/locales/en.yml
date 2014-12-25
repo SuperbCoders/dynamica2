@@ -71,6 +71,8 @@ en:
       planned_at: Date
       workflow_state: Status
       show: Show
+    show:
+      summary: Summary
 
   forecast:
     workflow_state:

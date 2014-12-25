@@ -4,7 +4,10 @@
 h1= @project.name
 
 - @forecast_lines.each do |forecast_line|
-  h2= forecast_line.item.name
+  - if forecast_line.summary?
+    h2=t '.summary'
+  - else
+    h2= forecast_line.item.name
 
   .forecast-chart id="forecast-chart-#{forecast_line.id}" style="height:240px"
   

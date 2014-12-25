@@ -66,7 +66,7 @@ class Forecast < ActiveRecord::Base
 
     def calculate_summary
       summary = forecast_lines.create!(summary: true)
-      predicted_values.unscoped.group(:timestamp).sum(:value).each do |timestamp, value|
+      predicted_values.group(:timestamp).sum(:value).each do |timestamp, value|
         same_value = predicted_values.find_by(timestamp: timestamp)
         summary.predicted_values.create!(timestamp: timestamp, from: same_value.from, to: same_value.to, value: value, predicted: same_value.predicted?)
       end
