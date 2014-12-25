@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :projects, only: [] do
         resources :forecasts, only: [:index, :create] do
-          resources :predicted_values, only: :index
+          resources :forecast_lines, only: :index, path: :lines
         end
 
         resources :values, only: :create
@@ -28,7 +28,7 @@ Rails.application.routes.draw do
         end
       end
       resources :forecasts, only: [] do
-        resources :predicted_values, only: :index
+        resources :forecast_lines, only: :index, path: :lines
       end
     end
   end

@@ -5,8 +5,8 @@ class ForecastLine < ActiveRecord::Base
   has_many :predicted_values, dependent: :destroy
 
   validates :forecast, presence: true
-  validates :item, presence: true
-  validates :item_id, uniqueness: { scope: :forecast_id }
+  validates :item, presence: true, unless: :summary?
+  validates :item_id, uniqueness: { scope: :forecast_id }, unless: :summary?
 
   delegate :period, :depth, :from, :to, :group_method, to: :forecast
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141222094226) do
+ActiveRecord::Schema.define(version: 20141224133603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20141222094226) do
     t.integer  "item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "summary",     default: false
   end
 
   add_index "forecast_lines", ["forecast_id", "item_id"], name: "index_forecast_lines_on_forecast_id_and_item_id", unique: true, using: :btree

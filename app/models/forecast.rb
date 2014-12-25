@@ -60,7 +60,16 @@ class Forecast < ActiveRecord::Base
       forecast_lines.find_each(batch_size: 10) do |forecast|
         forecast.calculate
       end
+      calculate_summary if project.items.count > 1
       finish!
+    end
+
+    def calculate_summary
+      summary = forecast_lines.create!(summary: true)
+      predicted_values.group(:timestamp).sum(:value).each do |timestamp, value|
+        same_value = predicted_values.find_by(timestamp: timestamp)
+        summary.predicted_values.create!(timestamp: timestamp, from: same_value.from, to: same_value.to, value: value, predicted: same_value.predicted?)
+      end
     end
 
     def set_default_values
