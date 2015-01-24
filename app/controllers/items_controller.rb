@@ -19,6 +19,7 @@ class ItemsController < ApplicationController
     end
   end
 
+  # DELETE /projects/:project_id/items/:item_id
   def destroy
     authorize! :forecasting, @project
     @item = @project.items.find_by(id: params[:id])
@@ -27,6 +28,15 @@ class ItemsController < ApplicationController
     else
       head :unprocessable_entity
     end
+  end
+
+  # Destroys all the values from the selected items
+  # DELETE /projects/:project_id/items/:item_id/values
+  def values
+    authorize! :forecasting, @project
+    @item = @project.items.find_by!(sku: params[:id])
+    @item.values.destroy_all
+    head 204
   end
 
   private

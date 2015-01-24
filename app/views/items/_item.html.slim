@@ -1,14 +1,29 @@
-tr.item id="item-#{item.id}"
-  td width='30%'
-    - if item.with_parsing_errors
-      a.warning href="#" data-toggle="tooltip" data-placement="top" title=t('.parsing_errors_warning')
-        i.glyphicon.glyphicon-warning-sign>
-    = item.name
-  td width='30%'= item.sku
-  td width='20%'
-    = link_to project_item_path(@project, item), class: 'js-destroy-item', method: :delete, remote: true, data: { confirm: t('.destroy_confirmation') } do
-      i.glyphicon.glyphicon-trash
-  td
+.item.panel.panel-default id="item-#{item.id}"
+  .panel-body
+    .row
+      .col-md-3
+        - if item.with_parsing_errors
+          a.warning href="#" data-toggle="tooltip" data-placement="top" title=t('.parsing_errors_warning')
+            i.glyphicon.glyphicon-warning-sign>
+        = item.name
+      .col-md-8
+        = form_for [@project, item] do |f|  
+          .file.well.text-center
+            .selected
+              | #{item.values.count} values uploaded 
+              = link_to 'Delete', values_project_item_path(@project, item), method: :delete, remote: true
+            .not-selected style="display:none"
+              = t('items.shared.choose_file').html_safe
+              = f.hidden_field :attachment_id
+            .loading style="display:none"
+              .progress
+                .progress-bar aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" role="progressbar" style=("width: 0%;")
+            .done style="display:none" OK
+        = form_for [@project, Attachment.new] do |f|
+          = f.file_field :file, style: 'visibility:hidden;', class: 'attachment_file'
+      .col-md-1
+        = link_to project_item_path(@project, item), class: 'js-destroy-item', method: :delete, remote: true, data: { confirm: t('.destroy_confirmation') } do
+          i.glyphicon.glyphicon-remove
 
 - if item.with_parsing_errors
   coffee:

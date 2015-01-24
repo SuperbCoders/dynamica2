@@ -21,7 +21,15 @@ class Item < ActiveRecord::Base
 
   private
 
+    def self.generate_sku
+      loop do
+        sku = SecureRandom.hex(32)
+        break sku unless self.exists?(sku: sku)
+      end
+    end
+
     def set_default_values
+      self.sku ||= self.class.generate_sku
       self.name ||= sku
     end
 

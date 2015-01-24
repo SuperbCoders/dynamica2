@@ -10,6 +10,7 @@ class ProjectsController < ApplicationController
   # GET /projects/:id
   def show
     authorize! :read, @project
+    @forecast = @project.forecasts.order(finished_at: :desc).first
   end
 
   # GET /projects/new
@@ -39,7 +40,7 @@ class ProjectsController < ApplicationController
   def update
     authorize! :update, @project
     if @project.update_attributes(project_update_params)
-      redirect_to projects_url, notice: I18n.t('projects.update.flash.success')
+      redirect_to project_url(@project), notice: I18n.t('projects.update.flash.success')
     else
       render :edit
     end

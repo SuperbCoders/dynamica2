@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require jquery-fileupload/basic
 //= require bootstrap/tooltip
+//= require bootstrap/dropdown
 //= require jquery.flot
 //= require jquery.flot.time
 //= require jquery.flot.tooltip

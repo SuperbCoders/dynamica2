@@ -1,4 +1,6 @@
-= render partial: 'projects/header'
+= link_to "Back to #{@project.name}", project_path(@project)
+
+h1 #{@project.name} team
 
 table.table.permissions
   tr

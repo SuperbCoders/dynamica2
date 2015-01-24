@@ -27,6 +27,8 @@ en:
       edit: Edit
       destroy-confirmation: "Do you really want to destroy this project? This action is irreversible."
     show:
+      upload_data: Upload data
+      settings: Settings
       no_items: 'There is no time series data yet. Check out %{api_docs} or %{upload_data} to start.'
       no_items_api_docs: API documentation
       no_items_upload_data: upload your data
@@ -60,11 +62,11 @@ en:
       destroy-confirmation: "Do you really want to revoke access for this user? This action is irreversible."
 
   items:
+    shared:
+      choose_file: 'Choose file on <a class="js-choose-file" href="#">your computer</a><br />or drag here'
     item:
       parsing_errors_warning: "There were errors during CSV file parsing. Please, check the results"
       destroy_confirmation: "Do you really want to destroy this item? This action is irreversible."
-    index:
-      choose_file: 'Choose file on <a class="js-choose-file" href="#">your computer</a><br />or drag here'
 
   forecasts:
     index:
@@ -80,6 +82,12 @@ en:
       pending: Pending
       started: Started
       finished: Finished
+    period:
+      day: Day
+      month: Month
+    group_method:
+      sum: Sum
+      average: Average
 
   permission_mailer:
     invite_user:

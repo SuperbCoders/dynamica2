@@ -1,5 +1,5 @@
-table.items {
-  tr.item {
+.items {
+  .item {
     a.warning {
       color: #f0ad4e;
       text-decoration: none;
@@ -7,16 +7,15 @@ table.items {
     }
   }
 
-  tr.new-item {
+  .new-item {
+
+    display: none;
+
     input[type=text] {
       width: 90%;
     }
 
-    .form {
-      display: none;
-    }
-
-    td.file {
+    .file {
       .loading {
         display: none;
       }

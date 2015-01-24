@@ -1,0 +1,19 @@
+= link_to "Back to #{@project.name}", project_path(@project)
+
+.pull-right
+  p Export your data to CSV file (there is <a href="#">an example</a>) and choose it on your computer to upload.
+  p One file for one item. We will build graph for each item and summary graph.
+
+h1= @project.name
+
+= render partial: 'items/list'
+
+= simple_form_for [@project, @forecast], html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+  = f.input :period, collection: Forecast::PERIODS.map { |i| [t("forecast.period.#{i}"), i]}, include_blank: false
+  = f.input :depth
+  = f.input :group_method, collection: Forecast::GROUP_METHODS.map { |i| [t("forecast.group_method.#{i}"), i]}, include_blank: false
+
+  .form-group
+    .col-sm-offset-3.col-sm-9
+      = f.button :submit, 'Create', class: 'btn btn-primary'
+      = link_to 'Cancel', project_path(@project), class: 'btn'

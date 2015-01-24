@@ -6,8 +6,10 @@ Rails.application.routes.draw do
   resources :projects do
     resources :permissions, only: [:index, :update, :destroy], shallow: true, on: :member
     resources :pending_permissions, only: [:create, :destroy], on: :member
-    resources :items, only: [:index, :create, :destroy], on: :member
-    resources :forecasts, only: [:index, :show]
+    resources :items, only: [:index, :create, :destroy], on: :member do
+      delete :values, on: :member
+    end
+    resources :forecasts, only: [:new, :create]
     resources :attachments, only: :create
   end
 

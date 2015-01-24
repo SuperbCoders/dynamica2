@@ -1,7 +1,7 @@
 class Forecast < ActiveRecord::Base
   include Workflow
 
-  PERIODS = %w(day week month)
+  PERIODS = %w(day month)
   GROUP_METHODS = %w(sum average)
 
   belongs_to :project
@@ -12,7 +12,7 @@ class Forecast < ActiveRecord::Base
   validates :project, presence: true
   validates :period, presence: true, inclusion: { in: PERIODS }
   validates :group_method, presence: true, inclusion: { in: GROUP_METHODS }
-  validates :depth, numericality: { only_integer: true, greater_than: 0 }
+  validates :depth, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :planned_at, presence: true
 
   before_validation :set_default_values

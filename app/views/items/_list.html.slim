@@ -1,0 +1,25 @@
+= link_to 'Add item', '#', class: 'js-add-new-item btn'
+.items
+  .item.new-item.panel.panel-default
+    .panel-body
+      = form_for [@project, Item.new], remote: true do |f|
+        .row
+          .col-md-3
+          .col-md-8
+            = f.text_field :name, class: 'form-control', placeholder: 'Name'
+            .file.well.text-center
+                .not-selected
+                  = t('items.shared.choose_file').html_safe
+                  = f.hidden_field :attachment_id
+                .loading
+                  .progress
+                    .progress-bar aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" role="progressbar" style=("width: 0%;")
+                .done OK
+          .col-md-1
+            = f.submit 'Save', class: 'btn btn-success btn-sm'
+            br/
+            = link_to '#', class: 'js-remove-new-item'
+              i.glyphicon.glyphicon-remove
+      = form_for [@project, Attachment.new] do |f|
+        = f.file_field :file, style: 'visibility:hidden;', class: 'attachment_file'
+  = render @items
