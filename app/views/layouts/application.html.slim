@@ -1,0 +1,53 @@
+doctype html
+html lang="ru" 
+  head
+    meta content="width=device-width, initial-scale=1" name="viewport" /
+    meta charset="utf-8" /
+    meta content="" name="keywords" /
+    meta content="" name="description" /
+    title Dynamica
+    link href="img/favicon.ico" rel=("shortcut icon") type="image/x-icon" /
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application'
+    /![if lt IE 9]
+      = javascript_include_tag 'html5shiv'
+    = csrf_meta_tags
+  body
+    .page
+      header.page-header.navbar.navbar-default
+        .container-fluid.globalwidth
+          .navbar-header
+            button.navbar-toggle.collapsed data-target=".bs-navbar-collapse" data-toggle="collapse" type="button" 
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand href="/"  DYNAMICA
+          nav.collapse.navbar-collapse.bs-navbar-collapse
+            - if signed_in?
+              ul.nav.navbar-right.hidden-xs
+                li
+                  .user.dropdown
+                    .arrow
+                    a.user-toggle.dropdown-toggle data-toggle="dropdown" href="#" 
+                      span.user-pic
+                        = image_tag current_user.avatar.small, class: 'img-circle', width: '40px', height: '40px'
+                      span.user-name
+                        = current_user.display_name
+                        i.icon.fa.fa-angle-down
+                    .user-menu.dropdown-menu.right
+                      ul
+                        li
+                          a href="#"  Billing
+                        li
+                          = link_to 'Profile', edit_user_registration_path
+                        li
+                          a href="#"  Help
+                        li.clear
+                          = link_to 'Log out', destroy_user_session_path, method: :delete
+            - else
+              ul.nav.navbar-nav.navbar-right
+                li= link_to 'Sign in', new_user_session_path
+                li= link_to 'Sign up', new_user_registration_path
+      section.page-body
+        .container-fluid.globalwidth
+          = yield

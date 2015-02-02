@@ -1,0 +1,28 @@
+.item.wrap-b.new-item
+  = form_for [@project, Item.new], remote: true, html: { class: 'form form-horizontal' } do |f|  
+    = link_to '×', '#', class: 'js-remove-new-item btn-close'
+    .form-group
+      h3.control-label.col-md-3.col-sm-3 New product
+      .col-md-7.col-sm-8
+        .control-box
+          = f.text_field :name, class: 'form-control', placeholder: 'Product name'
+          = f.hidden_field :attachment_id, class: 'attachment_id'
+        .control-box
+          .file
+            .selected style="display:none"
+              .form-control.upload-box.fixed
+                span.js-attachment-uploaded Data was successfully uploaded
+                span.js-real-count 0 values uploaded
+              = link_to 'Save product', '#', class: 'js-submit-new-item'
+            .not-selected
+              .form-control.upload-box
+                | Drop file here
+                a.js-choose-file href="#"  or choose
+                |  from computer
+            .loading style="display:none"
+              .form-control.upload-box.loading
+                  span.js-progress-bar.status-bar style="width:20%;" 
+                  a.btn-cancel href="#"  Cancel
+            .done style="display:none" OK
+  = form_for [@project, Attachment.new] do |f|
+    = f.file_field :file, style: 'visibility:hidden;', class: 'attachment_file'

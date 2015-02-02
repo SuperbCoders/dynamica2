@@ -1,51 +1,67 @@
 - if forecast.workflow_state == 'finished'
-  - forecast.forecast_lines.includes(:item).each do |forecast_line|
-    - if forecast_line.summary?
-      h2=t '.summary'
-    - else
-      h2= forecast_line.item.name
+  .items
+    - forecast.forecast_lines.includes(:item).each do |forecast_line|
+      .item.item-open
+        .item-capt
+          .row
+            .col-sm-7
+              - if forecast_line.summary?
+                h3=t '.summary'
+              - else
+                h3= forecast_line.item.name
+            .col-sm-5
+              ul.nav.nav-pills.pull-right
+                / li.arrow.inactive
+                  a href="#" 
+                    i.icon.glyphicon.glyphicon-arrow-up
+                / li.arrow
+                  a href="#" 
+                    i.icon.glyphicon.glyphicon-arrow-down
+                li.lock
+                  a href="#" 
+                    i.icon.fa.fa-plus
+        .item-cnt.wrap-b
+          .forecast-chart id="forecast-chart-#{forecast_line.id}" style="height:340px"
 
-    .forecast-chart id="forecast-chart-#{forecast_line.id}" style="height:240px"
-    
-    javascript:
-      var data#{forecast_line.id} = #{forecast_line.predicted_values.order(from: :asc).map(&:to_flot)};
-      $.plot("#forecast-chart-#{forecast_line.id}", [data#{forecast_line.id}], {
-        series: {
-          lines: {
-            show: true,
-            lineWidth: 1,
-            fill: true,
-            fillColor: {
-              colors: [{
-                  opacity: 0.2
-              }, {
-                  opacity: 0.1
-              }]
+      javascript:
+        var data#{forecast_line.id} = #{forecast_line.predicted_values.order(from: :asc).map(&:to_flot)};
+        $.plot("#forecast-chart-#{forecast_line.id}", [data#{forecast_line.id}], {
+          series: {
+            lines: {
+              show: true,
+              lineWidth: 1,
+              fill: true,
+              fillColor: {
+                colors: [{
+                    opacity: 0.2
+                }, {
+                    opacity: 0.1
+                }]
+              }
+            },
+            points: {
+              show: true
+            },
+            shadowSize: 0
+          },
+          grid: {
+            hoverable: true,
+            clickable: true,
+            tickColor: "#f0f0f0",
+            borderWidth: 0
+          },
+          xaxis: { 
+            mode: "time"
+          },
+          tooltip: true,
+          tooltipOpts: {
+            content: "%x: %y.3",
+            defaultTheme: false,
+            shifts: {
+              x: 0,
+              y: 20
             }
-          },
-          points: {
-            show: true
-          },
-          shadowSize: 0
-        },
-        grid: {
-          hoverable: true,
-          clickable: true,
-          tickColor: "#f0f0f0",
-          borderWidth: 0
-        },
-        xaxis: { 
-          mode: "time"
-        },
-        tooltip: true,
-        tooltipOpts: {
-          content: "%x: %y.3",
-          defaultTheme: false,
-          shifts: {
-            x: 0,
-            y: 20
           }
-        }
-      });
+        });
 - else
-  | Your forecast is planned and will be calculated in about #{distance_of_time_in_words(Time.now, forecast.planned_at)}
+  | Your forecast is planned and will be calculated in #{distance_of_time_in_words(Time.now, forecast.planned_at)}

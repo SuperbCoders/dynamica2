@@ -1,19 +1,27 @@
-= link_to "Back to #{@project.name}", project_path(@project)
-
-.pull-right
-  p Export your data to CSV file (there is <a href="#">an example</a>) and choose it on your computer to upload.
-  p One file for one item. We will build graph for each item and summary graph.
-
-h1= @project.name
-
-= render partial: 'items/list'
-
-= simple_form_for [@project, @forecast], html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
-  = f.input :period, collection: Forecast::PERIODS.map { |i| [t("forecast.period.#{i}"), i]}, include_blank: false
-  = f.input :depth
-  = f.input :group_method, collection: Forecast::GROUP_METHODS.map { |i| [t("forecast.group_method.#{i}"), i]}, include_blank: false
-
-  .form-group
-    .col-sm-offset-3.col-sm-9
-      = f.button :submit, 'Create', class: 'btn btn-primary'
-      = link_to 'Cancel', project_path(@project), class: 'btn'
+.back
+  = link_to "Back to #{@project.name}", project_path(@project)
+section.case.case-project-edit
+  .case-capt
+    .row
+      .col-sm-7
+        h1 Create new forecast
+        = link_to 'Add product', '#', class: 'js-add-new-item btn'
+      .col-sm-5
+        .descript-box
+          | Export your data to CSV file (there is <a href="#">an example</a>) and choose it on your computer to upload.
+          | One file for one item. We will build graph for each item and summary graph.
+  .case-cnt
+    .items
+      = render partial: 'items/new_item'
+      = render @items
+    = simple_form_for [@project, @forecast], html: { class: 'form-horizontal' }, wrapper: :horizontal_form do |f|
+      .forecast
+        .form.form-horizontal
+          .form-group
+            h3.control-label.col-sm-3 For how long Forecast?
+            .col-sm-9
+              .forecast-box.wrap-b
+                = image_tag 'forecast-chart.png', style: 'max-width:100%;'
+                .period-sel.text-center
+                  = f.input_field :period, collection: Forecast::PERIODS.map { |i| [t("forecast.period.#{i}"), i]}, class: 'selectpicker', include_blank: false
+      = f.button :submit, 'Make forecast', class: 'btn btn-lg btn-danger'

@@ -1,0 +1,70 @@
+.case-project {
+	.case-capt {
+		.nav-pills {
+			padding: 10px 0;
+		}
+		.upload {
+			.icon {
+				width: 30px;
+				height: 30px;
+				margin-right: 10px;
+				font-size: 24px;
+				line-height: 30px;
+				vertical-align: middle;
+			}
+		}
+		.setting {
+			.setting-toggle {
+				color: #b8b2a7;
+				.icon {
+					width: 30px;
+					height: 30px;
+					margin-right: 10px;
+					font-size: 30px;
+					line-height: 30px;
+					vertical-align: middle;
+					text-align: center;
+				}
+			}
+			.setting-menu {
+				margin-right: 65px;
+				@extend .dropdown-arrow;
+			}
+		}
+	}
+	.item {
+		margin-bottom: 40px;
+		.item-capt {
+			margin-bottom: 10px;
+			.nav-pills {
+				margin-top: -1px;
+				margin-bottom: -1px;
+				line-height: 24px;
+				.arrow {
+					padding: 0;
+					margin-left: 10px;
+				}
+				.lock {
+					font-size: 22px;
+				}
+				.switcher {
+					padding-left: 0;
+					line-height: 22px;
+					.switcher-label {
+						display: inline-block;
+						margin-right: 10px;
+					}
+				}
+			}
+		}
+		.item-cnt {
+			padding: 30px;
+		}
+		&.item-close {
+			border-bottom: 1px solid #dfdfdf;
+			.item-cnt {
+				display: none;
+			}
+		}
+	}
+}

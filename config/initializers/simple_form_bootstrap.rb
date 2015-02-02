@@ -58,12 +58,14 @@ SimpleForm.setup do |config|
     b.optional :pattern
     b.optional :min_max
     b.optional :readonly
-    b.use :label, class: 'col-sm-3 control-label'
+    b.use :label, class: 'col-md-3 col-sm-3 control-label'
 
-    b.wrapper tag: 'div', class: 'col-sm-9' do |ba|
-      ba.use :input, class: 'form-control'
-      ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
-      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    b.wrapper tag: 'div', class: 'col-md-6 col-sm-9' do |ba|
+      ba.wrapper :tag, class: 'control-box' do |bb|
+        bb.use :input, class: 'form-control'
+        bb.use :error, wrap_with: { tag: 'span', class: 'help-block' }
+        bb.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+      end
     end
   end
 

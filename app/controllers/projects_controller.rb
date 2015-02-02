@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   def index
     authorize! :read, Project
-    @projects = current_user.projects
+    @projects = current_user.projects.includes(:forecasts, :users)
   end
 
   # GET /projects/:id
@@ -59,7 +59,7 @@ class ProjectsController < ApplicationController
   private
 
     def project_create_params
-      params.require(:project).permit(:name, :slug)
+      params.require(:project).permit(:name)
     end
 
     def project_update_params

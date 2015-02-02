@@ -2,11 +2,14 @@ Rails.application.routes.draw do
   root to: 'welcome#index'
 
   devise_for :users, controllers: { registrations: 'customized_devise/registrations', sessions: 'customized_devise/sessions', passwords: 'customized_devise/passwords' }
+  devise_scope :user do
+    match 'users/avatar' => 'customized_devise/registrations#avatar', via: [:put, :patch]
+  end
 
   resources :projects do
     resources :permissions, only: [:index, :update, :destroy], shallow: true, on: :member
     resources :pending_permissions, only: [:create, :destroy], on: :member
-    resources :items, only: [:index, :create, :destroy], on: :member do
+    resources :items, only: [:index, :create, :update, :destroy], on: :member do
       delete :values, on: :member
     end
     resources :forecasts, only: [:new, :create]

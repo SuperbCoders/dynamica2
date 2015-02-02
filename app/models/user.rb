@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  mount_uploader :avatar, AvatarUploader
+
   has_many :permissions, dependent: :restrict_with_error
   has_many :projects, through: :permissions
 
@@ -13,6 +15,11 @@ class User < ActiveRecord::Base
   validates :api_token, uniqueness: true, if: :api_token
 
   before_create :set_api_token
+
+  # @return [String] user name to use in views
+  def display_name
+    [name, email, id].select(&:present?).first
+  end
 
   private
 

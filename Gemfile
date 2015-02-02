@@ -17,7 +17,10 @@ gem 'therubyracer',  platforms: :ruby
 # JS libraries
 gem 'jquery-rails'
 
+
 # CSS libraries
+gem 'compass-rails'
+gem "font-awesome-rails"
 gem 'bootstrap-sass', '~> 3.3.1'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -64,4 +67,6 @@ gem 'slim-rails'
 gem 'simple_form'
 gem 'friendly_id', '~> 5.0.0'
 gem 'carrierwave'
+gem 'mini_magick'
 gem 'jquery-fileupload-rails'
+gem 'non-stupid-digest-assets', '~> 1.0.4' # creates both digest and non-digest assets

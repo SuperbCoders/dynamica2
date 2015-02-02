@@ -19,6 +19,19 @@ class ItemsController < ApplicationController
     end
   end
 
+  # PATTCH/PUT /projects/:project_id/items/:id
+  def update
+    authorize! :forecasting, @project
+    @item = @project.items.find(params[:id])
+    @item.assign_attributes(item_params)
+    @item.validate_attachment = @item.attachment_id.present?
+    if @item.save
+      render json: { item: @item, html: render_to_string(@item) }, status: :ok
+    else
+      render json: @item.errors, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /projects/:project_id/items/:item_id
   def destroy
     authorize! :forecasting, @project
@@ -31,10 +44,10 @@ class ItemsController < ApplicationController
   end
 
   # Destroys all the values from the selected items
-  # DELETE /projects/:project_id/items/:item_id/values
+  # DELETE /projects/:project_id/items/:id/values
   def values
     authorize! :forecasting, @project
-    @item = @project.items.find_by!(sku: params[:id])
+    @item = @project.items.find(params[:id])
     @item.values.destroy_all
     head 204
   end

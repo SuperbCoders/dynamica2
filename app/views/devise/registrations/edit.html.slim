@@ -1,0 +1,56 @@
+section.case.case-profile
+  .case-capt
+    ul.nav.nav-pills
+      li.active
+        = link_to 'Profile', edit_user_registration_path
+      li
+        = link_to 'Billing', '#'
+      li.pull-right
+        a href="#"  Help
+  .case-cnt.wrap-b
+    = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'form-horizontal form' }) do |f|
+      form action="" method="post" 
+        .form-group
+          label.control-label.col-md-3.col-sm-3 for="user_name"  Personal
+          .col-md-7.col-sm-9
+            .control-box
+              = f.file_field :avatar, style: 'visibility:hidden;'
+              .upload-box
+                .user-pic
+                  = image_tag current_user.avatar.medium, id: 'js-avatar', class: 'img-circle', width: '100px', height: '100px'
+                  = image_tag 'fallback/medium_default.png', id: 'js-default-avatar', class: 'img-circle', width: '100px', height: '100px', style: 'display:none'
+                  = f.hidden_field :remove_avatar
+                  a#js-delete-avatar.btn-delete href="#" style=('display:none' unless current_user.avatar?)
+                    i.icon.fa.fa-trash
+                .descript
+                  | Drag and drop new avatar
+                  a#js-choose-file href="#"  or choose
+            .control-box
+              = f.text_field :name, placeholder: 'Name', class: 'form-control'
+            .control-box class=('has-error' if resource.errors.messages[:email])
+              = f.text_field :email, placeholder: 'E-mail address', class: 'form-control'
+        / .form-group
+          label.control-label.col-md-3.col-sm-3
+            | Import data from
+            br/
+            | social networks
+          .col-md-7.col-sm-9
+            .control-box
+              a.btn-social.btn-facebook href="#" 
+                i.icon.fa.fa-facebook
+                | Facebook
+              a.btn-social.btn-twitter href="#" 
+                i.icon.fa.fa-twitter
+                | Facebook
+        .form-group
+          label.control-label.col-md-3.col-sm-3 for="user_password"  Password
+          .col-md-7.col-sm-9
+            .control-box class=('has-error' if resource.errors.messages[:password])
+              = f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'New password'
+            .control-box class=('has-error' if resource.errors.messages[:password_confirmation])
+              = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control', placeholder: 'Confirm new password'
+            .control-box class=('has-error' if resource.errors.messages[:current_password])
+              = f.password_field :current_password, autocomplete: "off", class: 'form-control', placeholder: 'Current password'
+        .form-group
+          .col-md-offset-3.col-md-7.col-sm-offset-3.col-sm-9
+            = f.submit 'Save', class: 'btn btn-lg btn-danger'

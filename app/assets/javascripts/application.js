@@ -13,9 +13,16 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-fileupload/basic
-//= require bootstrap/tooltip
-//= require bootstrap/dropdown
 //= require jquery.flot
 //= require jquery.flot.time
 //= require jquery.flot.tooltip
-//= require_tree .
+
+//= require jquery.placeholder.min
+//= require bootstrap.min
+//= require bootstrap-select.min
+
+//= require script
+
+//= require items
+//= require permissions
+//= require profile

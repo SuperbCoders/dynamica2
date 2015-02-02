@@ -1,0 +1,35 @@
+.case-profile {
+	.upload-box {
+		.user-pic {
+			display: inline-block;
+			vertical-align: middle;
+			width: 100px;
+			height: 100px;
+			margin-right: 80px;
+			position: relative;
+		}
+		.btn-delete {
+			margin-top: -15px;
+			position: absolute;
+			top: 50%;
+			right: -40px;
+			color: #b5afae;
+			font-size: 22px;
+		}
+		.descript {
+			display: inline-block;
+			padding: 20px 0;
+			vertical-align: middle;
+		}
+	}
+	.price-box {
+		padding: 0 20px;
+		margin-bottom: 40px;
+		color: #b1b1b1;
+	}
+	.descript-box {
+		a {
+			color: #2895f1;
+		}
+	}
+}

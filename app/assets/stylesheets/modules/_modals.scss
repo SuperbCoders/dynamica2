@@ -1,0 +1,77 @@
+.box-modal {
+	width: 480px;
+	padding: 40px;
+	background: #fff;
+	.box-modal_i {
+		padding-top: 10px;
+		position: relative;
+	}
+	.box-modal_close {
+		position: absolute;
+		top: -10px;
+		right: -10px;
+		color: #b5afae;
+		font-size: 30px;
+		line-height: 22px;
+		&:hover {
+			color: #777;
+		}
+	}
+	.modal-capt {
+		margin-bottom: 40px;
+		font-size: 20px;
+		font-weight: 800;
+	}
+}
+
+.modal-confirm {
+	text-align: center;
+	.modal-capt {
+		color: #ff7851;
+	}
+	.descript {
+		margin-bottom: 30px;
+		font-size: 20px;
+		.term {
+			display: inline-block;
+			height: 100px;
+			padding: 0 10px;
+			margin-bottom: 20px;
+			color: #797979;
+			font-size: 70px;
+			line-height: 100px;
+			background: asset-url('term-bg.png') repeat-x 0 0;
+		}
+		.divider {
+			display: inline-block;
+			width: 60px;
+			margin: 20px auto;
+			border-bottom: 1px solid #d8d8d8;
+		}
+		.email {
+			color: #adadad;
+		}
+	}
+	.accept {
+		font-size: 18px;
+	}
+}
+
+.modal-login {
+	.descript {
+		font-size: 20px;
+	}
+	.btn-twitter {
+		margin: 0;
+	}
+}
+
+.modal-close {
+	display: block;
+	width: 21px;
+	height: 21px;
+	position: absolute;
+	top: 40px;
+	right: 40px;
+	@include retina-sprite(popup-close);
+}

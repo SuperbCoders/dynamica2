@@ -1,0 +1,26 @@
+.col-sm-6
+  .item
+    .title
+      = link_to project.name, project
+    .descript
+      - if project.forecasts.any?
+        | Last forecast #{time_ago_in_words(project.forecasts.last.finished_at)} ago
+      - else
+        | No forecast yet
+    .users
+      ul
+        - project.users.each do |user|
+          li.user-pic
+            = image_tag user.avatar.small, class: 'img-circle', width: '40px', height: '40px'
+    .setting-wrap
+      .setting.dropdown
+        a.setting-toggle.dropdown-toggle data-toggle="dropdown" href="#" 
+          i.icon.fa.fa-cog
+        .setting-menu.dropdown-menu.right
+          ul
+            - if can? :update, project
+              li
+                = link_to t('.edit'), edit_project_path(project)
+            - if can? :destroy, project
+              li
+                = link_to t('.delete'), project_path(project), method: :delete, data: { confirm: t('.destroy-confirmation') }

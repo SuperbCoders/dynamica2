@@ -16,6 +16,12 @@ en:
           <<: *permission
 
   projects:
+    project:
+      edit: Edit
+      delete: Delete
+      destroy-confirmation: "Do you really want to destroy this project? This action is irreversible."
+    form:
+      create: Create project
     header:
       overview: Overview
       forecasts: Forecasts
@@ -23,9 +29,7 @@ en:
       team: Team
     index:
       title: My projects
-      new: New project
-      edit: Edit
-      destroy-confirmation: "Do you really want to destroy this project? This action is irreversible."
+      new: Add new project
     show:
       upload_data: Upload data
       settings: Settings

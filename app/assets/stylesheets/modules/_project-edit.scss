@@ -1,0 +1,60 @@
+.case-project-edit {
+	.items {
+		margin-bottom: 40px;
+	}
+	.item {
+		margin-bottom: 20px;
+		.form {
+			position: relative;
+			.form-group {
+				margin-bottom: 0;
+			}
+			.btn-close {
+				position: absolute;
+				top: 0;
+				right: 0;
+				color: #b5afae;
+				font-size: 30px;
+				line-height: 22px;
+				&:hover {
+					color: #777;
+				}
+			}
+		}
+	}
+	.upload-box {
+		padding-right: 50px;
+		position: relative;
+		box-shadow: none;
+		.btn-delete {
+			margin-top: -15px;
+			position: absolute;
+			top: 50%;
+			right: 20px;
+			color: #b5afae;
+			font-size: 22px;
+		}
+		.btn-cancel {
+			position: absolute;
+			top: 14px;
+			right: 20px;
+			z-index: 100;
+		}
+		.status-bar {
+			display: block;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: #8bdc8b;
+		}
+		&.fixed {
+			background: #f7f7f7;
+		}
+	}
+	.forecast {
+		padding-bottom: 20px;
+		margin-bottom: 40px;
+		border-bottom: 1px solid #dfdfdf; 
+	}
+}

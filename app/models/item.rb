@@ -17,7 +17,7 @@ class Item < ActiveRecord::Base
   validates :attachment_id, presence: true, if: :validate_attachment
 
   before_validation :set_default_values
-  after_create :load_values_from_attachment, if: :attachment
+  after_save :load_values_from_attachment, if: :attachment
 
   private
 

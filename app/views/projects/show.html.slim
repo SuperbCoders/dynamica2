@@ -1,27 +1,39 @@
-.navigation.pull-right
-  => link_to new_project_forecast_path(@project) do
-    i.glyphicon.glyphicon-cloud-upload>
-    =t '.upload_data'
-  .btn-group
-    => link_to '#', class: 'dropdown-toggle', 'aria-expanded' => false, 'data-toggle' => 'dropdown' do
-      i.glyphicon.glyphicon-cog>
-      =t '.settings'
-    ul.dropdown-menu role="menu" 
-      li
-        a href="#"  Check API data
-      li= link_to 'Edit', edit_project_path(@project)
-      li
-        a href="#"  Export data
-      li= link_to 'Teammates', project_permissions_path(@project)
-      li
-        a href="#"  Delete project
-
-h1= @project.name
-
-- if @forecast
-  = render partial: 'forecasts/forecast', object: @forecast, as: :forecast
-- else
-  .well
-    | There are no forecasts yet. 
-    = link_to 'Upload data', new_project_forecast_path(@project)
-    |  to create a new one.
+section.case.case-project
+  .case-capt
+    .row
+      .col-sm-7
+        h1= @project.name
+      .col-sm-5
+        ul.nav.nav-pills.pull-right
+          li.active
+            = link_to new_project_forecast_path(@project), class: 'upload' do
+              i.icon.fa.fa-cloud-upload
+              | Update forecast
+          li
+            .setting.dropdown
+              a.setting-toggle.dropdown-toggle data-toggle="dropdown" href="#" 
+                i.icon.fa.fa-cog
+                =t '.settings'
+              .setting-menu.dropdown-menu.right
+                ul
+                  li
+                    a href="#"  Check API data
+                  li
+                    = link_to 'Edit', edit_project_path(@project)
+                  li
+                    a href="#"  Export data
+                  li
+                    = link_to 'Teammates', project_permissions_path(@project)
+                  li.clear
+                    = link_to 'Delete project', project_path(@project), method: :delete, data: { confirm: t('projects.project.destroy-confirmation') }
+  - if @forecast
+    .case-cnt
+      = render partial: 'forecasts/forecast', object: @forecast, as: :forecast
+  - else
+    section.case.case-projects-empty
+      .case-cnt.text-center
+        .title
+          | There are no forecasts yet. 
+          br>/
+          = link_to 'Upload data', new_project_forecast_path(@project)
+          |  to create a new one.

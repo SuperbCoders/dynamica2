@@ -1,0 +1,31 @@
+.futura {
+	font-family: 'futura_new', Arial, Helvetica, sans-serif;
+}
+
+input,
+select,
+button,
+textarea {
+	@extend .futura;
+	box-shadow: none!important;
+	outline: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+h3 {
+	font-weight: 800;
+}
+
+.clear {
+	a {
+		color: #b0b0b0!important;
+	}
+}

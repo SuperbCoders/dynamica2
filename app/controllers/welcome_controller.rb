@@ -1,6 +1,4 @@
 class WelcomeController < ApplicationController
-  layout 'guest'
-
   before_action :redirect_to_projects
 
   def index

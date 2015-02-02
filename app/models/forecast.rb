@@ -74,6 +74,12 @@ class Forecast < ActiveRecord::Base
 
     def set_default_values
       self.planned_at = Time.now
+      self.group_method ||= 'sum'
+      self.depth ||= case period
+      when 'day' then 14
+      when 'month' then 2
+      else nil
+      end
     end
 
     def setup_forecast_lines
