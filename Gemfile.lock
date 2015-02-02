@@ -34,7 +34,7 @@ GEM
       sass (~> 3.2)
     builder (3.2.2)
     cancancan (1.9.2)
-    capistrano (3.3.5)
+    capistrano (3.3.4)
       capistrano-stats (~> 1.1.0)
       i18n
       rake (>= 10.0.0)
@@ -229,7 +229,7 @@ PLATFORMS
 DEPENDENCIES
   bootstrap-sass (~> 3.3.1)
   cancancan
-  capistrano
+  capistrano (= 3.3.4)
   capistrano-rails
   capistrano-rvm
   capistrano3-unicorn
