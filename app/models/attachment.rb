@@ -1,14 +1,12 @@
 require 'csv'
 
-class Attachment < ActiveRecord::Base
+class Attachment
+  attr_reader :file
   attr_accessor :with_parsing_errors
 
-  mount_uploader :file, FileUploader
-
-  belongs_to :project
-
-  validates :project, presence: true
-  validates :file, presence: true
+  def initialize(file)
+    @file = file
+  end
 
   def data
     @data ||= parse
@@ -23,7 +21,6 @@ class Attachment < ActiveRecord::Base
         begin
           result[Time.parse(row[0])] = Float(row[1])
         rescue
-          puts row.inspect
           self.with_parsing_errors = true
         end
       end

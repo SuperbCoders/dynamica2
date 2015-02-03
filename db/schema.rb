@@ -11,19 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150202123915) do
+ActiveRecord::Schema.define(version: 20150203174301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "attachments", force: true do |t|
-    t.integer  "project_id"
-    t.string   "file"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "attachments", ["project_id"], name: "index_attachments_on_project_id", using: :btree
 
   create_table "forecast_lines", force: true do |t|
     t.integer  "forecast_id"
@@ -61,6 +52,8 @@ ActiveRecord::Schema.define(version: 20150202123915) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "values_count", default: 0
+    t.string   "attachment"
   end
 
   add_index "items", ["project_id", "sku"], name: "index_items_on_project_id_and_sku", unique: true, using: :btree

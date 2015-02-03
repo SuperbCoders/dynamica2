@@ -1,10 +1,9 @@
 class Item < ActiveRecord::Base
-  # @retirm [Boolean] whether item could not be created without an attachment
-  attr_accessor :validate_attachment
-  # @return [Integer] identifier of attachment that should be converted to values
-  attr_accessor :attachment_id
   # @return [Boolean] whether there were errors while data parsing
   attr_accessor :with_parsing_errors
+  attr_accessor :reload_attachment
+
+  mount_uploader :attachment, FileUploader
 
   belongs_to :project
 
@@ -14,16 +13,20 @@ class Item < ActiveRecord::Base
   validates :project, presence: true
   validates :sku, presence: true, uniqueness: { scope: :project_id }
   validates :name, presence: true
-  validates :attachment_id, presence: true, if: :validate_attachment
 
   before_validation :set_default_values
-  after_save :load_values_from_attachment, if: :attachment
+  after_save :load_values_from_attachment, if: :reload_attachment
+
+  def attachment=(value)
+    self.reload_attachment = true
+    super
+  end
 
   private
 
     def self.generate_sku
       loop do
-        sku = SecureRandom.hex(32)
+        sku = "product-#{SecureRandom.hex(8)}"
         break sku unless self.exists?(sku: sku)
       end
     end
@@ -34,15 +37,13 @@ class Item < ActiveRecord::Base
     end
 
     def load_values_from_attachment
-      @attachment.data.each do |timestamp, value|
+      return true unless attachment.present?
+      parser = Attachment.new(attachment)
+      parser.data.each do |timestamp, value|
         values.create(timestamp: timestamp, value: value)
       end
-      self.with_parsing_errors = @attachment.with_parsing_errors
-      @attachment.destroy
+      self.with_parsing_errors = parser.with_parsing_errors
+      reload
       true
-    end
-
-    def attachment
-      @attachment ||= project.attachments.find_by(id: attachment_id) if attachment_id
     end
 end

@@ -11,7 +11,6 @@ class ItemsController < ApplicationController
   def create
     authorize! :forecasting, @project
     @item = @project.items.build(item_params)
-    @item.validate_attachment = true
     if @item.save
       render json: { item: @item, html: render_to_string(@item) }, status: :created
     else
@@ -23,9 +22,7 @@ class ItemsController < ApplicationController
   def update
     authorize! :forecasting, @project
     @item = @project.items.find(params[:id])
-    @item.assign_attributes(item_params)
-    @item.validate_attachment = @item.attachment_id.present?
-    if @item.save
+    if @item.update_attributes(item_params)
       render json: { item: @item, html: render_to_string(@item) }, status: :ok
     else
       render json: @item.errors, status: :unprocessable_entity
@@ -59,6 +56,10 @@ class ItemsController < ApplicationController
     end
 
     def item_params
-      params.require(:item).permit(:name, :sku, :attachment_id)
+      if params[:item]
+        params.require(:item).permit(:name, :sku, :attachment)
+      else
+        {}
+      end
     end
 end
