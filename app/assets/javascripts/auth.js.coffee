@@ -29,3 +29,12 @@ $ ->
   $('body').on 'ajax:error', '.validate-signup', (event, error, status) ->
     for attribute, errors of error.responseJSON
       $(this).find("#user_#{attribute}").closest('.control-box').addClass('has-error')
+
+  #
+  # Password recovery
+  #
+  $('body').on 'ajax:complete', '.validate-password-recovery', (event, data, status) ->
+    email = $('#modal-recover #user_email').val()
+    $('#modal-password-recovery-sent span.email').text(email)
+    $.arcticmodal('close')
+    $('#modal-password-recovery-sent').arcticmodal()
