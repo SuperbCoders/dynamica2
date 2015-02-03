@@ -5,6 +5,7 @@ class ProjectsController < ApplicationController
   def index
     authorize! :read, Project
     @projects = current_user.projects.includes(:forecasts, :users)
+    redirect_to @projects.first if @projects.size == 1
   end
 
   # GET /projects/:id
@@ -25,7 +26,7 @@ class ProjectsController < ApplicationController
     @project = current_user.own_projects.build(project_create_params)
     if @project.save
       current_user.permissions.create!(project: @project, all: true)
-      redirect_to projects_url, notice: I18n.t('projects.create.flash.success')
+      redirect_to @project, notice: I18n.t('projects.create.flash.success')
     else
       render :new
     end

@@ -5,10 +5,11 @@ section.case.case-project
         h1= @project.name
       .col-sm-5
         ul.nav.nav-pills.pull-right
-          li.active
-            = link_to new_project_forecast_path(@project), class: 'upload' do
-              i.icon.fa.fa-cloud-upload
-              | Update forecast
+          - if @forecast && @forecast.finished?
+            li.active
+              = link_to new_project_forecast_path(@project), class: 'upload' do
+                i.icon.fa.fa-cloud-upload
+                | Update forecast
           li
             .setting.dropdown
               a.setting-toggle.dropdown-toggle data-toggle="dropdown" href="#" 

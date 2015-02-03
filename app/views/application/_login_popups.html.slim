@@ -1,0 +1,106 @@
+.hidden
+  #modal-login.box-modal
+    .box-modal_i
+      a.box-modal_close.arcticmodal-close href="#"  &times;
+      section.modal-login
+        .modal-capt
+          ul.nav.nav-pills
+            li.active
+              a Log in
+            li
+              a href="#" data-modal='signup' Sign up
+        .modal-cnt
+          .form
+            = form_for User.new, as: :user, url: session_path(:user), html: { class: 'validate-login form-horizontal' }, remote: true do |f|
+              / .form-group.clearfix
+                .control-box
+                  a.btn-social.btn-facebook href="#" 
+                    i.icon.fa.fa-facebook
+                    | Facebook
+                  a.btn-social.btn-twitter href="#" 
+                    i.icon.fa.fa-twitter
+                    | Twitter
+              .form-group
+                .control-box
+                  = f.email_field :email, class: 'form-control', autofocus: true, placeholder: 'Email'
+                .control-box
+                  = f.password_field :password, class: 'form-control', autocomplete: 'off', placeholder: 'Password'
+                .control-box.text-center
+                  = f.submit 'Log in', class: 'btn btn-lg btn-danger'
+                .control-box.text-center.clear
+                  a href="#"  Password recover
+  #modal-signup.box-modal
+    .box-modal_i
+      a.box-modal_close.arcticmodal-close href="#"  &times;
+      section.modal-login
+        .modal-capt
+          ul.nav.nav-pills
+            li
+              a href="#" data-modal='login'  Log in
+            li.active
+              a Sign up
+        .modal-cnt
+          .form
+            = form_for User.new, as: :user, url: registration_path(:user), html: { class: 'validate-signup form-horizontal' }, remote: true do |f|
+              .form-group
+                .control-box
+                  = f.email_field :email, class: 'form-control', autofocus: true, placeholder: 'Email'
+                .control-box
+                  = f.password_field :password, class: 'form-control', autocomplete: 'off', placeholder: 'Password'
+                .control-box
+                  = f.password_field :password_confirmation, class: 'form-control', autocomplete: 'off', placeholder: 'Confirm password'
+                .control-box.text-center
+                  = f.submit 'Join', class: 'btn btn-lg btn-danger'
+  #modal-recover.box-modal
+    .box-modal_i
+      a.box-modal_close.arcticmodal-close href="#"  &times;
+      section.modal-login
+        .modal-capt
+          ul.nav.nav-pills
+            li
+              a href="#"  Back
+            li.active
+              a href="#"  Password recover
+        .modal-cnt
+          .form
+            form action="" method="post" 
+              .form-group
+                .control-box
+                  .descript
+                    | Enter your email and we send
+                    br>/
+                    | password to you
+                .control-box
+                  input.form-control placeholder="Email" type="text" /
+                .control-box.text-center
+                  button.btn.btn-lg.btn-danger type="submit"  Log in
+                .control-box.text-center.clear
+                  a href="#"  Password recover
+  #modal-pass.box-modal
+    .box-modal_i
+      a.box-modal_close.arcticmodal-close href="#"  &times;
+      section.modal-confirm
+        .modal-cnt
+          .descript
+            br/
+            p
+              | We’ve sent password to
+              br/
+              span.email yaosamo@gmail.com
+          .accept
+            p
+              a href="#"  Ok, thanks!
+  #modal-email.box-modal
+    .box-modal_i
+      a.box-modal_close.arcticmodal-close href="#"  &times;
+      section.modal-confirm
+        .modal-cnt
+          .descript
+            br/
+            p
+              | Confirm your email adress
+              br/
+              span.email yaosamo@gmail.com
+          .accept
+            p
+              a href="#"  Ok, thanks!

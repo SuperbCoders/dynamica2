@@ -24,6 +24,11 @@ html lang="ru"
             a.navbar-brand href="/"  DYNAMICA
           nav.collapse.navbar-collapse.bs-navbar-collapse
             - if signed_in?
+              ul.nav.navbar-nav
+                li class=('active' if params[:controller] == 'projects' && params[:action] == 'index')
+                  = link_to 'Projects', projects_path
+                li class=('active' if params[:controller] == 'projects' && params[:action] == 'new')
+                  = link_to 'New project', new_project_path
               ul.nav.navbar-right.hidden-xs
                 li
                   .user.dropdown
@@ -46,8 +51,11 @@ html lang="ru"
                           = link_to 'Log out', destroy_user_session_path, method: :delete
             - else
               ul.nav.navbar-nav.navbar-right
-                li= link_to 'Sign in', new_user_session_path
-                li= link_to 'Sign up', new_user_registration_path
+                li= link_to 'Sign in', new_user_session_path, data: { modal: 'login' }
+                li= link_to 'Sign up', new_user_registration_path, data: { modal: 'signup' }
       section.page-body
         .container-fluid.globalwidth
           = yield
+
+- unless signed_in?
+  = render 'login_popups'

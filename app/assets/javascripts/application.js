@@ -19,10 +19,12 @@
 
 //= require jquery.placeholder.min
 //= require bootstrap.min
+//= require jquery.arcticmodal.js
 //= require bootstrap-select.min
 
 //= require script
 
+//= require auth
 //= require items
 //= require permissions
 //= require profile
