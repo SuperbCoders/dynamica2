@@ -16,6 +16,7 @@
 //= require jquery.flot
 //= require jquery.flot.time
 //= require jquery.flot.tooltip
+//= require autoNumeric
 
 //= require jquery.placeholder.min
 //= require bootstrap.min
@@ -26,5 +27,6 @@
 
 //= require auth
 //= require items
+//= require forecasts
 //= require permissions
 //= require profile

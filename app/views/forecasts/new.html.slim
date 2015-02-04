@@ -22,7 +22,12 @@ section.case.case-project-edit
               h3.control-label.col-sm-3 For how long Forecast?
               .col-sm-9
                 .forecast-box.wrap-b
-                  = image_tag 'forecast-chart.png', style: 'max-width:100%;'
+                  .el-graph
+                    .el-count
+                      a.el-arrow.el-arrow-minus href="#"
+                      = f.text_field :depth, class: 'el-field'
+                      a.el-arrow.el-arrow-plus href="#"
+                    = image_tag 'forecast-chart.png', style: 'max-width:100%;'
                   .period-sel.text-center
                     = f.input_field :period, collection: Forecast::PERIODS.map { |i| [t("forecast.period.#{i}"), i]}, class: 'selectpicker', include_blank: false
         = f.button :submit, 'Make forecast', class: 'btn btn-lg btn-danger'

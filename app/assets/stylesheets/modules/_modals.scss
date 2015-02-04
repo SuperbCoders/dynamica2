@@ -65,13 +65,3 @@
 		margin: 0;
 	}
 }
-
-.modal-close {
-	display: block;
-	width: 21px;
-	height: 21px;
-	position: absolute;
-	top: 40px;
-	right: 40px;
-	@include retina-sprite(popup-close);
-}

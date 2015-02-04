@@ -5,6 +5,7 @@ class ForecastsController < ApplicationController
   def new
     authorize! :forecasting, @project
     @forecast = @project.forecasts.build
+    @forecast.depth ||= 10
     @project.items.create! if @project.items.empty?
     @items = @project.items.order(created_at: :desc)
   end

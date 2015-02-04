@@ -87,8 +87,8 @@ en:
       started: Started
       finished: Finished
     period:
-      day: Day
-      month: Month
+      day: Days
+      month: Months
     group_method:
       sum: Sum
       average: Average

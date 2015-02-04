@@ -176,3 +176,38 @@
   filter: alpha(opacity=0);
   z-index: -1;
 }
+
+.el-count {
+  width: 136px;
+  height: 34px;
+  .el-arrow {
+    display: block;
+    width: 34px;
+    height: 34px;
+    float: left;
+  }
+  .el-field {
+    width: 60px;
+    height: 34px;
+    margin: 0 4px;
+    float: left;
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+    border: 0;
+    background: none;
+  }
+}
+
+.el-graph {
+  position: relative;
+  overflow: hidden;
+  .el-count {
+    position: absolute;
+    top: 50%;
+    right: 70px;
+  }
+}
+
+.el-arrow-minus {@include retina-sprite(icon-minus);}
+.el-arrow-plus {@include retina-sprite(icon-plus);}
