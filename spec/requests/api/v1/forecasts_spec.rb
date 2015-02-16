@@ -52,7 +52,7 @@ RSpec.describe 'Forecasts API' do
     end
   end
 
-  describe 'POST /api/v1/projects/:project_id/items/:item_id/forecasts' do
+  describe 'POST /api/v1/projects/:project_id/forecasts' do
     it_behaves_like 'non authorized user'
     it_behaves_like 'user without permission'
 
