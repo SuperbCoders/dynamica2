@@ -7,6 +7,7 @@
         .control-box
           = f.text_field :name, class: 'form-control', placeholder: 'Product name'
           = f.file_field :attachment, style: 'visibility:hidden;', class: 'item_attachment'
+          = hidden_field_tag :authenticity_token, form_authenticity_token
         .control-box
           .file
             .selected style=('display:none' if item.values.size == 0)

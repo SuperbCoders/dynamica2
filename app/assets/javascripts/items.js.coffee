@@ -35,8 +35,11 @@ $ ->
           alert 'Can not upload file'
 
     # Initialize fileupload
-    $('.item .item_attachment').each (index, fileInput)->
-      initFileupload(fileInput)
+    initFileuploads = ->
+      $('.item .item_attachment').each (index, fileInput)->
+        initFileupload(fileInput)
+
+    initFileuploads()
 
     # Open file dialog when user clicks on link
     $('body').on 'click', '.js-choose-file', (event) ->
@@ -50,12 +53,15 @@ $ ->
     $('body').on 'ajax:success', '#js-add-new-item', (event, data, status) ->
       $newItem = $(data.html)
       $('.items .js-insert-new-item-here').after($newItem)
-      initFileupload($newItem.find('.item_attachment'))
+      # initFileupload($newItem.find('.item_attachment'))
+      initFileuploads()
 
     # PATCH/PUT /project/:project_id/items/:item_id
     $('body').on 'ajax:success', 'form.edit-item', (event, data, status) ->
       return unless event.target is this
-      $(this).closest('.item').replaceWith(data.html)
+      $item = $(this).closest('.item')
+      $item.replaceWith(data.html)
+      initFileuploads()
 
     $('body').on 'ajax:error', 'form.edit-item', (event, error, status) ->
       return unless event.target is this
@@ -73,6 +79,7 @@ $ ->
       $fileBlock = $(this).closest('.file')
       $fileBlock.find('.selected').hide()
       $fileBlock.find('.not-selected').show()
+      initFileuploads()
 
     $('body').on 'ajax:error', '.js-destroy-values', (event, error, status) ->
       alert('Can not destroy values')
