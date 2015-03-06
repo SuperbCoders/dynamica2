@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API documentation</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link type='text/css' rel='stylesheet' href='../../../apidocs/stylesheets/bundled/bootstrap.min.css'/>
+<link type='text/css' rel='stylesheet' href='../../../apidocs/stylesheets/bundled/prettify.css'/>
+<link type='text/css' rel='stylesheet' href='../../../apidocs/stylesheets/bundled/bootstrap-responsive.min.css'/>
+  <link type='text/css' rel='stylesheet' href='../../../apidocs/stylesheets/application.css'/>
+  <!-- IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div id='container'>
+        <ul class='breadcrumb'>
+  <li>
+    <a href='../../../apidocs/v1.html'>Dynamica v1</a>
+    <span class='divider'>/</span>
+  </li>
+  <li>
+    <a href='../../../apidocs/v1/forecasts.html'>
+      Forecasts
+      
+    </a>
+    <span class='divider'>/</span>
+  </li>
+  <li class='active'>index</li>
+  
+
+</ul>
+
+  <div class='page-header'>
+    <h1>
+      GET /api/v1/projects/:project_id/forecasts
+      <br>
+      <small>List of all the project forecasts</small>
+    </h1>
+  </div>
+
+<div>
+
+  
+<p>It returns a list of all the forecasts creted in the project.</p>
+
+<p>Successful request responds with 200 status code.</p>
+
+
+
+  <h2>Errors</h2>
+    403
+    Access denied
+    <br>
+    500
+    Server error
+    <br>
+
+
+  <h2>Examples</h2>
+    <pre class="prettyprint">// GET /api/v1/projects/my-shop/forecasts
+
+// Response
+
+[
+  {
+    &quot;forecast&quot;:{
+      &quot;id&quot;:85,
+      &quot;period&quot;:&quot;day&quot;,
+      &quot;group_method&quot;:&quot;sum&quot;,
+      &quot;depth&quot;:5,
+      &quot;from&quot;:null,
+      &quot;to&quot;:null,
+      &quot;planned_at&quot;:&quot;2015-03-06T14:32:14.380Z&quot;,
+      &quot;started_at&quot;:null,
+      &quot;finished_at&quot;:null,
+      &quot;workflow_state&quot;:&quot;planned&quot;
+    }
+  },
+  {
+    &quot;forecast&quot;:{
+      &quot;id&quot;:86,
+      &quot;period&quot;:&quot;day&quot;,
+      &quot;group_method&quot;:&quot;sum&quot;,
+      &quot;depth&quot;:5,
+      &quot;from&quot;:null,
+      &quot;to&quot;:null,
+      &quot;planned_at&quot;:&quot;2015-03-06T14:32:14.383Z&quot;,
+      &quot;started_at&quot;:&quot;2015-03-06T14:33:14.093Z&quot;,
+      &quot;finished_at&quot;:&quot;2015-03-06T14:35:14.093Z&quot;,
+      &quot;workflow_state&quot;:&quot;finished&quot;
+    }
+  }
+]
+</pre>
+
+
+</div>
+
+
+        
+      </div>
+    </div>
+    <hr>
+    <footer></footer>
+  </div>
+  <script type='text/javascript' src='../../../apidocs/javascripts/bundled/jquery-1.7.2.js'></script>
+<script type='text/javascript' src='../../../apidocs/javascripts/bundled/bootstrap-collapse.js'></script>
+<script type='text/javascript' src='../../../apidocs/javascripts/bundled/prettify.js'></script>
+<script type='text/javascript' src='../../../apidocs/javascripts/apipie.js'></script>
+</body>
+</html>

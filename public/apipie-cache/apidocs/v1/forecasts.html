@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API documentation</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link type='text/css' rel='stylesheet' href='../../apidocs/stylesheets/bundled/bootstrap.min.css'/>
+<link type='text/css' rel='stylesheet' href='../../apidocs/stylesheets/bundled/prettify.css'/>
+<link type='text/css' rel='stylesheet' href='../../apidocs/stylesheets/bundled/bootstrap-responsive.min.css'/>
+  <link type='text/css' rel='stylesheet' href='../../apidocs/stylesheets/application.css'/>
+  <!-- IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div id='container'>
+        <ul class='breadcrumb'>
+  <li>
+    <a href='../../apidocs/v1.html'>Dynamica v1</a>
+    <span class='divider'>/</span>
+  </li>
+  <li class='active'>
+    Forecasts
+    
+  </li>
+  
+</ul>
+
+<div class='page-header'>
+  <h1>
+    Forecasts
+    <br>
+    <small></small>
+  </h1>
+</div>
+
+
+
+
+<div class='accordion' id='accordion'>
+
+    <hr>
+    <div class='pull-right small'>
+      <a href='../../apidocs/v1/forecasts/index.html'> >>> </a>
+    </div>
+    <div>
+        <h2>
+          <a href='#description-index'
+           class='accordion-toggle'
+           data-toggle='collapse'
+           data-parent='#accordion'>
+            GET /api/v1/projects/:project_id/forecasts
+          </a>
+          <br>
+          <small>List of all the project forecasts</small>
+        </h2>
+    </div>
+
+
+    <div id='description-index' class='collapse accordion-body'>
+      
+<p>It returns a list of all the forecasts creted in the project.</p>
+
+<p>Successful request responds with 200 status code.</p>
+
+
+
+  <h3>Errors</h3>
+    403
+    Access denied
+    <br>
+    500
+    Server error
+    <br>
+
+
+  <h3>Examples</h3>
+    <pre class="prettyprint">// GET /api/v1/projects/my-shop/forecasts
+
+// Response
+
+[
+  {
+    &quot;forecast&quot;:{
+      &quot;id&quot;:85,
+      &quot;period&quot;:&quot;day&quot;,
+      &quot;group_method&quot;:&quot;sum&quot;,
+      &quot;depth&quot;:5,
+      &quot;from&quot;:null,
+      &quot;to&quot;:null,
+      &quot;planned_at&quot;:&quot;2015-03-06T14:32:14.380Z&quot;,
+      &quot;started_at&quot;:null,
+      &quot;finished_at&quot;:null,
+      &quot;workflow_state&quot;:&quot;planned&quot;
+    }
+  },
+  {
+    &quot;forecast&quot;:{
+      &quot;id&quot;:86,
+      &quot;period&quot;:&quot;day&quot;,
+      &quot;group_method&quot;:&quot;sum&quot;,
+      &quot;depth&quot;:5,
+      &quot;from&quot;:null,
+      &quot;to&quot;:null,
+      &quot;planned_at&quot;:&quot;2015-03-06T14:32:14.383Z&quot;,
+      &quot;started_at&quot;:&quot;2015-03-06T14:33:14.093Z&quot;,
+      &quot;finished_at&quot;:&quot;2015-03-06T14:35:14.093Z&quot;,
+      &quot;workflow_state&quot;:&quot;finished&quot;
+    }
+  }
+]
+</pre>
+
+
+    </div>
+    <hr>
+    <div class='pull-right small'>
+      <a href='../../apidocs/v1/forecasts/create.html'> >>> </a>
+    </div>
+    <div>
+        <h2>
+          <a href='#description-create'
+           class='accordion-toggle'
+           data-toggle='collapse'
+           data-parent='#accordion'>
+            POST /api/v1/projects/:project_id/forecasts
+          </a>
+          <br>
+          <small>Create a forecast</small>
+        </h2>
+    </div>
+
+
+    <div id='description-create' class='collapse accordion-body'>
+      
+<p>Create a new forecast. New forecast will be created in “planned” state and will be planned to the closest available time.</p>
+
+<p>Successful request responds with 201 status code. Otherwise see error codes list.</p>
+
+<h2 id="forecast_setup_examples">Forecast setup examples</h2>
+
+<ol>
+<li>
+<p>There is an online store. After each order it send to Dynamica data about just sold products (its SKU and sold quantity). Assume that we want to predict sales in next 2 month. What we need is to group previous purchases by month and sum them. So, the following request should be sent:</p>
+
+<p><code>{ &quot;forecast&quot;: { &quot;period&quot;: &quot;month&quot;, &quot;depth&quot;: &quot;2&quot;, &quot;group_method&quot;: &quot;sum&quot; } }</code></p>
+</li>
+
+<li>
+<p>Every hour we send to Dynamica data about RUB to USD exchange rate. We want to predict the exchange for the next 5 days. Now there is not sense to calculate sum of all these values. We are interested in the average exchange rate for each day. So, the following request should be sent:</p>
+
+<p><code>{ &quot;forecast&quot;: { &quot;period&quot;: &quot;day&quot;, &quot;depth&quot;: &quot;5&quot;, &quot;group_method&quot;: &quot;average&quot; } }</code></p>
+</li>
+</ol>
+
+
+
+  <h3>Errors</h3>
+    422
+    Unprocessable entity
+    <br>
+    403
+    Access denied
+    <br>
+    500
+    Server error
+    <br>
+
+
+  <h3>Examples</h3>
+    <pre class="prettyprint">// POST /api/v1/projects/my-shop/forecasts
+
+{ &quot;forecast&quot;: { &quot;period&quot;: &quot;month&quot;, &quot;depth&quot;: &quot;2&quot;, &quot;group_method&quot;: &quot;sum&quot; } }
+
+// Response
+
+{
+  &quot;forecast&quot;:{
+    &quot;id&quot;:88,
+    &quot;period&quot;:&quot;month&quot;,
+    &quot;depth&quot;:2,
+    &quot;group_method&quot;:&quot;sum&quot;,
+    &quot;from&quot;:null,
+    &quot;to&quot;:null,
+    &quot;workflow_state&quot;:&quot;planned&quot;,
+    &quot;planned_at&quot;:&quot;2015-03-06T15:16:58.420Z&quot;
+  }
+}
+</pre>
+
+  <h3>Params</h3>
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>Param name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr style='background-color:rgb(255,255,255);'>
+    <td>
+      <strong>forecast </strong><br>
+      <small>
+        required
+        
+      </small>
+    </td>
+    <td>
+      
+<p>Description of a new forecast</p>
+
+        <br>
+        Value: 
+<p>Must be a Hash</p>
+
+
+
+    </td>
+
+  </tr>
+
+    <tr style='background-color:rgb(250,250,250);'>
+    <td>
+      <strong>forecast[period] </strong><br>
+      <small>
+        required
+        
+      </small>
+    </td>
+    <td>
+      
+<p>Time unit of the forecast.</p>
+
+        <br>
+        Value: 
+<p>Must be one of: day, month.</p>
+
+
+
+    </td>
+
+  </tr>
+
+  
+  <tr style='background-color:rgb(250,250,250);'>
+    <td>
+      <strong>forecast[depth] </strong><br>
+      <small>
+        optional
+        
+      </small>
+    </td>
+    <td>
+      
+<p>Depth of the forecast in selected time units. Default: 14 days or 2 month</p>
+
+        <br>
+        Value: 
+<p>Must be Integer</p>
+
+
+
+    </td>
+
+  </tr>
+
+  
+  <tr style='background-color:rgb(250,250,250);'>
+    <td>
+      <strong>forecast[group_method] </strong><br>
+      <small>
+        optional
+        
+      </small>
+    </td>
+    <td>
+      
+<p>How to group values on. Default: “sum”</p>
+
+        <br>
+        Value: 
+<p>Must be one of: sum, average.</p>
+
+
+
+    </td>
+
+  </tr>
+
+  
+
+
+    </tbody>
+  </table>
+
+    </div>
+</div>
+
+
+        
+      </div>
+    </div>
+    <hr>
+    <footer></footer>
+  </div>
+  <script type='text/javascript' src='../../apidocs/javascripts/bundled/jquery-1.7.2.js'></script>
+<script type='text/javascript' src='../../apidocs/javascripts/bundled/bootstrap-collapse.js'></script>
+<script type='text/javascript' src='../../apidocs/javascripts/bundled/prettify.js'></script>
+<script type='text/javascript' src='../../apidocs/javascripts/apipie.js'></script>
+</body>
+</html>
