@@ -28,6 +28,8 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.6)
+    apipie-rails (0.3.1)
+      json
     arel (5.0.1.20140414130214)
     bcrypt (3.1.9)
     bootstrap-sass (3.3.1.0)
@@ -112,6 +114,7 @@ GEM
     libv8 (3.16.14.7)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    maruku (0.7.2)
     mime-types (2.4.3)
     mini_magick (4.0.3)
     minitest (5.4.3)
@@ -227,6 +230,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  apipie-rails
   bootstrap-sass (~> 3.3.1)
   cancancan
   capistrano (= 3.3.4)
@@ -244,6 +248,7 @@ DEPENDENCIES
   jquery-fileupload-rails
   jquery-rails
   letter_opener
+  maruku
   mini_magick
   non-stupid-digest-assets (~> 1.0.4)
   oj

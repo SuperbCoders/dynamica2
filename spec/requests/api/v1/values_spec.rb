@@ -1,22 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe 'Values API' do
+  include_context 'API'
+
   let(:project) { FactoryGirl.create(:project) }
   let(:user) { FactoryGirl.create(:user, with_projects: [project]) }
   let(:other_user) { FactoryGirl.create(:user) }
-
-  let(:common_headers) { { 'CONTENT_TYPE' => Mime::JSON.to_s } }
 
   describe 'POST /api/v1/projects/:project_id/values' do
     let(:url) { "/api/v1/projects/#{project.slug}/values" }
 
     it 'responses with 401 error for non authorized user' do
-      post url, {}, common_headers
+      post url, {}, headers_base
       expect(response.status).to eq(401)
     end
 
     it 'responses with 403 error for user without permission' do
-      post url, {}, user_headers(other_user, common_headers)
+      post url, {}, user_headers(other_user, headers_base)
       expect(response.status).to eq(403)
       expect(response.body).to eq('Access denied')
     end
@@ -26,7 +26,7 @@ RSpec.describe 'Values API' do
         [{ value: 0, timestamp: '2014-01-01 00:00:00' },
          { value: 2, timestamp: '2014-01-02 00:00:00' }]
       end
-      let(:headers) { user_headers(user, common_headers) }
+      let(:headers) { user_headers(user, headers_base) }
       let(:action) { post url, data.to_json, headers }
 
       shared_context 'successfull request' do
@@ -82,7 +82,7 @@ RSpec.describe 'Values API' do
     end
 
     context 'unprocessable data' do
-      let(:headers) { user_headers(user, common_headers) }
+      let(:headers) { user_headers(user, headers_base) }
       let(:action) { post url, data.to_json, headers }
       let :values_data do
         [{ value: 0, timestamp: '2014-01-01 00:00:00' },
@@ -105,6 +105,56 @@ RSpec.describe 'Values API' do
         expect(response.body).to eq(expected_response.to_json)
       end
     end
+  end
+
+  describe 'DELETE /api/v1/projects/:project_id/values' do
+    let(:item) { FactoryGirl.create(:item, project: project) }
+    let(:url) { "/api/v1/projects/#{project.slug}/items/#{item.sku}/values" }
+
+    before do
+      3.times do |i|
+        FactoryGirl.create(:value, item: item)
+      end
+    end
+
+    shared_examples 'restricted request' do
+      it 'does not destroy any values' do
+        expect { action }.not_to change(Value, :count)
+      end
+    end
+
+    context 'non authenticated user' do
+      let(:action) { delete url, {}, headers }
+      it_behaves_like 'non authenticated request'
+      it_behaves_like 'restricted request'
+    end
+
+    context 'authenticated user' do
+      let(:action) { delete url, {}, user_headers(user, headers_base) }
+
+      context 'without permissions' do
+        let(:user) { FactoryGirl.create(:user) }
+        it_behaves_like 'unauthorized request'
+        it_behaves_like 'restricted request'
+      end
+
+      context 'with permissions' do
+        it 'responds with 204 status code' do
+          action
+          expect(response.status).to eq(204)
+        end
+
+        it 'responds with empty body' do
+          action
+          expect(response.body).to be_blank
+        end
+
+        it 'destroys all the values' do
+          expect { action }.to change { Value.count }.by(-3)
+        end
+      end
+    end
+
   end
 
 end

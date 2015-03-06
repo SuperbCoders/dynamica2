@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  apipie
   root to: 'welcome#index'
 
   devise_for :users, controllers: { registrations: 'customized_devise/registrations', sessions: 'customized_devise/sessions', passwords: 'customized_devise/passwords' }
@@ -28,9 +29,13 @@ Rails.application.routes.draw do
         end
 
         resources :values, only: :create
+
         resources :items, only: [] do
-          delete :values, on: :member
+          resources :values, only: :create do
+            delete '' => 'values#destroy_all', on: :collection
+          end
         end
+
       end
       resources :forecasts, only: [] do
         resources :forecast_lines, only: :index, path: :lines

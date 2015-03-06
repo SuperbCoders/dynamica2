@@ -56,6 +56,10 @@ end
 # Use letter opener for test emails
 gem 'letter_opener', group: :development
 
+# REST API generation tool
+gem 'apipie-rails'
+gem 'maruku'
+
 gem 'devise'
 gem 'cancancan'
 gem 'rabl'
