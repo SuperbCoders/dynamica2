@@ -28,7 +28,9 @@ class Project < ActiveRecord::Base
     end
 
     def set_default_values
-      self.slug ||= name.to_s.parameterize
-      self.slug = Project.generate_unique_slug if slug.blank?
+      if slug.blank?
+        derived_slug = name.to_s.parameterize
+        self.slug = Project.exists?(slug: derived_slug) ? Project.generate_unique_slug : derived_slug
+      end
     end
 end
