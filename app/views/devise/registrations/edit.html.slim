@@ -17,8 +17,8 @@ section.case.case-profile
               = f.file_field :avatar, style: 'visibility:hidden;'
               .upload-box
                 .user-pic
-                  = image_tag current_user.avatar.medium, id: 'js-avatar', class: 'img-circle', width: '100px', height: '100px'
-                  = image_tag 'fallback/medium_default.png', id: 'js-default-avatar', class: 'img-circle', width: '100px', height: '100px', style: 'display:none'
+                  = image_tag current_user.avatar.medium, id: 'js-avatar', class: 'img-circle', width: '80px', height: '80px'
+                  = image_tag 'fallback/medium_default.png', id: 'js-default-avatar', class: 'img-circle', width: '80px', height: '80px', style: 'display:none'
                   = f.hidden_field :remove_avatar
                   a#js-delete-avatar.btn-delete href="#" style=('display:none' unless current_user.avatar?)
                     i.icon.fa.fa-trash
