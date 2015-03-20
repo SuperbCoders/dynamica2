@@ -77,8 +77,9 @@ en:
       planned_at: Date
       workflow_state: Status
       show: Show
-    show:
+    forecast:
       summary: Summary
+      noname: Noname product
 
   forecast:
     workflow_state:

@@ -8,7 +8,13 @@
               - if forecast_line.summary?
                 h3=t '.summary'
               - else
-                h3= forecast_line.item.name
+                - if forecast_line.item.name.present?
+                  h3= forecast_line.item.name
+                - else
+                  h3
+                    =>t '.noname'
+                    small= forecast_line.item.sku
+
             .col-sm-5
               ul.nav.nav-pills.pull-right
                 / li.arrow.inactive

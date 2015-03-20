@@ -57,7 +57,7 @@ class ItemsController < ApplicationController
 
     def item_params
       if params[:item]
-        params.require(:item).permit(:name, :sku, :attachment)
+        params.require(:item).permit(:name, :attachment)
       else
         {}
       end

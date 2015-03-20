@@ -12,7 +12,6 @@ class Item < ActiveRecord::Base
 
   validates :project, presence: true
   validates :sku, presence: true, uniqueness: { scope: :project_id }
-  validates :name, presence: true
 
   before_validation :set_default_values
   after_save :load_values_from_attachment, if: :reload_attachment
@@ -33,7 +32,6 @@ class Item < ActiveRecord::Base
 
     def set_default_values
       self.sku ||= self.class.generate_sku
-      self.name ||= sku
     end
 
     def load_values_from_attachment
