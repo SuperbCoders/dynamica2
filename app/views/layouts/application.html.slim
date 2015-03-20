@@ -45,11 +45,7 @@ html lang="ru"
                     .user-menu.dropdown-menu.right
                       ul
                         li
-                          a href="#"  Billing
-                        li
                           = link_to 'Profile', edit_user_registration_path
-                        li
-                          a href="#"  Help
                         li.clear
                           = link_to 'Log out', destroy_user_session_path, method: :delete
             - else

@@ -3,10 +3,6 @@ section.case.case-profile
     ul.nav.nav-pills
       li.active
         = link_to 'Profile', edit_user_registration_path
-      li
-        = link_to 'Billing', '#'
-      li.pull-right
-        a href="#"  Help
   .case-cnt.wrap-b
     = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'form-horizontal form' }) do |f|
       form action="" method="post" 
