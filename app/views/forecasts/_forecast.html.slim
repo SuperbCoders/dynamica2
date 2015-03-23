@@ -30,8 +30,10 @@
           .forecast-chart id="forecast-chart-#{forecast_line.id}" style="height:340px"
 
       javascript:
-        var data#{forecast_line.id} = #{forecast_line.predicted_values.order(from: :asc).map(&:to_flot)};
-        $.plot("#forecast-chart-#{forecast_line.id}", [data#{forecast_line.id}], {
+        var data#{forecast_line.id}Original = #{forecast_line.predicted_values.where(predicted: false).order(from: :asc).map(&:to_flot)};
+        var data#{forecast_line.id}Prediction = #{forecast_line.predicted_values.where(predicted: true).order(from: :asc).map(&:to_flot)};
+        data#{forecast_line.id}Original.push(data#{forecast_line.id}Prediction[0]);
+        $.plot("#forecast-chart-#{forecast_line.id}", [data#{forecast_line.id}Original, data#{forecast_line.id}Prediction], {
           series: {
             lines: {
               show: true,
@@ -59,6 +61,7 @@
           xaxis: { 
             mode: "time"
           },
+          colors: ["#69C8EA", "#FC6248"],
           tooltip: true,
           tooltipOpts: {
             content: "%x: %y.3",
