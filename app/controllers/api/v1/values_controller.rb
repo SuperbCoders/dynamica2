@@ -105,8 +105,10 @@ module API
             @values.last.save!
           end
         end
+        @project.logs.create!(key: 'api.values.create.success', user: current_user, data: { values_count: @values.size, item_sku: @item.sku, item_name: @item.name })
         render status: :created
       rescue ActiveRecord::RecordInvalid
+        @project.logs.create!(key: 'api.values.create.failed', user: current_user)
         render json: @values.map(&:errors).reject(&:empty?), status: :unprocessable_entity
       end
 
@@ -123,6 +125,7 @@ module API
         authorize! :api_access, @project
         set_item
         @item.values.destroy_all
+        @project.logs.create!(key: 'api.values.destroy', user: current_user, data: { item_sku: @item.sku, item_name: @item.name })
         head 204
       end
 

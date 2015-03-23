@@ -34,6 +34,15 @@ RSpec.describe 'Values API' do
           action
           expect(response.status).to eq(201)
         end
+
+        it 'logs action' do
+          expect { action }.to change(Log, :count).by(1)
+          log = Log.order(id: :asc).last
+          item = project.items.order(id: :asc).last
+          expect(log.project_id).to eq(project.id)
+          expect(log.user_id).to eq(user.id)
+          expect(log.data).to eq({ values_count: values_data.size, item_sku: item.sku, item_name: item.name })
+        end
       end
 
       context 'use new SKU' do
@@ -104,6 +113,14 @@ RSpec.describe 'Values API' do
         expected_response = [{ timestamp: ["can't be blank"] }]
         expect(response.body).to eq(expected_response.to_json)
       end
+
+      it 'logs action' do
+        expect { action }.to change(Log, :count).by(1)
+        log = Log.order(id: :asc).last
+        expect(log.key).to eq('api.values.create.failed')
+        expect(log.project_id).to eq(project.id)
+        expect(log.user_id).to eq(user.id)
+      end
     end
   end
 
@@ -151,6 +168,16 @@ RSpec.describe 'Values API' do
 
         it 'destroys all the values' do
           expect { action }.to change { Value.count }.by(-3)
+        end
+
+        it 'logs action' do
+          expect { action }.to change(Log, :count).by(1)
+          log = Log.order(id: :asc).last
+          item = project.items.order(id: :asc).last
+          expect(log.key).to eq('api.values.destroy')
+          expect(log.project_id).to eq(project.id)
+          expect(log.user_id).to eq(user.id)
+          expect(log.data).to eq({ item_sku: item.sku, item_name: item.name })
         end
       end
     end

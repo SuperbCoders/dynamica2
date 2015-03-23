@@ -23,7 +23,7 @@ RSpec.describe 'Forecasts API' do
     end
   end
 
-  describe 'GET /api/v1/projects/:project_id/items/:item_id/forecasts' do
+  describe 'GET /api/v1/projects/:project_id/forecasts' do
     it_behaves_like 'non authorized user'
     it_behaves_like 'user without permission'
 
@@ -48,6 +48,13 @@ RSpec.describe 'Forecasts API' do
           expect(json[0][:forecast][:id]).to eq(forecast_1.id)
           expect(json[1][:forecast][:id]).to eq(forecast_2.id)
         end
+
+        it 'logs action' do
+          expect { action }.to change(Log, :count).by(1)
+          log = Log.order(id: :asc).last
+          expect(log.project_id).to eq(project.id)
+          expect(log.user_id).to eq(user.id)
+        end
       end
     end
   end
@@ -70,7 +77,15 @@ RSpec.describe 'Forecasts API' do
       it 'responds with JSON' do
         action
         expect(response.status).to eq(201)
-        expect(json[:forecast][:id]).to eq(Forecast.last.id)
+        expect(json[:forecast][:id]).to eq(Forecast.order(id: :asc).last.id)
+      end
+
+      it 'logs action' do
+        expect { action }.to change(Log, :count).by(1)
+        log = Log.order(id: :asc).last
+        expect(log.project_id).to eq(project.id)
+        expect(log.user_id).to eq(user.id)
+        expect(log.data).to eq({ forecast_id: Forecast.order(id: :asc).last.id })
       end
     end
   end

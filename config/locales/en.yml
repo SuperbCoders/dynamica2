@@ -98,6 +98,21 @@ en:
       sum: Sum
       average: Average
 
+  log:
+    api:
+      values:
+        create:
+          success: "%{username} uploaded %{values_count} values for item %{item_sku}"
+          failed: "%{username} tried to upload values, but data was invalid"
+        destroy: "%{username} destroyed all the values of item #%{item_sku}"
+      forecasts:
+        index: "%{username} read forecasts list"
+        create:
+          success: "%{username} created a forecast #%{forecast_id}"
+          failed: "%{username} tried to create a forecast with invalid data"
+      forecast_lines:
+        index: "%{username} read results of forecast #%{forecast_id}"
+
   permission_mailer:
     invite_user:
       subject: "You were invited to the Dynamica project"

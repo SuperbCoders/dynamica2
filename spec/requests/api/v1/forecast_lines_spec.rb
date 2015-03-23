@@ -18,10 +18,16 @@ RSpec.describe 'ForecastLines API' do
   end
 
   shared_examples 'user without permission' do
+    let(:action) { get url, {}, user_headers(other_user, common_headers) }
+
     it 'responses with 403 error for user without permission' do
-      get url, {}, user_headers(other_user, common_headers)
+      action
       expect(response.status).to eq(403)
       expect(response.body).to eq('Access denied')
+    end
+
+    it 'does not log anything' do
+      expect { action }.not_to change(Log, :count)
     end
   end
 
@@ -51,6 +57,14 @@ RSpec.describe 'ForecastLines API' do
         expect(json[2][:forecast_line][:predicted_values].size).to eq(5)
         expect(json[2][:forecast_line][:item]).to be_nil
         expect(json[2][:forecast_line][:summary]).to eq(true)
+      end
+
+      it 'logs action' do
+        expect { action }.to change(Log, :count).by(1)
+        log = Log.order(id: :asc).last
+        expect(log.project_id).to eq(project.id)
+        expect(log.user_id).to eq(user.id)
+        expect(log.data).to eq({ forecast_id: forecast.id })
       end
     end
   end

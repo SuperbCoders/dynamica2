@@ -12,6 +12,8 @@ class User < ActiveRecord::Base
   # @return [Array<Project>] project that were created by the user
   has_many :own_projects, class_name: 'Project', dependent: :restrict_with_error
 
+  has_many :logs, dependent: :destroy
+
   validates :api_token, uniqueness: true, if: :api_token
 
   before_create :set_api_token
