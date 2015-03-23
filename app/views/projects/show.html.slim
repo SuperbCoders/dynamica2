@@ -18,7 +18,7 @@ section.case.case-project
               .setting-menu.dropdown-menu.right
                 ul
                   li
-                    a href="#"  Check API data
+                    a href="#" data-modal="api-data" Check API data
                   li
                     = link_to 'Edit', edit_project_path(@project)
                   li
@@ -38,6 +38,33 @@ section.case.case-project
           br>/
           = link_to 'Upload data', new_project_forecast_path(@project)
           |  or 
-          = link_to 'check API', '#'
+          = link_to 'check API', '#', data: { modal: 'api-data' }
           br>/
           | to create a new one.
+
+.hidden
+  #modal-api-data.box-modal
+    .box-modal_i
+      a.box-modal_close.arcticmodal-close href='#'  &times;
+      section.modal-login
+        .modal-capt
+          | Check API Data
+        .modal-cnt
+          .form-group
+            .control-box
+              .descript
+                | Your API token
+            .control-box
+              = text_field_tag :api_token, current_user.api_token, class: 'form-control', readonly: true
+          .descript
+            br/
+            - last_api_request = @project.logs.order(id: :asc).includes(:user).first
+            - if last_api_request
+              p.text-center
+                | Last API request at
+                br/
+                =l last_api_request.created_at, format: :long
+                br/
+                | by #{last_api_request.user.display_name}
+            - else
+              p.text-center There were no API requests yet
