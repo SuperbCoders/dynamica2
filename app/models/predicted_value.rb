@@ -3,7 +3,6 @@ class PredictedValue < ActiveRecord::Base
 
   validates :forecast_line, presence: true
   validates :value, presence: true
-  validates :timestamp, presence: true, uniqueness: { scope: :forecast_line_id }
   validates :from, presence: true
   validates :to, presence: true
 

@@ -18,12 +18,12 @@ class ForecastLine < ActiveRecord::Base
 
   def calculate
     calculated_values = calculator.calculate
-    original_values = calculator.series_with_timestamps
-    original_values.each do |key, value|
-      predicted_values.create!(timestamp: key[:timestamp], from: key[:from], to: key[:to], value: value, predicted: false)
+    original_values = calculator.series
+    original_values.each do |serie|
+      predicted_values.create!(from: serie['start'], to: serie['end'], value: serie['value'].to_f, predicted: false)
     end
     calculated_values.each do |key, value|
-      predicted_values.create!(timestamp: key[:timestamp], from: key[:from], to: key[:to], value: value, predicted: true)
+      predicted_values.create!(from: key[:from], to: key[:to], value: value, predicted: true)
     end
   end
 end

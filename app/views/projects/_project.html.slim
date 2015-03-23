@@ -3,8 +3,9 @@
     .title
       = link_to project.name, project
     .descript
-      - if project.forecasts.any?
-        | Last forecast #{time_ago_in_words(project.forecasts.last.finished_at)} ago
+      - last_finished_forecast = project.forecasts.with_finished_state.last
+      - if last_finished_forecast
+        | Last forecast #{time_ago_in_words(last_finished_forecast.finished_at)} ago
       - else
         | No forecast yet
     .users

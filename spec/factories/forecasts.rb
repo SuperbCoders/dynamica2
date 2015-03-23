@@ -17,12 +17,11 @@ FactoryGirl.define do
         forecast.project.items.each do |item|
           forecast_line = forecast.forecast_lines.create!(item: item)
           forecast.depth.times do |i|
-            time = (i+1).days.since
-            timestamp = time.strftime('%Y-%m-%d')
+            time = UTC.parse((i+1).days.since)
             from = time.beginning_of_day
             to = time.end_of_day
             value = (i + 1).to_f
-            forecast_line.predicted_values.create!(timestamp: timestamp, from: from, to: to, value: value, predicted: true)
+            forecast_line.predicted_values.create!(from: from, to: to, value: value, predicted: true)
           end
         end
         forecast.send(:calculate_summary) if forecast.project.items.count > 1

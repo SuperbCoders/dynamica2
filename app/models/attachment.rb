@@ -19,7 +19,7 @@ class Attachment
       result = {}
       CSV.foreach("#{Rails.root}/public/#{file.url}", col_sep: ';', encoding: 'UTF-8') do |row|
         begin
-          result[Time.parse(row[0])] = Float(row[1])
+          result[UTC.parse(row[0])] = Float(row[1])
         rescue
           self.with_parsing_errors = true
         end

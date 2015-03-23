@@ -88,8 +88,12 @@ en:
       started: Started
       finished: Finished
     period:
+      hour: Hours
       day: Days
+      week: Weeks
       month: Months
+      quarter: Quarters
+      year: Years
     group_method:
       sum: Sum
       average: Average

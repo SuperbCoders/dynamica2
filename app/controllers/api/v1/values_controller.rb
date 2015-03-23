@@ -99,7 +99,9 @@ module API
         @values = []
         Value.transaction do
           params[:values].each do |value_params|
-            @values << @item.values.build(value_params.permit(:value, :timestamp))
+            value = @item.values.build(value: value_params[:value])
+            value.timestamp = UTC.parse(value_params[:timestamp]) if value_params[:timestamp].present?
+            @values << value
             @values.last.save!
           end
         end

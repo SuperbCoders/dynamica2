@@ -1,7 +1,7 @@
 class Forecast < ActiveRecord::Base
   include Workflow
 
-  PERIODS = %w(day month)
+  PERIODS = %w(hour day week month quarter year)
   GROUP_METHODS = %w(sum average)
 
   belongs_to :project
@@ -66,9 +66,8 @@ class Forecast < ActiveRecord::Base
 
     def calculate_summary
       summary = forecast_lines.create!(summary: true)
-      predicted_values.group(:timestamp).sum(:value).each do |timestamp, value|
-        same_value = predicted_values.find_by(timestamp: timestamp)
-        summary.predicted_values.create!(timestamp: timestamp, from: same_value.from, to: same_value.to, value: value, predicted: same_value.predicted?)
+      predicted_values.select('"from", "to", "predicted", SUM(value) AS sum_value').group('"from", "to", "predicted"').each do |value|
+        summary.predicted_values.create!(from: value.from, to: value.to, value: value.sum_value, predicted: value.predicted?)
       end
     end
 

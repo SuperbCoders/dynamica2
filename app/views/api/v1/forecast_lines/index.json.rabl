@@ -9,5 +9,5 @@ node(:summary, if: -> (forecast_line) { forecast_line.summary? }) do
 end
 
 child :predicted_values, object_root: false do
-  attributes :from, :to, :timestamp, :value, :predicted
+  attributes :from, :to, :value, :predicted
 end

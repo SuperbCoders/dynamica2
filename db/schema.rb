@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150203174301) do
+ActiveRecord::Schema.define(version: 20150323092512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,7 +92,6 @@ ActiveRecord::Schema.define(version: 20150203174301) do
 
   create_table "predicted_values", force: true do |t|
     t.integer  "forecast_line_id"
-    t.string   "timestamp"
     t.float    "value"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -101,7 +100,6 @@ ActiveRecord::Schema.define(version: 20150203174301) do
     t.datetime "to"
   end
 
-  add_index "predicted_values", ["forecast_line_id", "timestamp"], name: "index_predicted_values_on_forecast_line_id_and_timestamp", unique: true, using: :btree
   add_index "predicted_values", ["forecast_line_id"], name: "index_predicted_values_on_forecast_line_id", using: :btree
 
   create_table "projects", force: true do |t|
