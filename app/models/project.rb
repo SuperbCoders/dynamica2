@@ -31,7 +31,9 @@ class Project < ActiveRecord::Base
 
     def self.generate_unique_slug_by_name(name)
       derived_slug = name.to_s.parameterize
-      if derived_slug.present? && !Project.exists?(slug: derived_slug)
+      if derived_slug.present? &&
+        !friendly_id_config.reserved_words.include?(derived_slug) &&
+        !Project.exists?(slug: derived_slug)
         derived_slug
       else
         Project.generate_unique_slug
