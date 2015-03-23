@@ -73,4 +73,9 @@
           }
         });
 - else
-  | Your forecast is planned and will be calculated in #{distance_of_time_in_words(Time.now, forecast.planned_at)}
+  section.case.case-projects-empty
+    .case-cnt.text-center
+      .title
+        | Your forecast is planned.
+        br>/
+        | It will be calculated in #{distance_of_time_in_words(Time.now, forecast.planned_at)}
