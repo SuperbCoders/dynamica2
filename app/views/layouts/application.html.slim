@@ -30,8 +30,6 @@ html lang="ru"
               ul.nav.navbar-nav
                 li class=('active' if params[:controller] == 'projects' && params[:action] == 'index')
                   = link_to 'Projects', projects_path
-                li class=('active' if params[:controller] == 'projects' && params[:action] == 'new')
-                  = link_to 'New project', new_project_path
               ul.nav.navbar-right.hidden-xs
                 li
                   .user.dropdown
