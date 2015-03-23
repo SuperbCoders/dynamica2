@@ -95,6 +95,7 @@ module API
       EOS
       def create
         authorize! :api_access, @project
+        @project.api_used!
         find_or_create_item
         @values = []
         Value.transaction do
@@ -123,6 +124,7 @@ module API
       EOS
       def destroy_all
         authorize! :api_access, @project
+        @project.api_used!
         set_item
         @item.values.destroy_all
         @project.logs.create!(key: 'api.values.destroy', user: current_user, data: { item_sku: @item.sku, item_name: @item.name })

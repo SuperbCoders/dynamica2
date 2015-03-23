@@ -20,6 +20,11 @@ class Project < ActiveRecord::Base
 
   before_validation :set_default_values
 
+  # Marks project as a project that uses API
+  def api_used!
+    update_column(:api_used, true) unless api_used?
+  end
+
   private
 
     def self.generate_unique_slug

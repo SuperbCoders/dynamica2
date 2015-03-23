@@ -10,6 +10,7 @@ module API
         authorize! :api_access, @project
         @forecast_lines = @forecast.forecast_lines.includes(:predicted_values, :item).order('items.id ASC')
         @project.logs.create!(key: 'api.forecast_lines.index', user: current_user, data: { forecast_id: @forecast.id })
+        @project.api_used!
       end
 
       private

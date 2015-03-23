@@ -7,9 +7,14 @@ section.case.case-project
         ul.nav.nav-pills.pull-right
           - if @forecast && @forecast.finished?
             li.active
-              = link_to new_project_forecast_path(@project), class: 'upload' do
-                i.icon.fa.fa-cloud-upload
-                | Update forecast
+              - if @project.api_used?
+                = link_to '#', class: 'upload', data: { modal: 'api-used' } do
+                  i.icon.fa.fa-cloud-upload
+                  | Update forecast
+              - else
+                = link_to new_project_forecast_path(@project), class: 'upload' do
+                  i.icon.fa.fa-cloud-upload
+                  | Update forecast
           li
             .setting.dropdown
               a.setting-toggle.dropdown-toggle data-toggle="dropdown" href="#" 
@@ -68,3 +73,26 @@ section.case.case-project
                 | by #{last_api_request.user.display_name}
             - else
               p.text-center There were no API requests yet
+
+  - if @project.api_used?
+    #modal-api-used.box-modal
+      .box-modal_i
+        a.box-modal_close.arcticmodal-close href='#'  &times;
+        section.modal-login
+          .modal-capt
+            | Warning!
+          .modal-cnt
+            .form
+              .descript
+                | This project was modified via API. 
+                | There is a risk to break something in your project.
+                br/
+                br/
+                | Are you sure that you want to update it manually?
+                br/
+                br/
+              .form-group
+                .control-box.text-center
+                  = link_to 'No, thanks', '#', class: 'btn btn-lg btn-danger arcticmodal-close'
+                .control-box.text-center.clear
+                  = link_to 'I still want to upload my data', new_project_forecast_path(@project)

@@ -51,6 +51,7 @@ module API
         authorize! :api_access, @project
         @forecasts = @project.forecasts.order(created_at: :asc)
         @project.logs.create!(key: 'api.forecasts.index', user: current_user)
+        @project.api_used!
       end
 
       api :POST, '/v1/projects/:project_id/forecasts', 'Create a forecast'
@@ -106,6 +107,7 @@ module API
       EOS
       def create
         authorize! :api_access, @project
+        @project.api_used!
         @forecast = @project.forecasts.build(forecast_params)
         if @forecast.save
           @project.logs.create!(key: 'api.forecasts.create.success', user: current_user, data: { forecast_id: @forecast.id })
