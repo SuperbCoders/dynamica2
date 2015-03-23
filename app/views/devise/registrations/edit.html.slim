@@ -39,6 +39,11 @@ section.case.case-profile
                 i.icon.fa.fa-twitter
                 | Facebook
         .form-group
+          label.control-label.col-md-3.col-sm-3 for="user_password"  API Token
+          .col-md-7.col-sm-9
+            .control-box
+              = text_field_tag :api_token, resource.api_token, readonly: true, class: 'form-control'
+        .form-group
           label.control-label.col-md-3.col-sm-3 for="user_password"  Password
           .col-md-7.col-sm-9
             .control-box class=('has-error' if resource.errors.messages[:password])
