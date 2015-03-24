@@ -25,6 +25,10 @@ class Project < ActiveRecord::Base
     update_column(:api_used, true) unless api_used?
   end
 
+  def recent_forecast
+    forecasts.order(created_at: :asc, finished_at: :asc).last
+  end
+
   private
 
     def self.generate_unique_slug

@@ -26,7 +26,7 @@ section.case.case-project
                     a href="#" data-modal="api-data" Check API data
                   li
                     = link_to 'Edit', edit_project_path(@project)
-                  - if @forecast
+                  - if @forecast && @forecast.finished?
                     li
                       = link_to 'Export data', project_forecast_predicted_values_path(@project, @forecast)
                   li
