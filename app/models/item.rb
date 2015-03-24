@@ -36,10 +36,8 @@ class Item < ActiveRecord::Base
 
     def load_values_from_attachment
       return true unless attachment.present?
-      parser = Attachment.new(attachment)
-      parser.data.each do |timestamp, value|
-        values.create(timestamp: timestamp, value: value)
-      end
+      parser = Attachment.new(self, "#{Rails.root}/public/#{attachment.url}")
+      parser.process
       self.with_parsing_errors = parser.with_parsing_errors
       reload
       true
