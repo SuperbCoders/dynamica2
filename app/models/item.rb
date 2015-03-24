@@ -21,6 +21,10 @@ class Item < ActiveRecord::Base
     super
   end
 
+  def display_name
+    [name, sku, id].select(&:present?).first
+  end
+
   private
 
     def self.generate_sku

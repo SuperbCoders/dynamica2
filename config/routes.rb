@@ -13,7 +13,9 @@ Rails.application.routes.draw do
     resources :items, only: [:index, :create, :update, :destroy], on: :member do
       delete :values, on: :member
     end
-    resources :forecasts, only: [:new, :create]
+    resources :forecasts, only: [:new, :create] do
+      resources :predicted_values, only: :index
+    end
     resources :attachments, only: :create
   end
 
