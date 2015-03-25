@@ -1,0 +1,64 @@
+doctype html
+html lang="ru" 
+  head
+    meta content="width=device-width, initial-scale=1" name="viewport" /
+    meta charset="utf-8" /
+    meta content="" name="keywords" /
+    meta content="" name="description" /
+    title Dynamica
+
+    link rel="apple-touch-icon" href=asset_path('apple-touch-icon.png') /
+    link href="/favicon.ico" rel=("shortcut icon") type="image/x-icon" /
+
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application'
+    /![if lt IE 9]
+      = javascript_include_tag 'html5shiv'
+    = csrf_meta_tags
+
+  body
+    .page
+      section.case-landing
+        .rowspan.row1.row-odd
+          .container-fluid.globalwidth
+            .brand DYNAMICA
+            .title
+              h2
+                | Математический инструмент
+                br/
+                | для прогноза продаж
+            .descript или любых данных, меняющихся во времени
+            .btn-wrap
+              = link_to 'Попробовать бесплатно', new_user_registration_path, data: { modal: 'signup' }, class: 'a btn btn-xl btn-danger'
+        .rowspan.row2.row-even
+          .container-fluid.globalwidth
+            .text.offset-40
+              p При осуществлении финансово-хозяйственной деятельности мы постоянно имеем дело с прогнозированием различных показателей. Например, нам нужно знать продажи в будущем периоде, чтобы закупить товар в необходимом количестве.
+              p И часто такое планирование осуществляется «на глазок» – не самый надежный метод. DYNAMICA ставит своей целью решить эту проблему и предоставить вам удобный инструмент для прогнозирования любых показателей.
+              p
+                b На основе нашей текущей практики: погрешность не превышает 5%
+            .divider
+            .text.offset-80
+              h2.text-center
+                | Просто загрузите данные
+                br/
+                | и мы построим прогноз
+              p
+                b CSV
+                | – все очень просто: сохраните историю продаж в CSV файл и загрузите к нас на сервер
+              p
+                b API
+                | – для более продвинутых расчетов и автоматического обмена данными используете наш API
+            .graphic
+              = image_tag 'landing-chart.png', width: '100%'
+            .btn-wrap.text-center
+              = link_to 'Попробовать прямо сейчас', new_user_registration_path, data: { modal: 'signup' }, class: 'a btn btn-xl btn-danger'
+        .rowspan.row3.row-odd
+          .container-fluid.globalwidth
+            .text.offset-40
+              h2.text-center Как это работает?
+              p Динамика анализирует ваши данные и строит математическую функцию, которая отражает поведение данных во времени. Визуализацией этой функции является кривая, которую мы превращаем в понятный вам график.
+              p Мы видим основное применение Динамики в области торговли, но никак не ограничиваем вашу фантазию – вы можете строить прогнозы для любых данных, меняющихся во времени.
+            .copyright LTD Dynamica © 2015 All Rights Reserved
+
+= render 'login_popups'
