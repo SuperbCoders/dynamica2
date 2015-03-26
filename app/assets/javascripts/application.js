@@ -30,3 +30,4 @@
 //= require forecasts
 //= require permissions
 //= require profile
+//= require dropzone

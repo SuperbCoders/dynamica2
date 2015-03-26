@@ -17,8 +17,10 @@ $ ->
       $notSelected = $item.find('.file .not-selected')
       $loading = $item.find('.file .loading')
       $progressBar = $item.find('.file .loading .js-progress-bar')
+      $dropzone = $item
 
       $(fileInput).fileupload
+        dropZone: $item
         add: (e, data) ->
           $notSelected.hide()
           $loading.show()

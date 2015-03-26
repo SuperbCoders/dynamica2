@@ -16,3 +16,19 @@
  */
  
  #flotTip {white-space: nowrap; border: 1px solid #111; padding: 3px 8px; background:#fff; font-size:12px;}
+
+.dropzone {
+}
+.dropzone.in {
+}
+.dropzone.hover {
+    background: #F6F6F6;
+}
+.dropzone.fade {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    opacity: 1;
+}

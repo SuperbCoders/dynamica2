@@ -1,4 +1,4 @@
-.item.wrap-b id="item-#{item.id}"
+.item.dropzone.wrap-b id="item-#{item.id}"
   = form_for [@project, item], html: { class: 'form form-horizontal edit-item' }, remote: true do |f|  
     = link_to '×', project_item_path(@project, item), class: 'js-destroy-item btn-close', method: :delete, remote: true, data: { confirm: t('.destroy_confirmation') }
     .form-group
