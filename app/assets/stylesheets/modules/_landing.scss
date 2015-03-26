@@ -2,6 +2,32 @@
 	.globalwidth {
 		max-width: 820px;
 	}
+	.lang {
+		position: absolute;
+		top: 60px;
+		left: 60px;
+		color: #5f6167;
+		font-size: 20px;
+		font-weight: bold;
+		@media (max-width: $screen-sm-min) {
+			top: 30px;
+			left: 30px;
+		}
+	}
+	.btn-log {
+		min-width: 160px;
+		position: absolute;
+		top: 60px;
+		right: 60px;
+		border-radius: 27px;
+		@media (max-width: $screen-sm-min) {
+			min-width: 0;
+			padding: 0;
+			top: 30px;
+			right: 30px;
+			border: 0;
+		}
+	}
 	h2 {
 		margin-bottom: 50px;
 		color: #4c5056;
