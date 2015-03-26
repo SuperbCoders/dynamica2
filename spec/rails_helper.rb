@@ -4,6 +4,12 @@ require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'capybara/rails'
+require 'capybara/poltergeist'
+require 'database_cleaner'
+
+Capybara.javascript_driver = :poltergeist
+DatabaseCleaner.strategy = :truncation
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -50,4 +56,8 @@ RSpec.configure do |config|
 
   # Include own application-specific helpers
   config.include Requests::JsonHelpers, type: :request
+
+  config.after :each do
+    DatabaseCleaner.clean
+  end
 end

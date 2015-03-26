@@ -51,6 +51,14 @@ end
 group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'capybara'
+
+  # Uncomment to use Poltergeist
+  gem 'poltergeist'
+  gem 'database_cleaner'
+
+  # Uncomment to use Selenium
+  # gem 'selenium-webdriver'
 end
 
 # Use letter opener for test emails
