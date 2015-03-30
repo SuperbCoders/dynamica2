@@ -47,7 +47,7 @@ html lang="ru"
                       li
                         = link_to t('.profile'), edit_user_registration_path
                       li.clear
-                        = link_to t('.log_out'), destroy_user_session_path, method: :delete
+                        = link_to t('.log_out'), destroy_user_session_path
       section.page-body
         .container-fluid.globalwidth
           = yield
