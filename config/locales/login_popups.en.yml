@@ -1,0 +1,30 @@
+en:
+  application:
+    login_popups:
+      log_in:
+        log_in: Log in
+        sign_up: Sign up
+        form:
+          email: 'Email'
+          password: 'Password'
+          submit: 'Log in'
+        password_recovery: 'I forgot my password'
+      sign_up:
+        log_in: Log in
+        sign_up: Sign up
+        form:
+          email: 'Email'
+          password: 'Password'
+          submit: 'Start'
+      password_recovery:
+        back: Back
+        password_recovery: Password recovery
+        description:
+          line_1: Enter your email and we will send you
+          line_2: password recovery instructions
+        form:
+          email: Email
+          submit: Send
+      password_recovery_sent:
+        description: "We’ve sent password recovery instructions to"
+        ok: "Ok, thanks!"

@@ -6,9 +6,9 @@
         .modal-capt
           ul.nav.nav-pills
             li.active
-              a Log in
+              a=t '.log_in.log_in'
             li
-              a href='#' data-modal='signup' Sign up
+              a href='#' data-modal='signup'=t '.log_in.sign_up'
         .modal-cnt
           .form
             = form_for User.new, as: :user, url: session_path(:user), html: { class: 'validate-login form-horizontal' }, remote: true do |f|
@@ -22,13 +22,13 @@
                     | Twitter
               .form-group
                 .control-box
-                  = f.email_field :email, class: 'form-control', autofocus: true, placeholder: 'Email'
+                  = f.email_field :email, class: 'form-control', autofocus: true, placeholder: t('.log_in.form.email')
                 .control-box
-                  = f.password_field :password, class: 'form-control', autocomplete: 'off', placeholder: 'Password'
+                  = f.password_field :password, class: 'form-control', autocomplete: 'off', placeholder: t('.log_in.form.password')
                 .control-box.text-center
-                  = f.submit 'Log in', class: 'btn btn-lg btn-danger'
+                  = f.submit t('.log_in.form.submit'), class: 'btn btn-lg btn-danger'
                 .control-box.text-center.clear
-                  a href='#' data-modal='recover'  Password recovery
+                  a href='#' data-modal='recover'=t '.log_in.password_recovery'
   #modal-signup.box-modal
     .box-modal_i
       a.box-modal_close.arcticmodal-close href='#'  &times;
@@ -36,21 +36,19 @@
         .modal-capt
           ul.nav.nav-pills
             li
-              a href='#' data-modal='login'  Log in
+              a href='#' data-modal='login'=t '.sign_up.log_in'
             li.active
-              a Sign up
+              a=t '.sign_up.sign_up'
         .modal-cnt
           .form
             = form_for User.new, as: :user, url: registration_path(:user), html: { class: 'validate-signup form-horizontal' }, remote: true do |f|
               .form-group
                 .control-box
-                  = f.email_field :email, class: 'form-control', autofocus: true, placeholder: 'Email'
+                  = f.email_field :email, class: 'form-control', autofocus: true, placeholder: t('.sign_up.form.email')
                 .control-box
-                  = f.password_field :password, class: 'form-control', autocomplete: 'off', placeholder: 'Password'
-                .control-box
-                  = f.password_field :password_confirmation, class: 'form-control', autocomplete: 'off', placeholder: 'Confirm password'
+                  = f.password_field :password, class: 'form-control', autocomplete: 'off', placeholder: t('.sign_up.form.password')
                 .control-box.text-center
-                  = f.submit 'Join', class: 'btn btn-lg btn-danger'
+                  = f.submit t('.sign_up.form.submit'), class: 'btn btn-lg btn-danger'
   #modal-recover.box-modal
     .box-modal_i
       a.box-modal_close.arcticmodal-close href='#'  &times;
@@ -58,22 +56,22 @@
         .modal-capt
           ul.nav.nav-pills
             li
-              a href='#' data-modal='login'  Back
+              a href='#' data-modal='login'=t '.password_recovery.back'
             li.active
-              a  Password recovery
+              a=t '.password_recovery.password_recovery'
         .modal-cnt
           .form
             = form_for User.new, as: :user, url: password_path(:user), html: { class: 'validate-password-recovery', method: :post }, remote: true do |f|
               .form-group
                 .control-box
                   .descript
-                    | Enter your email and we will send you
-                    br>/
-                    | password recovery instructions
+                    =t '.password_recovery.description.line_1'
+                    br/
+                    =t '.password_recovery.description.line_2'
                 .control-box
-                  = f.email_field :email, class: 'form-control', autofocus: true, placeholder: 'Email'
+                  = f.email_field :email, class: 'form-control', autofocus: true, placeholder: t('.password_recovery.form.email')
                 .control-box.text-center
-                  = f.submit 'Send', class: 'btn btn-lg btn-danger'
+                  = f.submit t('.password_recovery.form.submit'), class: 'btn btn-lg btn-danger'
   #modal-password-recovery-sent.box-modal
     .box-modal_i
       a.box-modal_close.arcticmodal-close href='#'  &times;
@@ -82,9 +80,9 @@
           .descript
             br/
             p
-              | We’ve sent password to
+              =t '.password_recovery_sent.description'
               br/
               span.email
           .accept
             p
-              a.arcticmodal-close href='#'  Ok, thanks!
+              a.arcticmodal-close href='#'=t '.password_recovery_sent.ok'
