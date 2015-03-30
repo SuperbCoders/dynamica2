@@ -20,7 +20,7 @@ html lang="ru"
     .page
       section.case-landing
         .rowspan.row1.row-odd
-          - if params[:locale].blank? || params[:locale] == 'en'
+          - if I18n.locale == :en
             = link_to 'РУС', url_for(locale: 'ru'), class: 'lang'
           - else
             = link_to 'ENG', url_for(locale: 'en'), class: 'lang'
