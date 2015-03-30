@@ -5,9 +5,9 @@
     .descript
       - last_finished_forecast = project.forecasts.with_finished_state.last
       - if last_finished_forecast
-        | Last forecast #{time_ago_in_words(last_finished_forecast.finished_at)} ago
+        =t '.last_forecast', time: time_ago_in_words(last_finished_forecast.finished_at)
       - else
-        | No forecast yet
+        =t '.no_forecasts'
     .users
       ul
         - project.users.each do |user|

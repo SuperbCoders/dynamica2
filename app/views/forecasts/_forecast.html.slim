@@ -73,14 +73,4 @@
           }
         });
 - else
-  section.case.case-projects-empty
-    .case-cnt.text-center
-      .title
-        | Your forecast is planned.
-        br>/
-        | It will be calculated in 
-        - ceiled_time = ceil_time(forecast.planned_at, 5.minutes)
-        - if ceiled_time.future?
-          = distance_of_time_in_words(Time.now, ceiled_time)
-        - else
-          | a moment
+  = render partial: 'forecasts/planned', object: forecast, as: :forecast

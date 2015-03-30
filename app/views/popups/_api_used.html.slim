@@ -1,0 +1,20 @@
+.hidden
+  #modal-api-used.box-modal
+    .box-modal_i
+      a.box-modal_close.arcticmodal-close href='#'  &times;
+      section.modal-login
+        .modal-capt=t '.title'
+        .modal-cnt
+          .form
+            .descript
+              =t '.description.line_1'
+              br/
+              br/
+              =t '.description.line_2'
+              br/
+              br/
+            .form-group
+              .control-box.text-center
+                = link_to t('.button_no'), '#', class: 'btn btn-lg btn-danger arcticmodal-close'
+              .control-box.text-center.clear
+                = link_to t('.button_yes'), new_project_forecast_path(@project)

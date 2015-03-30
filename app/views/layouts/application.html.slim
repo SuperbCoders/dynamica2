@@ -26,30 +26,25 @@ html lang="ru"
               span.icon-bar
             a.navbar-brand href="/"  DYNAMICA
           nav.collapse.navbar-collapse.bs-navbar-collapse
-            - if signed_in?
-              ul.nav.navbar-nav
-                li class=('active' if params[:controller] == 'projects' && params[:action] == 'index')
-                  = link_to 'Projects', projects_path
-              ul.nav.navbar-right.hidden-xs
-                li
-                  .user.dropdown
-                    .arrow
-                    a.user-toggle.dropdown-toggle data-toggle="dropdown" href="#" 
-                      span.user-pic
-                        = image_tag current_user.avatar.small, class: 'img-circle', width: '40px', height: '40px'
-                      span.user-name
-                        = current_user.display_name
-                        i.icon.fa.fa-angle-down
-                    .user-menu.dropdown-menu.right
-                      ul
-                        li
-                          = link_to 'Profile', edit_user_registration_path
-                        li.clear
-                          = link_to 'Log out', destroy_user_session_path, method: :delete
-            - else
-              ul.nav.navbar-nav.navbar-right
-                li= link_to 'Sign in', new_user_session_path, data: { modal: 'login' }
-                li= link_to 'Sign up', new_user_registration_path, data: { modal: 'signup' }
+            ul.nav.navbar-nav
+              li class=('active' if params[:controller] == 'projects' && params[:action] == 'index')
+                = link_to t('.projects'), projects_path
+            ul.nav.navbar-right.hidden-xs
+              li
+                .user.dropdown
+                  .arrow
+                  a.user-toggle.dropdown-toggle data-toggle="dropdown" href="#"
+                    span.user-pic
+                      = image_tag current_user.avatar.small, class: 'img-circle', width: '40px', height: '40px'
+                    span.user-name
+                      = current_user.display_name
+                      i.icon.fa.fa-angle-down
+                  .user-menu.dropdown-menu.right
+                    ul
+                      li
+                        = link_to t('.profile'), edit_user_registration_path
+                      li.clear
+                        = link_to t('.log_out'), destroy_user_session_path, method: :delete
       section.page-body
         .container-fluid.globalwidth
           = yield

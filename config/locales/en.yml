@@ -19,30 +19,32 @@ en:
     project:
       edit: Edit
       delete: Delete
-      destroy-confirmation: "Do you really want to destroy this project? This action is irreversible."
-    form:
-      create: Create project
-    header:
-      overview: Overview
-      forecasts: Forecasts
-      items: Items
-      team: Team
+      destroy-confirmation: "Do you really want to delete the project? It can not be restored."
+      last_forecast: "Last forecast %{time} ago"
+      no_forecasts: No forecasts yet
     index:
-      title: My projects
       new: Add new project
     show:
-      upload_data: Upload data
-      settings: Settings
-      no_items: 'There is no time series data yet. Check out %{api_docs} or %{upload_data} to start.'
-      no_items_api_docs: API documentation
-      no_items_upload_data: upload your data
+      controls:
+        update_forecast: Update forecast
+        settings: Settings
+      settings:
+        api_status: API status
+        edit: Edit project name
+        export: Export
+        team: Team
+        delete: Delete project
     new:
       title: New project
+      form:
+        submit: Next
     create:
       flash:
         success: Project was successfully created
     edit:
       title: Edit project
+      form:
+        submit: Save
     update:
       flash:
         success: Project was successfully saved
@@ -50,6 +52,9 @@ en:
       flash:
         success: Project was destroyed
         fail: Project could not be destroyed
+    empty:
+      title: "Hello, you don't have any projects."
+      button: Start my project
 
   permissions:
     index:
@@ -63,23 +68,54 @@ en:
       invite: Invite
       invite_cancel: Cancel
     permission:
-      destroy-confirmation: "Do you really want to revoke access for this user? This action is irreversible."
+      destroy-confirmation: "Do you really want to revoke access for this user?"
 
   items:
-    shared:
-      choose_file: 'Choose file on <a class="js-choose-file" href="#">your computer</a><br />or drag here'
     item:
+      form:
+        name: Product name
+        attachment: 'Drop a file here <a class="js-choose-file" href="#">or choose</a> from computer'
+        cancel: Cancel
+        data_was_uploaded: Data was successfully uploaded
+        uploaded_values: "%{count} values uploaded"
       parsing_errors_warning: "There were errors during CSV file parsing. Please, check the results"
-      destroy_confirmation: "Do you really want to destroy this item? This action is irreversible."
+      destroy_confirmation: "Do you really want to delete this product? It can not be restored."
 
   forecasts:
-    index:
-      planned_at: Date
-      workflow_state: Status
-      show: Show
+    new:
+      back: Back
+      title: Upload your data
+      add_product: Add another product
+      description:
+        line_1: 'Export your sales log as CSV file (<a href="#" data-modal="csv-example">check the example</a>). '
+        line_2: 'One file for one product. You can add many products to this forecast.'
+      params: "Do you want your graph by day or week or other interval - choose, please.<br /><br />And for how many days (or what you have) to forecast?"
+      form:
+        submit: Make forecast
     forecast:
       summary: Summary
       noname: Noname product
+    empty:
+      text: 'No data for analysis.<br /><a href="%{upload_url}">Upload CSV file</a> or <a data-modal="api-status" href="#">set up API connection</a>'
+    planned:
+      title: "We need %{time} to process your forecast.<br />Wait a bit, please."
+      moment: a moment
+
+  devise:
+    registrations:
+      edit:
+        profile: Profile
+        personal: Personal
+        api_token: API token
+        password: Password
+        avatar_select: 'Drag and drop new avatar <a id="js-choose-file" href="#">or choose</a>'
+        form:
+          name: Name
+          email: Email
+          new_password: New password
+          confirm_new_password: Confirm new password
+          current_password: Current password
+          submit: Save
 
   forecast:
     workflow_state:

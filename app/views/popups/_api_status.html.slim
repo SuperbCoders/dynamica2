@@ -1,0 +1,23 @@
+.hidden
+  #modal-api-status.box-modal
+    .box-modal_i
+      a.box-modal_close.arcticmodal-close href='#'  &times;
+      section.modal-login
+        .modal-capt=t '.title'
+        .modal-cnt
+          p
+            =t '.description.line_1'
+            = t('.description.line_2', manual_url: '#', email_url: 'mailto:support@dynamica.cc').html_safe
+          .form-group
+            .control-box
+              .descript=t '.api_token'
+            .control-box
+              = text_field_tag :api_token, current_user.api_token, class: 'form-control', readonly: true
+          .descript
+            br/
+            - last_api_request = @project.logs.order(id: :asc).includes(:user).first
+            - if last_api_request
+              p.text-center
+                = t('.last_request', date: I18n.l(last_api_request.created_at, format: :long), user: last_api_request.user.display_name).html_safe
+            - else
+              p.text-center=t '.no_requests'

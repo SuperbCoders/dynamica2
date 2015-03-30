@@ -5,7 +5,6 @@ class ProjectsController < ApplicationController
   def index
     authorize! :read, Project
     @projects = current_user.projects.includes(:forecasts, :users)
-    redirect_to @projects.first if @projects.size == 1
   end
 
   # GET /projects/:id

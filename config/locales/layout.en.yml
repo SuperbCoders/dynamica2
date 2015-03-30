@@ -1,0 +1,6 @@
+en:
+  layouts:
+    application:
+      projects: Projects
+      profile: Profile
+      log_out: Log out

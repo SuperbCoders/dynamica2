@@ -85,3 +85,4 @@ gem 'non-stupid-digest-assets', '~> 1.0.4' # creates both digest and non-digest 
 gem 'smarter_csv'
 gem 'render_csv'
 gem 'rubyzip'
+gem 'russian'

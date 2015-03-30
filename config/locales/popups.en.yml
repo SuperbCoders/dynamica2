@@ -1,0 +1,45 @@
+en:
+  popups:
+    login:
+      log_in:
+        log_in: Log in
+        sign_up: Sign up
+        form:
+          email: 'Email'
+          password: 'Password'
+          submit: 'Log in'
+        password_recovery: 'I forgot my password'
+      sign_up:
+        log_in: Log in
+        sign_up: Sign up
+        form:
+          email: 'Email'
+          password: 'Password'
+          submit: 'Start'
+      password_recovery:
+        back: Back
+        password_recovery: Password recovery
+        description:
+          line_1: Enter your email and we will send you
+          line_2: password recovery instructions
+        form:
+          email: Email
+          submit: Send
+      password_recovery_sent:
+        description: "We’ve sent password recovery instructions to"
+        ok: "Ok, thanks!"
+    api_status:
+      title: API status
+      description:
+        line_1: 'Use our API to submit your data automatically and to request a forecast. '
+        line_2: 'Check <a href="%{manual_url}">the manual</a>. Feel free <a href="%{email_url}">to email</a> us if you have questions.'
+      api_token: Your API token
+      no_requests: There were no API requests yet
+      last_request: 'Last API request at<br />%{date}<br />by %{user}'
+    api_used:
+      title: "Warning!"
+      description:
+        line_1: "This project was modified via API. There is a risk to break something in your project."
+        line_2: "Are you sure that you want to update it manually?"
+      button_yes: I still want to upload my data
+      button_no: "No, thanks"

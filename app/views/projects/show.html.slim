@@ -5,95 +5,40 @@ section.case.case-project
         h1= @project.name
       .col-sm-5
         ul.nav.nav-pills.pull-right
-          - if @forecast && @forecast.finished?
+          - if @forecast && @forecast.finished? && can?(:forecasting, @project)
             li.active
               - if @project.api_used?
                 = link_to '#', class: 'upload', data: { modal: 'api-used' } do
                   i.icon.fa.fa-cloud-upload
-                  | Update forecast
+                  =t '.controls.update_forecast'
               - else
                 = link_to new_project_forecast_path(@project), class: 'upload' do
                   i.icon.fa.fa-cloud-upload
-                  | Update forecast
+                  =t '.controls.update_forecast'
           li
             .setting.dropdown
               a.setting-toggle.dropdown-toggle data-toggle="dropdown" href="#" 
                 i.icon.fa.fa-cog
-                =t '.settings'
+                =t '.controls.settings'
               .setting-menu.dropdown-menu.right
                 ul
                   li
-                    a href="#" data-modal="api-data" Check API data
+                    a href="#" data-modal="api-status"=t '.settings.api_status'
                   li
-                    = link_to 'Edit', edit_project_path(@project)
+                    = link_to t('.settings.edit'), edit_project_path(@project)
                   - if @forecast && @forecast.finished?
                     li
-                      = link_to 'Export data', project_forecast_predicted_values_path(@project, @forecast)
+                      = link_to t('.settings.export'), project_forecast_predicted_values_path(@project, @forecast)
                   li
-                    = link_to 'Teammates', project_permissions_path(@project)
+                    = link_to t('.settings.team'), project_permissions_path(@project)
                   li.clear
-                    = link_to 'Delete project', project_path(@project), method: :delete, data: { confirm: t('projects.project.destroy-confirmation') }
+                    = link_to t('.settings.delete'), project_path(@project), method: :delete, data: { confirm: t('projects.project.destroy-confirmation') }
   - if @forecast
     .case-cnt
       = render partial: 'forecasts/forecast', object: @forecast, as: :forecast
   - else
-    section.case.case-projects-empty
-      .case-cnt.text-center
-        .title
-          | There are no forecasts yet. 
-          br>/
-          = link_to 'Upload data', new_project_forecast_path(@project)
-          |  or 
-          = link_to 'check API', '#', data: { modal: 'api-data' }
-          br>/
-          | to create a new one.
+    = render partial: 'forecasts/empty'
 
-.hidden
-  #modal-api-data.box-modal
-    .box-modal_i
-      a.box-modal_close.arcticmodal-close href='#'  &times;
-      section.modal-login
-        .modal-capt
-          | Check API Data
-        .modal-cnt
-          .form-group
-            .control-box
-              .descript
-                | Your API token
-            .control-box
-              = text_field_tag :api_token, current_user.api_token, class: 'form-control', readonly: true
-          .descript
-            br/
-            - last_api_request = @project.logs.order(id: :asc).includes(:user).first
-            - if last_api_request
-              p.text-center
-                | Last API request at
-                br/
-                =l last_api_request.created_at, format: :long
-                br/
-                | by #{last_api_request.user.display_name}
-            - else
-              p.text-center There were no API requests yet
-
-  - if @project.api_used?
-    #modal-api-used.box-modal
-      .box-modal_i
-        a.box-modal_close.arcticmodal-close href='#'  &times;
-        section.modal-login
-          .modal-capt
-            | Warning!
-          .modal-cnt
-            .form
-              .descript
-                | This project was modified via API. 
-                | There is a risk to break something in your project.
-                br/
-                br/
-                | Are you sure that you want to update it manually?
-                br/
-                br/
-              .form-group
-                .control-box.text-center
-                  = link_to 'No, thanks', '#', class: 'btn btn-lg btn-danger arcticmodal-close'
-                .control-box.text-center.clear
-                  = link_to 'I still want to upload my data', new_project_forecast_path(@project)
+= render partial: 'popups/api_status'
+- if @project.api_used?
+    = render partial: 'popups/api_used'

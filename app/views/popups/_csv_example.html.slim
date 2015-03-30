@@ -1,0 +1,20 @@
+.hidden
+  #modal-csv-example.box-modal
+    .box-modal_i
+      a.box-modal_close.arcticmodal-close href='#'  &times;
+      section.modal-login
+        .modal-capt
+          | CSV examples
+        .modal-cnt
+          p
+            | 1. #{link_to 'Purchases of a product', '/csv-examples/product_orders.csv', target: '_blank'}
+            br
+            | Each row contains the following information:
+            br
+            | - when the product was sold
+            br
+            | - how many products were sold at once
+          p
+            | 2. #{link_to 'Daily exchange rates', '/csv-examples/exchange_rates.csv', target: '_blank'}
+            br
+            | Rouble-to-Euro exchange rate for 2014 year. One row for each day.

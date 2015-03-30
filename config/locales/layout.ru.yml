@@ -1,0 +1,6 @@
+ru:
+  layouts:
+    application:
+      projects: Проекты
+      profile: Профиль
+      log_out: Выйти

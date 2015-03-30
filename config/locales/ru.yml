@@ -14,3 +14,146 @@ ru:
               should_give_at_least_one_action: Не выбран тип доступа
         pending_permission:
           <<: *permission
+
+  projects:
+    project:
+      edit: Редактировать
+      delete: Удалить
+      destroy-confirmation: "Вы правда хотите удалить этот проект? Его нельзя будет восстановить."
+      last_forecast: "Последний прогноз %{time} назад"
+      no_forecasts: Пока нет прогнозов
+    index:
+      new: Новый проект
+    show:
+      controls:
+        update_forecast: Обновить прогноз
+        settings: Настройки
+      settings:
+        api_status: Статус API
+        edit: Изменить название
+        export: Экспорт
+        team: Команда
+        delete: Удалить проект
+    new:
+      title: Новый проект
+      form:
+        submit: Дальше
+    create:
+      flash:
+        success: Проект создан
+    edit:
+      title: Изменить название проекта
+      form:
+        submit: Сохранить
+    update:
+      flash:
+        success: Проект сохранен
+    destroy:
+      flash:
+        success: Проект удален
+        fail: Проект не может быть удален
+    empty:
+      title: "Привет, у вас пока нет проектов."
+      button: Создать проект
+
+  permissions:
+    index:
+      user: Пользователь
+      read: Чтение
+      forecasting: Прогнозирование
+      manage: Управление
+      api: Доступ к API
+      invite_user: Пригласить пользователя
+      save: Сохранить
+      invite: Пригласить
+      invite_cancel: Отмена
+    permission:
+      destroy-confirmation: "Вы точно хотите запретить этому пользователю доступ к проекту?"
+
+  items:
+    item:
+      form:
+        name: Название продукта
+        attachment: 'Перетащите сюда файл <a class="js-choose-file" href="#">или выберите</a> его на компьютере'
+        cancel: Отмена
+        data_was_uploaded: Данные загружены
+        uploaded_values: "Загружено %{count} значений"
+      parsing_errors_warning: "Во время чтения CSV файла возникли ошибки. Проверьте результаты загрузки."
+      destroy_confirmation: "Вы точно хотите удалить этот продукт? Его нельзя будет восстановить."
+
+  forecasts:
+    new:
+      back: Назад
+      title: Загрузите данные
+      add_product: Добавить еще один продукт
+      description:
+        line_1: 'Сохраните историю продаж в CSV файл (<a href="#" data-modal="csv-example">вот пример</a>). '
+        line_2: 'Один файл для одного продукта. В прогноз можно добавить много продуктов.'
+      params: "Как вам построить график: по часам, по дням или за другой интервал - выберите.<br /><br />И на сколько дней (или что там у вас) прогнозировать?"
+      form:
+        submit: Посчитать прогноз
+    forecast:
+      summary: Итого
+      noname: Продукт без названия
+    empty:
+      text: 'Нет данных для анализа.<br /><a href="%{upload_url}">Загрузите CSV файл</a> или <a data-modal="api-status" href="#">настройте работу через API</a>'
+    planned:
+      title: "Нам нужно %{time}, чтобы построить ваш прогноз.<br />Подождите, пожалуйста."
+      moment: "еще чуть-чуть"
+
+  devise:
+    registrations:
+      edit:
+        profile: Профиль
+        personal: Личные данные
+        api_token: Токен для API
+        password: Пароль
+        avatar_select: 'Перетащите сюда новую фотографию <a id="js-choose-file" href="#">или выберите на компьютере</a>'
+        form:
+          name: Имя
+          email: Эл. почта
+          new_password: Новый пароль
+          confirm_new_password: Новый пароль еще раз
+          current_password: Текущий пароль
+          submit: Сохранить
+
+  forecast:
+    workflow_state:
+      planned: Запланирован
+      pending: Ожидание
+      started: Идет расчет
+      finished: Готов
+    period:
+      hour: Часы
+      day: Дни
+      week: Недели
+      month: Месяца
+      quarter: Кварталы
+      year: Годы
+    group_method:
+      sum: Сумма
+      average: Среднее
+
+  log:
+    api:
+      values:
+        create:
+          success: "%{username} загрузил %{values_count} значений для продукта %{item_sku}"
+          failed: "%{username} пытался загрузить данные, но они были некорректными"
+        destroy: "%{username} удалил все данные о продукте #%{item_sku}"
+      forecasts:
+        index: "%{username} получил список прогнозов"
+        create:
+          success: "%{username} создал прогноз #%{forecast_id}"
+          failed: "%{username} пытался создать прогноз, но загрузил некорректные данные"
+      forecast_lines:
+        index: "%{username} получил результаты прогноза #%{forecast_id}"
+
+  permission_mailer:
+    invite_user:
+      subject: "Приглашение в проект на Dynamica"
+
+  shared:
+    save: Сохранить
+    create: Создать
+    cancel: Отмена

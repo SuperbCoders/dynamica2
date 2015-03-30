@@ -5,26 +5,24 @@
       h3.control-label.col-md-3.col-sm-3= item.name
       .col-md-7.col-sm-8
         .control-box
-          = f.text_field :name, class: 'form-control', placeholder: 'Product name'
+          = f.text_field :name, class: 'form-control', placeholder: t('.form.name')
           = f.file_field :attachment, style: 'visibility:hidden;', class: 'item_attachment'
           = hidden_field_tag :authenticity_token, form_authenticity_token
         .control-box
           .file
             .selected style=('display:none' if item.values.size == 0)
               .form-control.upload-box.fixed
-                span.js-attachment-uploaded style='display:none' Data was successfully uploaded
-                span.js-real-count #{item.values.size} values uploaded
+                span.js-attachment-uploaded style='display:none'=t '.form.data_was_uploaded'
+                span.js-real-count=t '.form.uploaded_values', count: item.values.size
                 = link_to values_project_item_path(@project, item), method: :delete, remote: true, class: 'js-destroy-values btn-delete' do
                   i.icon.fa.fa-trash
             .not-selected style=('display:none' if item.values.size > 0)
               .form-control.upload-box
-                | Drop file here
-                a.js-choose-file href="#"  or choose
-                |  from computer
+                = t('.form.attachment').html_safe
             .loading style="display:none"
               .form-control.upload-box.loading
                   span.js-progress-bar.status-bar style="width:0%;"
-                  a.btn-cancel href="#"  Cancel
+                  a.btn-cancel href="#"=t '.form.cancel'
 
 - if item.with_parsing_errors
   coffee:

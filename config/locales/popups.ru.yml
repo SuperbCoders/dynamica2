@@ -1,0 +1,45 @@
+ru:
+  popups:
+    login:
+      log_in:
+        log_in: Вход
+        sign_up: Регистрация
+        form:
+          email: 'Эл. почта'
+          password: 'Пароль'
+          submit: 'Войти'
+        password_recovery: 'Я забыл пароль'
+      sign_up:
+        log_in: Вход
+        sign_up: Регистрация
+        form:
+          email: 'Эл. почта'
+          password: 'Пароль'
+          submit: 'Начать'
+      password_recovery:
+        back: Назад
+        password_recovery: Восстановление пароля
+        description:
+          line_1: Введите адрес эл. почты и мы пришлем вам
+          line_2: инструкции по восстановлению пароля
+        form:
+          email: "Эл. почта"
+          submit: Отправить
+      password_recovery_sent:
+        description: "Мы отправили письмо на адрес"
+        ok: "ОК, спасибо"
+    api_status:
+      title: Состояние API
+      description:
+        line_1: 'Используйте API, чтобы передавать данные автоматически, или чтобы запрашивать прогноз. '
+        line_2: 'Ознакомьтес с <a href="%{manual_url}">руководством по подключению</a>. Если есть вопросы по подключению - <a href="%{email_url}">пишите</a>.'
+      api_token: Ваш токен для API
+      no_requests: Обновлений через API не было
+      last_request: 'Последнее обновление через API<br />%{date}<br />от %{user}'
+    api_used:
+      title: "Внимание!"
+      description:
+        line_1: "Этот проект обновляется через API. Вы можете случайно нарушить правильную работу вашего приложения."
+        line_2: "Вы уверены, что хотите обновить прогноз вручную?"
+      button_yes: "Да, я хочу обновить прогноз вручную"
+      button_no: "Нет, я передумал"
