@@ -8,5 +8,5 @@ tr.pending-permission id="pending-permission-#{permission.id}"
   td= '✓' if permission.api?
   td
     - if can?(:destroy, permission)
-      => link_to project_pending_permission_path(@project, permission), class: 'js-destroy-pending-permission', method: :delete, remote: true, data: { id: permission.id, confirm: t('permissions.permission.destroy-confirmation') } do
+      => link_to project_pending_permission_path(permission.project, permission), class: 'js-destroy-pending-permission', method: :delete, remote: true, data: { id: permission.id, confirm: t('permissions.permission.destroy-confirmation') } do
         i.glyphicon.glyphicon-trash

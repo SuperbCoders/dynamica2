@@ -58,6 +58,9 @@ en:
 
   permissions:
     index:
+      back: Back
+    permissions_of_project:
+      title: "%{project} team"
       user: User
       read: Read
       forecasting: Forecasting
@@ -67,6 +70,8 @@ en:
       save: Save
       invite: Invite
       invite_cancel: Cancel
+      form:
+        email: Email
     permission:
       destroy-confirmation: "Do you really want to revoke access for this user?"
 

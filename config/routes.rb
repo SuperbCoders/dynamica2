@@ -21,7 +21,7 @@ Rails.application.routes.draw do
       resources :attachments, only: :create
     end
 
-    resources :permissions, only: [] do
+    resources :permissions, only: :index do
       get :activate, on: :member
     end
   end

@@ -2,5 +2,6 @@ ru:
   layouts:
     application:
       projects: Проекты
+      team: Команда
       profile: Профиль
       log_out: Выйти

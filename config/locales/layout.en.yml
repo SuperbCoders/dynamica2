@@ -2,5 +2,6 @@ en:
   layouts:
     application:
       projects: Projects
+      team: Team
       profile: Profile
       log_out: Log out

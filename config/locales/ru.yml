@@ -58,6 +58,9 @@ ru:
 
   permissions:
     index:
+      back: Назад
+    permissions_of_project:
+      title: "Команда проекта «%{project}»"
       user: Пользователь
       read: Чтение
       forecasting: Прогнозирование
@@ -67,6 +70,8 @@ ru:
       save: Сохранить
       invite: Пригласить
       invite_cancel: Отмена
+      form:
+        email: Эл. почта
     permission:
       destroy-confirmation: "Вы точно хотите запретить этому пользователю доступ к проекту?"
 

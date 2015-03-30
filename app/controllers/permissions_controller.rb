@@ -5,13 +5,14 @@ class PermissionsController < ApplicationController
   before_action :set_pending_permission, only: :activate
   before_action :check_current_user_email, only: :activate
 
+  # GET /permissions
   # GET /projects/:project_id/permissions
   def index
-    @project = Project.friendly.find(params[:project_id])
-    authorize! :manage, @project
-    @permissions = @project.permissions.includes(:user)
-    @pending_permissions = @project.pending_permissions.select(&:persisted?)
-    @pending_permission = @project.pending_permissions.build(read: true)
+    if params[:project_id].present?
+      index_for_single_project
+    else
+      index_for_all_projects
+    end
   end
 
   # PATCH/PUT /permissions/:id
@@ -62,4 +63,14 @@ class PermissionsController < ApplicationController
       redirect_to root_url unless @pending_permission.email == current_user.email
     end
 
+    def index_for_single_project
+      @project = Project.friendly.find(params[:project_id])
+      authorize! :manage, @project
+    end
+
+    def index_for_all_projects
+      @projects = current_user.projects.select do |project|
+        can? :manage, project
+      end
+    end
 end

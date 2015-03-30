@@ -1,43 +1,8 @@
-= link_to "Back to #{@project.name}", project_path(@project)
+- if @project
+  = link_to t('.back'), project_path(@project)
 
-h1 #{@project.name} team
-
-table.table.permissions
-  tr
-    th width='30%'= t('.user')
-    th width='15%'= t('.read')
-    th width='15%'= t('.forecasting')
-    th width='15%'= t('.manage')
-    th width='15%'= t('.api')
-    th width='10%'
-  - @permissions.each do |permission|
-    = render partial: 'permissions/permission', object: permission, as: :permission
-    tr id="edit-permission-#{permission.id}" class='edit-permission'
-      td.edit-permission-wrapper colspan=6
-        = form_for permission, remote: true do |f|
-          table width='100%'
-            tr
-              td width='30%'= permission.user.email
-              td width='15%'= f.check_box :read
-              td width='15%'= f.check_box :forecasting
-              td width='15%'= f.check_box :manage
-              td width='15%'= f.check_box :api
-              td width='10%'
-                => f.submit t('.save'), class: 'btn btn-primary btn-sm'
-                => link_to 'Cancel', '#', class: 'js-edit-permission-toggle btn btn-sm', data: { id: permission.id }
-  = render partial: 'permissions/pending_permission', collection: @pending_permissions, as: :permission
-  tr id="new-pending-permission"
-    td.new-permission-wrapper colspan=6
-      = link_to t('.invite_user'), '#', class: 'js-new-pending-permission-toggle js-invite btn btn-success btn-sm'
-      = form_for [@project, @pending_permission], remote: true do |f|
-        table width='100%'
-          tr
-            td width='30%'= f.email_field :email, class: 'form-control', placeholder: 'E-mail'
-            td width='15%'= f.check_box :read
-            td width='15%'= f.check_box :forecasting
-            td width='15%'= f.check_box :manage
-            td width='15%'= f.check_box :api
-            td width='10%'
-              => f.submit t('.invite'), class: 'btn btn-success btn-sm'
-              => link_to '#', class: 'js-new-pending-permission-toggle btn btn-sm' do
-                i.glyphicon.glyphicon-remove
+- if @project
+  = render partial: 'permissions_of_project', locals: { project: @project }
+- else
+  - @projects.each do |project|
+    = render partial: 'permissions_of_project', locals: { project: project }
