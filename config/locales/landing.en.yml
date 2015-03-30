@@ -1,0 +1,29 @@
+en:
+  layouts:
+    landing:
+      title:
+        line_1: A mathematical tool
+        line_2: to forecast your sales
+      subtitle: or any data changing with time
+      try_button: Try the math
+      text_1:
+        p_1: "Doing a business we constantly deal with forecasting of various ecomonic indicators. For example, we need to predict the volume of future sales to calculate stocks."
+        p_2: "And often we play by ear while planning – it's not the most reliable method. Dynamica aims to solve this problem and provide you with a convenient tool to forecast any indicators."
+        p_3: "Based on our current practice Dynamica has 95% accurancy."
+      text_2:
+        title:
+          line_1: Upload your data
+          line_2: "and we'll make a forecast"
+        p_1:
+          title: CSV
+          text: " – save your sales history as CSV file and upload to the server"
+        p_2:
+          title: API
+          text: " – for advanced calculations and online synchronization"
+      try_button_2: Try now
+      text_3:
+        title: "How does it work?"
+        p_1: "Dynamica analyzes your data and calculates a mathematical function that reflects the behavior of the data over time. The visualization of this function is a curve that we transform to a graph."
+        p_2: "We see the main application of Dynamica as a tool to forecast sales. But we don't want to limit your creativity – you can make forecasts for any data that changes over time."
+      copyright: ""
+      log_in: Log in

@@ -1,26 +1,29 @@
 Rails.application.routes.draw do
   apipie
-  root to: 'welcome#index'
 
-  devise_for :users, controllers: { registrations: 'customized_devise/registrations', sessions: 'customized_devise/sessions', passwords: 'customized_devise/passwords' }
-  devise_scope :user do
-    match 'users/avatar' => 'customized_devise/registrations#avatar', via: [:put, :patch]
-  end
+  scope "(:locale)", locale: /en|ru/ do
+    root to: 'welcome#index'
 
-  resources :projects do
-    resources :permissions, only: [:index, :update, :destroy], shallow: true, on: :member
-    resources :pending_permissions, only: [:create, :destroy], on: :member
-    resources :items, only: [:index, :create, :update, :destroy], on: :member do
-      delete :values, on: :member
+    devise_for :users, controllers: { registrations: 'customized_devise/registrations', sessions: 'customized_devise/sessions', passwords: 'customized_devise/passwords' }
+    devise_scope :user do
+      match 'users/avatar' => 'customized_devise/registrations#avatar', via: [:put, :patch]
     end
-    resources :forecasts, only: [:new, :create] do
-      resources :predicted_values, only: :index
-    end
-    resources :attachments, only: :create
-  end
 
-  resources :permissions, only: [] do
-    get :activate, on: :member
+    resources :projects do
+      resources :permissions, only: [:index, :update, :destroy], shallow: true, on: :member
+      resources :pending_permissions, only: [:create, :destroy], on: :member
+      resources :items, only: [:index, :create, :update, :destroy], on: :member do
+        delete :values, on: :member
+      end
+      resources :forecasts, only: [:new, :create] do
+        resources :predicted_values, only: :index
+      end
+      resources :attachments, only: :create
+    end
+
+    resources :permissions, only: [] do
+      get :activate, on: :member
+    end
   end
 
   namespace :api do

@@ -1,0 +1,16 @@
+ru:
+  activerecord:
+    attributes: &activerecord_attributes
+      project:
+        slug: ID
+        name: Название
+
+    errors:
+      models:
+        permission: &permission
+          attributes:
+            base:
+              owner_should_be_able_to_manage_project: У владельца проекта должен быть полный доступ
+              should_give_at_least_one_action: Не выбран тип доступа
+        pending_permission:
+          <<: *permission
