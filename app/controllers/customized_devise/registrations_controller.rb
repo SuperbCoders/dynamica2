@@ -33,7 +33,7 @@ class CustomizedDevise::RegistrationsController < Devise::RegistrationsControlle
     end
   end
 
-  private
+  protected
 
     def configure_permitted_parameters
       allowed_attributes = [:name, :email, :remove_avatar]
@@ -56,6 +56,10 @@ class CustomizedDevise::RegistrationsController < Devise::RegistrationsControlle
 
     def after_update_path_for(resource)
       edit_user_registration_url
+    end
+
+    def after_sign_up_path_for(resource)
+      new_project_url
     end
 
 end
