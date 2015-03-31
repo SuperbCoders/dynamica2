@@ -22,6 +22,7 @@ en:
       destroy-confirmation: "Do you really want to delete the project? It can not be restored."
       last_forecast: "Last forecast %{time} ago"
       no_forecasts: No forecasts yet
+      no_forecasts_demo: "Demo project is being prepared, please wait"
     index:
       new: Add new project
     show:

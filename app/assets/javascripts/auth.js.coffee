@@ -24,7 +24,7 @@ $ ->
     $(this).find('.control-box').removeClass('has-error')
 
   $('body').on 'ajax:success', '.validate-signup', (event, data, status) ->
-    window.location.replace('projects/new')
+    window.location.replace('/projects')
 
   $('body').on 'ajax:error', '.validate-signup', (event, error, status) ->
     for attribute, errors of error.responseJSON

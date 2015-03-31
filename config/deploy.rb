@@ -27,9 +27,19 @@ set :linked_dirs, fetch(:linked_dirs, []).push('bin', 'log', 'tmp/pids', 'tmp/ca
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-after 'deploy:publishing', 'deploy:restart'
 namespace :deploy do
   task :restart do
     invoke 'unicorn:restart'
   end
+
+  task :seed do
+    on roles(:app), in: :sequence, wait: 5 do
+      within release_path do
+        execute :bundle, "exec rake db:seed RAILS_ENV=#{fetch(:stage)}"
+      end
+    end
+  end
 end
+
+after 'deploy:publishing', 'deploy:restart'
+after 'deploy:updated', 'deploy:seed'

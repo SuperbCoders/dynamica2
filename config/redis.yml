@@ -1,0 +1,11 @@
+development: &default
+  url: 'redis://localhost:6379'
+
+test:
+  <<: *default
+
+staging:
+  url: 'http://db.ono:6379/3'
+
+production:
+  url: 'http://db.ono:6379/4'

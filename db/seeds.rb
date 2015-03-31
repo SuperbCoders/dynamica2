@@ -2,17 +2,22 @@
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 
 def create_demo_user
-  User.find_by(email: 'demo@dynamica.cc').first_or_create!(password: SecureRandom.hex(32))
+  User.where(email: 'demo@dynamica.cc').first_or_create!(password: SecureRandom.hex(32))
 end
 
 def create_demo_project_for_sales(user)
-  return if user.projects.exist?(name: 'Sales')
-  project = user.own_projects.create!(slug: SecureRandom.hex(32), name: 'Sales')
+  return if user.own_projects.exists?(name: 'Sales (demo)')
+  project = user.own_projects.create!(slug: SecureRandom.hex(32), name: 'Sales (demo)')
+  user.permissions.create!(project: project, all: true)
   items = %w(carrot cucumber mango prune)
   items.each do |name|
     item = project.items.create!(sku: name, name: name.capitalize)
+    item.attachment = File.open("#{Rails.root}/db/seeds/#{name}.csv")
+    item.save!
   end
+  forecast = project.forecasts.create!(period: 'month', depth: 3)
+  forecast.start!
 end
 
-# demo_user = create_demo_user
-# create_demo_project_for_sales(user)
+demo_user = create_demo_user
+create_demo_project_for_sales(demo_user)

@@ -7,7 +7,10 @@
       - if last_finished_forecast
         =t '.last_forecast', time: time_ago_in_words(last_finished_forecast.finished_at)
       - else
-        =t '.no_forecasts'
+        - if project.demo?
+          =t '.no_forecasts_demo'
+        - else
+          =t '.no_forecasts'
     .users
       ul
         - project.users.each do |user|
