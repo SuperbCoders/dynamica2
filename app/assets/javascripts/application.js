@@ -31,3 +31,4 @@
 //= require permissions
 //= require profile
 //= require dropzone
+//= require hash
