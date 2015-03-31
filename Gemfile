@@ -43,6 +43,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-rails'
   gem 'capistrano3-unicorn'
+  gem 'capistrano-sidekiq'
 end
 
 # Use debugger
