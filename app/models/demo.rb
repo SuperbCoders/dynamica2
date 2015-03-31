@@ -12,8 +12,13 @@ class Demo
   end
 
   def create
-    projects.each do |project|
+    demo_user.own_projects.each do |project|
       create_project(project)
+    end
+    user.projects.reload.each do |project|
+      source = demo_user.own_projects.find_by(name: project.name)
+      create_items(project, source)
+      create_forecasts(project, source)
     end
   end
 
@@ -23,15 +28,9 @@ class Demo
       @demo_user = User.find_by(email: 'demo@dynamica.cc')
     end
 
-    def projects
-      @projects = demo_user.own_projects
-    end
-
     def create_project(source)
       project = user.own_projects.create!(name: source.name, demo: true)
       user.permissions.create!(project: project, all: true)
-      create_items(project, source)
-      create_forecasts(project, source)
     end
 
     def create_items(project, source)
