@@ -83,8 +83,11 @@ gem 'carrierwave'
 gem 'mini_magick'
 gem 'jquery-fileupload-rails'
 gem 'non-stupid-digest-assets', '~> 1.0.4' # creates both digest and non-digest assets
-gem 'smarter_csv'
-gem 'render_csv'
+
+# CSV libraries
+gem 'smarter_csv' # For reading
+gem 'render_csv'  # For export
+
 gem 'rubyzip'
 gem 'russian'
 gem 'sidekiq'

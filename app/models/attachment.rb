@@ -1,4 +1,5 @@
 require 'csv'
+require 'matrix'
 
 class Attachment
   attr_reader :item
@@ -13,19 +14,10 @@ class Attachment
   end
 
   def process
-    col_sep = detect_col_sep
-    SmarterCSV.process filename, chunk_size: 50, headers_in_file: false, user_provided_headers: [:timestamp, :value], col_sep: col_sep do |chunk|
-      chunk.each do |row|
-        begin
-          @total_lines += 1
-          timestamp = UTC.parse(row[:timestamp])
-          value = parse_float(row[:value])
-          item.values.create!(timestamp: timestamp, value: value)
-          @processed_lines += 1
-        rescue
-          self.with_parsing_errors = true
-        end
-      end
+    if vertical?
+      process_vertical_table
+    else
+      process_horizontal_table
     end
   end
 
@@ -34,6 +26,44 @@ class Attachment
   end
 
   private
+
+    def process_vertical_table
+      col_sep = detect_col_sep
+      SmarterCSV.process filename, chunk_size: 50, headers_in_file: false, user_provided_headers: [:timestamp, :value], col_sep: col_sep do |chunk|
+        chunk.each do |row|
+          begin
+            @total_lines += 1
+            timestamp = UTC.parse(row[:timestamp])
+            value = parse_float(row[:value])
+            item.values.create!(timestamp: timestamp, value: value)
+            @processed_lines += 1
+          rescue
+            self.with_parsing_errors = true
+          end
+        end
+      end
+    end
+
+    def process_horizontal_table
+      transpose!
+      process_vertical_table
+    end
+
+    def vertical?
+      first_line = File.open(filename, &:readline)
+      available_col_seps.all? do |col_sep|
+        first_line.count(col_sep) <= 2
+      end
+    end
+
+    def transpose!
+      data = Matrix[*CSV.read(filename)]
+      csv = CSV.generate do |table|
+        data.transpose.to_a.each { |row| table << row }
+      end
+      @filename = "#{filename}.transposed"
+      File.open(filename, 'w') { |f| f.write(csv) }
+    end
 
     def available_col_seps
       [',', ';']

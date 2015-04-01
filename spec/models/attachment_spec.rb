@@ -82,4 +82,9 @@ RSpec.describe Attachment, type: :model do
     end
   end
 
+  context 'horizontal' do
+    let(:filename) { 'horizontal/comma.csv' }
+    it_behaves_like 'any attachment'
+  end
+
 end
