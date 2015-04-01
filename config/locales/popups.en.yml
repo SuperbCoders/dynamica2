@@ -43,3 +43,16 @@ en:
         line_2: "Are you sure that you want to update it manually?"
       button_yes: I still want to upload my data
       button_no: "No, thanks"
+    csv_example:
+      title: "The .CSV recipe"
+      subtitle: "Upload your data the right way to get a proper forecast."
+      two_columns: "Two columns"
+      two_rows: "or two rows"
+      text_bottom: "One CSV file for one product."
+      ok: Ok
+      example_1:
+        title: Purchases of product
+        download: Download example
+      example_2:
+        title: Daily exchange rate
+        download: Download example

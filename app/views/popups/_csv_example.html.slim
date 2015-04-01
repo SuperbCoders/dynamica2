@@ -3,41 +3,35 @@
     .box-modal_i
       a.box-modal_close.arcticmodal-close href="#"  &times;
       section.modal-instruct
-        .modal-capt
-          | How to make CSV
+        .modal-capt=t '.title'
         .modal-cnt
-          .title You need to make right table view
+          .title=t '.subtitle'
           .format-items
             .row
               .col-sm-6
                 .format-item
-                  .format-title Like this
+                  .format-title=t '.two_columns'
                   figure
                     = image_tag 'table1.png', width: '400', height: 146
               .col-sm-6
                 .format-item
-                  .format-title or this
+                  .format-title=t '.two_rows'
                   figure
                     = image_tag 'table2.png', width: '400', height: 146
-          .title
-            | Then export it in 
-            b CSV
-            |  also you can download our examples
+          .title=t '.text_bottom'
           .note-items
-            .row
+            .row.text-center
               .col-sm-6
                 .note-item
-                  .note-title Purchases of a product
-                  p Each row contains the following information:
-                  p — when the product was sold
-                  p — how many products were sold at once
+                  .note-title=t '.example_1.title'
                   .download
-                    a href='/csv-examples/product_orders.csv' target='_blank'  Download
+                    a href='/csv-examples/product_orders.csv' target='_blank'=t '.example_1.download'
               .col-sm-6
                 .note-item
-                  .note-title Daily exchange rate
-                  p Each row contains the following information:
-                  p — when the product was sold
-                  p — how many products were sold at once
+                  .note-title=t '.example_2.title'
                   .download
-                    a href='/csv-examples/exchange_rates.csv' target='_blank'  Download
+                    a href='/csv-examples/exchange_rates.csv' target='_blank'=t '.example_2.download'
+          .form
+            .form-group
+              .control-box.text-center
+                = link_to t('.ok'), '#', class: 'btn btn-lg btn-danger arcticmodal-close'
