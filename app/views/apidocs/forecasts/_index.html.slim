@@ -1,0 +1,63 @@
+.rowspan.row2.row-even
+  .container-fluid.globalwidth
+    h2.text-center Get list of all the project forecasts
+    h3.text-center Endpoint
+    .text.offset-40
+      p GET /api/v1/projects/:project_id/forecasts
+    h3.text-center Description
+    .text.offset-40
+      p It returns a list of all the forecasts created in the project.
+    h3.text-center URL parameters
+    table.table
+      tr
+        th Parameter
+        th Type
+        th Description
+      tr
+        td project_id
+        td String
+        td Identificator of the project
+    h3.text-center Response codes
+    .text.offset-40
+      p 200 Ok
+      p 403 Access denied 
+      p 500 Server error 
+    h3.text-center Examples
+    .text.offset-40
+      p Request
+      pre
+        | GET /api/v1/projects/my-shop/forecasts
+      br/
+      p Response
+      pre Status code: 200
+      pre
+        | [
+            {
+              "forecast":{
+                "id":85,
+                "period":"day",
+                "group_method":"sum",
+                "depth":5,
+                "from":null,
+                "to":null,
+                "planned_at":"2015-03-06T14:32:14.380Z",
+                "started_at":null,
+                "finished_at":null,
+                "workflow_state":"planned"
+              }
+            },
+            {
+              "forecast":{
+                "id":86,
+                "period":"day",
+                "group_method":"sum",
+                "depth":5,
+                "from":null,
+                "to":null,
+                "planned_at":"2015-03-06T14:32:14.383Z",
+                "started_at":"2015-03-06T14:33:14.093Z",
+                "finished_at":"2015-03-06T14:35:14.093Z",
+                "workflow_state":"finished"
+              }
+            }
+          ]

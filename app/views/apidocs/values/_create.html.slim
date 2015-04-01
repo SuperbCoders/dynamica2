@@ -1,0 +1,149 @@
+.rowspan.row2.row-even
+  .container-fluid.globalwidth
+    h2.text-center Upload values
+    h3.text-center Endpoint
+    .text.offset-40
+      p POST /api/v1/projects/:project_id/values 
+    h3.text-center Description
+    .text.offset-40
+      p It uploads values to the project.
+      p It accepts item description and array of values. If there is no item with the specified SKU it will be created.
+    h3.text-center URL parameters
+    table.table
+      tr
+        th Parameter
+        th Type
+        th Description
+      tr
+        td project_id
+        td String
+        td Identificator of the project
+    h3.text-center Request parameters
+    table.table
+      tr
+        th Parameter
+        th Type
+        th Description
+      tr
+        td
+          b item
+          br/
+          | Required
+        td Object
+        td Description of a new or the existing item
+      tr
+        td
+          b item[name]
+          br/
+          | Optional
+        td String
+        td Product name
+      tr
+        td
+          b item[sku]
+          br/
+          | Required
+        td String
+        td Unique identifier
+      tr
+        td
+          b values
+          br/
+          | Required
+        td Array
+        td List of values
+      tr
+        td
+          b values[value] 
+          br/
+          | Required
+        td Integer, Float
+        td Value
+      tr
+        td
+          b values[timestamp]
+          br/
+          | Required
+        td String
+        td
+          p Timestamp. Available formats:
+          pre 31.12.2015
+          pre 31.12.2015 10:15
+          pre 31.12.2015 10:15:17
+          pre 2015-12-31
+          pre 2015-12-31 10:15
+          pre 2015-12-31 10:15:17
+    h3.text-center Response codes
+    .text.offset-40
+      p 201 Values were successfully created
+      p 422 Unprocessable entity
+      p 403 Access denied
+      p 500 Server error
+    h3.text-center Example of successful upload
+    .text.offset-40
+      p Request
+      pre POST /api/v1/projects/my-shop/values
+      pre
+        | {
+            {
+            "item":{
+              "sku":"shampoo",
+              "name":"Shampoo for any type of hair"
+            },
+            "values":[
+              {
+                "value":1,
+                "timestamp":"2015-01-15 10:20:11"
+              },
+              {
+                "value":2,
+                "timestamp":"2015-01-16 09:00:17"
+              }
+            ]
+          }
+      br/
+      p Response
+      pre Status code: 201
+      pre
+        | [
+            {
+              "value":{
+                "value":1.0,
+                "timestamp":"2015-01-15T10:20:11.000Z"
+              }
+            },
+            {
+              "value":{
+                "value":2.0,
+                "timestamp":"2015-01-16T09:00:17Z"
+              }
+            }
+          ]
+    h3.text-center Example of failed upload
+    .text.offset-40
+      p Request
+      pre POST /api/v1/projects/my-shop/values
+      pre
+        | {
+            "item":{
+              "sku":"shampoo",
+              "name":"Shampoo for any type of hair"
+            },
+            "values":[
+              {
+                "value":1
+              }
+            ]
+          }
+
+      br/
+      p Response
+      pre Status code: 422
+      pre
+        | [
+            {
+              "timestamp":[
+                "can't be blank"
+              ]
+            }
+          ]
