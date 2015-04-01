@@ -29,7 +29,7 @@ section.case.case-project-edit
                       a.el-arrow.el-arrow-plus href="#"
                     = image_tag 'forecast-chart.png', style: 'max-width:100%;'
                   .period-sel.text-center
-                    = f.input_field :period, collection: Forecast::PERIODS.map { |i| [t("forecast.period.#{i}"), i]}, class: 'selectpicker', include_blank: false
+                    = f.input_field :period, collection: Forecast::PERIODS.map { |i| [t("forecast.period.#{i}"), i]}, class: 'selectpicker', prompt: t('.form.period_prompt')
         = f.button :submit, t('.form.submit'), class: 'btn btn-lg btn-danger'
 
 = render partial: 'popups/csv_example'

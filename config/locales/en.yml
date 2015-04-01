@@ -97,6 +97,7 @@ en:
         line_2: 'One file for one product. You can add many products to this forecast.'
       params: "Do you want your graph by day or week or other interval - choose, please.<br /><br />And for how many days (or what you have) to forecast?"
       form:
+        period_prompt: Select a time interval
         submit: Make forecast
     forecast:
       summary: Summary
