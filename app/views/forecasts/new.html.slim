@@ -33,3 +33,8 @@ section.case.case-project-edit
         = f.button :submit, t('.form.submit'), class: 'btn btn-lg btn-danger'
 
 = render partial: 'popups/csv_example'
+
+- if @project.forecasts.count == 0
+  coffee:
+    $ ->
+      $('#modal-csv-example').arcticmodal()

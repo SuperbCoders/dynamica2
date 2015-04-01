@@ -1,20 +1,43 @@
 .hidden
   #modal-csv-example.box-modal
     .box-modal_i
-      a.box-modal_close.arcticmodal-close href='#'  &times;
-      section.modal-login
+      a.box-modal_close.arcticmodal-close href="#"  &times;
+      section.modal-instruct
         .modal-capt
-          | CSV examples
+          | How to make CSV
         .modal-cnt
-          p
-            | 1. #{link_to 'Purchases of a product', '/csv-examples/product_orders.csv', target: '_blank'}
-            br
-            | Each row contains the following information:
-            br
-            | - when the product was sold
-            br
-            | - how many products were sold at once
-          p
-            | 2. #{link_to 'Daily exchange rates', '/csv-examples/exchange_rates.csv', target: '_blank'}
-            br
-            | Rouble-to-Euro exchange rate for 2014 year. One row for each day.
+          .title You need to make right table view
+          .format-items
+            .row
+              .col-sm-6
+                .format-item
+                  .format-title Like this
+                  figure
+                    = image_tag 'table1.png', width: '400', height: 146
+              .col-sm-6
+                .format-item
+                  .format-title or this
+                  figure
+                    = image_tag 'table2.png', width: '400', height: 146
+          .title
+            | Then export it in 
+            b CSV
+            |  also you can download our examples
+          .note-items
+            .row
+              .col-sm-6
+                .note-item
+                  .note-title Purchases of a product
+                  p Each row contains the following information:
+                  p — when the product was sold
+                  p — how many products were sold at once
+                  .download
+                    a href='/csv-examples/product_orders.csv' target='_blank'  Download
+              .col-sm-6
+                .note-item
+                  .note-title Daily exchange rate
+                  p Each row contains the following information:
+                  p — when the product was sold
+                  p — how many products were sold at once
+                  .download
+                    a href='/csv-examples/exchange_rates.csv' target='_blank'  Download

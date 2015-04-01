@@ -65,3 +65,52 @@
 		margin: 0;
 	}
 }
+
+#modal-csv-example {
+	width: 920px;
+	@media (max-width: $screen-sm-min) {
+		width: 480px;
+	}
+}
+
+.modal-instruct {
+	.modal-capt {
+		margin-bottom: 20px;
+		color: #ff7851;
+		text-align: center;
+	}
+	.title {
+		margin-bottom: 30px;
+		font-size: 20px;
+		text-align: center;
+	}
+	.format-items {
+		padding-bottom: 20px;
+		text-align: center;
+	}
+	.format-item {
+			margin-bottom: 20px;
+	}
+	.format-title {
+		margin-bottom: 14px;
+		font-size: 18px;
+		font-weight: bold;
+	}
+	.note-item {
+		padding-bottom: 20px;
+		p {
+			margin-bottom: 0px;
+			font-size: 20px;
+		}
+		.download {
+			padding-top: 10px;
+			font-size: 18px;
+			font-weight: bold;
+		}
+	}
+	.note-title {
+		margin-bottom: 10px;
+		font-size: 20px;
+		font-weight: bold;
+	}
+}
