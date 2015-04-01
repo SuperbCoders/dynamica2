@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   scope "(:locale)", locale: /en|ru/ do
     root to: 'welcome#index'
 
+    get 'apidocs' => 'apidocs#index'
+
     devise_for :users, controllers: { registrations: 'customized_devise/registrations', sessions: 'customized_devise/sessions', passwords: 'customized_devise/passwords' }
     devise_scope :user do
       match 'users/avatar' => 'customized_devise/registrations#avatar', via: [:put, :patch]
