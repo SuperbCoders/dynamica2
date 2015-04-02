@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  ROLES = %(user admin)
+  ROLES = %w(user admin)
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
