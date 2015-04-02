@@ -9,7 +9,14 @@ $ ->
   # Login
   #
   $('body').on 'ajax:before', '.validate-login', (event, data, status) ->
+    return false if $(this).hasClass('waiting')
+    $(this).fadeTo('fast', 0.7)
+    $(this).addClass('waiting')
     $(this).find('.control-box').removeClass('has-error')
+
+  $('body').on 'ajax:complete', '.validate-login', (event, data, status) ->
+    $(this).fadeTo('fast', 1.0)
+    $(this).removeClass('waiting')
 
   $('body').on 'ajax:success', '.validate-login', (event, data, status) ->
     location.reload()
@@ -21,7 +28,14 @@ $ ->
   # Registration
   #
   $('body').on 'ajax:before', '.validate-signup', (event, data, status) ->
+    return false if $(this).hasClass('waiting')
+    $(this).fadeTo('fast', 0.7)
+    $(this).addClass('waiting')
     $(this).find('.control-box').removeClass('has-error')
+
+  $('body').on 'ajax:complete', '.validate-signup', (event, data, status) ->
+    $(this).fadeTo('fast', 1.0)
+    $(this).removeClass('waiting')
 
   $('body').on 'ajax:success', '.validate-signup', (event, data, status) ->
     window.location.replace('/projects')
