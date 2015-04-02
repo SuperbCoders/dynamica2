@@ -1,0 +1,16 @@
+ru:
+  shared:
+    create: Создать
+    edit: Редактировать
+    save: Сохранить
+    back: Назад
+    are_you_sure: Вы уверены?
+    created: Изменения сохранены
+    saved: Изменения сохранены
+    not_saved: Изменения не были сохранены
+    destroyed: Запись удалена
+    not_destroyed: Запись не была удалена
+    add: Добавить
+    remove: Удалить
+    close: Закрыть
+    change: Изменить

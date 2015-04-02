@@ -4,6 +4,13 @@ en:
       project:
         slug: Project ID
         name: Name
+      user:
+        role: Role
+        email: E-mail
+        name: Name
+        avatar: Avatar
+        remove_avatar: Remove avatar
+        password: Password
 
     errors:
       models:
@@ -141,6 +148,11 @@ en:
       sum: Sum
       average: Average
 
+  user:
+    role:
+      user: User
+      admin: Admin
+
   log:
     api:
       values:
@@ -159,8 +171,3 @@ en:
   permission_mailer:
     invite_user:
       subject: "You were invited to the Dynamica project"
-
-  shared:
-    save: Save
-    create: Create
-    cancel: Cancel

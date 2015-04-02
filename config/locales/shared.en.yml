@@ -1,0 +1,16 @@
+en:
+  shared:
+    create: Create
+    edit: Edit
+    save: Save
+    back: Back
+    are_you_sure: "Are you sure?"
+    created: Record was saved
+    saved: Record was saved
+    not_saved: Record was not saved
+    destroyed: Record was deleted
+    not_destroyed: Record was not deleted
+    add: Add
+    remove: Remove
+    close: Close
+    change: Change

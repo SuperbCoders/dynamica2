@@ -4,6 +4,13 @@ ru:
       project:
         slug: ID
         name: Название
+      user:
+        role: Роль
+        email: Эл. почта
+        name: Имя
+        avatar: Фото
+        remove_avatar: Удалить фото
+        password: Пароль
 
     errors:
       models:
@@ -141,6 +148,11 @@ ru:
       sum: Сумма
       average: Среднее
 
+  user:
+    role:
+      user: Пользователь
+      admin: Администратор
+
   log:
     api:
       values:
@@ -159,8 +171,3 @@ ru:
   permission_mailer:
     invite_user:
       subject: "Приглашение в проект на Dynamica"
-
-  shared:
-    save: Сохранить
-    create: Создать
-    cancel: Отмена

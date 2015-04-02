@@ -83,7 +83,11 @@ gem 'carrierwave'
 gem 'mini_magick'
 gem 'jquery-fileupload-rails'
 gem 'non-stupid-digest-assets', '~> 1.0.4' # creates both digest and non-digest assets
+
+# Admin panel
 gem 'first_admin_panel', git: 'git@bitbucket.org:ImmaculatePine/first_admin_panel.git'
+gem 'kaminari'
+gem 'bootstrap-kaminari-views'
 
 # CSV libraries
 gem 'smarter_csv' # For reading

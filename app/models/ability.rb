@@ -29,6 +29,7 @@ class Ability
 
       if user.role == 'admin'
         can :access, :admin_panel
+        can :manage, User
       end
     end
   end

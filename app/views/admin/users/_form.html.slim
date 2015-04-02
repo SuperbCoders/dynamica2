@@ -1,0 +1,37 @@
+.clearfix
+  h4 #{@user.persisted? ? t('shared.edit') : t('shared.create')} пользователя
+
+section class="panel pos-rlt clearfix"
+  header.panel-heading Информация
+  .panel-body.clearfix
+    = simple_form_for [:admin, @user], wrapper: :horizontal_form, html: { class: 'form-horizontal' } do |f|
+      = f.input :email
+      - if @user.new_record?
+        = f.input :password
+      = f.input :role, collection: User::ROLES.map { |role| [t("user.role.#{role}"), role] }, include_blank: false
+      = f.input :name
+      = f.input :avatar, hint: (image_tag @user.avatar.medium if @user.avatar?), wrapper: :horizontal_file_input
+      - if @user.persisted? && @user.avatar?
+        .form-group
+          .col-sm-offset-3.col-sm-9
+            .checkbox
+              label
+                = f.check_box :remove_avatar
+                = f.label :remove_avatar
+
+      .form-group
+        .col-lg-9.col-lg-offset-3
+          => f.button :submit, @user.new_record? ? t('shared.create') : t('shared.save'), class: 'btn-primary'
+          => link_to t('shared.back'), admin_users_path, class: 'btn btn-default'
+
+.row
+  - if @user.persisted?
+    .col-lg-6
+      section class="panel pos-rlt clearfix"
+        header.panel-heading Смена пароля
+        .panel-body.clearfix
+          = simple_form_for [:admin, @user], wrapper: :horizontal_form, html: { class: 'form-horizontal' } do |f|
+            = f.input :password
+            .form-group
+              .col-lg-9.col-lg-offset-3
+                => f.button :submit, t('shared.change')
