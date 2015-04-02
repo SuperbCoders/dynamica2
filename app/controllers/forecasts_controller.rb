@@ -6,6 +6,7 @@ class ForecastsController < ApplicationController
     authorize! :forecasting, @project
     @forecast = @project.forecasts.build
     @recent_forecast = @project.recent_forecast
+    @forecast.period = @recent_forecast.try(:period)
     @forecast.depth = @recent_forecast.try(:depth) || 10
     @project.items.create! if @project.items.empty?
     @items = @project.items.order(created_at: :desc)
