@@ -45,7 +45,6 @@ class Demo
     def create_forecasts(project, source)
       source.forecasts.each do |source_forecast|
         forecast = project.forecasts.create!(period: source_forecast.period, depth: source_forecast.depth, group_method: source_forecast.group_method)
-        forecast.start!
       end
     end
 end
