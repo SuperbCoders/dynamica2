@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  ROLES = %(user admin)
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -15,7 +17,9 @@ class User < ActiveRecord::Base
   has_many :logs, dependent: :destroy
 
   validates :api_token, uniqueness: true, if: :api_token
+  validates :role, presence: true, inclusion: { in: ROLES }
 
+  before_validation :set_default_values
   before_create :set_api_token
 
   # @return [String] user name to use in views
@@ -38,6 +42,10 @@ class User < ActiveRecord::Base
     # @return [String] generated token
     def set_api_token
       self.api_token ||= self.class.generate_api_token
+    end
+
+    def set_default_values
+      self.role ||= 'user'
     end
 
 end

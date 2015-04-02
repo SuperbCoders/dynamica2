@@ -26,6 +26,10 @@ class Ability
       can :manage, [Permission, PendingPermission] do |permission|
         user.permissions.where(manage: true).map(&:project_id).include?(permission.project_id)
       end
+
+      if user.role == 'admin'
+        can :access_admin_panel
+      end
     end
   end
 end
