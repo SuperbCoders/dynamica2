@@ -1,0 +1,1 @@
+FirstAdminPanel.config.name = 'Dynamica'

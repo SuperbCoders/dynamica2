@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   apipie
 
   scope "(:locale)", locale: /en|ru/ do
-    root to: 'welcome#index'
+    root 'welcome#index'
 
     get 'apidocs' => 'apidocs#index'
 
@@ -51,5 +51,6 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    root 'dashboard#index'
   end
 end

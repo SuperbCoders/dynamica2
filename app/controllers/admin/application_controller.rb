@@ -1,3 +1,5 @@
 class Admin::ApplicationController < ::ApplicationController
-  before_action { authorize! :access_admin_panel }
+  layout 'first_admin_panel/application'
+  before_action :authenticate_user!
+  before_action { authorize! :access, :admin_panel }
 end

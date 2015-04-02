@@ -1,0 +1,11 @@
+ul.nav.navbar-nav.navbar-avatar.pull-right
+  li.dropdown
+    a.dropdown-toggle data-toggle="dropdown" href="#"
+      span.hidden-xs-only= current_user.display_name
+      - if current_user.avatar?
+        span.thumb-small.avatar.inline
+          = image_tag current_user.avatar.small, class: 'img-circle'
+      b.caret.hidden-xs-only
+    |  
+    ul.dropdown-menu
+      li= link_to 'Выйти', destroy_user_session_path

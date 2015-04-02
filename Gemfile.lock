@@ -1,3 +1,14 @@
+GIT
+  remote: git@bitbucket.org:ImmaculatePine/first_admin_panel.git
+  revision: c806d5884c0a4f3a960a957b6b687d5f89bf52c6
+  specs:
+    first_admin_panel (0.0.1)
+      coffee-rails (~> 4.0.0)
+      jquery-rails
+      rails (> 4.0, < 5.0)
+      sass-rails (~> 4.0.3)
+      slim
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -290,6 +301,7 @@ DEPENDENCIES
   database_cleaner
   devise
   factory_girl_rails
+  first_admin_panel!
   font-awesome-rails
   friendly_id (~> 5.0.0)
   jbuilder (~> 2.0)

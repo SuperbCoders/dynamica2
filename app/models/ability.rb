@@ -28,7 +28,7 @@ class Ability
       end
 
       if user.role == 'admin'
-        can :access_admin_panel
+        can :access, :admin_panel
       end
     end
   end
