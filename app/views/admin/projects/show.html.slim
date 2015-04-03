@@ -1,0 +1,37 @@
+section#content
+  section.main.padder
+    .clearfix
+      h4
+        i.icon-bar-chart>
+        = @project.name
+    .row
+      section.panel.pos-rlt.clearfix
+        header.panel-heading Продукты
+        .table-responsive
+          table.table.table-striped.b-t.text-small
+            tr
+              th Название
+              th SKU
+              th Количество загруженных значений
+            - @project.items.each do |item|
+              tr
+                td= item.name
+                td= item.sku
+                td= item.values_count
+      section.panel.pos-rlt.clearfix
+        header.panel-heading Прогнозы
+        .table-responsive
+          table.table.table-striped.b-t.text-small
+            tr
+              th Дата
+              th Статус
+              th Период
+              th Глубина прогноза
+              th Метод группировки
+            - @project.forecasts.each do |forecast|
+              tr
+                td=l forecast.planned_at, format: :long
+                td=t "forecast.workflow_state.#{forecast.workflow_state}"
+                td=t "forecast.period.#{forecast.period}"
+                td= forecast.depth
+                td=t "forecast.group_method.#{forecast.group_method}"

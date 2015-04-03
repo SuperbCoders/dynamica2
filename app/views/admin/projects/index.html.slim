@@ -20,7 +20,7 @@ section#content
             tbody
               - @projects.each do |project|
                 tr
-                  td= project.name
+                  td= link_to project.name, admin_project_path(project)
                   td= link_to project.user.display_name, admin_users_path(project.user)
                   td= project.forecasts_count
                   td=l project.created_at, format: :long
