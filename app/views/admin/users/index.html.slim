@@ -43,6 +43,10 @@ section#content
                         a.dropdown-toggle data-toggle="dropdown" href="#"
                           i.icon-pencil
                         ul.dropdown-menu.pull-right
+                          li
+                            = link_to admin_projects_path(user_id: user.id) do
+                                i.icon-list
+                                | Проекты
                           - if can? :update, user
                             li
                               = link_to edit_admin_user_path(user) do

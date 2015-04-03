@@ -6,3 +6,7 @@ li class=('active' if params[:controller] == 'admin/users')
   = link_to admin_users_path do
     i.icon-user.icon-xlarge
     span Пользователи
+li class=('active' if params[:controller] == 'admin/projects')
+  = link_to admin_projects_path do
+    i.icon-bar-chart.icon-xlarge
+    span Проекты
