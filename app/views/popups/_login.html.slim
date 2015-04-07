@@ -86,3 +86,22 @@
           .accept
             p
               a.arcticmodal-close href='#'=t '.password_recovery_sent.ok'
+  #modal-password-new.box-modal
+    .box-modal_i
+      a.box-modal_close.arcticmodal-close href='#'  &times;
+      section.modal-login
+        .modal-capt
+          ul.nav.nav-pills
+            li.active
+              a=t '.password_new.title'
+        .modal-cnt
+          .form
+            = form_for User.new, as: :user, url: password_path(:user), html: { class: 'validate-password-new', method: :put }, remote: true do |f|
+              = f.hidden_field :reset_password_token, value: params[:reset_password_token]
+              .form-group
+                .control-box
+                  = f.password_field :password, class: 'form-control', autofocus: true, autocomplete: "off", placeholder: t('.password_new.form.password')
+                .control-box
+                  = f.password_field :password_confirmation, class: 'form-control', autocomplete: "off", placeholder: t('.password_new.form.password_confirmation')
+                .control-box.text-center
+                  = f.submit t('.password_new.form.submit'), class: 'btn btn-lg btn-danger'

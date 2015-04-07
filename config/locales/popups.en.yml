@@ -28,6 +28,12 @@ en:
       password_recovery_sent:
         description: "We’ve sent password recovery instructions to"
         ok: "Ok, thanks!"
+      password_new:
+        title: Enter new password
+        form:
+          password: New password
+          password_confirmation: New password again
+          submit: Change
     api_status:
       title: API status
       description:

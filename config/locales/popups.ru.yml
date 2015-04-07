@@ -28,6 +28,12 @@ ru:
       password_recovery_sent:
         description: "Мы отправили письмо на адрес"
         ok: "ОК, спасибо"
+      password_new:
+        title: Введите новый пароль
+        form:
+          password: Новый пароль
+          password_confirmation: Новый пароль еще раз
+          submit: Изменить
     api_status:
       title: Состояние API
       description:

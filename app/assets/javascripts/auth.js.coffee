@@ -52,3 +52,23 @@ $ ->
     $('#modal-password-recovery-sent span.email').text(email)
     $.arcticmodal('close')
     $('#modal-password-recovery-sent').arcticmodal()
+
+  #
+  # Password recovery (changing)
+  #
+  $('body').on 'ajax:before', '.validate-password-new', (event, data, status) ->
+    return false if $(this).hasClass('waiting')
+    $(this).fadeTo('fast', 0.7)
+    $(this).addClass('waiting')
+    $(this).find('.control-box').removeClass('has-error')
+
+  $('body').on 'ajax:complete', '.validate-password-new', (event, data, status) ->
+    $(this).fadeTo('fast', 1.0)
+    $(this).removeClass('waiting')
+
+  $('body').on 'ajax:success', '.validate-password-new', (event, data, status) ->
+    window.location.replace('/projects')
+
+  $('body').on 'ajax:error', '.validate-password-new', (event, error, status) ->
+    for attribute, errors of error.responseJSON
+      $(this).find("#user_#{attribute}").closest('.control-box').addClass('has-error')
