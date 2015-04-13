@@ -1,7 +1,7 @@
 module ItemsManageable
 
   def find_or_create_item
-    @item = @project.items.where(sku: params[:item][:sku]).first_or_create(item_params)
+    @item = @project.items.where(sku: params[:item][:sku].to_s).first_or_create(item_params)
   end
 
   private

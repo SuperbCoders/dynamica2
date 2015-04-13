@@ -134,11 +134,11 @@ module API
       private
 
         def set_project
-          @project = Project.find_by!(slug: params[:project_id])
+          @project = Project.find_by!(slug: params[:project_id].to_s)
         end
 
         def set_item
-          @item = @project.items.find_by!(sku: params[:item_id])
+          @item = @project.items.find_by!(sku: params[:item_id].to_s)
         end
 
     end
