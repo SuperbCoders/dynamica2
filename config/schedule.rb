@@ -7,3 +7,7 @@
 every 5.minutes do
   rake 'dynamica:forecasts:start_planned'
 end
+
+every :day, at: '02:15pm' do
+  rake 'dynamica:shopify:import'
+end

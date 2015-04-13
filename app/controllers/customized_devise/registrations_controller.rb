@@ -12,11 +12,11 @@ class CustomizedDevise::RegistrationsController < Devise::RegistrationsControlle
       if resource.active_for_authentication?
         set_flash_message :notice, :signed_up if is_flashing_format?
         sign_up(resource_name, resource)
-        render json: resource, status: :created
+        render json: { redirect_to: after_sign_up_path_for(resource).to_s }, status: :created
       else
         set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
         expire_data_after_sign_in!
-        render json: resource, status: :created
+        render json: { redirect_to: after_inactive_sign_up_path_for(resource).to_s }, status: :created
       end
     else
       clean_up_passwords resource
@@ -57,10 +57,6 @@ class CustomizedDevise::RegistrationsController < Devise::RegistrationsControlle
 
     def after_update_path_for(resource)
       edit_user_registration_url
-    end
-
-    def after_sign_up_path_for(resource)
-      new_project_url
     end
 
 end

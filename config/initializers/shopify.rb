@@ -1,0 +1,1 @@
+ShopifyAPI::Session.setup({api_key: Dynamica::Settings::Shopify.api_key, secret: Dynamica::Settings::Shopify.secret})

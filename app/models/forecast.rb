@@ -60,7 +60,7 @@ class Forecast < ActiveRecord::Base
       forecast_lines.find_each(batch_size: 10) do |forecast|
         forecast.calculate
       end
-      calculate_summary if project.items.count > 1
+      calculate_summary if !project.shopify? && project.items.count > 1
       finish!
     end
 

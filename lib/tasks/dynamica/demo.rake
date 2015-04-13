@@ -2,11 +2,8 @@ require 'csv'
 
 namespace :dynamica do
   namespace :demo do
-    task csv: :environment do
-    end
-
     desc 'Generates demo CSV file with random data'
-    task :csv, [:name, :from, :to, :interval] => :environment  do |t, args|
+    task :csv, [:name, :from, :to, :interval] => :environment do |t, args|
       args.with_defaults(name: 'carrot', from: '01.01.2013', to: Time.now.to_s, interval: 'random')
       from = UTC.parse(args.from)
       to = UTC.parse(args.to)

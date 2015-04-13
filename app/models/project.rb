@@ -14,6 +14,8 @@ class Project < ActiveRecord::Base
 
   has_many :logs, dependent: :destroy
 
+  has_one :shopify_integration, dependent: :destroy, class_name: 'ThirdParty::Shopify::Integration'
+
   validates :user, presence: true
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[-_A-Za-z0-9]+\z/ }
@@ -27,6 +29,11 @@ class Project < ActiveRecord::Base
 
   def recent_forecast
     forecasts.order(created_at: :asc, finished_at: :asc).last
+  end
+
+  # @return [Boolean] whether this project is integrated with Shopify
+  def shopify?
+    shopify_integration.present?
   end
 
   private

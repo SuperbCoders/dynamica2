@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150402173300) do
+ActiveRecord::Schema.define(version: 20150414082237) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,6 +126,27 @@ ActiveRecord::Schema.define(version: 20150402173300) do
 
   add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree
   add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
+
+  create_table "third_party_shopify_integrations", force: true do |t|
+    t.integer  "project_id"
+    t.string   "token"
+    t.string   "shop_name"
+    t.datetime "last_import_at"
+    t.integer  "fails_count",    default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "third_party_shopify_integrations", ["project_id"], name: "index_third_party_shopify_integrations_on_project_id", using: :btree
+
+  create_table "third_party_shopify_orders", force: true do |t|
+    t.integer  "integration_id"
+    t.string   "shopify_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "third_party_shopify_orders", ["integration_id"], name: "index_third_party_shopify_orders_on_integration_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

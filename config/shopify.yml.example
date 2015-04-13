@@ -1,0 +1,18 @@
+# dev-dynamica
+development: &default
+  api_key: xxx
+  secret: xxx
+
+# dev-dynamica
+test:
+  <<: *default
+
+# staging-dynamica
+staging:
+  api_key: xxx
+  secret: xxx
+
+# dynamica
+production:
+  api_key: xxx
+  secret: xxx

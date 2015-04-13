@@ -111,6 +111,8 @@ en:
       noname: Noname product
     empty:
       text: 'No data for analysis.<br /><a href="%{upload_url}">Upload CSV file</a> or <a data-modal="api-status" href="#">set up API connection</a>'
+    shopify_empty:
+      text: 'We are currently importing the data from Shopify.<br />Please, wait a moment.'
     planned:
       title: "We need %{time} to process your forecast.<br />Wait a bit, please."
       moment: a moment

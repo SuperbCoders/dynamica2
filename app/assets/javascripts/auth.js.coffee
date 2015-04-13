@@ -19,7 +19,8 @@ $ ->
     $(this).removeClass('waiting')
 
   $('body').on 'ajax:success', '.validate-login', (event, data, status) ->
-    location.reload()
+    url = data['redirect_to']
+    window.location.replace(url)
 
   $('body').on 'ajax:error', '.validate-login', (event, error, status) ->
     $(this).find('.control-box').addClass('has-error')
@@ -38,7 +39,8 @@ $ ->
     $(this).removeClass('waiting')
 
   $('body').on 'ajax:success', '.validate-signup', (event, data, status) ->
-    window.location.replace('/projects')
+    url = data['redirect_to']
+    window.location.replace(url)
 
   $('body').on 'ajax:error', '.validate-signup', (event, error, status) ->
     for attribute, errors of error.responseJSON

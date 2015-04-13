@@ -111,6 +111,8 @@ ru:
       noname: Продукт без названия
     empty:
       text: 'Нет данных для анализа.<br /><a href="%{upload_url}">Загрузите CSV файл</a> или <a data-modal="api-status" href="#">настройте работу через API</a>'
+    shopify_empty:
+      text: 'Мы импортируем данные из Shopify.<br />Подождите, пожалуйста.'
     planned:
       title: "Нам нужно %{time}, чтобы построить ваш прогноз.<br />Подождите, пожалуйста."
       moment: "еще чуть-чуть"

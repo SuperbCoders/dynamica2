@@ -37,7 +37,10 @@ section.case.case-project
     .case-cnt
       = render partial: 'forecasts/forecast', object: @forecast, as: :forecast
   - else
-    = render partial: 'forecasts/empty'
+    - if @project.shopify?
+      = render partial: 'forecasts/shopify_empty'
+    - else
+      = render partial: 'forecasts/empty'
 
 = render partial: 'popups/api_status'
 - if @project.api_used?
