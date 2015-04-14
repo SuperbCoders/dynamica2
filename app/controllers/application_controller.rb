@@ -9,9 +9,21 @@ class ApplicationController < ActionController::Base
     { locale: I18n.locale }.merge(options)
   end
 
+  def current_city_name
+    @current_city_name ||= request.headers['X-GEO-CITY'] || 'Moscow'
+  end
+
+  def current_country_code
+    @current_city_name ||= request.headers['X-GEO-COUNTRYCODE'] || 'RU'
+  end
+
+  def locale_by_current_country_code
+    current_country_code == 'RU' ? 'ru' : 'en'
+  end
+
   protected
 
     def set_locale
-      I18n.locale = params[:locale] || I18n.default_locale
+      I18n.locale = params[:locale] || locale_by_current_country_code
     end
 end
