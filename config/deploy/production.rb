@@ -10,4 +10,4 @@ role :db,  %w{w3dynamica@ono.rrv.ru:2222}
 
 set :application, 'dynamica'
 set :deploy_to, '/www/dynamica.cc'
-set :branch, :master
+set :branch, :production
