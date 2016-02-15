@@ -23,3 +23,6 @@
 config/database.yml
 config/secrets.yml
 config/shopify.yml
+
+.rspec
+/.capistrano/*
