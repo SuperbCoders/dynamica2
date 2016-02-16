@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  id         :integer          not null, primary key
+#  slug       :string(255)
+#  name       :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#  user_id    :integer
+#  api_used   :boolean          default(FALSE)
+#  demo       :boolean          default(FALSE)
+#
+
 class Project < ActiveRecord::Base
   extend FriendlyId
   friendly_id :slug, use: :slugged
@@ -13,6 +27,9 @@ class Project < ActiveRecord::Base
   has_many :forecasts, dependent: :destroy
 
   has_many :logs, dependent: :destroy
+
+  has_many :project_characteristics, dependent: :destroy
+  has_many :products, dependent: :destroy
 
   has_one :shopify_integration, dependent: :destroy, class_name: 'ThirdParty::Shopify::Integration'
 

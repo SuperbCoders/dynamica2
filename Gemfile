@@ -44,6 +44,13 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano3-unicorn'
   gem 'capistrano-sidekiq'
+
+  gem 'annotate', '~> 2.6.10'
+
+
+  gem 'better_errors', '~> 2.1.1'
+  gem 'binding_of_caller', '~> 0.7.2'
+  gem 'pry-rails', '~> 0.3.3'
 end
 
 # Use debugger
@@ -74,7 +81,8 @@ gem 'cancancan'
 gem 'rabl'
 gem 'oj'
 gem 'workflow'
-gem 'rinruby'
+# Commented temporary
+# gem 'rinruby'
 gem 'whenever'
 gem 'slim-rails'
 gem 'simple_form'
