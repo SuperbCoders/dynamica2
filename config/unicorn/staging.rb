@@ -1,4 +1,4 @@
-deploy_to  = '/www/dev-dynamica.onomnenado.ru'
+deploy_to  = '/www/dev-dyn2.onomnenado.ru'
 rails_root = "#{deploy_to}/current"
 pid_file   = "#{deploy_to}/shared/tmp/pids/unicorn.pid"
 log_file   = "#{rails_root}/log/unicorn.log"
@@ -8,7 +8,7 @@ old_pid    = pid_file + '.oldbin'
 worker_processes 1
 timeout 30
 preload_app true
-listen 8089, tcp_nopush: true
+listen 8090, tcp_nopush: true
 pid pid_file
 stderr_path err_log
 stdout_path log_file

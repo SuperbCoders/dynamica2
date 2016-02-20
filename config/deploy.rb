@@ -1,7 +1,7 @@
 # config valid only for current version of Capistrano
 lock '3.3.4'
 
-set :repo_url, 'git@github.com:SuperbCoders/dynamica.git'
+set :repo_url, 'git@github.com:SuperbCoders/dynamica2.git'
 
 # Default value for :scm is :git
 # set :scm, :git
