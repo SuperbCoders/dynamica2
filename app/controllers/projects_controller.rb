@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /projects
   def index
@@ -69,5 +70,4 @@ class ProjectsController < ApplicationController
     def set_project
       @project = Project.friendly.find(params[:id])
     end
-
 end
