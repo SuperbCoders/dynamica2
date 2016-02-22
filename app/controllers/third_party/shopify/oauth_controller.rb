@@ -1,18 +1,14 @@
 module ThirdParty
   module Shopify
     class OauthController < ApplicationController
-      before_action :authenticate_user!
-
       def callback
-        @shop_name = params[:shop]
-        session = ShopifyAPI::Session.new(@shop_name)
-        token = session.request_token(params)
+        shop_name = params[:shop]
+        access_token = ShopifyAPI::Session.new(shop_name).request_token(params)
 
-        @project = current_user.own_projects.create!(name: @shop_name)
-        current_user.permissions.create!(project: @project, all: true)
-        @shopify_integration = @project.create_shopify_integration!(token: token, shop_name: @shop_name)
+        @project = Project.create(name: shop_name)
+        @integration = @project.create_integration(type: 'ShopifyIntegration', code: params[:code], access_token: access_token)
 
-        ThirdParty::Shopify::Importer.delay.import(@shopify_integration.id)
+        @project.set_project_owner! current_user, session
 
         redirect_to project_url(@project)
       end

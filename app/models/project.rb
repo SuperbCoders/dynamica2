@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  id          :integer          not null, primary key
+#  slug        :string(255)
+#  name        :string(255)
+#  created_at  :datetime
+#  updated_at  :datetime
+#  user_id     :integer
+#  api_used    :boolean          default(FALSE)
+#  demo        :boolean          default(FALSE)
+#  guest_token :string(255)
+#
+
 class Project < ActiveRecord::Base
   extend FriendlyId
   friendly_id :slug, use: :slugged
@@ -14,9 +29,12 @@ class Project < ActiveRecord::Base
 
   has_many :logs, dependent: :destroy
 
-  has_one :shopify_integration, dependent: :destroy, class_name: 'ThirdParty::Shopify::Integration'
+  has_many :project_characteristics, dependent: :destroy
+  has_many :products, dependent: :destroy
 
-  validates :user, presence: true
+  has_one :shopify_integration, dependent: :destroy, class_name: 'ThirdParty::Shopify::Integration'
+  has_one :integration, dependent: :destroy
+
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[-_A-Za-z0-9]+\z/ }
 
@@ -34,6 +52,19 @@ class Project < ActiveRecord::Base
   # @return [Boolean] whether this project is integrated with Shopify
   def shopify?
     shopify_integration.present?
+  end
+
+  def set_project_owner!(user, session = {})
+    return if user_id
+
+    if user
+      update_attributes user_id: user.id, guest_token: nil
+      user.permissions.create! project: self, all: true
+      session[:guest_token] = nil
+    else
+      update_attribute :guest_token, SecureRandom.hex(32)
+      session[:guest_token] = guest_token
+    end
   end
 
   private

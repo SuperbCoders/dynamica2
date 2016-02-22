@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: predicted_values
+#
+#  id               :integer          not null, primary key
+#  forecast_line_id :integer
+#  value            :float
+#  created_at       :datetime
+#  updated_at       :datetime
+#  predicted        :boolean          default(FALSE)
+#  from             :datetime
+#  to               :datetime
+#
+
 FactoryGirl.define do
   factory :predicted_value do
     forecast

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150414082237) do
+ActiveRecord::Schema.define(version: 20160222091309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,17 @@ ActiveRecord::Schema.define(version: 20150414082237) do
   end
 
   add_index "forecasts", ["project_id"], name: "index_forecasts_on_project_id", using: :btree
+
+  create_table "integrations", force: true do |t|
+    t.integer  "project_id",   null: false
+    t.string   "code"
+    t.string   "access_token"
+    t.string   "type",         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "integrations", ["project_id"], name: "index_integrations_on_project_id", using: :btree
 
   create_table "items", force: true do |t|
     t.integer  "project_id"
@@ -114,14 +125,69 @@ ActiveRecord::Schema.define(version: 20150414082237) do
 
   add_index "predicted_values", ["forecast_line_id"], name: "index_predicted_values_on_forecast_line_id", using: :btree
 
+  create_table "product_characteristics", force: true do |t|
+    t.integer  "product_id",                                                null: false
+    t.decimal  "price",              precision: 10, scale: 2, default: 0.0, null: false
+    t.integer  "inventory_quantity",                          default: 0,   null: false
+    t.integer  "sold_quantity",                               default: 0,   null: false
+    t.decimal  "gross_revenue",      precision: 10, scale: 2, default: 0.0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "product_characteristics", ["product_id"], name: "index_product_characteristics_on_product_id", using: :btree
+
+  create_table "products", force: true do |t|
+    t.integer  "remote_id",               null: false
+    t.integer  "project_id",              null: false
+    t.string   "title",      default: "", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "products", ["project_id"], name: "index_products_on_project_id", using: :btree
+  add_index "products", ["remote_id"], name: "index_products_on_remote_id", unique: true, using: :btree
+
+  create_table "project_characteristics", force: true do |t|
+    t.integer  "orders_number",                                                           null: false
+    t.integer  "products_number",                                                         null: false
+    t.integer  "project_id",                                                              null: false
+    t.decimal  "total_gross_revenues",                           precision: 10, scale: 2, null: false
+    t.decimal  "total_prices",                                   precision: 10, scale: 2
+    t.string   "currency",                                                                null: false
+    t.integer  "customers_number",                                                        null: false
+    t.integer  "new_customers_number",                                                    null: false
+    t.integer  "repeat_customers_number",                                                 null: false
+    t.float    "ratio_of_new_customers_to_repeat_customers",                              null: false
+    t.float    "average_order_value",                                                     null: false
+    t.float    "average_order_size",                                                      null: false
+    t.integer  "abandoned_shopping_cart_sessions_number"
+    t.float    "average_revenue_per_customer",                                            null: false
+    t.float    "sales_per_visitor",                                                       null: false
+    t.float    "average_customer_lifetime_value",                                         null: false
+    t.float    "shipping_cost_as_a_percentage_of_total_revenue",                          null: false
+    t.integer  "unique_users_number",                                                     null: false
+    t.integer  "visits",                                                                  null: false
+    t.float    "time_on_site",                                                            null: false
+    t.integer  "products_in_stock_number",                                                null: false
+    t.integer  "items_in_stock_number",                                                   null: false
+    t.float    "percentage_of_inventory_sold",                                            null: false
+    t.float    "percentage_of_stock_sold",                                                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "project_characteristics", ["project_id"], name: "index_project_characteristics_on_project_id", using: :btree
+
   create_table "projects", force: true do |t|
     t.string   "slug"
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
-    t.boolean  "api_used",   default: false
-    t.boolean  "demo",       default: false
+    t.boolean  "api_used",    default: false
+    t.boolean  "demo",        default: false
+    t.string   "guest_token"
   end
 
   add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree

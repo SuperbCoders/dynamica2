@@ -21,6 +21,16 @@ class ApplicationController < ActionController::Base
     current_country_code == 'RU' ? 'ru' : 'en'
   end
 
+  def after_sign_in_path_for(resource_or_scope)
+    # Assign the project and current_user
+    if session[:guest_token]
+      project = Project.where(guest_token: session[:guest_token]).first
+      project.try :set_project_owner!, current_user, session
+    end
+
+    super
+  end
+
   protected
 
     def set_locale
