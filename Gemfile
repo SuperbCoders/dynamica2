@@ -104,7 +104,10 @@ gem 'render_csv'  # For export
 
 gem 'rubyzip'
 gem 'russian'
+gem 'celluloid', '~> 0.16.0'
 gem 'sidekiq'
+gem 'sidetiq', '~> 0.6.3'
 
 # Third-party shops integration
-gem 'shopify_api'
+gem 'activeresource', git: 'git://github.com/Shopify/activeresource', tag: '4.2-threadsafe'
+gem 'shopify_api', '>= 3.2.1'

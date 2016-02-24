@@ -45,3 +45,16 @@ section.case.case-project
 = render partial: 'popups/api_status'
 - if @project.api_used?
     = render partial: 'popups/api_used'
+
+
+table.table.table-striped
+  thead
+    tr
+      th ID
+      th Title
+      th Price
+      th Sold quantity
+      th Total
+      th Inventory quantity
+    tbody
+      = render @project.products

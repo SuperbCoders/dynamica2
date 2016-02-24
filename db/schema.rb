@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160222091309) do
+ActiveRecord::Schema.define(version: 20160225135019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,55 +126,58 @@ ActiveRecord::Schema.define(version: 20160222091309) do
   add_index "predicted_values", ["forecast_line_id"], name: "index_predicted_values_on_forecast_line_id", using: :btree
 
   create_table "product_characteristics", force: true do |t|
-    t.integer  "product_id",                                                null: false
-    t.decimal  "price",              precision: 10, scale: 2, default: 0.0, null: false
-    t.integer  "inventory_quantity",                          default: 0,   null: false
-    t.integer  "sold_quantity",                               default: 0,   null: false
-    t.decimal  "gross_revenue",      precision: 10, scale: 2, default: 0.0, null: false
+    t.integer  "product_id",                                           null: false
+    t.decimal  "price",         precision: 10, scale: 2, default: 0.0, null: false
+    t.integer  "sold_quantity",                          default: 0,   null: false
+    t.decimal  "gross_revenue", precision: 10, scale: 2, default: 0.0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "date",                                                 null: false
   end
 
   add_index "product_characteristics", ["product_id"], name: "index_product_characteristics_on_product_id", using: :btree
 
   create_table "products", force: true do |t|
-    t.integer  "remote_id",               null: false
-    t.integer  "project_id",              null: false
-    t.string   "title",      default: "", null: false
+    t.integer  "remote_id",          limit: 8,              null: false
+    t.integer  "project_id",                                null: false
+    t.string   "title",                        default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "inventory_quantity",           default: 0,  null: false
   end
 
   add_index "products", ["project_id"], name: "index_products_on_project_id", using: :btree
-  add_index "products", ["remote_id"], name: "index_products_on_remote_id", unique: true, using: :btree
+  add_index "products", ["remote_id", "project_id"], name: "index_products_on_remote_id_and_project_id", unique: true, using: :btree
+  add_index "products", ["remote_id"], name: "index_products_on_remote_id", using: :btree
 
   create_table "project_characteristics", force: true do |t|
-    t.integer  "orders_number",                                                           null: false
-    t.integer  "products_number",                                                         null: false
-    t.integer  "project_id",                                                              null: false
-    t.decimal  "total_gross_revenues",                           precision: 10, scale: 2, null: false
+    t.integer  "orders_number",                                                           default: 0,     null: false
+    t.integer  "products_number",                                                         default: 0,     null: false
+    t.integer  "project_id",                                                                              null: false
+    t.decimal  "total_gross_revenues",                           precision: 10, scale: 2, default: 0.0,   null: false
     t.decimal  "total_prices",                                   precision: 10, scale: 2
-    t.string   "currency",                                                                null: false
-    t.integer  "customers_number",                                                        null: false
-    t.integer  "new_customers_number",                                                    null: false
-    t.integer  "repeat_customers_number",                                                 null: false
-    t.float    "ratio_of_new_customers_to_repeat_customers",                              null: false
-    t.float    "average_order_value",                                                     null: false
-    t.float    "average_order_size",                                                      null: false
+    t.string   "currency",                                                                default: "USD", null: false
+    t.integer  "customers_number",                                                        default: 0,     null: false
+    t.integer  "new_customers_number",                                                    default: 0,     null: false
+    t.integer  "repeat_customers_number",                                                 default: 0,     null: false
+    t.float    "ratio_of_new_customers_to_repeat_customers",                              default: 0.0,   null: false
+    t.float    "average_order_value",                                                     default: 0.0,   null: false
+    t.float    "average_order_size",                                                      default: 0.0,   null: false
     t.integer  "abandoned_shopping_cart_sessions_number"
-    t.float    "average_revenue_per_customer",                                            null: false
-    t.float    "sales_per_visitor",                                                       null: false
-    t.float    "average_customer_lifetime_value",                                         null: false
-    t.float    "shipping_cost_as_a_percentage_of_total_revenue",                          null: false
-    t.integer  "unique_users_number",                                                     null: false
-    t.integer  "visits",                                                                  null: false
-    t.float    "time_on_site",                                                            null: false
-    t.integer  "products_in_stock_number",                                                null: false
-    t.integer  "items_in_stock_number",                                                   null: false
-    t.float    "percentage_of_inventory_sold",                                            null: false
-    t.float    "percentage_of_stock_sold",                                                null: false
+    t.float    "average_revenue_per_customer",                                            default: 0.0,   null: false
+    t.float    "sales_per_visitor",                                                       default: 0.0,   null: false
+    t.float    "average_customer_lifetime_value",                                         default: 0.0,   null: false
+    t.float    "shipping_cost_as_a_percentage_of_total_revenue",                          default: 0.0,   null: false
+    t.integer  "unique_users_number",                                                     default: 0,     null: false
+    t.integer  "visits",                                                                  default: 0,     null: false
+    t.float    "time_on_site",                                                            default: 0.0,   null: false
+    t.integer  "products_in_stock_number",                                                default: 0,     null: false
+    t.integer  "items_in_stock_number",                                                   default: 0,     null: false
+    t.float    "percentage_of_inventory_sold",                                            default: 0.0,   null: false
+    t.float    "percentage_of_stock_sold",                                                default: 0.0,   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "date",                                                                                    null: false
   end
 
   add_index "project_characteristics", ["project_id"], name: "index_project_characteristics_on_project_id", using: :btree
