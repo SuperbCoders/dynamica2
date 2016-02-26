@@ -17,6 +17,8 @@ class Project < ActiveRecord::Base
   extend FriendlyId
   friendly_id :slug, use: :slugged
 
+  TIME_PERIOD = 1.year
+
   # @return [User] who created this project
   belongs_to :user
 
@@ -39,6 +41,8 @@ class Project < ActiveRecord::Base
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[-_A-Za-z0-9]+\z/ }
 
   before_validation :set_default_values
+
+  scope :actives, -> { where.not(user_id: nil) }
 
   # Marks project as a project that uses API
   def api_used!
@@ -65,6 +69,10 @@ class Project < ActiveRecord::Base
       update_attribute :guest_token, SecureRandom.hex(32)
       session[:guest_token] = guest_token
     end
+  end
+
+  def fetch_data
+    CharacteristicsFetcherWorker.perform_async self.id, Time.now - Project::TIME_PERIOD, Time.now
   end
 
   private

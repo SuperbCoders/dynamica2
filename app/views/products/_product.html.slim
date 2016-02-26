@@ -1,0 +1,7 @@
+tr
+  th= product.id
+  th= product.title
+  th= product.product_characteristics.to_a.sum(&:gross_revenue).to_f / product.product_characteristics.to_a.sum(&:sold_quantity).to_f
+  th= product.product_characteristics.to_a.sum(&:sold_quantity).to_f
+  th= product.product_characteristics.to_a.sum(&:gross_revenue).to_f
+  th= product.inventory_quantity
