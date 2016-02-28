@@ -71,8 +71,8 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def fetch_data
-    CharacteristicsFetcherWorker.perform_async self.id, Time.now - Project::TIME_PERIOD, Time.now
+  def fetch_data(time_period = Project::TIME_PERIOD)
+    CharacteristicsFetcherWorker.perform_async self.id, Time.now - time_period, Time.now
   end
 
   private

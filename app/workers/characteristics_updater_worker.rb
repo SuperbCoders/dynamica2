@@ -5,6 +5,6 @@ class CharacteristicsUpdaterWorker
   recurrence { daily.hour_of_day(2) }
 
   def perform()
-    Project.actives.each { |project| project.fetch_data }
+    Project.actives.each { |project| project.fetch_data 1.day }
   end
 end
