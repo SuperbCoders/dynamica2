@@ -22,6 +22,10 @@
 //= require bootstrap.min
 //= require jquery.arcticmodal.js
 //= require bootstrap-select.min
+//= require bootstrap-datepicker
+//= require d3
+//= require moment
+//= require select2
 
 //= require script
 
@@ -32,3 +36,4 @@
 //= require profile
 //= require dropzone
 //= require hash
+//= require dashboard

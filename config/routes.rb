@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'dashboard/index'
+
   apipie
 
   scope "(:locale)", locale: /en|ru/ do

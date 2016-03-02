@@ -4,6 +4,8 @@
 @import "bootstrap-variables";
 @import "bootstrap";
 @import "font-awesome";
+@import "bootstrap-datepicker";
+@import "select2";
 
 @import "helpers/sprites";
 @import "helpers/mixin";
@@ -29,3 +31,4 @@
 @import "modules/profile";
 @import "modules/modals";
 @import "modules/landing";
+@import "modules/dashboard";

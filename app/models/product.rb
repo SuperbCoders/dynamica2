@@ -9,10 +9,14 @@
 #  created_at         :datetime
 #  updated_at         :datetime
 #  inventory_quantity :integer          default(0), not null
+#  fields             :text
+#  remote_updated_at  :datetime
 #
 
 class Product < ActiveRecord::Base
   belongs_to :project
 
   has_many :product_characteristics, dependent: :destroy
+
+  serialize :fields, Hash
 end

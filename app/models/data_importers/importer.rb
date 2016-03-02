@@ -52,7 +52,7 @@ module DataImporters
 
     def synchronize_product
       data[:products].each do |product|
-        local_product = Product.find_or_initialize_by(remote_id: product.id, project_id: current_project.id )
+        local_product = Product.find_or_initialize_by(remote_id: product.id, project_id: current_project.id)
         local_product.update_attributes!(
           title: product.title,
           inventory_quantity: product.variants.sum(&:inventory_quantity)

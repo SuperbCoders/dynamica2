@@ -93,6 +93,13 @@ gem 'jquery-fileupload-rails'
 gem 'non-stupid-digest-assets', '~> 1.0.4' # creates both digest and non-digest assets
 gem 'settingslogic'
 
+source 'https://rails-assets.org' do
+  gem 'rails-assets-bootstrap-datepicker'
+  gem 'rails-assets-d3'
+  gem 'rails-assets-moment'
+  gem 'rails-assets-select2'
+end
+
 # Admin panel
 gem 'first_admin_panel', git: 'git@bitbucket.org:ImmaculatePine/first_admin_panel.git'
 gem 'kaminari'
