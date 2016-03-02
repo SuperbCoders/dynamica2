@@ -9,6 +9,8 @@
 #  created_at         :datetime
 #  updated_at         :datetime
 #  inventory_quantity :integer          default(0), not null
+#  fields             :text
+#  remote_updated_at  :datetime
 #
 
 require 'rails_helper'

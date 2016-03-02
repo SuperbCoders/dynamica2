@@ -30,14 +30,18 @@ class ShopifyIntegration < Integration
 
   def get_data
     @products  = ShopifyAPI::Product.find(:all, product_params)
-    # @customers = ShopifyAPI::Customer.find(:all, customer_params)
+    @customers = ShopifyAPI::Customer.find(:all, customer_params)
     @orders    = ShopifyAPI::Order.find(:all, order_params)
 
-    {
+    @result = {
       products: @products,
-      # customers: @customers,
+      customers: @customers,
       orders: @orders
     }
+
+    dump_to_local_database @result
+
+    @result
   end
 
   def order_params
@@ -58,13 +62,13 @@ class ShopifyIntegration < Integration
     }
   end
 
-  # def customer_params
-  #   {
-  #     params: {
-  #       fields: CUSTOMER_FIELDS
-  #     }
-  #   }
-  # end
+  def customer_params
+    {
+      params: {
+        fields: CUSTOMER_FIELDS
+      }
+    }
+  end
 
   def activate!
     return false unless session.valid?

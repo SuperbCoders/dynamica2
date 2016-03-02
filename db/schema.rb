@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225135019) do
+ActiveRecord::Schema.define(version: 20160302075354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "customers", force: true do |t|
+    t.text     "fields",                      null: false
+    t.integer  "project_id",                  null: false
+    t.integer  "remote_id",         limit: 8, null: false
+    t.datetime "remote_updated_at",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "customers", ["project_id"], name: "index_customers_on_project_id", using: :btree
 
   create_table "forecast_lines", force: true do |t|
     t.integer  "forecast_id"
@@ -70,6 +81,17 @@ ActiveRecord::Schema.define(version: 20160225135019) do
   add_index "items", ["project_id", "sku"], name: "index_items_on_project_id_and_sku", unique: true, using: :btree
   add_index "items", ["project_id"], name: "index_items_on_project_id", using: :btree
 
+  create_table "line_items", force: true do |t|
+    t.text     "fields",                      null: false
+    t.integer  "project_id",                  null: false
+    t.integer  "remote_id",         limit: 8, null: false
+    t.datetime "remote_updated_at",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "line_items", ["project_id"], name: "index_line_items_on_project_id", using: :btree
+
   create_table "logs", force: true do |t|
     t.integer  "project_id"
     t.integer  "user_id"
@@ -81,6 +103,17 @@ ActiveRecord::Schema.define(version: 20160225135019) do
 
   add_index "logs", ["project_id"], name: "index_logs_on_project_id", using: :btree
   add_index "logs", ["user_id"], name: "index_logs_on_user_id", using: :btree
+
+  create_table "orders", force: true do |t|
+    t.text     "fields",                      null: false
+    t.integer  "project_id",                  null: false
+    t.integer  "remote_id",         limit: 8, null: false
+    t.datetime "remote_updated_at",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "orders", ["project_id"], name: "index_orders_on_project_id", using: :btree
 
   create_table "pending_permissions", force: true do |t|
     t.string   "email"
@@ -144,6 +177,8 @@ ActiveRecord::Schema.define(version: 20160225135019) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "inventory_quantity",           default: 0,  null: false
+    t.text     "fields"
+    t.datetime "remote_updated_at"
   end
 
   add_index "products", ["project_id"], name: "index_products_on_project_id", using: :btree

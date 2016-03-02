@@ -41,6 +41,10 @@ class ProjectCharacteristic < ActiveRecord::Base
 
   before_save :calculate_statistics
 
+  def total_gross_revenues
+    self[:total_gross_revenues].to_f
+  end
+
   private
 
   def calculate_statistics
