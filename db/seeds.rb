@@ -35,3 +35,31 @@ end
 # demo_user = create_demo_user
 # create_demo_project_for_sales(demo_user)
 # create_demo_project_for_subscriptions(demo_user)
+
+def create_demo_project
+  orders_csv      = CSV.new(File.open("#{Rails.root}/db/seeds/orders.csv").read, headers: true)
+  items_csv       = CSV.new(File.open("#{Rails.root}/db/seeds/items.csv").read, headers: true)
+  order_items_csv = CSV.new(File.open("#{Rails.root}/db/seeds/order_items.csv").read, headers: true)
+
+  order_items = order_items_csv.to_a.map {|row| row.to_hash}
+  items = items_csv.to_a.map {|row| row.to_hash}
+  orders = orders_csv.to_a.map {|row| row.to_hash}
+
+  current_project = Project.last
+
+  items.each do |product|
+    local_product = Product.find_or_initialize_by(remote_id: product['id'], project_id: current_project.id)
+    local_product.update_attributes!(
+      title: product['title'],
+      remote_updated_at: product['updated_at']
+    )
+  end
+
+  items.each do |product|
+    local_product = Product.find_or_initialize_by(remote_id: product['id'], project_id: current_project.id)
+    local_product.update_attributes!(
+      title: product['title'],
+      remote_updated_at: product['updated_at']
+    )
+  end
+end

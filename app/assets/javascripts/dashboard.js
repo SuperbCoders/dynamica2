@@ -1,38 +1,12 @@
-var resizeHndl, calendarNeedRefresh = false;
+var resizeHndl, activeFamilyGraph = 0;
 
 $(function ($) {
-
-    /*    selectReadyTicker = setInterval(function () {
-
-     var $selectpicker = $('.filterSelect');
-
-
-     $selectpicker.each(function (ind) {
-     var slct = $(this).data('selectpicker').$newElement;
-
-     if (slct != void 0) {
-     clearInterval(selectReadyTicker);
-
-     console.log($(this), slct);
-     }
-
-     //slct.on('hide.bs.dropdown', function (e) {
-     //    console.log('hide');
-     //});
-     //
-     //slct.on('hidden.bs.dropdown', function (e) {
-     //    console.log('hide');
-     //});
-     });
-
-     }, 500);*/
-    //
 
     $('.datePicker').each(function () {
         var datePckr = $(this);
 
         datePckr.datepicker({
-            multidate: 2,
+            multidate: 3,
             //clearBtn: true,
             toggleActive: true,
             startDate: '-477d',
@@ -40,20 +14,20 @@ $(function ($) {
             orientation: "bottom left",
             format: 'M dd, yyyy',
             container: datePckr.parent(),
-            //multidateSeparator: ' — ',
             multidateSeparator: ' – ',
             beforeShowDay: function (date, e) {
-                var dates = e.dates, curDate = moment(date),
+                var dataPicker = $(e.picker), dPickerElement = $(e.element),
+                    dates = e.dates, curDate = moment(date),
                     rangeStart = moment(dates[0]), rangeEnd = moment(dates[1]);
 
                 if (rangeStart.isAfter(rangeEnd)) {
-                    calendarNeedRefresh = true;
+                    dPickerElement.datepicker("setDates", [dates[1], dates[0]]).datepicker("update");
                 }
-                
+
                 if (dates.length == 1) {
                     if (curDate.isSame(rangeStart, 'day')) return "start-range";
                 }
-                
+
                 if (dates.length == 2) {
 
                     if (rangeStart.isAfter(rangeEnd, 'day')) {
@@ -64,15 +38,35 @@ $(function ($) {
                     if (curDate.isSame(rangeEnd, 'day')) return "end-range";
                     if (curDate.isBetween(rangeStart, rangeEnd)) return "in-range";
                 }
+
+                if (dates.length == 3) {
+                    dPickerElement.datepicker("setDates", [dates[2]]).datepicker("update");
+                }
             }
         }).on('show', function (e) {
-            if (calendarNeedRefresh) {
-                $(this).datepicker("setDates", [e.dates[1], e.dates[0]]).datepicker("update");
-                calendarNeedRefresh = false;
-            }
+            var calendar = $(this).datepicker("widget"), dates = e.dates;
+
+            if (calendar.find('.btn').length) return;
+
+            var buttonPane = $('<span class="calendar-control-holder" />');
+
+            setTimeout(function () {
+                var btn = $('<a class="apply-calendar-btn_ btn btn-block btn-danger" >Показать</a>');
+
+                btn.off("click").on("click", function () {
+                    loadGraphData();
+                    return false;
+                });
+
+                buttonPane.appendTo(calendar);
+                btn.appendTo(buttonPane);
+
+            }, 1);
+
         }).on('changeDate', function (e, w) {
-
-
+          if ($(this).datepicker('getDates').length == 2) {
+            redrawCharts();
+          }
         });
     });
 
@@ -89,14 +83,17 @@ $(function ($) {
         .delegate('.hoverCatcher', 'mouseenter', function () {
             var firedEl = $($(this).attr('data-area'));
 
+            activeFamilyGraph = $(this).attr('data-area').replace(/\D/g, '') * 1;
+
             firedEl.css('opacity', 1).siblings('.area').css('opacity', .15);
+
         })
         .delegate('.hoverCatcher', 'mouseleave', function () {
             var firedEl = $($(this).attr('data-area'));
 
             firedEl.css('opacity', .5).siblings('.area').css('opacity', .5);
         });
-    
+
 
     $('.graphFilterDate').on('change', function () {
         var firedEl = $(this),
@@ -139,6 +136,17 @@ $(function ($) {
 
 });
 
+function loadGraphData() {
+    console.log('loadGraphData');
+
+    $('.pageOverlay').addClass('show_overlay');
+
+    setTimeout(function () {
+        $('.pageOverlay').removeClass('show_overlay');
+    }, 1500);
+
+}
+
 function fit2Limits(pckr, date, max) {
     var start = moment(pckr.datepicker('getStartDate')),
         end = moment(pckr.datepicker('getEndDate'));
@@ -150,91 +158,48 @@ function fit2Limits(pckr, date, max) {
     }
 }
 
+function fetchDataForTheBigCharts() {
+  // switch (period) {
+  //   case 'day':
+
+  //     break
+  //   case 'month':
+  //     break
+  //   case 'year':
+  //     break
+  // };
+  var pckr = $('.datePicker');
+
+  d3.json("/charts_data/big_chart_data.json?period=" +
+          $('input[name="graph_filter"]:checked').val() +
+          "&from=" + pckr.datepicker('getDates')[0] +
+          "&to=" + pckr.datepicker('getDates')[1] +
+          "&project_id=" + $('.dashboard').data('project-id'),
+          function (error, data) {
+
+    if (error) return console.log(error);
+
+    $('.dashboard').data('big-charts', data);
+    drawTheBigCharts();
+  });
+}
+
+function redrawCharts() {
+  fetchDataForTheBigCharts();
+}
+
+function drawTheBigCharts() {
+  var bigCharts = $('.dashboard').data('big-charts');
+
+  $('.areaChartFamily_1').each(function (ind) {
+    init_area_family_chart($(this), bigCharts);
+  });
+}
 
 function init_charts() {
 
-    var big_chart = [
-        {
-            "name": "Revenue",
-            "color": "#6AFFCB", // green
-            "value": "35,489$",
-            "diff": "+8%",
-            "data": [
-                {"date": "9-Apr-12", "close": 180},
-                {"date": "8-Apr-12", "close": 260},
-                {"date": "7-Apr-12", "close": 218},
-                {"date": "6-Apr-12", "close": 308},
-                {"date": "5-Apr-12", "close": 400},
-                {"date": "4-Apr-12", "close": 220},
-                {"date": "3-Apr-12", "close": 329},
-                {"date": "2-Apr-12", "close": 150}
-            ]
-        },
-        {
-            "name": "Orders",
-            "color": "#FF1FA7", // violet
-            "value": "490",
-            "diff": "-9%",
-            "data": [
-                {"date": "9-Apr-12", "close": 240},
-                {"date": "8-Apr-12", "close": 290},
-                {"date": "7-Apr-12", "close": 368},
-                {"date": "6-Apr-12", "close": 308},
-                {"date": "5-Apr-12", "close": 150},
-                {"date": "4-Apr-12", "close": 264},
-                {"date": "3-Apr-12", "close": 120},
-                {"date": "2-Apr-12", "close": 250}
-            ]
-        },
-        {
-            "name": "Products sell",
-            "color": "#FF7045",  // orange
-            "value": "9,483",
-            "diff": "-9%",
-            "data": [
-                {"date": "9-Apr-12", "close": 340},
-                {"date": "8-Apr-12", "close": 290},
-                {"date": "7-Apr-12", "close": 368},
-                {"date": "6-Apr-12", "close": 208},
-                {"date": "5-Apr-12", "close": 313},
-                {"date": "4-Apr-12", "close": 264},
-                {"date": "3-Apr-12", "close": 129},
-                {"date": "2-Apr-12", "close": 218}
-            ]
-        },
-        {
-            "name": "Unic users",
-            "color": "#3BD7FF", // light blue
-            "value": "109,330",
-            "diff": "-1%",
-            "data": [
-                {"date": "9-Apr-12", "close": 326},
-                {"date": "8-Apr-12", "close": 200},
-                {"date": "7-Apr-12", "close": 318},
-                {"date": "6-Apr-12", "close": 308},
-                {"date": "5-Apr-12", "close": 120},
-                {"date": "4-Apr-12", "close": 300},
-                {"date": "3-Apr-12", "close": 250},
-                {"date": "2-Apr-12", "close": 155}
-            ]
-        },
-        {
-            "name": "Customers",
-            "color": "#FFD865", // yellow
-            "value": "477",
-            "diff": "+2",
-            "data": [
-                {"date": "9-Apr-12", "close": 126},
-                {"date": "8-Apr-12", "close": 300},
-                {"date": "7-Apr-12", "close": 218},
-                {"date": "6-Apr-12", "close": 108},
-                {"date": "5-Apr-12", "close": 213},
-                {"date": "4-Apr-12", "close": 364},
-                {"date": "3-Apr-12", "close": 129},
-                {"date": "2-Apr-12", "close": 418}
-            ]
-        }
-    ];
+    // var big_chart = eval($('.dashboard').data('content'))['day'];
+    var big_chart = $('.dashboard').data('content');
 
     init_donut_chart($('.donutChart_1'));
 
@@ -536,7 +501,7 @@ function init_area_family_chart(el, data_files, data_colors) {
 
     var tooltip = $('<table class="graph-tooltip-table" />');
 
-    var margin = {top: 0, right: 0, bottom: 0, left: 0},
+    var margin = {top: 80, right: 0, bottom: 30, left: 0},
         width = el.width() - margin.left - margin.right,
         height = el.height() - margin.top - margin.bottom;
 
@@ -561,7 +526,14 @@ function init_area_family_chart(el, data_files, data_colors) {
         .y0(height)
         .y1(function (d) {
             return area_y(d.close);
-        });
+        })
+        .interpolate("monotone");
+
+    var xAxis = d3.svg.axis()
+        .scale(area_x)
+        .ticks(dates.length - 1)
+        .tickFormat(d3.time.format("%b %d"))
+        .orient("bottom");
 
     //var xScale = d3.scale.ordinal()
     //    .domain(d3.range(dataset.length))
@@ -576,17 +548,12 @@ function init_area_family_chart(el, data_files, data_colors) {
             //console.log(d3.mouse(this));
             var tooltip = d3.select("#tooltip"),
                 tooltip_content = $("#tooltip_content"),
+                tooltip_dot = $("#tooltip_dot"),
                 tool_table = $('<table class="graph-tooltip-table" />'),
-                x = d3.mouse(this)[0],
+                distance = area_x(data_files[activeFamilyGraph].data[0].date) - area_x(data_files[activeFamilyGraph].data[1].date) || 0,
+                x = d3.mouse(this)[0] + distance / 2,
                 x0 = area_x.invert(x),
-                ind
-
-            //d0 = data[i - 1],
-            //d1 = data[i]
-            //d = x0 - d0.date > d1.date - x0 ? d1 : d0
-                ;
-            //focus.attr("transform", "translate(" + x(d.date) + "," + y(d.close) + ")");
-            //focus.select("text").text(d.close);
+                ind;
 
             for (var k = 0; k < dates.length; k++) {
                 var obj1 = dates[k];
@@ -600,9 +567,10 @@ function init_area_family_chart(el, data_files, data_colors) {
             for (var j = 0; j < data_files.length; j++) {
                 var color = data_files[j].color, data = data_files[j].data;
 
-                var i = bisectDate(data, x0, 1);
+                //var i = bisectDate(data, x0, 1);
 
                 var tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + j)
+                    .addClass(j == activeFamilyGraph ? 'active_row' : '')
                     .addClass($('.graph-unit-legend .legend_item[data-graph=#family_area_' + j + ']').hasClass('disabled') ? 'disabled' : '')
                     .append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[j].name))))
                     .append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[j].data[ind].close)));
@@ -615,12 +583,20 @@ function init_area_family_chart(el, data_files, data_colors) {
                 .append(tool_table);
 
             tooltip
-                //.classed("hidden", false)
                 .classed('flipped_left', x < tooltip_content.outerWidth() + 25)
-                .style("left", x + "px");
+                .style("left", area_x(data_files[activeFamilyGraph].data[ind].date) + "px");
+
+            tooltip_dot.css('top', margin.top + area_y(data_files[activeFamilyGraph].data[ind].close) - 11);
 
         }
     );
+
+    svg.append("g")
+        .attr("class", "x axis family_x_axis")
+        .style("font-size", '14px')
+        .style("fill", '#fff')
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
 
     for (var i = 0; i < data_files.length; i++) {
         var data = data_files[i].data;
@@ -692,8 +668,9 @@ function init_area_family_chart(el, data_files, data_colors) {
         svg.append("rect")
             .attr("class", 'graph-hover-catcher hoverCatcher')
             .attr("data-area", '#family_area_' + i)
-            .attr("x", 0)
             .style("opacity", 0)
+            .attr("transform", "translate(0,-" + margin.top + ")")
+            .attr("x", 0)
             .attr("y", i * (100 / data_files.length) + '%')
             .attr("width", '100%')
             .attr("height", (100 / data_files.length) + '%');
@@ -844,11 +821,11 @@ $(window).resize(function () {
     clearTimeout(resizeHndl);
 
     resizeHndl = setTimeout(function () {
-        init_charts();
+      redrawCharts();
     }, 10);
 
 }).load(function () {
 
-    init_charts();
+    redrawCharts();
 
 });

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'dashboard/index'
+  get 'charts_data/big_chart_data'
 
   apipie
 

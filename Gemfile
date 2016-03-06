@@ -37,6 +37,8 @@ gem 'spring',        group: :development
 # Use unicorn as the app server
 gem 'unicorn'
 
+gem 'groupdate'
+
 # Use Capistrano for deployment
 group :development do
   gem 'capistrano', '3.3.4'
@@ -94,7 +96,6 @@ gem 'non-stupid-digest-assets', '~> 1.0.4' # creates both digest and non-digest 
 gem 'settingslogic'
 
 source 'https://rails-assets.org' do
-  gem 'rails-assets-bootstrap-datepicker'
   gem 'rails-assets-d3'
   gem 'rails-assets-moment'
   gem 'rails-assets-select2'

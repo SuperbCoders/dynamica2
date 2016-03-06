@@ -22,6 +22,7 @@
 //= require bootstrap.min
 //= require jquery.arcticmodal.js
 //= require bootstrap-select.min
+//= require moment
 //= require bootstrap-datepicker
 //= require d3
 //= require moment

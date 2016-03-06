@@ -2,9 +2,10 @@
 @import "compass/css3";
 
 @import "bootstrap-variables";
+@import 'bootstrap-sprockets';
 @import "bootstrap";
 @import "font-awesome";
-@import "bootstrap-datepicker";
+@import 'bootstrap-datepicker';
 @import "select2";
 
 @import "helpers/sprites";
