@@ -1,6 +1,9 @@
 var resizeHndl, activeFamilyGraph = 0;
 
 $(function ($) {
+  $('input[name="graph_filter"]').change(function () {
+    fetchDataForTheBigCharts();
+  });
 
     $('.datePicker').each(function () {
         var datePckr = $(this);
@@ -159,15 +162,6 @@ function fit2Limits(pckr, date, max) {
 }
 
 function fetchDataForTheBigCharts() {
-  // switch (period) {
-  //   case 'day':
-
-  //     break
-  //   case 'month':
-  //     break
-  //   case 'year':
-  //     break
-  // };
   var pckr = $('.datePicker');
 
   d3.json("/charts_data/big_chart_data.json?period=" +
@@ -175,13 +169,13 @@ function fetchDataForTheBigCharts() {
           "&from=" + pckr.datepicker('getDates')[0] +
           "&to=" + pckr.datepicker('getDates')[1] +
           "&project_id=" + $('.dashboard').data('project-id'),
-          function (error, data) {
+          function (error, response) {
+            if (error) return console.log(error);
+            $('.dashboard').data('big-charts', response);
 
-    if (error) return console.log(error);
-
-    $('.dashboard').data('big-charts', data);
-    drawTheBigCharts();
-  });
+            drawTheBigCharts();
+        }
+  );
 }
 
 function redrawCharts() {
@@ -189,7 +183,7 @@ function redrawCharts() {
 }
 
 function drawTheBigCharts() {
-  var bigCharts = $('.dashboard').data('big-charts');
+  var bigCharts = $.extend(true, [], $('.dashboard').data('big-charts'));
 
   $('.areaChartFamily_1').each(function (ind) {
     init_area_family_chart($(this), bigCharts);
@@ -298,7 +292,7 @@ function init_line_area_chart(el) {
         width = el.width() - margin.left - margin.right,
         height = el.height() - margin.top - margin.bottom;
 
-    var parseDate = d3.time.format("%d-%b-%y").parse;
+    var parseDate = d3.time.format(getFormatOfDate()).parse;
 
     var x = d3.time.scale().range([0, width]);
     var y = d3.scale.linear().range([height, 0]);
@@ -426,7 +420,7 @@ function init_line_chart(el) {
         width = el.width() - margin.left - margin.right,
         height = el.height() - margin.top - margin.bottom;
 
-    var parseDate = d3.time.format("%d-%b-%y").parse;
+    var parseDate = d3.time.format(getFormatOfDate()).parse;
 
     var x = d3.time.scale().range([0, width]);
     var y = d3.scale.linear().range([height, 0]);
@@ -478,6 +472,34 @@ function init_line_chart(el) {
 
 }
 
+function getFormatOfDate() {
+  switch ($('input[name="graph_filter"]:checked').val()) {
+    case 'day':
+      return "%d-%b-%y";
+      break
+    case 'week':
+      return "%V-%y";
+      break
+    case 'month':
+      return "%b-%y";
+      break
+  };
+}
+
+function getFormatOfDateForMoment() {
+  switch ($('input[name="graph_filter"]:checked').val()) {
+    case 'day':
+      return "DD-MMM-YY";
+      break
+    case 'week':
+      return "WW-YY";
+      break
+    case 'month':
+      return "MMM-YY";
+      break
+  };
+}
+
 function init_area_family_chart(el, data_files, data_colors) {
 
     el.find('svg').remove();
@@ -495,7 +517,7 @@ function init_area_family_chart(el, data_files, data_colors) {
 
     for (var i = 0; i < data_files[0].data.length; i++) {
         var obj = data_files[0].data[i];
-        dates.push(moment(obj.date));
+        dates.push(moment(obj.date, getFormatOfDateForMoment()));
         values.push(obj.close);
     }
 
@@ -509,7 +531,7 @@ function init_area_family_chart(el, data_files, data_colors) {
             //console.log(d);
             return d.date;
         }).left,
-        parseDate = d3.time.format("%d-%b-%y").parse;
+        parseDate = moment;
 
     var area_x = d3.time.scale()
         .domain([moment.min(dates), moment.max(dates)])
@@ -602,7 +624,7 @@ function init_area_family_chart(el, data_files, data_colors) {
         var data = data_files[i].data;
 
         data.forEach(function (d) {
-            d.date = parseDate(d.date);
+            d.date = parseDate(d.date, getFormatOfDateForMoment())._d;
             d.close = +d.close;
         });
 
@@ -686,7 +708,7 @@ function init_area_chart(el) {
         width = el.width() - margin.left - margin.right,
         height = el.height() - margin.top - margin.bottom;
 
-    var parseDate = d3.time.format("%d-%b-%y").parse;
+    var parseDate = d3.time.format(getFormatOfDate()).parse;
 
     var area_x = d3.time.scale()
         .range([0, width]);
@@ -820,7 +842,7 @@ $(window).resize(function () {
 
     clearTimeout(resizeHndl);
 
-    resizeHndl = setTimeout(function () {
+    resizeHndlndl = setTimeout(function () {
       redrawCharts();
     }, 10);
 
