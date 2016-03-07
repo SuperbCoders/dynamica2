@@ -1,5 +1,29 @@
-module DashboardHelper
-  def diff(current_value, previous_value)
+class ChartsDataController < ApplicationController
+  before_action :set_project
+  before_action :authenticate_user!
+
+  def big_chart_data
+    @current_project_characteristics  = @project.project_characteristics.where(date: date_from..date_to)
+    @previous_project_characteristics = @project.project_characteristics.where(date: (date_from - (date_to - date_from))..date_from)
+
+    render json: big_charts_data
+  end
+
+  private
+
+  def date_from
+    @date_from ||= Date.parse params[:from]
+  end
+
+  def date_to
+    @date_to ||= Date.parse params[:to]
+  end
+
+  def set_project
+    @project = current_user.projects.where(id: params[:project_id]).first
+  end
+
+    def diff(current_value, previous_value)
     result = current_value * 100.0 / previous_value - 100
     result > 0 ? "+#{result}" : result
   end
@@ -119,19 +143,8 @@ module DashboardHelper
       ]
     }
 
-    result[:day].each {|gr| t = 0.day; gr[:data] = gr[:data].map {|k, v| {'date' => Date.parse(k).strftime("%d-%b-%y"), 'close' => v}}}
-    # binding.pry
+    result[:day].each {|gr| gr[:data] = gr[:data].map {|k, v| {'date' => Date.parse(k).strftime("%d-%b-%y"), 'close' => v}}}
 
-    # result[:day].each {|gr| gr[:data] = [
-    #             {"date" => "8-Apr-12", "close" => 0},
-    #             {"date" => "9-Apr-12", "close" => 20}
-    #         ]
-    # }
-    # result[:day].first[:data] = [
-    #             {"date" => "8-Apr-12", "close" => 0},
-    #             {"date" => "9-Apr-12", "close" => 200000}
-    #         ]
-
-    result.to_json
+    result[:day]
   end
 end

@@ -6,8 +6,8 @@
 #  orders_number                                  :integer          default(0), not null
 #  products_number                                :integer          default(0), not null
 #  project_id                                     :integer          not null
-#  total_gross_revenues                           :decimal(10, 2)   default(0.0), not null
-#  total_prices                                   :decimal(10, 2)
+#  total_gross_revenues                           :float            default(0.0), not null
+#  total_prices                                   :float
 #  currency                                       :string(255)      default("USD"), not null
 #  customers_number                               :integer          default(0), not null
 #  new_customers_number                           :integer          default(0), not null

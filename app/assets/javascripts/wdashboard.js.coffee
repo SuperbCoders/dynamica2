@@ -1,7 +1,7 @@
 resizeHndl = undefined
 
 $ ->
-  $('.datePicker').each ->
+  $('.datePicker').each (e) ->
     datePckr = $(this)
     datePckr.datepicker(
       multidate: 2
@@ -17,6 +17,8 @@ $ ->
         curDate = moment(date)
         rangeStart = moment(dates[0])
         rangeEnd = moment(dates[1])
+        if rangeStart.isAfter(rangeEnd)
+          calendarNeedRefresh = true
         if dates.length == 1
           if curDate.isSame(rangeStart, 'day')
             return 'start-range'
@@ -34,16 +36,33 @@ $ ->
             return 'in-range'
         return
     ).on('show', (e) ->
+      if calendarNeedRefresh
+        $(this).datepicker('setDates', [
+          e.dates[1]
+          e.dates[0]
+        ]).datepicker 'update'
+        calendarNeedRefresh = false
+      return
     ).on 'changeDate', (e, w) ->
     return
+
   $('body').delegate('.bootstrap-select.filterSelect', 'hide.bs.dropdown', ->
     $(this).closest('.hover-select-box').removeClass 'opened'
     return
   ).delegate('.bootstrap-select.filterSelect', 'click', ->
     $(this).closest('.hover-select-box').addClass 'opened'
     return
-  ).delegate '.filter-mod.hover-select-box .filterSelect.selectpicker', 'change', ->
+  ).delegate('.filter-mod.hover-select-box .filterSelect.selectpicker', 'change', ->
     $(this).closest('.filter-holder').addClass('current').siblings().removeClass 'current'
+    return
+  ).delegate('.hoverCatcher', 'mouseenter', ->
+    firedEl = $($(this).attr('data-area'))
+    activeFamilyGraph = $(this).attr('data-area').replace(/\D/g, '') * 1
+    firedEl.css('opacity', 1).siblings('.area').css 'opacity', .15
+    return
+  ).delegate '.hoverCatcher', 'mouseleave', ->
+    firedEl = $($(this).attr('data-area'))
+    firedEl.css('opacity', .5).siblings('.area').css 'opacity', .5
     return
   $('.graphFilterDate').on('change', ->
     firedEl = $(this)
@@ -82,8 +101,6 @@ $ ->
     ]).datepicker 'update'
     return
   ).change()
-  return
-
 
 fit2Limits = (pckr, date, max) ->
   start = moment(pckr.datepicker('getStartDate'))
@@ -366,7 +383,6 @@ init_line_area2_chart = (el) ->
   return
 
 init_line_area_chart = (el) ->
-  debugger
   el.empty()
   margin = 
     top: 0
@@ -482,7 +498,7 @@ init_line_chart = (el) ->
     left: 0
   width = el.width() - (margin.left) - (margin.right)
   height = el.height() - (margin.top) - (margin.bottom)
-  parseDate = d3.time.format('%d-%b-%y').parse
+  parseDate = d3.time.format('%Y-%m-%d').parse
   x = d3.time.scale().range([
     0
     width
@@ -492,50 +508,27 @@ init_line_chart = (el) ->
     0
   ])
   valueline = d3.svg.line().x((d) ->
-    x d.date
+    x d[0]
   ).y((d) ->
-    y d.close
+    y d[1]
   )
   svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-  data = [
-    {
-      'date': '9-Apr-12'
-      'close': 436
-    }
-    {
-      'date': '7-Apr-12'
-      'close': 221
-    }
-    {
-      'date': '5-Apr-12'
-      'close': 313
-    }
-    {
-      'date': '4-Apr-12'
-      'close': 264
-    }
-    {
-      'date': '3-Apr-12'
-      'close': 229
-    }
-    {
-      'date': '2-Apr-12'
-      'close': 218
-    }
-  ]
+
+  data = eval(el.data('content'))
+  debugger
   # Get the data
   data.forEach (d) ->
-    d.date = parseDate(d.date)
-    d.close = +d.close
+    d[0] = parseDate(d[0])
+    d[1] = +d[1]
     return
   # Scale the range of the data
   x.domain d3.extent(data, (d) ->
-    d.date
+    d[0]
   )
   y.domain [
     0
     d3.max(data, (d) ->
-      Math.max d.close
+      Math.max d[1]
     )
   ]
   svg.append('path').attr('class', 'line').attr('id', 'blueLine').attr 'd', valueline(data)
@@ -665,6 +658,17 @@ init_area_family_chart = (el, data_files, data_colors) ->
   return
 
 init_area_chart = (el) ->
+  # data = eval(el.data('content'))
+  data = [
+    [
+      '12-Apr-9'
+      436
+    ]
+    [
+      '12-Apr-7'
+      221
+    ]
+  ]
   el.empty()
   margin = 
     top: 0
@@ -673,7 +677,7 @@ init_area_chart = (el) ->
     left: 0
   width = el.width() - (margin.left) - (margin.right)
   height = el.height() - (margin.top) - (margin.bottom)
-  parseDate = d3.time.format('%d-%b-%y').parse
+  parseDate = d3.time.format('%y-%b-%d').parse
   area_x = d3.time.scale().range([
     0
     width
@@ -688,27 +692,25 @@ init_area_chart = (el) ->
     area_y d.close
   )
   svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-  d3.tsv 'data.tsv', (error, data) ->
-    if error
-      throw error
-    data.forEach (d) ->
-      d.date = parseDate(d.date)
-      d.close = +d.close
-      return
-    area_x.domain d3.extent(data, (d) ->
-      d.date
-    )
-    area_y.domain [
-      0
-      d3.max(data, (d) ->
-        d.close
-      )
-    ]
-    gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
-    gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
-    gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
-    svg.append('path').datum(data).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
+
+  data.forEach (d) ->
+    d[0] = parseDate(d[0])
+    d[1] = +d[1]
     return
+  area_x.domain d3.extent(data, (d) ->
+    d[0]
+  )
+  area_y.domain [
+    0
+    d3.max(data, (d) ->
+      d[1]
+    )
+  ]
+
+  gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
+  gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
+  gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
+  svg.append('path').datum(data).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
   return
 
 init_donut_chart = (el) ->

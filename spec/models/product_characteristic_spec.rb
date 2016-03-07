@@ -4,9 +4,9 @@
 #
 #  id            :integer          not null, primary key
 #  product_id    :integer          not null
-#  price         :decimal(10, 2)   default(0.0), not null
+#  price         :float            default(0.0), not null
 #  sold_quantity :integer          default(0), not null
-#  gross_revenue :decimal(10, 2)   default(0.0), not null
+#  gross_revenue :float            default(0.0), not null
 #  created_at    :datetime
 #  updated_at    :datetime
 #  date          :date             not null
