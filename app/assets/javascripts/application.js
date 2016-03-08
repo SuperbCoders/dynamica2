@@ -38,3 +38,4 @@
 //= require dropzone
 //= require hash
 //= require dashboard
+//= require project

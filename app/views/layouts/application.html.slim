@@ -21,11 +21,28 @@ html lang="ru"
       header.page-header.navbar.navbar-default
         .container-fluid.globalwidth
           .navbar-header
-            button.navbar-toggle.collapsed data-target=".bs-navbar-collapse" data-toggle="collapse" type="button" 
+            button.navbar-toggle.collapsed data-target=".bs-navbar-collapse" data-toggle="collapse" type="button"
               span.icon-bar
               span.icon-bar
               span.icon-bar
-            a.navbar-brand href="/"  DYNAMICA
+            .navbar-project-switch
+              a.navbar-brand href="/"  Dynamica
+              - if current_user
+                span of
+                .hover-select-box.front-select-btn
+                  select.selectpicker
+                    - current_user.projects.each do |project|
+                      - if params[:controller] == 'projects' && params[:action] == 'show' && project.id == @project.id
+                        option selected="selected" value=project.id = project.name.truncate 20
+                      - else
+                        option value=project.id = project.name.truncate 20
+
+
+                /! ul.hover-select-list
+                /! li.hover-select-item.active: a.projectBtn(href='#') Bling-Blings
+                /! li.hover-select-item: a.projectBtn(href='#') Apple Store
+                /! li.hover-select-item: a.projectBtn(href='#') Helvetica
+                /! i.icon.fa.fa-angle-down.hover-select-icon
           nav.collapse.navbar-collapse.bs-navbar-collapse
             ul.nav.navbar-nav
               li class=('active' if params[:controller] == 'projects' && params[:action] == 'index')
@@ -49,8 +66,20 @@ html lang="ru"
                         = link_to t('.profile'), edit_user_registration_path
                       li.clear
                         = link_to t('.log_out'), destroy_user_session_path
-      section.page-body
+      = yield
+      .page-footer
         .container-fluid.globalwidth
-          = yield
+          ul.footer-menu
+            li
+              a href="#"  Projects
+            li
+              a href="#"  Team
+            li
+              a href="#"  Profile
+            li
+              a href="#"  Billing
+            li
+              a href="#"  Support
+          .footer-copyright All rights reserved © Osintsev. K.S. 2016
     .page-overlay.pageOverlay
       .jawn

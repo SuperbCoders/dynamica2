@@ -59,6 +59,8 @@ end
 # gem 'debugger', group: [:development, :test]
 
 group :development, :test do
+  gem 'quiet_assets', '~> 1.1.0'
+
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'capybara'
@@ -99,6 +101,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-d3'
   gem 'rails-assets-moment'
   gem 'rails-assets-select2'
+  # gem 'rails-assets-bootstrap-select'
 end
 
 # Admin panel

@@ -62,14 +62,14 @@ class ProjectCharacteristic < ActiveRecord::Base
 
   def calculate_statistics
     self.repeat_customers_number = (customers_number - new_customers_number).to_i
-    self.ratio_of_new_customers_to_repeat_customers = new_customers_number / repeat_customers_number * 1.0 rescue 0
+    self.ratio_of_new_customers_to_repeat_customers = new_customers_number.to_f / repeat_customers_number rescue 0
     self.average_order_value = total_gross_revenues / orders_number rescue 0
-    self.average_order_size = products_number / orders_number * 1.0 rescue 0
+    self.average_order_size = products_number.to_f / orders_number rescue 0
     self.average_revenue_per_customer = total_gross_revenues / customers_number rescue 0
     self.sales_per_visitor = total_gross_revenues / unique_users_number rescue 0
     # self.average_customer_lifetime_value
     # self.shipping_cost_as_a_percentage_of_total_revenue
-    self.percentage_of_inventory_sold = unique_products_number / products_number * 100.0 rescue 0
-    self.percentage_of_stock_sold = products_number / items_in_stock_number * 100.0 rescue 0
+    self.percentage_of_inventory_sold = unique_products_number.to_f / products_number * 100.0 rescue 0
+    self.percentage_of_stock_sold = products_number.to_f / items_in_stock_number * 100.0 rescue 0
   end
 end

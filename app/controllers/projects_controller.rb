@@ -11,7 +11,7 @@ class ProjectsController < ApplicationController
   # GET /projects/:id
   def show
     authorize! :read, @project
-    @forecast = @project.recent_forecast
+    # @forecast = @project.recent_forecast
   end
 
   # GET /projects/new

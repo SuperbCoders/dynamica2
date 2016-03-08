@@ -47,7 +47,8 @@ $(function ($) {
                 }
             }
         }).on('show', function (e) {
-            var calendar = $(this).datepicker("widget"), dates = e.dates;
+            //var calendar = $(this).datepicker("widget"), dates = e.dates;
+            var calendar = $('.datepicker.datepicker-dropdown.dropdown-menu'), dates = e.dates;
 
             if (calendar.find('.btn').length) return;
 
@@ -164,6 +165,9 @@ function fit2Limits(pckr, date, max) {
 function fetchDataForTheBigCharts() {
   var pckr = $('.datePicker');
 
+  $('.pageOverlay').addClass('show_overlay');
+
+
   d3.json("/charts_data/big_chart_data.json?period=" +
           $('input[name="graph_filter"]:checked').val() +
           "&from=" + pckr.datepicker('getDates')[0] +
@@ -174,6 +178,24 @@ function fetchDataForTheBigCharts() {
             $('.dashboard').data('big-charts', response);
 
             drawTheBigCharts();
+        }
+  );
+
+  d3.json("/charts_data/other_chart_data.json?period=" +
+          $('input[name="graph_filter"]:checked').val() +
+          "&from=" + pckr.datepicker('getDates')[0] +
+          "&to=" + pckr.datepicker('getDates')[1] +
+          "&project_id=" + $('.dashboard').data('project-id'),
+          function (error, response) {
+            if (error) return console.log(error);
+            $('.dashboard').data('other_charts', response);
+
+            $('.lineAreaChart_1').each(function (ind) {
+                init_line_area_chart($(this));
+            });
+
+            init_donut_chart($('.donutChart_1'));
+            $('.pageOverlay').removeClass('show_overlay');
         }
   );
 }
@@ -329,14 +351,11 @@ function init_line_area_chart(el) {
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-    var data = [
-        {"date": "9-Apr-12", "close": 436},
-        {"date": "7-Apr-12", "close": 221},
-        {"date": "5-Apr-12", "close": 313},
-        {"date": "4-Apr-12", "close": 264},
-        {"date": "3-Apr-12", "close": 229},
-        {"date": "2-Apr-12", "close": 218}
-    ];
+    var t = $.extend(true, [], $('.dashboard').data('other_charts'));
+    var data = t[el.attr('id')] || {};
+    el.parent().parent().children('.graph-value').children('.val').html(data['value'])
+    el.parent().parent().children('.graph-value').children('.graph-dynamica.dynamica_up').html(data['diff'])
+    data = data['data'] || [];
 
 // Get the data
     data.forEach(function (d) {
@@ -473,6 +492,8 @@ function init_line_chart(el) {
 }
 
 function getFormatOfDate() {
+  return "%d-%b-%y";
+
   switch ($('input[name="graph_filter"]:checked').val()) {
     case 'day':
       return "%d-%b-%y";
@@ -778,7 +799,6 @@ function init_area_chart(el) {
 }
 
 function init_donut_chart(el) {
-
     el.empty();
 
     var legendBlock = el.parent().find('.legend_v1');
@@ -810,26 +830,30 @@ function init_donut_chart(el) {
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    d3.csv("customers_data.csv", type, function (error, data) {
-        if (error) throw error;
 
-        var g = svg.selectAll(".arc")
-            .data(pie(data))
-            .enter().append("g")
-            .attr("class", "arc");
+    var t = $.extend(true, [], $('.dashboard').data('other_charts'));
+    var data = t[el.attr('id')] || {};
+    el.parent().parent().children('.graph-value').children('.val').html(data['value'])
+    el.parent().parent().children('.graph-value').children('.graph-dynamica.dynamica_up').html(data['diff'])
+    data = data['data'] || [];
 
-        g.append("path")
-            .attr("d", arc)
-            .style("fill", function (d) {
 
-                var color = d.data.color, legendItem = $('<li class="legend_item" />')
-                    .append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(d.data.name)))
-                    .append($('<div class="legend_val" />').text(d.data.value));
+    var g = svg.selectAll(".arc")
+        .data(pie(data))
+        .enter().append("g")
+        .attr("class", "arc");
 
-                el.next().append(legendItem);
-                return color;
-            });
-    });
+    g.append("path")
+        .attr("d", arc)
+        .style("fill", function (d) {
+
+            var color = d.data.color, legendItem = $('<li class="legend_item" />')
+                .append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(d.data.name)))
+                .append($('<div class="legend_val" />').text(d.data.value));
+
+            el.next().append(legendItem);
+            return color;
+        });
 
     function type(d) {
         d.value = +d.value;
@@ -839,6 +863,9 @@ function init_donut_chart(el) {
 
 
 $(window).resize(function () {
+    if ($('.dashboard-body').length == 0) {
+      return ;
+    }
 
     clearTimeout(resizeHndl);
 
@@ -847,6 +874,9 @@ $(window).resize(function () {
     }, 10);
 
 }).load(function () {
+    if ($('.dashboard-body').length == 0) {
+      return ;
+    }
 
     redrawCharts();
 
