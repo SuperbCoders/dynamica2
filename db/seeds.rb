@@ -37,7 +37,7 @@ end
 # create_demo_project_for_subscriptions(demo_user)
 
 def create_demo_project
-  project_name = 'The test project'
+  project_name = 'New test project'
   return if Project.where(name: project_name).first
 
   orders_csv      = CSV.new(File.open("#{Rails.root}/db/seeds/orders.csv").read, headers: true)
@@ -72,8 +72,8 @@ def create_demo_project
       total_gross_revenues: line_items.inject(0) {|acc, l_i| acc + l_i['quantity'].to_i * l_i['price'].to_f},
       total_prices: 0.0,
       currency: local_orders.first.try(:currency) || 'USD',
-      customers_number: local_orders.map {|order| order['user_id']}.compact.uniq.count,
-      new_customers_number: local_orders.count { |order| order['user_id'] ? !previous_orders.any? {|p_o| p_o['user_id'] == order['user_id']} : false },
+      customers_number: local_orders.map {|order| order['email']}.compact.uniq.count,
+      new_customers_number: local_orders.count { |order| order['email'] ? !previous_orders.any? {|p_o| p_o['email'] == order['email']} : false },
       abandoned_shopping_cart_sessions_number: 0, ####### !!!!!!
       unique_users_number: 0,
       visits: 0, #####

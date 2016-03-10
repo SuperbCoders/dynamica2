@@ -41,7 +41,7 @@ section.dashboard-body
               a.dashboard-panel-link href="#"  Products
       .row.dashboard-title-row
         .col-sm-6
-          h2 Bling-Blings Dashboard
+          h2 = @project.name
         .col-sm-6
           .pull-right.datepicker-v1.datepickerComponent
             .pull-left.datepicker-parent
@@ -73,7 +73,7 @@ section.dashboard-body
                   #tooltip_dot.tooltip-dot
                   #tooltip_content.graph-tooltip
       .dashboard-caption
-        h3.caption-text Finance overview
+        h3.caption-text = t '.general'
         i.icon.fa.fa-angle-right
       .graph-unit-holder.graph-unit-hover
         .row
@@ -89,7 +89,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Shipping Cost As A Percentage Of Total Revenue
+              h5.graph-name = t '.shipping_cost_as_a_percentage_of_total_revenue'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -98,7 +98,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Average Order Value
+              h5.graph-name = t '.average_order_value'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -107,21 +107,21 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Average Order Size
+              h5.graph-name = t '.average_order_size'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_order_size
       .dashboard-caption
-        h3.caption-text Customers overview
+        h3.caption-text = t '.customers'
         i.icon.fa.fa-angle-right
       .graph-unit-holder.graph-unit-hover
         .row
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Customers Number
+              h5.graph-name = t '.customers_number'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -130,7 +130,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name New Customers Number
+              h5.graph-name = t '.new_customers_number'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -139,7 +139,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Repeat Customers Number
+              h5.graph-name = t '.repeat_customers_number'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -148,7 +148,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name New & repeat customers
+              h5.graph-name = t '.ratio_of_new_customers_to_repeat_customers'
               .graph-value
                 span.val 3.2
                 sup.graph-dynamica.dynamica_up +8%
@@ -158,7 +158,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Average Revenue Per Customer
+              h5.graph-name = t '.average_revenue_per_customer'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -167,7 +167,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Sales Per Visitor
+              h5.graph-name = t '.sales_per_visitor'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -176,7 +176,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Average Customer Lifetime Value
+              h5.graph-name = t '.average_customer_lifetime_value'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -185,7 +185,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Unique Users Number
+              h5.graph-name = t '.unique_users_number'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -195,21 +195,21 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Visits
+              h5.graph-name = t '.visits'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#visits
       .dashboard-caption
-        h3.caption-text Products overview
+        h3.caption-text = t '.inventory'
         i.icon.fa.fa-angle-right
       .graph-unit-holder.graph-unit-hover
         .row
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Products In Stock Number
+              h5.graph-name = t '.products_in_stock_number'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -218,7 +218,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Items In Stock Number
+              h5.graph-name = t '.items_in_stock_number'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -227,7 +227,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Percentage Of Inventory Sold
+              h5.graph-name = t '.percentage_of_inventory_sold'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -236,7 +236,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Percentage Of Stock Sold
+              h5.graph-name = t '.percentage_of_stock_sold'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%
@@ -246,7 +246,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Products Number
+              h5.graph-name = t '.products_number'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%

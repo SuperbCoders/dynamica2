@@ -33,6 +33,10 @@ en:
     index:
       new: Add new project
     show:
+      general: General
+      customers: Customers
+      inventory: Inventory
+      total_revenu: Gross Revenue
       controls:
         update_forecast: Update forecast
         settings: Settings

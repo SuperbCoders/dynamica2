@@ -33,6 +33,9 @@ ru:
     index:
       new: Новый проект
     show:
+      general: Базовые
+      customers: Покупатели
+      inventory: Товары
       controls:
         update_forecast: Обновить прогноз
         settings: Настройки

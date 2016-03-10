@@ -62,13 +62,13 @@ class ChartsDataController < ApplicationController
         data: @current_project_characteristics.send(scope).sum(:products_number)
       },
       average_order_value: {
-        diff: diff_sum(:average_order_value),
-        value: "#{@current_project_characteristics.sum(:average_order_value).round 3}",
+        diff: diff_average_sum(:average_order_value),
+        value: "#{average_sum @current_project_characteristics, :average_order_value}",
         data: @current_project_characteristics.send(scope).sum(:average_order_value)
       },
       average_order_size: {
-        diff: diff_sum(:average_order_size),
-        value: "#{@current_project_characteristics.sum(:average_order_size).round 3}",
+        diff: diff_average_sum(:average_order_size),
+        value: "#{average_sum @current_project_characteristics, :average_order_size}",
         data: @current_project_characteristics.send(scope).sum(:average_order_size)
       },
       customers_number: {
@@ -142,8 +142,8 @@ class ChartsDataController < ApplicationController
 
     result.merge({
       ratio_of_new_customers_to_repeat_customers: {
-        diff: diff_average_sum(:ratio_of_new_customers_to_repeat_customers),
-        value: "#{average_sum(@current_project_characteristics, :ratio_of_new_customers_to_repeat_customers)}",
+        diff: diff_values(@current_project_characteristics.sum(:new_customers_number).to_f / @current_project_characteristics.sum(:repeat_customers_number).to_f * 100.0, @previous_project_characteristics.sum(:new_customers_number).to_f / @previous_project_characteristics.sum(:repeat_customers_number).to_f * 100.0),
+        value: "#{ration}",
         data: [
           {
             color: "#91E873",
@@ -158,6 +158,11 @@ class ChartsDataController < ApplicationController
         ]
       }
     })
+  end
+
+  def ration
+    result = (@current_project_characteristics.sum(:new_customers_number).to_f / @current_project_characteristics.sum(:repeat_customers_number).to_f * 100.0)
+    (result.nan? || result.infinite?) ? result : result.round(3)
   end
 
   def big_charts_data
