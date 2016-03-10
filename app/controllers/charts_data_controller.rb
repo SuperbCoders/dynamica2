@@ -63,12 +63,12 @@ class ChartsDataController < ApplicationController
       },
       average_order_value: {
         diff: diff_sum(:average_order_value),
-        value: "#{@current_project_characteristics.sum :average_order_value}",
+        value: "#{@current_project_characteristics.sum(:average_order_value).round 3}",
         data: @current_project_characteristics.send(scope).sum(:average_order_value)
       },
       average_order_size: {
         diff: diff_sum(:average_order_size),
-        value: "#{@current_project_characteristics.sum :average_order_size}",
+        value: "#{@current_project_characteristics.sum(:average_order_size).round 3}",
         data: @current_project_characteristics.send(scope).sum(:average_order_size)
       },
       customers_number: {

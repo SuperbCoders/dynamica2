@@ -12,7 +12,7 @@ $(function ($) {
             multidate: 3,
             //clearBtn: true,
             toggleActive: true,
-            startDate: '-477d',
+            startDate: '-10000d',
             endDate: '0',
             orientation: "bottom left",
             format: 'M dd, yyyy',
@@ -58,7 +58,9 @@ $(function ($) {
                 var btn = $('<a class="apply-calendar-btn_ btn btn-block btn-danger" >Показать</a>');
 
                 btn.off("click").on("click", function () {
-                    loadGraphData();
+                    if ($('.datePicker').datepicker('getDates').length == 2) {
+                      redrawCharts();
+                    }
                     return false;
                 });
 
@@ -68,9 +70,9 @@ $(function ($) {
             }, 1);
 
         }).on('changeDate', function (e, w) {
-          if ($(this).datepicker('getDates').length == 2) {
-            redrawCharts();
-          }
+          // if ($(this).datepicker('getDates').length == 2) {
+          //   redrawCharts();
+          // }
         });
     });
 
@@ -134,6 +136,10 @@ $(function ($) {
             fit2Limits(datePckr, rangeStart, true),
             fit2Limits(datePckr, rangeEnd)
         ]).datepicker("update");
+
+        if ($('.datePicker').datepicker('getDates').length == 2) {
+          redrawCharts();
+        }
 
     }).change();
 
@@ -202,6 +208,16 @@ function fetchDataForTheBigCharts() {
 
 function redrawCharts() {
   fetchDataForTheBigCharts();
+}
+
+function drawCharts() {
+  drawTheBigCharts();
+
+  $('.lineAreaChart_1').each(function (ind) {
+    init_line_area_chart($(this));
+  });
+
+  init_donut_chart($('.donutChart_1'));
 }
 
 function drawTheBigCharts() {
@@ -574,7 +590,7 @@ function init_area_family_chart(el, data_files, data_colors) {
 
     var xAxis = d3.svg.axis()
         .scale(area_x)
-        .ticks(dates.length - 1)
+        .ticks((dates.length - 1) > 12 ? 12 : (dates.length - 1))
         .tickFormat(d3.time.format("%b %d"))
         .orient("bottom");
 
@@ -870,7 +886,7 @@ $(window).resize(function () {
     clearTimeout(resizeHndl);
 
     resizeHndlndl = setTimeout(function () {
-      redrawCharts();
+      drawCharts();
     }, 10);
 
 }).load(function () {

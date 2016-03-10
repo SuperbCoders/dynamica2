@@ -35,7 +35,7 @@
 class ProjectCharacteristic < ActiveRecord::Base
   # default_scope -> { order(created_at: :desc) }
 
-  attr_accessor :unique_products_number
+  attr_accessor :unique_products_number, :shipping_price
 
   belongs_to :project
 
@@ -57,7 +57,7 @@ class ProjectCharacteristic < ActiveRecord::Base
   private
 
   def replace_bad_values
-    ProjectCharacteristic.column_names.each { |p_c_c| val = self.read_attribute(p_c_c); self[p_c_c] = ((val.is_a?(Float) || val.is_a?(BigDecimal)) && val.nan?) ? 0 : val }
+    ProjectCharacteristic.column_names.each { |p_c_c| val = self.read_attribute(p_c_c); self[p_c_c] = ((val.is_a?(Float) || val.is_a?(BigDecimal)) && (val.nan? || val.infinite?)) ? 0 : val }
   end
 
   def calculate_statistics
@@ -68,7 +68,7 @@ class ProjectCharacteristic < ActiveRecord::Base
     self.average_revenue_per_customer = total_gross_revenues / customers_number rescue 0
     self.sales_per_visitor = total_gross_revenues / unique_users_number rescue 0
     # self.average_customer_lifetime_value
-    # self.shipping_cost_as_a_percentage_of_total_revenue
+    self.shipping_cost_as_a_percentage_of_total_revenue = shipping_price.to_f / total_gross_revenues.to_f * 100.0 rescue 0
     self.percentage_of_inventory_sold = unique_products_number.to_f / products_number * 100.0 rescue 0
     self.percentage_of_stock_sold = products_number.to_f / items_in_stock_number * 100.0 rescue 0
   end
