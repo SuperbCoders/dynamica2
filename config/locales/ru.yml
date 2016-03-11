@@ -36,6 +36,24 @@ ru:
       general: Базовые
       customers: Покупатели
       inventory: Товары
+      shipping_cost_as_a_percentage_of_total_revenue: Доля доставки от общей стоимости
+      average_order_value: Средния стоимость заказа
+      average_order_size: Средняя размер заказа
+      customers_number: Число покупателей
+      new_customers_number: Число новых покупателей
+      repeat_customers_number: Чилсо повторных покупателей
+      ratio_of_new_customers_to_repeat_customers: Отшение новых покупателей к повторным
+      average_revenue_per_customer: Средняя сумма на покупателя
+      sales_per_visitor: Покупок на посетителей
+      average_customer_lifetime_value: Среднее время проведенное клиентом
+      unique_users_number: Количество уникальных посетителей
+      visits: Число визитов
+      products_in_stock_number: Продуктов в продаже
+      items_in_stock_number: Позиций на складе
+      percentage_of_inventory_sold: Процент проданных товаров
+      percentage_of_stock_sold: Процент запаса на складе
+      products_number: Количество товаров
+      total_revenu: Общая выручка
       controls:
         update_forecast: Обновить прогноз
         settings: Настройки

@@ -11,6 +11,7 @@ class ProjectsController < ApplicationController
   # GET /projects/:id
   def show
     authorize! :read, @project
+    @from, @to = params[:start_date], params[:finish_date]
     # @forecast = @project.recent_forecast
   end
 

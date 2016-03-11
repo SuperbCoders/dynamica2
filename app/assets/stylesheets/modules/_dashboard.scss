@@ -1,3 +1,9 @@
+.single_project_link a {
+  color: inherit;
+  padding-left: 5px;
+  display: initial;
+}
+
 %clearfix {
   &:after {
     position: static;

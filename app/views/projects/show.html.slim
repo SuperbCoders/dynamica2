@@ -1,6 +1,6 @@
 section.dashboard-body
   .container-fluid.globalwidth
-    section.dashboard.projects-dashboard data-project-id=@project.id
+    section.dashboard.projects-dashboard data-project-id=@project.id data-start-date= @project.project_characteristics.order(date: :asc).first.try(:date).try(:strftime, '%b %d, %Y') data-date-from=@from data-date-to=@to
       .row
         .col-sm-12
           ul.dashboard-panel
@@ -16,7 +16,7 @@ section.dashboard-body
                   option value=("Sales per visitor")  Sales per visitor
                   option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
                   option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
-              a.dashboard-panel-link href="#"  Finance
+              a.dashboard-panel-link href="#" = t '.general'
             li.filter-holder
               .hover-select-box.filter-mod
                 select.selectpicker.filterSelect
@@ -27,7 +27,7 @@ section.dashboard-body
                   option value=("Sales per visitor")  Sales per visitor
                   option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
                   option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
-              a.dashboard-panel-link href="#"  Customers
+              a.dashboard-panel-link href="#" = t '.customers'
             li.filter-holder
               .hover-select-box.filter-mod
                 select.selectpicker.filterSelect
@@ -38,7 +38,7 @@ section.dashboard-body
                   option value=("Sales per visitor")  Sales per visitor
                   option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
                   option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
-              a.dashboard-panel-link href="#"  Products
+              a.dashboard-panel-link href="#" = t '.inventory'
       .row.dashboard-title-row
         .col-sm-6
           h2 = @project.name
@@ -80,7 +80,7 @@ section.dashboard-body
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="total_revenu.html"
-              h5.graph-name Gross Revenue
+              h5.graph-name = t '.total_revenu'
               .graph-value
                 span.val $4,490
                 sup.graph-dynamica.dynamica_up +8%

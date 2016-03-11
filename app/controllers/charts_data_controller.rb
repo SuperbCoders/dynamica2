@@ -2,16 +2,18 @@ class ChartsDataController < ApplicationController
   before_action :set_project
   before_action :authenticate_user!
 
+  include ActionView::Helpers::NumberHelper
+
   def big_chart_data
     @current_project_characteristics  = @project.project_characteristics.where(date: date_from..date_to)
-    @previous_project_characteristics = @project.project_characteristics.where(date: (date_from - (date_to - date_from))..date_from)
+    @previous_project_characteristics = @project.project_characteristics.where(date: (date_from - (date_to - date_from))...date_from)
 
     render json: big_charts_data
   end
 
   def other_chart_data
     @current_project_characteristics  = @project.project_characteristics.where(date: date_from..date_to)
-    @previous_project_characteristics = @project.project_characteristics.where(date: (date_from - (date_to - date_from))..date_from)
+    @previous_project_characteristics = @project.project_characteristics.where(date: (date_from - (date_to - date_from))...date_from)
 
     render json: other_charts_data
   end
@@ -33,11 +35,12 @@ class ChartsDataController < ApplicationController
   def diff_values(current_value, previous_value)
     result = (current_value * 100.0 / previous_value - 100)
     result = (result.nan? || result.infinite?) ? 0 : result.round
+    return '' if result.zero?
     result > 0 ? "+#{result}%" : "#{result}%"
   end
 
   def average_sum(relation, field)
-    (relation.sum(field) / relation.count).round 3
+    (relation.sum(field) / relation.count).round 1
   end
 
   def diff_sum(field)
@@ -162,7 +165,7 @@ class ChartsDataController < ApplicationController
 
   def ration
     result = (@current_project_characteristics.sum(:new_customers_number).to_f / @current_project_characteristics.sum(:repeat_customers_number).to_f * 100.0)
-    (result.nan? || result.infinite?) ? result : result.round(3)
+    (result.nan? || result.infinite?) ? result : result.round(1)
   end
 
   def big_charts_data

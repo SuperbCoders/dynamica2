@@ -29,13 +29,16 @@ html lang="ru"
               a.navbar-brand href="/"  Dynamica
               - if current_user
                 span of
-                .hover-select-box.front-select-btn
-                  select.selectpicker
-                    - current_user.projects.each do |project|
-                      - if params[:controller] == 'projects' && params[:action] == 'show' && project.id == @project.id
-                        option selected="selected" value=project.id = project.name.truncate 20
-                      - else
-                        option value=project.id = project.name.truncate 20
+                - if current_user.projects.count == 1 || current_user.projects.count.zero?
+                  .single_project_link= link_to current_user.projects.first.name.truncate(20), current_user.projects.first
+                - else
+                  .hover-select-box.front-select-btn
+                    select.selectpicker
+                      - current_user.projects.each do |project|
+                        - if params[:controller] == 'projects' && params[:action] == 'show' && project.id == @project.id
+                          option selected="selected" value=project.id = project.name.truncate 20
+                        - else
+                          option value=project.id = project.name.truncate 20
 
 
                 /! ul.hover-select-list

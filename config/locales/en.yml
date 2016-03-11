@@ -37,6 +37,24 @@ en:
       customers: Customers
       inventory: Inventory
       total_revenu: Gross Revenue
+      shipping_cost_as_a_percentage_of_total_revenue: Shipping Cost As A Percentage Of Total Revenue
+      average_order_value: Average Order Value
+      average_order_size: Average Order Size
+      customers_number: Customers Number
+      new_customers_number: New Customers Number
+      repeat_customers_number: Repeat Customers Number
+      ratio_of_new_customers_to_repeat_customers: Ratio Of New Customers To Repeat Customers
+      average_revenue_per_customer: Average Revenue Per Customer
+      sales_per_visitor: Sales Per Visitor
+      average_customer_lifetime_value: Average Customer Lifetime Value
+      unique_users_number: Unique Users Number
+      visits: Visits
+      products_in_stock_number: Products_in_stock_number
+      items_in_stock_number: Items In Stock Number
+      percentage_of_inventory_sold: Percentage Of Inventory Sold
+      percentage_of_stock_sold: Rercentage Of Stock Sold
+      products_number: Products Number
+      total_revenu: Gross Revenue
       controls:
         update_forecast: Update forecast
         settings: Settings

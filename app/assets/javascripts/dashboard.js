@@ -2,7 +2,7 @@ var resizeHndl, activeFamilyGraph = 0;
 
 $(function ($) {
   $('input[name="graph_filter"]').change(function () {
-    fetchDataForTheBigCharts();
+    fetchDataForTheBigCharts(false);
   });
 
     $('.datePicker').each(function () {
@@ -12,7 +12,7 @@ $(function ($) {
             multidate: 3,
             //clearBtn: true,
             toggleActive: true,
-            startDate: '-10000d',
+            startDate: $('.dashboard').data('start-date'),
             endDate: '0',
             orientation: "bottom left",
             format: 'M dd, yyyy',
@@ -102,11 +102,16 @@ $(function ($) {
 
 
     $('.graphFilterDate').on('change', function () {
-        var firedEl = $(this),
-            datePckr = firedEl.closest('.datepickerComponent').find('.datePicker'),
-            rangeStart, rangeEnd,
-            newRange = firedEl.val(), today = moment();
+      var firedEl = $(this),
+          datePckr = firedEl.closest('.datepickerComponent').find('.datePicker'),
+          rangeStart, rangeEnd,
+          newRange = firedEl.val(), today = moment();
 
+      if ($('.dashboard').data('date-from') && $('.dashboard').data('date-to')) {
+        rangeStart = moment($('.dashboard').data('date-from'));
+        rangeEnd = moment($('.dashboard').data('date-to'));
+        $('.dashboard').data('date-to', null);
+      } else {
         if (newRange == 0) {         //  Current month       
             rangeStart = moment(today).startOf('month');
             rangeEnd = moment(today).endOf('month');
@@ -131,15 +136,16 @@ $(function ($) {
             rangeStart = moment(datePckr.datepicker('getStartDate'));
             rangeEnd = moment(datePckr.datepicker('getEndDate'));
         }
+      }
 
-        datePckr.datepicker("setDates", [
-            fit2Limits(datePckr, rangeStart, true),
-            fit2Limits(datePckr, rangeEnd)
-        ]).datepicker("update");
+      datePckr.datepicker("setDates", [
+          fit2Limits(datePckr, rangeStart, true),
+          fit2Limits(datePckr, rangeEnd)
+      ]).datepicker("update");
 
-        if ($('.datePicker').datepicker('getDates').length == 2) {
-          redrawCharts();
-        }
+      if ($('.datePicker').datepicker('getDates').length == 2) {
+        redrawCharts();
+      }
 
     }).change();
 
@@ -168,11 +174,13 @@ function fit2Limits(pckr, date, max) {
     }
 }
 
-function fetchDataForTheBigCharts() {
+function fetchDataForTheBigCharts(booth) {
   var pckr = $('.datePicker');
 
   $('.pageOverlay').addClass('show_overlay');
 
+  var pathname = window.location.pathname;
+  window.history.pushState(pathname, 'Title', pathname + '?start_date=' + moment(pckr.datepicker('getDates')[0]).format('YYYY-MM-DD') + '&finish_date=' + moment(pckr.datepicker('getDates')[1]).format('YYYY-MM-DD'));
 
   d3.json("/charts_data/big_chart_data.json?period=" +
           $('input[name="graph_filter"]:checked').val() +
@@ -207,7 +215,7 @@ function fetchDataForTheBigCharts() {
 }
 
 function redrawCharts() {
-  fetchDataForTheBigCharts();
+  fetchDataForTheBigCharts(true);
 }
 
 function drawCharts() {
@@ -369,8 +377,19 @@ function init_line_area_chart(el) {
 
     var t = $.extend(true, [], $('.dashboard').data('other_charts'));
     var data = t[el.attr('id')] || {};
-    el.parent().parent().children('.graph-value').children('.val').html(data['value'])
-    el.parent().parent().children('.graph-value').children('.graph-dynamica.dynamica_up').html(data['diff'])
+    var value = parseFloat(data['value']).number_with_delimiter('&thinsp;');
+    if (el.attr('id') == 'total_revenu') {
+      value += '&nbsp;' + data['value'].slice(-1);
+    }
+    var diff = parseFloat(data['diff']).number_with_delimiter('&thinsp;');
+    diff += '&nbsp;%';
+
+    value = data['value'] == '' ? '' : value;
+    diff = data['diff'] == '' ? '' : diff;
+
+    el.parent().parent().children('.graph-value').children('.val').html(value);
+    el.parent().parent().children('.graph-value').children('.graph-dynamica').removeClass('dynamica_up dynamica_down').addClass(/-/g.test(data['diff']) ? 'dynamica_down' : 'dynamica_up');
+    el.parent().parent().children('.graph-value').children('.graph-dynamica').html(diff);
     data = data['data'] || [];
 
 // Get the data
@@ -515,7 +534,7 @@ function getFormatOfDate() {
       return "%d-%b-%y";
       break
     case 'week':
-      return "%V-%y";
+      return "%V-%g";
       break
     case 'month':
       return "%b-%y";
@@ -529,7 +548,7 @@ function getFormatOfDateForMoment() {
       return "DD-MMM-YY";
       break
     case 'week':
-      return "WW-YY";
+      return "WW-GG";
       break
     case 'month':
       return "MMM-YY";
@@ -679,17 +698,28 @@ function init_area_family_chart(el, data_files, data_colors) {
             .attr("d", area)
             .style("fill", function (d) {
 
+                var value = parseFloat(data_files[i].value).number_with_delimiter('&thinsp;');
+                if (data_files[i].name == 'Revenue') {
+                  value += '&nbsp;' + data_files[i].value.slice(-1);
+                }
+
+                var diff = parseFloat(data_files[i].diff).number_with_delimiter('&thinsp;');
+                diff += '&nbsp;%';
+
+                value = data_files[i].value == '' ? '' : value;
+                diff = data_files[i].diff == '' ? '' : diff;
+
                 var color = data_files[i].color,
 
                     legendItem = $('<li class="legend_item" />')
                         .append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[i].name)))
                         .append($('<div class="legend_val" />')
-                            .append($('<span class="val" />').text(data_files[i].value))
-                            .append($('<sup class="graph-dynamica" />').addClass(/-/g.test(data_files[i].diff) ? 'dynamica_down' : 'dynamica_up').text(data_files[i].diff))),
+                            .append($('<span class="val" />').html(value))
+                            .append($('<sup class="graph-dynamica" />').addClass(/-/g.test(data_files[i].diff) ? 'dynamica_down' : 'dynamica_up').html(diff))),
 
                     tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + i)
                         .append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[i].name))))
-                        .append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[i].value)));
+                        .append($('<td class="tooltip_val" />').append($('<b class="" />').html(value)));
 
                 legendItem.attr('data-graph', '#family_area_' + i).on('click', function () {
                     var firedEl = $(this),
@@ -849,8 +879,18 @@ function init_donut_chart(el) {
 
     var t = $.extend(true, [], $('.dashboard').data('other_charts'));
     var data = t[el.attr('id')] || {};
-    el.parent().parent().children('.graph-value').children('.val').html(data['value'])
-    el.parent().parent().children('.graph-value').children('.graph-dynamica.dynamica_up').html(data['diff'])
+    var value = parseFloat(data['value']).number_with_delimiter('&thinsp;');
+    if (el.attr('id') == 'total_revenu') {
+      value += '&nbsp;' + data['value'].slice(-1);
+    }
+    var diff = parseFloat(data['diff']).number_with_delimiter('&thinsp;');
+    diff += '&nbsp;%';
+
+    value = data['value'] == '' ? '' : value;
+    diff = data['diff'] == '' ? '' : diff;
+    el.parent().parent().children('.graph-value').children('.val').html(value)
+    el.parent().parent().children('.graph-value').children('.graph-dynamica').removeClass('dynamica_up dynamica_down').addClass(/-/g.test(data['diff']) ? 'dynamica_down' : 'dynamica_up');
+    el.parent().parent().children('.graph-value').children('.graph-dynamica').html(diff)
     data = data['data'] || [];
 
 
@@ -865,7 +905,7 @@ function init_donut_chart(el) {
 
             var color = d.data.color, legendItem = $('<li class="legend_item" />')
                 .append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(d.data.name)))
-                .append($('<div class="legend_val" />').text(d.data.value));
+                .append($('<div class="legend_val" />').html(parseFloat(d.data.value).number_with_delimiter('&thinsp;')));
 
             el.next().append(legendItem);
             return color;
@@ -893,7 +933,5 @@ $(window).resize(function () {
     if ($('.dashboard-body').length == 0) {
       return ;
     }
-
     redrawCharts();
-
 });
