@@ -1,6 +1,9 @@
 var resizeHndl, activeFamilyGraph = 0;
 
 $(function ($) {
+  if ($('#project_dashboard').length == 0) {
+    return ;
+  }
   $('input[name="graph_filter"]').change(function () {
     fetchDataForTheBigCharts(false);
   });
@@ -919,7 +922,7 @@ function init_donut_chart(el) {
 
 
 $(window).resize(function () {
-    if ($('.dashboard-body').length == 0) {
+    if ($('#project_dashboard').length == 0) {
       return ;
     }
 
@@ -930,7 +933,7 @@ $(window).resize(function () {
     }, 10);
 
 }).load(function () {
-    if ($('.dashboard-body').length == 0) {
+    if ($('#project_dashboard').length == 0) {
       return ;
     }
     redrawCharts();

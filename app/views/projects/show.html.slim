@@ -1,44 +1,9 @@
-section.dashboard-body
+section.dashboard-body#project_dashboard
   .container-fluid.globalwidth
     section.dashboard.projects-dashboard data-project-id=@project.id data-start-date= @project.project_characteristics.order(date: :asc).first.try(:date).try(:strftime, '%b %d, %Y') data-date-from=@from data-date-to=@to
       .row
         .col-sm-12
-          ul.dashboard-panel
-            li.current
-              a.dashboard-panel-link href="#"  Overview
-            li.filter-holder
-              .hover-select-box.filter-mod
-                select.selectpicker.filterSelect
-                  option data-hidden="true" value="-1"
-                  option value=("Gross Revenue")  Gross Revenue
-                  option value=("Avg. order")  Avg. order
-                  option value=("Avg. revenue per customer")  Avg. revenue per customer
-                  option value=("Sales per visitor")  Sales per visitor
-                  option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
-                  option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
-              a.dashboard-panel-link href="#" = t '.general'
-            li.filter-holder
-              .hover-select-box.filter-mod
-                select.selectpicker.filterSelect
-                  option data-hidden="true" value="-1"
-                  option value=("Gross Revenue")  Gross Revenue
-                  option value=("Avg. order")  Avg. order
-                  option value=("Avg. revenue per customer")  Avg. revenue per customer
-                  option value=("Sales per visitor")  Sales per visitor
-                  option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
-                  option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
-              a.dashboard-panel-link href="#" = t '.customers'
-            li.filter-holder
-              .hover-select-box.filter-mod
-                select.selectpicker.filterSelect
-                  option data-hidden="true" value="-1"
-                  option value=("Gross Revenue")  Gross Revenue
-                  option value=("Avg. order")  Avg. order
-                  option value=("Avg. revenue per customer")  Avg. revenue per customer
-                  option value=("Sales per visitor")  Sales per visitor
-                  option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
-                  option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
-              a.dashboard-panel-link href="#" = t '.inventory'
+          = render partial: 'full_charts'
       .row.dashboard-title-row
         .col-sm-6
           h2 = @project.name

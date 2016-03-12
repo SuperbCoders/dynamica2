@@ -18,7 +18,19 @@ class ChartsDataController < ApplicationController
     render json: other_charts_data
   end
 
+  def full_chart_data
+    @current_project_characteristics  = @project.project_characteristics.where(date: date_from..date_to)
+    @previous_project_characteristics = @project.project_characteristics.where(date: (date_from - (date_to - date_from))...date_from)
+    @chart = params[:chart]
+
+    @result = other_charts_data[params[:chart].to_sym]
+    # render json: other_charts_data[params[:chart].to_sym]
+  end
+
   private
+
+  def full_charts_data
+  end
 
   def date_from
     @date_from ||= Date.parse params[:from]
@@ -142,6 +154,7 @@ class ChartsDataController < ApplicationController
     }
 
     result.each {|k, v| result[k][:data] = v[:data].map {|k, v| {'date' => k, 'close' => v}}}
+    # result.each {|k, v| result[k][:data] = v[:data].reverse}
 
     result.merge({
       ratio_of_new_customers_to_repeat_customers: {

@@ -38,4 +38,5 @@
 //= require dropzone
 //= require hash
 //= require dashboard
+//= require full_chart
 //= require project

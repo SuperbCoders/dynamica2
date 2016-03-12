@@ -1,0 +1,25 @@
+var data = JSON.parse("<%= escape_javascript(@result.to_json.html_safe) %>");
+var value = parseFloat(data.value).number_with_delimiter('&thinsp;');
+
+if ($('.dashboard').data('chart') == 'total_revenu') {
+  value += '&nbsp;' + data['value'].slice(-1);
+}
+var diff = parseFloat(data['diff']).number_with_delimiter('&thinsp;');
+diff += '&nbsp;%';
+
+value = data['value'] == '' ? '' : value;
+diff = data['diff'] == '' ? '' : diff;
+
+$('.graph-unit-holder span.val').html(value);
+$('.graph-value .graph-dynamica').removeClass('dynamica_up dynamica_down').addClass(/-/g.test(data['diff']) ? 'dynamica_down' : 'dynamica_up');
+$('.graph-value .graph-dynamica').html(diff);
+
+$('.dashboard').data('full-chart', data);
+
+drawChart();
+
+$('.table-content').html("<%= j(render(partial: 'projects/project_characteristic', collection: @result[:data]))%>");
+
+$('.table-footer .table-cell.col_2').html(value);
+
+$('.pageOverlay').removeClass('show_overlay');

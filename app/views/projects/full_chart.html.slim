@@ -1,0 +1,47 @@
+section.dashboard-body#full_chart
+  .container-fluid.globalwidth
+    section.dashboard.projects-full-graph data-project-id=@project.id data-start-date= @project.project_characteristics.order(date: :asc).first.try(:date).try(:strftime, '%b %d, %Y') data-date-from=@from data-date-to=@to data-chart=@chart
+      .row
+        .col-sm-12
+          = render partial: 'full_charts'
+      .row.dashboard-title-row
+        .col-sm-6
+          h2 = t 'projects.show.' + @chart
+        .col-sm-6
+          .pull-right.datepicker-v1.datepickerComponent
+            .pull-left.datepicker-parent
+              input.form-control.datePicker.form-control-small type="text" /
+            .pull-left
+              select.selectpicker.graphFilterDate
+                option data-hidden="true" value="-1"
+                option selected="" value="0"  Current month
+                option value="1"  Previous month
+                option value="2"  Last 3 month
+                option value="3"  Last 6 month
+                option value="4"  Last year
+                option value="5"  All time
+      .graph-unit-holder
+        .graph-unit
+          .graph-value
+            span.val
+            sup.graph-dynamica.dynamica_up
+          .graph-unit-large-v2
+            .graph-block
+              .areaChartTotal_1.hide_y_axis.hide_x_axis.d3graph.graph_3
+                #tooltip.graph-tooltip-holder.transp-mod
+                  #tooltip_content.graph-tooltip-top
+        .graph-unit-info
+          .graph-unit-info-table.scrollParent
+            .table-header.sortBlock
+              .table-cell.col_1.sortHeader
+                span Date
+                span.sort_catcher.sortCatcher
+                  span.sort_btn.sortBtn
+              .table-cell.col_2.sortHeader
+                span Value
+                span.sort_catcher.sortCatcher
+            .table-footer.scrollBottomFixed
+              .table-cell.col_1 Total
+              .table-cell.col_2
+            .table-content
+              = render partial: 'project_characteristic', collection: []

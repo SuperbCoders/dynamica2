@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'dashboard/index'
+  get 'charts_data/full_chart_data'
   get 'charts_data/big_chart_data'
   get 'charts_data/other_chart_data'
 
@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         resources :predicted_values, only: :index
       end
       resources :attachments, only: :create
+      get :full_chart, on: :member
     end
 
     resources :permissions, only: :index do

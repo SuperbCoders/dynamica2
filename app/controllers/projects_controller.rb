@@ -1,11 +1,16 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :set_project, only: [:show, :edit, :update, :destroy, :full_chart]
   before_action :authenticate_user!
 
   # GET /projects
   def index
     authorize! :read, Project
     @projects = current_user.projects.includes(:forecasts, :users)
+  end
+
+  def full_chart
+    authorize! :read, Project
+    @from, @to, @chart = params[:start_date], params[:finish_date], params[:chart]
   end
 
   # GET /projects/:id

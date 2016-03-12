@@ -1,0 +1,34 @@
+ul.dashboard-panel
+  li.current
+    a.dashboard-panel-link href="#"  Overview
+  li.filter-holder
+    .hover-select-box.filter-mod
+      select.selectpicker.filterSelect
+        option data-hidden="true" value="-1"
+        option value=("total_revenu") = t 'projects.show.total_revenu'
+        option value=("shipping_cost_as_a_percentage_of_total_revenue") = t 'projects.show.shipping_cost_as_a_percentage_of_total_revenue'
+        option value=("average_order_value") = t 'projects.show.average_order_value'
+        option value=("average_order_size") = t 'projects.show.average_order_size'
+    a.dashboard-panel-link href="#" = t 'projects.show.general'
+  li.filter-holder
+    .hover-select-box.filter-mod
+      select.selectpicker.filterSelect
+        option data-hidden="true" value="-1"
+        option value=("Gross Revenue")  Gross Revenue
+        option value=("Avg. order")  Avg. order
+        option value=("Avg. revenue per customer")  Avg. revenue per customer
+        option value=("Sales per visitor")  Sales per visitor
+        option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
+        option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
+    a.dashboard-panel-link href="#" = t 'projects.show.customers'
+  li.filter-holder
+    .hover-select-box.filter-mod
+      select.selectpicker.filterSelect
+        option data-hidden="true" value="-1"
+        option value=("Gross Revenue")  Gross Revenue
+        option value=("Avg. order")  Avg. order
+        option value=("Avg. revenue per customer")  Avg. revenue per customer
+        option value=("Sales per visitor")  Sales per visitor
+        option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
+        option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
+    a.dashboard-panel-link href="#" = t 'projects.show.inventory'
