@@ -22,4 +22,7 @@ $('.table-content').html("<%= j(render(partial: 'projects/project_characteristic
 
 $('.table-footer .table-cell.col_4').html(value);
 
+$('span.sort_catcher.sortCatcher').html('');
+$('span.sort_catcher.sortCatcher').first().html('<span class="sort_btn sortBtn sort_desc"></span>');
+
 $('.pageOverlay').removeClass('show_overlay');
