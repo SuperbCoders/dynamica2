@@ -35,7 +35,7 @@ html lang="ru"
                   .hover-select-box.front-select-btn
                     select.selectpicker
                       - current_user.projects.each do |project|
-                        - if params[:controller] == 'projects' && params[:action] == 'show' && project.id == @project.id
+                        - if params[:controller] == 'projects' && (params[:action] == 'show' || params[:action] == 'full_chart') && project.id == @project.id
                           option selected="selected" value=project.id = project.name.truncate 20
                         - else
                           option value=project.id = project.name.truncate 20

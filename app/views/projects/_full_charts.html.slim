@@ -1,6 +1,6 @@
 ul.dashboard-panel
   li.current
-    a.dashboard-panel-link href="#"  Overview
+    a.dashboard-panel-link href="/projects/#{@project.id}" = t 'projects.show.overview'
   li.filter-holder
     .hover-select-box.filter-mod
       select.selectpicker.filterSelect
@@ -14,21 +14,22 @@ ul.dashboard-panel
     .hover-select-box.filter-mod
       select.selectpicker.filterSelect
         option data-hidden="true" value="-1"
-        option value=("Gross Revenue")  Gross Revenue
-        option value=("Avg. order")  Avg. order
-        option value=("Avg. revenue per customer")  Avg. revenue per customer
-        option value=("Sales per visitor")  Sales per visitor
-        option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
-        option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
+        option value=("customers_number") = t 'projects.show.customers_number'
+        option value=("new_customers_number") = t 'projects.show.new_customers_number'
+        option value=("repeat_customers_number") = t 'projects.show.repeat_customers_number'
+        option value=("average_revenue_per_customer") = t 'projects.show.average_revenue_per_customer'
+        option value=("sales_per_visitor") = t 'projects.show.sales_per_visitor'
+        option value=("average_customer_lifetime_value") = t 'projects.show.average_customer_lifetime_value'
+        option value=("unique_users_number") = t 'projects.show.unique_users_number'
+        option value=("visits") = t 'projects.show.visits'
     a.dashboard-panel-link href="#" = t 'projects.show.customers'
   li.filter-holder
     .hover-select-box.filter-mod
       select.selectpicker.filterSelect
         option data-hidden="true" value="-1"
-        option value=("Gross Revenue")  Gross Revenue
-        option value=("Avg. order")  Avg. order
-        option value=("Avg. revenue per customer")  Avg. revenue per customer
-        option value=("Sales per visitor")  Sales per visitor
-        option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
-        option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
+        option value=("products_in_stock_number") = t 'projects.show.products_in_stock_number'
+        option value=("items_in_stock_number") = t 'projects.show.items_in_stock_number'
+        option value=("percentage_of_inventory_sold") = t 'projects.show.percentage_of_inventory_sold'
+        option value=("percentage_of_stock_sold") = t 'projects.show.percentage_of_stock_sold'
+        option value=("products_number") = t 'projects.show.products_number'
     a.dashboard-panel-link href="#" = t 'projects.show.inventory'

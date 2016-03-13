@@ -33,6 +33,7 @@ ru:
     index:
       new: Новый проект
     show:
+      overview: Обзор
       general: Базовые
       customers: Покупатели
       inventory: Товары

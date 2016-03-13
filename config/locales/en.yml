@@ -33,6 +33,7 @@ en:
     index:
       new: Add new project
     show:
+      overview: Overview
       general: General
       customers: Customers
       inventory: Inventory

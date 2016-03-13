@@ -4,6 +4,9 @@ $(function ($) {
   if ($('#project_dashboard').length == 0) {
     return ;
   }
+
+  $('ul.dashboard-panel>li').first().addClass('current');
+
   $('input[name="graph_filter"]').change(function () {
     fetchDataForTheBigCharts(false);
   });
@@ -85,9 +88,6 @@ $(function ($) {
         })
         .delegate('.bootstrap-select.filterSelect', 'click', function () {
             $(this).closest('.hover-select-box').addClass('opened');
-        })
-        .delegate('.filter-mod.hover-select-box .filterSelect.selectpicker', 'change', function () {
-            $(this).closest('.filter-holder').addClass('current').siblings().removeClass('current');
         })
         .delegate('.hoverCatcher', 'mouseenter', function () {
             var firedEl = $($(this).attr('data-area'));
