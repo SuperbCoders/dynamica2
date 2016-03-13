@@ -114,8 +114,6 @@ $(function ($) {
 
             if (firedEl.find('.sortBtn').length) {
                 firedEl.find('.sortBtn').toggleClass('sort_desc');
-                return false;
-
             } else {
                 sortBtn.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
                     firedEl.find('.sortCatcher').append($(this).removeClass('sorting').attr('style', ''));
@@ -124,6 +122,21 @@ $(function ($) {
                 sortBtn.addClass('sorting').css('left', firedEl.find('.sortCatcher').offset().left - sortBtn.offset().left + sortBtn.css('marginLeft').replace('px', '') * 1);
             }
         }
+
+        var pckr = $('.datePicker');
+        var sort_by = $(this).attr('id');
+        var sort_direction = $('.sort_desc').length == 1 ? 'asc' : 'desc'; // reverse
+        $('.pageOverlay').addClass('show_overlay');
+        $.ajax({
+          url: "/charts_data/sorted_full_chart_data?chart=" +
+              $('.dashboard').data('chart') +
+              "&from=" + pckr.datepicker('getDates')[0] +
+              "&to=" + pckr.datepicker('getDates')[1] +
+              "&project_id=" + $('.dashboard').data('project-id') + '&' +
+              sort_by + '=' + sort_direction,
+          dataType: 'Script',
+          type:'get'
+        });
 
     });
 

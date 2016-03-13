@@ -23,7 +23,21 @@ class ChartsDataController < ApplicationController
     @previous_project_characteristics = @project.project_characteristics.where(date: (date_from - (date_to - date_from))...date_from)
     @chart = params[:chart]
 
-    @result = other_charts_data[params[:chart].to_sym]
+    @result = send(params[:chart], 'group_date_by_day')
+    @result[:data] = @result[:data].map {|k, v| {'date' => k, 'close' => v}}
+
+    # render json: other_charts_data[params[:chart].to_sym]
+  end
+
+  def sorted_full_chart_data
+    @current_project_characteristics  = @project.project_characteristics.where(date: date_from..date_to)
+    @previous_project_characteristics = @project.project_characteristics.where(date: (date_from - (date_to - date_from))...date_from)
+    @chart = params[:chart]
+
+    @result = send(params[:chart], 'group_date_by_day')
+    @result[:data] = @result[:data].map {|k, v| {'date' => k, 'close' => v}}.sort_by {|v| params[:date] ? Date.parse(v['date']) : v['close']}
+    @result[:data] = @result[:data].reverse if (params[:date] || params[:value]) == 'desc'
+
     # render json: other_charts_data[params[:chart].to_sym]
   end
 
@@ -61,6 +75,142 @@ class ChartsDataController < ApplicationController
 
   def diff_average_sum(field)
     diff_values(average_sum(@current_project_characteristics, field), average_sum(@previous_project_characteristics, field))
+  end
+
+  def total_revenu(scope)
+    {
+      diff: diff_sum(:total_gross_revenues),
+      value: "#{@current_project_characteristics.sum :total_gross_revenues}$",
+      data: @current_project_characteristics.send(scope).sum(:total_gross_revenues)
+    }
+  end
+
+  def products_number(scope)
+    {
+      diff: diff_sum(:products_number),
+      value: "#{@current_project_characteristics.sum :products_number}",
+      data: @current_project_characteristics.send(scope).sum(:products_number)
+    }
+  end
+
+  def average_order_value(scope)
+    {
+      diff: diff_average_sum(:average_order_value),
+      value: "#{average_sum @current_project_characteristics, :average_order_value}",
+      data: @current_project_characteristics.send(scope).sum(:average_order_value)
+    }
+  end
+
+  def average_order_size(scope)
+    {
+      diff: diff_average_sum(:average_order_size),
+      value: "#{average_sum @current_project_characteristics, :average_order_size}",
+      data: @current_project_characteristics.send(scope).sum(:average_order_size)
+    }
+  end
+
+  def customers_number(scope)
+    {
+      diff: diff_sum(:customers_number),
+      value: "#{@current_project_characteristics.sum :customers_number}",
+      data: @current_project_characteristics.send(scope).sum(:customers_number)
+    }
+  end
+
+  def new_customers_number(scope)
+    {
+      diff: diff_sum(:new_customers_number),
+      value: "#{@current_project_characteristics.sum :new_customers_number}",
+      data: @current_project_characteristics.send(scope).sum(:new_customers_number)
+    }
+  end
+
+  def repeat_customers_number(scope)
+    {
+      diff: diff_sum(:repeat_customers_number),
+      value: "#{@current_project_characteristics.sum :repeat_customers_number}",
+      data: @current_project_characteristics.send(scope).sum(:repeat_customers_number)
+    }
+  end
+
+  def average_revenue_per_customer(scope)
+    {
+      diff: diff_average_sum(:average_revenue_per_customer),
+      value: "#{average_sum(@current_project_characteristics, :average_revenue_per_customer)}",
+      data: @current_project_characteristics.send(scope).sum(:average_revenue_per_customer)
+    }
+  end
+
+  def products_in_stock_number(scope)
+    {
+      diff: diff_sum(:products_in_stock_number),
+      value: "#{@current_project_characteristics.sum :products_in_stock_number}",
+      data: @current_project_characteristics.send(scope).sum(:products_in_stock_number)
+    }
+  end
+
+  def sales_per_visitor(scope)
+    {
+      diff: diff_sum(:sales_per_visitor),
+      value: "#{@current_project_characteristics.sum :sales_per_visitor}",
+      data: @current_project_characteristics.send(scope).sum(:sales_per_visitor)
+    }
+  end
+
+  def average_customer_lifetime_value(scope)
+    {
+      diff: diff_sum(:average_customer_lifetime_value),
+      value: "#{@current_project_characteristics.sum :average_customer_lifetime_value}",
+      data: @current_project_characteristics.send(scope).sum(:average_customer_lifetime_value)
+    }
+  end
+
+  def unique_users_number(scope)
+    {
+      diff: diff_sum(:unique_users_number),
+      value: "#{@current_project_characteristics.sum :unique_users_number}",
+      data: @current_project_characteristics.send(scope).sum(:unique_users_number)
+    }
+  end
+
+  def visits(scope)
+    {
+      diff: diff_sum(:visits),
+      value: "#{@current_project_characteristics.sum :visits}",
+      data: @current_project_characteristics.send(scope).sum(:visits)
+    }
+  end
+
+  def items_in_stock_number(scope)
+    {
+      diff: diff_sum(:items_in_stock_number),
+      value: "#{@current_project_characteristics.sum :items_in_stock_number}",
+      data: @current_project_characteristics.send(scope).sum(:items_in_stock_number)
+    }
+  end
+
+  def percentage_of_inventory_sold(scope)
+    {
+      diff: diff_average_sum(:percentage_of_inventory_sold),
+      value: "#{average_sum(@current_project_characteristics, :percentage_of_inventory_sold)}",
+      data: @current_project_characteristics.send(scope).sum(:percentage_of_inventory_sold)
+    }
+  end
+
+  def percentage_of_stock_sold(scope)
+    {
+      diff: diff_average_sum(:percentage_of_stock_sold),
+      value: "#{average_sum(@current_project_characteristics, :percentage_of_stock_sold)}",
+      data: @current_project_characteristics.send(scope).sum(:percentage_of_stock_sold)
+    }
+  end
+
+  def shipping_cost_as_a_percentage_of_total_revenue(scope)
+    {
+      diff: diff_average_sum(:shipping_cost_as_a_percentage_of_total_revenue),
+      value: "#{average_sum @current_project_characteristics, :shipping_cost_as_a_percentage_of_total_revenue}",
+      data: @current_project_characteristics.send(scope).sum(:shipping_cost_as_a_percentage_of_total_revenue)
+    }
   end
 
   def other_charts_data
