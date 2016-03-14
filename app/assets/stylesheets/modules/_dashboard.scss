@@ -384,6 +384,34 @@
       box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
     }
   }
+
+  &.disabled {
+
+    .graph-value {
+      position: relative;
+      z-index: 1;
+
+      .val {
+        line-height: 1.2;
+      }
+    }
+
+    .graph-block {
+      opacity: .2;
+    }
+  }
+}
+
+.dark_wrapper {
+  margin: -20px -20px 0;
+  padding: 20px;
+  background: #333648;
+
+  .graph-value {
+    .val {
+      color: #fff;
+    }
+  }
 }
 
 .graph-u-link {
@@ -525,6 +553,12 @@
   width: 70px;
 }
 
+.legend_holder {
+  background: #fff;
+  padding: 1px 20px;
+  margin: 0 -20px;
+}
+
 .graph-unit-legend {
   margin: 23px 0 0;
 
@@ -559,12 +593,12 @@
     -webkit-transition: color .3s, background-color .3s;
     -ms-transition: color .3s, background-color .3s;
     transition: color .3s, background-color .3s;
-    
+
     &:hover {
       color: #2b2b2b;
       background: #dff5ff;
     }
-    
+
     &.active {
       background: #ff6140;
 
@@ -732,6 +766,9 @@
   padding-left: 12px;
   margin-top: 32px;
 
+  .no_cursor & {
+    cursor: default;
+  }
 }
 
 .legend_name {
@@ -751,7 +788,13 @@
   span {
     color: #696969;
   }
+}
 
+.legend_name {
+  font-size: 16px;
+  line-height: 1;
+  position: relative;
+  color: #636363;
 }
 
 .legend_val {
@@ -1149,7 +1192,6 @@
     width: 26%;
     text-align: right;
   }
-
 }
 
 .graph-unit-info-table {
@@ -1161,12 +1203,67 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
 }
 
+.table-content {
+  display: table-row-group;
+}
+
 .sort_catcher {
   cursor: pointer;
   display: inline-block;
   height: 16px;
   width: 22px;
   position: relative;
+}
+
+.best_sellers {
+  font-size: 14px;
+  line-height: 16px;
+  margin-top: 12px;
+
+  td {
+    padding: 10px 0 10px 8px;
+    border-top: 1px solid #ddd;
+    color: #2a2a2a;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+  }
+
+  tr:first-child {
+    td {
+      border-top: none;
+    }
+  }
+
+  .col_1 {
+    width: 54%;
+  }
+
+  .col_2 {
+    width: 20%;
+  }
+
+  .col_3 {
+    width: 26%;
+  }
+}
+
+.seller_name {
+  font-weight: 600;
+  max-height: 2.28em;
+  overflow: hidden;
+}
+
+.seller_val {
+  float: right;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 4px;
+  padding: 0 5px;
+  color: #fff;
+  background-color: #5ec65d;
 }
 
 @-webkit-keyframes sorting_anim {
@@ -1398,4 +1495,113 @@ $blue: rgb(0, 155, 255);
 
   }
 
+}
+
+.popup_icon {
+  text-align: center;
+}
+
+.dynamica_icon {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.no_server_icon {
+  position: relative;
+  border-radius: 100%;
+  display: inline-block;
+  vertical-align: top;
+  width: 26px;
+  height: 26px;
+  margin: 35px 0 25px;
+  border: 2px solid #ff6140;
+
+  &:after,
+  &:before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    border-radius: 100%;
+    width: 26px;
+    height: 26px;
+    border: 2px solid #ff6140;
+  }
+
+  &:before {
+    right: 100%;
+    margin-right: 22px;
+  }
+
+  &:after {
+    left: 100%;
+    margin-left: 22px;
+  }
+
+}
+
+.popup_info {
+  background: #fff;
+  width: 100%;
+  max-width: 728px;
+  border-radius: 4px;
+  position: absolute;
+  padding: 70px 50px;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.popup_inner {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: column nowrap;
+  flex-flow: column nowrap;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  align-items: stretch;
+  -webkit-box-pack: center;
+  -webkit-box-align: stretch;
+}
+
+.popup_controls {
+  text-align: center;
+
+  .btn {
+    border-radius: 10px;
+    font-size: 16px;
+    min-width: 140px;
+  }
+}
+
+.popup_caption {
+  color: #000;
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.popup_close {
+  position: absolute;
+  top: 9px;
+  right: 19px;
+  color: #d8d8d8;
+  font-size: 32px;
+  -webkit-transition: color .3s, border-color .3s;
+  -ms-transition: color .3s, border-color .3s;
+  transition: color .3s, border-color .3s;
+}
+
+.popup_content {
+  padding: 30px 0 25px;
+  text-align: center;
+
+  p {
+    font-size: 20px;
+  }
 }

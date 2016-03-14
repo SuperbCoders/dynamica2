@@ -1,12 +1,18 @@
 var resizeHndl, scrollBottomFixed, scrollParent, wnd, doc, prevTracingDot;
 
 $(function ($) {
+  $('a.dashboard-panel-link').click(function (e){
+    window.location.href = '/projects/' + $('.dashboard').data('project-id') + '?start_date=' + moment($('.datePicker').datepicker('getDates')[0]).format('YYYY-MM-DD') + '&finish_date=' + moment($('.datePicker').datepicker('getDates')[1]).format('YYYY-MM-DD');
+    return false;
+  });
+
   $('.dashboard-panel .selectpicker.filterSelect').change(function (e) {
-    window.location.href = '/projects/' + $('.dashboard').data('project-id') + '/full_chart?chart=' + $(e.target).val()
+    window.location.href = '/projects/' + $('.dashboard').data('project-id') + '/full_chart?chart=' + $(e.target).val() + '&start_date=' + moment($('.datePicker').datepicker('getDates')[0]).format('YYYY-MM-DD') + '&finish_date=' + moment($('.datePicker').datepicker('getDates')[1]).format('YYYY-MM-DD');
   });
 
   $('a.graph-u-link').click(function (e) {
-    window.location.href = '/projects/' + $('.dashboard').data('project-id') + '/full_chart?chart=' + $(e.target).parent().find('.graph_1,.graph_2').attr('id');
+    window.location.href = '/projects/' + $('.dashboard').data('project-id') + '/full_chart?chart=' + $(e.target).parent().find('.graph_1,.graph_2').attr('id') + '&start_date=' + moment($('.datePicker').datepicker('getDates')[0]).format('YYYY-MM-DD') + '&finish_date=' + moment($('.datePicker').datepicker('getDates')[1]).format('YYYY-MM-DD');
+    return false;
   });
 
   if ($('#full_chart').length == 0) {
@@ -288,7 +294,7 @@ function init_line_area3_chart(el) {
 
     //console.log(moment.min(data));
 
-    var margin = {top: 30, right: 35, bottom: 50, left: 80},
+    var margin = {top: 30, right: 35, bottom: 50, left: 100},
         width = el.width() - margin.left - margin.right,
         height = el.height() - margin.top - margin.bottom;
 
@@ -357,7 +363,7 @@ function init_line_area3_chart(el) {
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .ticks(data.length - 1)
+        .ticks((data.length - 1) > 12 ? 12 : (data.length - 1))
         .tickFormat(d3.time.format("%b %d"))
         .orient("bottom");
 

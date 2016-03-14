@@ -130,14 +130,26 @@ section.dashboard-body#project_dashboard
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_revenue_per_customer
           .col-lg-3.col-md-4.col-sm-6
-            .graph-unit
-              a.graph-u-link href="#"
-              h5.graph-name = t '.sales_per_visitor'
-              .graph-value
-                span.val $4,490
-                sup.graph-dynamica.dynamica_up +8%
-              .graph-block
-                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#sales_per_visitor
+            - if false
+              .graph-unit
+                a.graph-u-link href="#"
+                h5.graph-name = t '.sales_per_visitor'
+                .graph-value
+                  span.val $4,490
+                  sup.graph-dynamica.dynamica_up +8%
+                .graph-block
+                  .graph_2.lineAreaChart_1.d3graph.hide_x_axis#sales_per_visitor
+            - else
+              .graph-unit.disabled
+                h5.graph-name = t '.sales_per_visitor'
+                .graph-value
+                  span.val
+                    | Google analytics is not available,
+                    br/
+                    a href="#" set up
+                    |  it now
+                .graph-block
+                  .graph_2.d3graph.hide_x_axis.disabled-chart
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -148,24 +160,48 @@ section.dashboard-body#project_dashboard
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_customer_lifetime_value
           .col-lg-3.col-md-4.col-sm-6
-            .graph-unit
-              a.graph-u-link href="#"
-              h5.graph-name = t '.unique_users_number'
-              .graph-value
-                span.val $4,490
-                sup.graph-dynamica.dynamica_up +8%
-              .graph-block
-                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#unique_users_number
+            - if false
+              .graph-unit
+                a.graph-u-link href="#"
+                h5.graph-name = t '.unique_users_number'
+                .graph-value
+                  span.val $4,490
+                  sup.graph-dynamica.dynamica_up +8%
+                .graph-block
+                  .graph_2.lineAreaChart_1.d3graph.hide_x_axis#unique_users_number
+            - else
+              .graph-unit.disabled
+                h5.graph-name = t '.unique_users_number'
+                .graph-value
+                  span.val
+                    | Google analytics is not available,
+                    br/
+                    a href="#" set up
+                    |  it now
+                .graph-block
+                  .graph_2.d3graph.hide_x_axis.disabled-chart
         .row
           .col-lg-3.col-md-4.col-sm-6
-            .graph-unit
-              a.graph-u-link href="#"
-              h5.graph-name = t '.visits'
-              .graph-value
-                span.val $4,490
-                sup.graph-dynamica.dynamica_up +8%
-              .graph-block
-                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#visits
+            - if false
+              .graph-unit
+                a.graph-u-link href="#"
+                h5.graph-name = t '.visits'
+                .graph-value
+                  span.val $4,490
+                  sup.graph-dynamica.dynamica_up +8%
+                .graph-block
+                  .graph_2.lineAreaChart_1.d3graph.hide_x_axis#visits
+            - else
+              .graph-unit.disabled
+                h5.graph-name = t '.visits'
+                .graph-value
+                  span.val
+                    | Google analytics is not available,
+                    br/
+                    a href="#" set up
+                    |  it now
+                .graph-block
+                  .graph_2.d3graph.hide_x_axis.disabled-chart
       .dashboard-caption
         h3.caption-text = t '.inventory'
         i.icon.fa.fa-angle-right
