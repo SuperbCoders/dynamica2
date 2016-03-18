@@ -1,0 +1,43 @@
+.header.page-header.navbar.navbar-default
+  .container-fluid.globalwidth
+    .navbar-header
+      %button.navbar-toggle.collapsed{'data-target'=>".bs-navbar-collapse", 'data-toggle' => "collapse", type: "button"}
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      .navbar-project-switch
+        %a.navbar-brand
+          Dynamica
+          %span
+            of
+            .single_project_link{'ng-show' => "vm.projects.length == 1"}
+              {{vm.projects[0].name}}
+            .hover-select-box.front-select-btn{'ng-show' => "vm.projects.length > 1"}
+              %select.selectpicker
+                %option{'ng-repeat' => "project in vm.projects"}
+                  {{vm.project.name}}
+
+    %nav.collapse.navbar-collapse.bs-navbar-collapse
+      %ul.nav.navbar-nav
+        %li{'ui-sref-active' => "active"}
+          %a{'ui-sref' => "projects.list"}
+            Projects
+        %li{'ui-sref-active' => "active"}
+          %a{'ui-sref' => "team.list"}
+            Team
+      %ul.nav.navbar-right.hidden-xs{id: 'user_dropdown'}
+        %li
+          .user.dropdown
+            .arrow
+            %a.user-toggle.dropdown-toggle{href: ""}
+              %span.user-pic
+                %img.img-circle{'ng-src' => "{{user.avatar.avatar.small.url}}",width: '40px', height: '40px'}
+              %span.user-name{id: 'user_dropdown'}
+                {{user.display_name}}
+                %i.icon.fa.fa-angle-down
+            .user-menu.dropdown-menu.right
+              %ul
+                %li
+                  %a{href: '', 'ui-sref' => "profile"} .profile_edit_user_registration_path
+                %li.clear
+                  %a{href: '/users/sign_out'} .log_out_destroy_user_session_path

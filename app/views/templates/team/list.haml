@@ -1,0 +1,68 @@
+.project{id: "project-{{project.id}}", 'ng-repeat' => "project in vm.projects"}
+
+  %h1 {{project.name}}
+
+  %table.table.permissions
+    %tr
+      %th{width: '30%'} t.user
+      %th{width: '15%'} t.read
+      %th{width: '15%'} t.forecasting
+      %th{width: '15%'} t.manage
+      %th{width: '15%'} t.api
+      %th{width: '10%'}
+    %tr.permission{id: "permission-{{permission.id}}", 'data-id'=>"{{permission.id}}", 'ng-repeat' => "permission in project.permissions" }
+      %td
+        {{permission.user.email}}
+      %td
+        .read{'ng-show' => "permission.read"}
+          '✓'
+      %td
+        .read{'ng-show' => "permission.forecasting"}
+          '✓'
+      %td
+        .read{'ng-show' => "permission.manage"}
+          '✓'
+      %td
+        .read{'ng-show' => "permission.api"}
+          '✓'
+      %td
+        %a.js-edit-permission-toggle{href: '', 'ng-show' => "user.can.update.permissions"}
+          %i.glyphicon.glyphicon-cog
+        %a.js-destroy-permission{href: '', 'ng-show' => "user.can.destroy.permissions"}
+          %i.glyphicon.glyphicon-trash
+    %tr.edit-permission{id: "edit-permission-{{permission.id}}", 'ng-repeat' => "permission in project.permissions"}
+      %td.edit-permission-wrapper{colspan: 6}
+        %table{width: '100%'}
+          %tr
+            %td{width: '30%'}
+              permission.user.email
+            %td{width: '15%'}
+              f.check_box :read
+            %td{width: '15%'}
+              f.check_box :forecasting
+            %td{width: '15%'}
+              f.check_box :manage
+            %td{width: '15%'}
+              f.check_box :api
+            %td{width: '10%'}
+              %button.btn.btn-primary.btn-sm
+                t.save
+              %a.js-edit-permission-toggle.btn.btn-sm
+                t.invite_cancel
+
+    -#= render partial: 'permissions/pending_permission', collection: pending_permissions, as: :permission
+    -#tr.new-pending-permission
+    -#  td.new-permission-wrapper colspan=6
+    -#    = link_to t('.invite_user'), '#', class: 'js-new-pending-permission-toggle js-invite btn btn-success btn-sm'
+    -#    = form_for [project, pending_permission], remote: true do |f|
+    -#      table width='100%'
+    -#        tr
+    -#          td width='30%'= f.email_field :email, class: 'form-control', placeholder: t('.form.email')
+    -#          td width='15%'= f.check_box :read
+    -#          td width='15%'= f.check_box :forecasting
+    -#          td width='15%'= f.check_box :manage
+    -#          td width='15%'= f.check_box :api
+    -#          td width='10%'
+    -#            => f.submit t('.invite'), class: 'btn btn-success btn-sm'
+    -#            => link_to '#', class: 'js-new-pending-permission-toggle btn btn-sm' do
+    -#              i.glyphicon.glyphicon-remove

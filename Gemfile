@@ -16,7 +16,7 @@ gem 'therubyracer',  platforms: :ruby
 
 # JS libraries
 gem 'jquery-rails'
-
+gem 'bower-rails'
 
 # CSS libraries
 gem 'compass-rails'
@@ -89,6 +89,7 @@ gem 'workflow'
 # gem 'rinruby'
 gem 'whenever'
 gem 'slim-rails'
+gem 'active_model_serializers', '~> 0.10.0.rc4'
 gem 'simple_form'
 gem 'friendly_id', '~> 5.0.0'
 gem 'carrierwave'
@@ -96,6 +97,9 @@ gem 'mini_magick'
 gem 'jquery-fileupload-rails'
 gem 'non-stupid-digest-assets', '~> 1.0.4' # creates both digest and non-digest assets
 gem 'settingslogic'
+
+gem 'haml-rails'
+gem 'haml'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-d3'

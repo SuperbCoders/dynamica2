@@ -115,27 +115,27 @@ $(function ($) {
         rangeEnd = moment($('.dashboard').data('date-to'));
         $('.dashboard').data('date-to', null);
       } else {
-        if (newRange == 0) {         //  Current month       
+        if (newRange == 0) {         //  Current month
             rangeStart = moment(today).startOf('month');
             rangeEnd = moment(today).endOf('month');
 
-        } else if (newRange == 1) {  //  Previous month 
+        } else if (newRange == 1) {  //  Previous month
             rangeStart = moment(today).subtract(1, 'month').startOf('month');
             rangeEnd = moment(today).subtract(1, 'month').endOf('month');
 
-        } else if (newRange == 2) {  //  Last 3 month 
+        } else if (newRange == 2) {  //  Last 3 month
             rangeStart = moment(today).subtract(3, 'month');
             rangeEnd = moment(today);
 
-        } else if (newRange == 3) {  //  Last 6 month 
+        } else if (newRange == 3) {  //  Last 6 month
             rangeStart = moment(today).subtract(6, 'month');
             rangeEnd = moment(today);
 
-        } else if (newRange == 4) {  //  Last year 
+        } else if (newRange == 4) {  //  Last year
             rangeStart = moment(today).subtract(12, 'month');
             rangeEnd = moment(today);
 
-        } else if (newRange == 5) {  //  All time 
+        } else if (newRange == 5) {  //  All time
             rangeStart = moment(datePckr.datepicker('getStartDate'));
             rangeEnd = moment(datePckr.datepicker('getEndDate'));
         }

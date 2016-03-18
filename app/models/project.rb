@@ -14,6 +14,8 @@
 #
 
 class Project < ActiveRecord::Base
+  include Alertable
+
   extend FriendlyId
   friendly_id :slug, use: :slugged
 

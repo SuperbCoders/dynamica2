@@ -36,6 +36,10 @@ GEM
       activesupport (= 4.1.8)
       builder (~> 3.1)
       erubis (~> 2.7.0)
+    active_model_serializers (0.10.0.rc4)
+      actionpack (>= 4.0)
+      activemodel (>= 4.0)
+      railties (>= 4.0)
     activemodel (4.1.8)
       activesupport (= 4.1.8)
       builder (~> 3.1)
@@ -68,6 +72,7 @@ GEM
       rails (>= 3.1)
     bootstrap-sass (3.3.1.0)
       sass (~> 3.2)
+    bower-rails (0.10.0)
     builder (3.2.2)
     cancancan (1.9.2)
     capistrano (3.3.4)
@@ -146,8 +151,21 @@ GEM
     fssm (0.2.10)
     groupdate (2.5.2)
       activesupport (>= 3)
+    haml (4.0.7)
+      tilt
+    haml-rails (0.9.0)
+      actionpack (>= 4.0.1)
+      activesupport (>= 4.0.1)
+      haml (>= 4.0.6, < 5.0)
+      html2haml (>= 1.0.1)
+      railties (>= 4.0.1)
     hike (1.2.3)
     hitimes (1.2.2)
+    html2haml (2.0.0)
+      erubis (~> 2.7.0)
+      haml (~> 4.0.0)
+      nokogiri (~> 1.6.0)
+      ruby_parser (~> 3.5)
     i18n (0.7.0)
     ice_cube (0.11.1)
     jbuilder (2.2.5)
@@ -216,8 +234,8 @@ GEM
       railties (= 4.1.8)
       sprockets-rails (~> 2.0)
     rails-assets-d3 (3.5.16)
-    rails-assets-moment (2.11.2)
-    rails-assets-select2 (4.0.1)
+    rails-assets-moment (2.12.0)
+    rails-assets-select2 (4.0.2)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
     railties (4.1.8)
@@ -253,6 +271,8 @@ GEM
       rspec-mocks (~> 3.1.0)
       rspec-support (~> 3.1.0)
     rspec-support (3.1.2)
+    ruby_parser (3.8.1)
+      sexp_processor (~> 4.1)
     rubyzip (1.1.7)
     russian (0.6.0)
       i18n (>= 0.5.0)
@@ -266,6 +286,7 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     settingslogic (2.0.9)
+    sexp_processor (4.7.0)
     shopify_api (3.2.1)
       activeresource (>= 3.0.0)
       thor (>= 0.14.4)
@@ -339,6 +360,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_model_serializers (~> 0.10.0.rc4)
   activeresource!
   annotate (~> 2.6.10)
   apipie-rails
@@ -346,6 +368,7 @@ DEPENDENCIES
   binding_of_caller (~> 0.7.2)
   bootstrap-kaminari-views
   bootstrap-sass (~> 3.3.1)
+  bower-rails
   cancancan
   capistrano (= 3.3.4)
   capistrano-rails
@@ -364,6 +387,8 @@ DEPENDENCIES
   font-awesome-rails
   friendly_id (~> 5.0.0)
   groupdate
+  haml
+  haml-rails
   jbuilder (~> 2.0)
   jquery-fileupload-rails
   jquery-rails
@@ -401,6 +426,3 @@ DEPENDENCIES
   unicorn
   whenever
   workflow
-
-BUNDLED WITH
-   1.11.2

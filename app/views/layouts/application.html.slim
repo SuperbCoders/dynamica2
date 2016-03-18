@@ -29,7 +29,7 @@ html lang="ru"
               a.navbar-brand href="/"  Dynamica
               - if current_user
                 span of
-                - if current_user.projects.count == 1 || current_user.projects.count.zero?
+                - if current_user.projects.count == 1 || !current_user.projects.count.zero?
                   .single_project_link= link_to current_user.projects.first.name.truncate(20), current_user.projects.first
                 - else
                   .hover-select-box.front-select-btn
@@ -49,7 +49,7 @@ html lang="ru"
           nav.collapse.navbar-collapse.bs-navbar-collapse
             ul.nav.navbar-nav
               li class=('active' if params[:controller] == 'projects' && params[:action] == 'index')
-                = link_to t('.projects'), projects_path
+                = link_to t('.projects'), dashboard_path
               - if current_user.permissions.where(manage: true).any?
                 li class=('active' if params[:controller] == 'permissions' && params[:action] == 'index')
                   = link_to t('.team'), permissions_path

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'templates(/*url)' => 'application#templates'
   get 'charts_data/full_chart_data'
   get 'charts_data/big_chart_data'
   get 'charts_data/other_chart_data'
@@ -16,7 +17,18 @@ Rails.application.routes.draw do
       match 'users/avatar' => 'customized_devise/registrations#avatar', via: [:put, :patch]
     end
 
-    resources :projects do
+    get 'dashboard' => 'dashboard#index', as: :dashboard
+
+    scope :profile do
+      get  '/' => 'profile#index', as: :profile
+      post '/' => 'profile#update', as: :update
+    end
+
+
+    resources :projects, defaults: { format: :json } do
+      collection do
+        post 'search' => 'projects#search'
+      end
       resources :permissions, only: [:index, :update, :destroy], shallow: true, on: :member
       resources :pending_permissions, only: [:create, :destroy], on: :member
       resources :items, only: [:index, :create, :update, :destroy], on: :member do

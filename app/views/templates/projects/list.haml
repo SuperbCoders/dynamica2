@@ -1,0 +1,35 @@
+.section.case.case-projects
+  .case-capt
+    %a{href: '', 'ui-sref' => "projects.new", "ng-click" => "vm.project = {}"} Add new project
+  .case-cnt
+    .items
+      .row
+        .col-sm-6{'ng-repeat' => "project in vm.projects"}
+          .item
+            / Project cart
+            .title
+              %a{href: '', 'ui-sref' => "projects.view({slug: project.slug, id: project.id })"} {{project.name}}
+            .descript
+              .demo{'ng-show' => "project.demo"}
+                demo
+              .forecast{'ng-show' => "project.last_forecast"}
+                {{project.last_forecast}}
+              .no_forecast{'ng-show' => "!project.last_forecast"}
+                no_forecast
+            .users
+              %ul{'ng-repeat' => "user in project.users"}
+                %li.user-pic
+                  %img.img-circle{'ng-src' => "{{user.avatar.avatar.url}}", width: '40px', height: '40px'}
+
+            / Project dropdown menu
+            .setting-wrap
+              .setting.dropdown{id: "setting_menu_{{project.id}}"}
+                %a.setting-toggle.dropdown-toggle{href: "", 'ng-click' => "vm.open_setting_menu(project)"}
+                  %i.icon.fa.fa-cog{id: "setting_menu"}
+                .setting-menu.dropdown-menu.right
+                  %ul
+                    %li
+                      %a{href: '', 'ui-sref' => "projects.edit({slug: project.slug})"} edit_project_path
+                    %li
+                      %a{href: '', 'ng-click' => "vm.destroy(project)"} destroy_project
+          .clearfix{'ng-show' => "$index % 3 == 0"}

@@ -1,9 +1,12 @@
 section.dashboard-body#project_dashboard
   .container-fluid.globalwidth
     section.dashboard.projects-dashboard data-project-id=@project.id data-start-date= @project.project_characteristics.order(date: :asc).first.try(:date).try(:strftime, '%b %d, %Y') data-date-from=@from data-date-to=@to
+      / Top menu
       .row
         .col-sm-12
           = render partial: 'full_charts'
+
+      / Graph header
       .row.dashboard-title-row
         .col-sm-6
           h2 = @project.name
@@ -20,6 +23,12 @@ section.dashboard-body#project_dashboard
                 option value="3"  Last 6 month
                 option value="4"  Last year
                 option value="5"  All time
+
+
+
+
+
+      / Graph
       .graph-unit-holder
         .graph-unit
           .graph-unit-large
@@ -37,11 +46,14 @@ section.dashboard-body#project_dashboard
                 #tooltip.graph-tooltip-holder.hidden_
                   #tooltip_dot.tooltip-dot
                   #tooltip_content.graph-tooltip
+
+      / Основные показатели
       .dashboard-caption
         h3.caption-text = t '.general'
         i.icon.fa.fa-angle-right
       .graph-unit-holder.graph-unit-hover
         .row
+          / Доля выручки
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -51,6 +63,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#total_revenu
+
+          / Доля доставки от общей стоимости
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -60,6 +74,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#shipping_cost_as_a_percentage_of_total_revenue
+
+          / Средняя стоимость заказа
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -69,6 +85,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_order_value
+
+          / Средний размер заказа
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -78,11 +96,15 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_order_size
+
+      / Покупатели
       .dashboard-caption
         h3.caption-text = t '.customers'
         i.icon.fa.fa-angle-right
       .graph-unit-holder.graph-unit-hover
+
         .row
+          / Число покупателей
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -92,6 +114,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#customers_number
+
+          / Число новых покупателей
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -101,6 +125,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#new_customers_number
+
+          / Чисто повторных покупателей
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -110,6 +136,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#repeat_customers_number
+
+          / Отношение новых покупателей к повторным
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -119,7 +147,9 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_1.donutChart_1.d3graph.hide_x_axis#ratio_of_new_customers_to_repeat_customers
+
         .row
+          / Средняя сумма покупателя
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -129,6 +159,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_revenue_per_customer
+
+          / Покупок на посетителей
           .col-lg-3.col-md-4.col-sm-6
             - if false
               .graph-unit
@@ -150,6 +182,8 @@ section.dashboard-body#project_dashboard
                     |  it now
                 .graph-block
                   .graph_2.d3graph.hide_x_axis.disabled-chart
+
+          / Среднее время проведенное клиентом
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -159,6 +193,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_customer_lifetime_value
+
+          / Количество уникальных посетителей
           .col-lg-3.col-md-4.col-sm-6
             - if false
               .graph-unit
@@ -180,7 +216,9 @@ section.dashboard-body#project_dashboard
                     |  it now
                 .graph-block
                   .graph_2.d3graph.hide_x_axis.disabled-chart
+
         .row
+          / Число визитов
           .col-lg-3.col-md-4.col-sm-6
             - if false
               .graph-unit
@@ -202,11 +240,15 @@ section.dashboard-body#project_dashboard
                     |  it now
                 .graph-block
                   .graph_2.d3graph.hide_x_axis.disabled-chart
+
+      / Товары
       .dashboard-caption
         h3.caption-text = t '.inventory'
         i.icon.fa.fa-angle-right
       .graph-unit-holder.graph-unit-hover
         .row
+
+          / Продуктов в продаже
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -216,6 +258,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#products_in_stock_number
+
+          / Позиций на складе
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -225,6 +269,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#items_in_stock_number
+
+          / Процент проданных товаров
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -234,6 +280,8 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#percentage_of_inventory_sold
+
+          / Процент запаса на складе
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
@@ -243,7 +291,10 @@ section.dashboard-body#project_dashboard
                 sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis#percentage_of_stock_sold
+
         .row
+
+          / Количество товаров
           .col-lg-3.col-md-4.col-sm-6
             .graph-unit
               a.graph-u-link href="#"
