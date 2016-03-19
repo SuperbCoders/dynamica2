@@ -12,6 +12,7 @@
 #= require angular-resource
 
 #= require d3
+#= require dashboard.js
 
 #= require ./dashboard/app
 #= require_tree ./dashboard/controllers
