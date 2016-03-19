@@ -1,2 +1,208 @@
-%pre
-  {{vm.project | json}}
+%section.dashboard-body
+  .container-fluid.globalwidth
+    %section.dashboard.projects-dashboard
+
+      = render 'templates/projects/view/header'
+
+      .dashboard-caption
+        %h3.caption-text
+          Finance overview
+        %i.icon.fa.fa-angle-right
+
+      .graph-unit-holder.graph-unit-hover
+        .row
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Gross Revenue
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #total_revenu.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Shipping Cost As A Percentage Of Total Revenue
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #shipping_cost_as_a_percentage_of_total_revenue.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Average Order Value
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #average_order_value.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Average Order Size
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #average_order_size.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+      .dashboard-caption
+        %h3.caption-text
+          Customers overview
+        %i.icon.fa.fa-angle-right
+      .graph-unit-holder.graph-unit-hover
+        .row
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Customers Number
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #customers_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                New Customers Number
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #new_customers_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Repeat Customers Number
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #repeat_customers_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                New & repeat customers
+              .graph-value
+                %span.val 3.2
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #ratio_of_new_customers_to_repeat_customers.graph_1.donutChart_1.d3graph.hide_x_axis
+        .row
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Average Revenue Per Customer
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #average_revenue_per_customer.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Sales Per Visitor
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #sales_per_visitor.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Average Customer Lifetime Value
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #average_customer_lifetime_value.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Unique Users Number
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #unique_users_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+        .row
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Visits
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #visits.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+      .dashboard-caption
+        %h3.caption-text
+          Products overview
+        %i.icon.fa.fa-angle-right
+      .graph-unit-holder.graph-unit-hover
+        .row
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Products In Stock Number
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #products_in_stock_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Items In Stock Number
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #items_in_stock_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Percentage Of Inventory Sold
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #percentage_of_inventory_sold.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Percentage Of Stock Sold
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #percentage_of_stock_sold.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+        .row
+          .col-lg-3.col-md-4.col-sm-6
+            .graph-unit
+              %a.graph-u-link{:href => "total_revenu.html"}
+              %h5.graph-name
+                Products Number
+              .graph-value
+                %span.val $4,490
+                %sup.graph-dynamica.dynamica_up +8%
+              .graph-block
+                #products_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis

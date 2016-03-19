@@ -41,5 +41,17 @@ namespace :deploy do
   end
 end
 
+namespace :bower do
+  desc 'Install bower'
+  task :install do
+    on roles(:web) do
+      within release_path do
+        execute :rake, "bower:install['-f']"
+      end
+    end
+  end
+end
+
 after 'deploy:publishing', 'deploy:restart'
 after 'deploy:updated', 'deploy:seed'
+before 'deploy:compile_assets', 'bower:install'
