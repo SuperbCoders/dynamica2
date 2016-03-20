@@ -2,6 +2,7 @@
 #= require jquery.placeholder.min.js
 #= require moment
 #= require lodash/lodash
+#= require select2
 
 #= require bootstrap.min.js
 #= require bootstrap-switch
@@ -13,8 +14,8 @@
 #= require angular-resource
 
 #= require d3
-#= require dashboard.js
+#= require script
 
 #= require ./dashboard/app
-#= require_tree ./dashboard/controllers
+#= require_tree ./dashboard/
 #= require_tree ./shared

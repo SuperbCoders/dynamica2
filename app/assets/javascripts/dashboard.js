@@ -1,15 +1,15 @@
-var resizeHndl, activeFamilyGraph = 0;
+var resizeHndl, activeFamilyGraph = 0, dataFixture = [];
 
 $(function ($) {
-  if ($('#project_dashboard').length == 0) {
-    return ;
-  }
 
-  $('ul.dashboard-panel>li').first().addClass('current');
+    for (var i = 0; i < 95; i++) {
+        var date = moment().subtract(i, 'd');
 
-  $('input[name="graph_filter"]').change(function () {
-    fetchDataForTheBigCharts(false);
-  });
+        dataFixture.push({
+            "date": date.format('D') + '-' + date.format('MMM') + '-' + date.format('YY'),
+            "close": (Math.random() * 1000).toFixed(0)
+        });
+    }
 
     $('.datePicker').each(function () {
         var datePckr = $(this);
@@ -18,7 +18,7 @@ $(function ($) {
             multidate: 3,
             //clearBtn: true,
             toggleActive: true,
-            startDate: $('.dashboard').data('start-date'),
+            startDate: '-477d',
             endDate: '0',
             orientation: "bottom left",
             format: 'M dd, yyyy',
@@ -53,8 +53,7 @@ $(function ($) {
                 }
             }
         }).on('show', function (e) {
-            //var calendar = $(this).datepicker("widget"), dates = e.dates;
-            var calendar = $('.datepicker.datepicker-dropdown.dropdown-menu'), dates = e.dates;
+            var calendar = $(this).datepicker("widget"), dates = e.dates;
 
             if (calendar.find('.btn').length) return;
 
@@ -64,9 +63,7 @@ $(function ($) {
                 var btn = $('<a class="apply-calendar-btn_ btn btn-block btn-danger" >Показать</a>');
 
                 btn.off("click").on("click", function () {
-                    if ($('.datePicker').datepicker('getDates').length == 2) {
-                      redrawCharts();
-                    }
+                    loadGraphData();
                     return false;
                 });
 
@@ -76,9 +73,8 @@ $(function ($) {
             }, 1);
 
         }).on('changeDate', function (e, w) {
-          // if ($(this).datepicker('getDates').length == 2) {
-          //   redrawCharts();
-          // }
+
+
         });
     });
 
@@ -88,6 +84,9 @@ $(function ($) {
         })
         .delegate('.bootstrap-select.filterSelect', 'click', function () {
             $(this).closest('.hover-select-box').addClass('opened');
+        })
+        .delegate('.filter-mod.hover-select-box .filterSelect.selectpicker', 'change', function () {
+            $(this).closest('.filter-holder').addClass('current').siblings().removeClass('current');
         })
         .delegate('.hoverCatcher', 'mouseenter', function () {
             var firedEl = $($(this).attr('data-area'));
@@ -105,55 +104,70 @@ $(function ($) {
 
 
     $('.graphFilterDate').on('change', function () {
-      var firedEl = $(this),
-          datePckr = firedEl.closest('.datepickerComponent').find('.datePicker'),
-          rangeStart, rangeEnd,
-          newRange = firedEl.val(), today = moment();
+        var firedEl = $(this),
+            datePckr = firedEl.closest('.datepickerComponent').find('.datePicker'),
+            rangeStart, rangeEnd,
+            newRange = firedEl.val(), today = moment();
 
-      if ($('.dashboard').data('date-from') && $('.dashboard').data('date-to')) {
-        rangeStart = moment($('.dashboard').data('date-from'));
-        rangeEnd = moment($('.dashboard').data('date-to'));
-        $('.dashboard').data('date-to', null);
-      } else {
-        if (newRange == 0) {         //  Current month
+        if (newRange == 0) {         //  Current month       
             rangeStart = moment(today).startOf('month');
             rangeEnd = moment(today).endOf('month');
 
-        } else if (newRange == 1) {  //  Previous month
+        } else if (newRange == 1) {  //  Previous month 
             rangeStart = moment(today).subtract(1, 'month').startOf('month');
             rangeEnd = moment(today).subtract(1, 'month').endOf('month');
 
-        } else if (newRange == 2) {  //  Last 3 month
+        } else if (newRange == 2) {  //  Last 3 month 
             rangeStart = moment(today).subtract(3, 'month');
             rangeEnd = moment(today);
 
-        } else if (newRange == 3) {  //  Last 6 month
+        } else if (newRange == 3) {  //  Last 6 month 
             rangeStart = moment(today).subtract(6, 'month');
             rangeEnd = moment(today);
 
-        } else if (newRange == 4) {  //  Last year
+        } else if (newRange == 4) {  //  Last year 
             rangeStart = moment(today).subtract(12, 'month');
             rangeEnd = moment(today);
 
-        } else if (newRange == 5) {  //  All time
+        } else if (newRange == 5) {  //  All time 
             rangeStart = moment(datePckr.datepicker('getStartDate'));
             rangeEnd = moment(datePckr.datepicker('getEndDate'));
         }
-      }
 
-      datePckr.datepicker("setDates", [
-          fit2Limits(datePckr, rangeStart, true),
-          fit2Limits(datePckr, rangeEnd)
-      ]).datepicker("update");
-
-      if ($('.datePicker').datepicker('getDates').length == 2) {
-        redrawCharts();
-      }
+        datePckr.datepicker("setDates", [
+            fit2Limits(datePckr, rangeStart, true),
+            fit2Limits(datePckr, rangeEnd)
+        ]).datepicker("update");
 
     }).change();
 
-
 });
+
+function avgBuilder(arr, step) {
+    var ret = [], part = (1 * (arr.length / step).toFixed(0));
+
+    if (part < 2) return arr;
+
+    for (var i = 0; i < arr.length; i += part) {
+
+        var obj = arr.slice(i, i + (arr.length - part * 2 >= i ? part : arr.length)), val = 0;
+
+        for (var j = 0; j < obj.length; j++) {
+            val += 1 * obj[j].close;
+        }
+
+        ret.push({"close": 1 * (val / obj.length).toFixed(0), "date": arr[i].date});
+
+        val = 0;
+
+        if (!(arr.length - part * 2 >= i)) {
+            //console.log('break', arr.length, i, part, obj.length);
+            break;
+        }
+    }
+
+    return ret;
+}
 
 function loadGraphData() {
     console.log('loadGraphData');
@@ -177,76 +191,91 @@ function fit2Limits(pckr, date, max) {
     }
 }
 
-function fetchDataForTheBigCharts(booth) {
-  var pckr = $('.datePicker');
-
-  $('.pageOverlay').addClass('show_overlay');
-
-  var pathname = window.location.pathname;
-  window.history.pushState(pathname, 'Title', pathname + '?start_date=' + moment(pckr.datepicker('getDates')[0]).format('YYYY-MM-DD') + '&finish_date=' + moment(pckr.datepicker('getDates')[1]).format('YYYY-MM-DD'));
-
-  d3.json("/charts_data/big_chart_data.json?period=" +
-          $('input[name="graph_filter"]:checked').val() +
-          "&from=" + pckr.datepicker('getDates')[0] +
-          "&to=" + pckr.datepicker('getDates')[1] +
-          "&project_id=" + $('.dashboard').data('project-id'),
-          function (error, response) {
-            if (error) return console.log(error);
-            $('.dashboard').data('big-charts', response);
-
-            drawTheBigCharts();
-        }
-  );
-
-  d3.json("/charts_data/other_chart_data.json?period=" +
-          $('input[name="graph_filter"]:checked').val() +
-          "&from=" + pckr.datepicker('getDates')[0] +
-          "&to=" + pckr.datepicker('getDates')[1] +
-          "&project_id=" + $('.dashboard').data('project-id'),
-          function (error, response) {
-            if (error) return console.log(error);
-            $('.dashboard').data('other_charts', response);
-
-            $('.lineAreaChart_1').each(function (ind) {
-                init_line_area_chart($(this));
-            });
-
-            init_donut_chart($('.donutChart_1'));
-            $('.pageOverlay').removeClass('show_overlay');
-        }
-  );
-}
-
-function redrawCharts() {
-  fetchDataForTheBigCharts(true);
-
-  $('.disabled-chart').each(function (ind) {
-    disabled_chart($(this));
-  });
-}
-
-function drawCharts() {
-  drawTheBigCharts();
-
-  $('.lineAreaChart_1').each(function (ind) {
-    init_line_area_chart($(this));
-  });
-
-  init_donut_chart($('.donutChart_1'));
-}
-
-function drawTheBigCharts() {
-  var bigCharts = $.extend(true, [], $('.dashboard').data('big-charts'));
-
-  $('.areaChartFamily_1').each(function (ind) {
-    init_area_family_chart($(this), bigCharts);
-  });
-}
 
 function init_charts() {
 
-    // var big_chart = eval($('.dashboard').data('content'))['day'];
-    var big_chart = $('.dashboard').data('content');
+    var big_chart = [
+        {
+            "name": "Revenue",
+            "color": "#6AFFCB", // green
+            "value": "35,489$",
+            "diff": "+8%",
+            "data": [
+                {"date": "9-Apr-12", "close": 180},
+                {"date": "8-Apr-12", "close": 260},
+                {"date": "7-Apr-12", "close": 218},
+                {"date": "6-Apr-12", "close": 308},
+                {"date": "5-Apr-12", "close": 400},
+                {"date": "4-Apr-12", "close": 220},
+                {"date": "3-Apr-12", "close": 329},
+                {"date": "2-Apr-12", "close": 150}
+            ]
+        },
+        {
+            "name": "Orders",
+            "color": "#FF1FA7", // violet
+            "value": "490",
+            "diff": "-9%",
+            "data": [
+                {"date": "9-Apr-12", "close": 240},
+                {"date": "8-Apr-12", "close": 290},
+                {"date": "7-Apr-12", "close": 368},
+                {"date": "6-Apr-12", "close": 308},
+                {"date": "5-Apr-12", "close": 150},
+                {"date": "4-Apr-12", "close": 264},
+                {"date": "3-Apr-12", "close": 120},
+                {"date": "2-Apr-12", "close": 250}
+            ]
+        },
+        {
+            "name": "Products sell",
+            "color": "#FF7045",  // orange
+            "value": "9,483",
+            "diff": "-9%",
+            "data": [
+                {"date": "9-Apr-12", "close": 340},
+                {"date": "8-Apr-12", "close": 290},
+                {"date": "7-Apr-12", "close": 368},
+                {"date": "6-Apr-12", "close": 208},
+                {"date": "5-Apr-12", "close": 313},
+                {"date": "4-Apr-12", "close": 264},
+                {"date": "3-Apr-12", "close": 129},
+                {"date": "2-Apr-12", "close": 218}
+            ]
+        },
+        {
+            "name": "Unic users",
+            "color": "#3BD7FF", // light blue
+            "value": "109,330",
+            "diff": "-1%",
+            "data": [
+                {"date": "9-Apr-12", "close": 326},
+                {"date": "8-Apr-12", "close": 200},
+                {"date": "7-Apr-12", "close": 318},
+                {"date": "6-Apr-12", "close": 308},
+                {"date": "5-Apr-12", "close": 120},
+                {"date": "4-Apr-12", "close": 300},
+                {"date": "3-Apr-12", "close": 250},
+                {"date": "2-Apr-12", "close": 155}
+            ]
+        },
+        {
+            "name": "Customers",
+            "color": "#FFD865", // yellow
+            "value": "477",
+            "diff": "+2",
+            "data": [
+                {"date": "9-Apr-12", "close": 126},
+                {"date": "8-Apr-12", "close": 300},
+                {"date": "7-Apr-12", "close": 218},
+                {"date": "6-Apr-12", "close": 108},
+                {"date": "5-Apr-12", "close": 213},
+                {"date": "4-Apr-12", "close": 364},
+                {"date": "3-Apr-12", "close": 129},
+                {"date": "2-Apr-12", "close": 418}
+            ]
+        }
+    ];
 
     init_donut_chart($('.donutChart_1'));
 
@@ -263,7 +292,9 @@ function init_charts() {
     });
 
     $('.lineAreaChart_1').each(function (ind) {
-        init_line_area_chart($(this));
+        init_line_area_chart($(this), function (el) {
+            el.parent().addClass('animated fadeInUp');
+        });
     });
 
     $('.areaChart_3').each(function (ind) {
@@ -337,7 +368,8 @@ function init_line_area2_chart(el) {
 
 }
 
-function disabled_chart(el) {
+function init_line_area_chart(el, callback) {
+
     el.empty();
 
     var margin = {top: 0, right: 0, bottom: 0, left: 0},
@@ -379,7 +411,7 @@ function disabled_chart(el) {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+            "translate(" + margin.left + "," + margin.top + ")");
 
     var data = [
         {"date": "9-Apr-12", "close": 436},
@@ -387,12 +419,15 @@ function disabled_chart(el) {
         {"date": "5-Apr-12", "close": 313},
         {"date": "4-Apr-12", "close": 264},
         {"date": "3-Apr-12", "close": 229},
-        {"date": "2-Apr-12", "close": 218}
+        {"date": "2-Apr-12", "close": 218},
+        {"date": "1-Apr-12", "close": 436}
     ];
 
+    data = avgBuilder(dataFixture, 10);
+
 // Get the data
     data.forEach(function (d) {
-        d.date = parseDate(d.date);
+        d.date = parseDate(moment(d.date).format('D-MMM-YY'));
         d.close = +d.close;
     });
 
@@ -462,141 +497,7 @@ function disabled_chart(el) {
             return y(d.close);
         });
 
-}
-
-function init_line_area_chart(el) {
-
-    el.empty();
-
-    var margin = {top: 0, right: 0, bottom: 0, left: 0},
-        width = el.width() - margin.left - margin.right,
-        height = el.height() - margin.top - margin.bottom;
-
-    var parseDate = d3.time.format(getFormatOfDate()).parse;
-
-    var x = d3.time.scale().range([0, width]);
-    var y = d3.scale.linear().range([height, 0]);
-
-    var area_x = d3.time.scale().range([0, width]);
-    var area_y = d3.scale.linear().range([height, 0]);
-
-    var area = d3.svg.area()
-        .x(function (d) {
-            return area_x(d.date);
-        })
-        .y0(height)
-        //.interpolate("cardinal")
-        .y1(function (d) {
-            return area_y(d.close);
-        });
-
-    var valueline = d3.svg.line()
-        .x(function (d) {
-            //console.log(d);
-            return x(d.date);
-        })
-        .y(function (d) {
-            //console.log(d);
-            return y(d.close);
-        });
-    //.interpolate("cardinal");
-
-    var svg = d3.select(el[0])
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
-
-    var t = $.extend(true, [], $('.dashboard').data('other_charts'));
-    var data = t[el.attr('id')] || {};
-    var value = parseFloat(data['value']).number_with_delimiter('&thinsp;');
-    if (el.attr('id') == 'total_revenu') {
-      value += '&nbsp;' + data['value'].slice(-1);
-    }
-    var diff = parseFloat(data['diff']).number_with_delimiter('&thinsp;');
-    diff += '&nbsp;%';
-
-    value = data['value'] == '' ? '' : value;
-    diff = data['diff'] == '' ? '' : diff;
-
-    el.parent().parent().children('.graph-value').children('.val').html(value);
-    el.parent().parent().children('.graph-value').children('.graph-dynamica').removeClass('dynamica_up dynamica_down').addClass(/-/g.test(data['diff']) ? 'dynamica_down' : 'dynamica_up');
-    el.parent().parent().children('.graph-value').children('.graph-dynamica').html(diff);
-    data = data['data'] || [];
-
-// Get the data
-    data.forEach(function (d) {
-        d.date = parseDate(d.date);
-        d.close = +d.close;
-    });
-
-// Scale the range of the data
-    x.domain(d3.extent(data, function (d) {
-        return d.date;
-    }));
-    y.domain([0, d3.max(data, function (d) {
-        return Math.max(d.close);
-    })]);
-
-    area_x.domain(d3.extent(data, function (d) {
-        return d.date;
-    }));
-    area_y.domain([0, d3.max(data, function (d) {
-        return d.close;
-    })]);
-
-    var gradient = svg.append("svg:defs")
-        .append("svg:linearGradient")
-        .attr("id", "area_gradient_1")
-        .attr("x1", "0%")
-        .attr("y1", "0%")
-        .attr("x2", "0%")
-        .attr("y2", "100%")
-        .attr("spreadMethod", "pad");
-
-    gradient.append("svg:stop")
-        .attr("offset", "0%")
-        .attr("stop-color", "#dfe7ff")
-        .attr("stop-opacity", 1);
-
-    gradient.append("svg:stop")
-        .attr("offset", "100%")
-        .attr("stop-color", "#f6f6f6")
-        .attr("stop-opacity", 0);
-
-    svg.append("path")
-        .attr("class", "line")
-        .attr("d", valueline(data));
-
-    svg.append("path")
-        .datum(data)
-        .attr("class", "area area_v1")
-        .attr("d", area)
-        .style("fill", 'url(#area_gradient_1)');
-
-
-    // Add the scatterplot
-    svg.selectAll("dot")
-        .data(data)
-        .enter().append("circle")
-        .attr("r", 5.5)
-        .attr('class', function (d, i) {
-            var cls;
-
-            if (i == 0 || (i == data.length - 1)) {
-                cls = 'hidden'
-            }
-
-            return 'mark ' + cls;
-        })
-        .attr("cx", function (d) {
-            return x(d.date);
-        })
-        .attr("cy", function (d) {
-            return y(d.close);
-        });
+    if (typeof callback == 'function') callback(el);
 
 }
 
@@ -608,7 +509,7 @@ function init_line_chart(el) {
         width = el.width() - margin.left - margin.right,
         height = el.height() - margin.top - margin.bottom;
 
-    var parseDate = d3.time.format(getFormatOfDate()).parse;
+    var parseDate = d3.time.format("%d-%b-%y").parse;
 
     var x = d3.time.scale().range([0, width]);
     var y = d3.scale.linear().range([height, 0]);
@@ -627,7 +528,7 @@ function init_line_chart(el) {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+            "translate(" + margin.left + "," + margin.top + ")");
 
     var data = [
         {"date": "9-Apr-12", "close": 436},
@@ -660,36 +561,6 @@ function init_line_chart(el) {
 
 }
 
-function getFormatOfDate() {
-  return "%d-%b-%y";
-
-  switch ($('input[name="graph_filter"]:checked').val()) {
-    case 'day':
-      return "%d-%b-%y";
-      break
-    case 'week':
-      return "%V-%g";
-      break
-    case 'month':
-      return "%b-%y";
-      break
-  };
-}
-
-function getFormatOfDateForMoment() {
-  switch ($('input[name="graph_filter"]:checked').val()) {
-    case 'day':
-      return "DD-MMM-YY";
-      break
-    case 'week':
-      return "WW-GG";
-      break
-    case 'month':
-      return "MMM-YY";
-      break
-  };
-}
-
 function init_area_family_chart(el, data_files, data_colors) {
 
     el.find('svg').remove();
@@ -707,7 +578,7 @@ function init_area_family_chart(el, data_files, data_colors) {
 
     for (var i = 0; i < data_files[0].data.length; i++) {
         var obj = data_files[0].data[i];
-        dates.push(moment(obj.date, getFormatOfDateForMoment()));
+        dates.push(moment(obj.date));
         values.push(obj.close);
     }
 
@@ -721,7 +592,7 @@ function init_area_family_chart(el, data_files, data_colors) {
             //console.log(d);
             return d.date;
         }).left,
-        parseDate = moment;
+        parseDate = d3.time.format("%d-%b-%y").parse;
 
     var area_x = d3.time.scale()
         .domain([moment.min(dates), moment.max(dates)])
@@ -743,7 +614,7 @@ function init_area_family_chart(el, data_files, data_colors) {
 
     var xAxis = d3.svg.axis()
         .scale(area_x)
-        .ticks((dates.length - 1) > 12 ? 12 : (dates.length - 1))
+        .ticks(dates.length - 1)
         .tickFormat(d3.time.format("%b %d"))
         .orient("bottom");
 
@@ -814,7 +685,7 @@ function init_area_family_chart(el, data_files, data_colors) {
         var data = data_files[i].data;
 
         data.forEach(function (d) {
-            d.date = parseDate(d.date, getFormatOfDateForMoment())._d;
+            d.date = parseDate(d.date);
             d.close = +d.close;
         });
 
@@ -832,28 +703,17 @@ function init_area_family_chart(el, data_files, data_colors) {
             .attr("d", area)
             .style("fill", function (d) {
 
-                var value = parseFloat(data_files[i].value).number_with_delimiter('&thinsp;');
-                if (data_files[i].name == 'Revenue') {
-                  value += '&nbsp;' + data_files[i].value.slice(-1);
-                }
-
-                var diff = parseFloat(data_files[i].diff).number_with_delimiter('&thinsp;');
-                diff += '&nbsp;%';
-
-                value = data_files[i].value == '' ? '' : value;
-                diff = data_files[i].diff == '' ? '' : diff;
-
                 var color = data_files[i].color,
 
                     legendItem = $('<li class="legend_item" />')
                         .append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[i].name)))
                         .append($('<div class="legend_val" />')
-                            .append($('<span class="val" />').html(value))
-                            .append($('<sup class="graph-dynamica" />').addClass(/-/g.test(data_files[i].diff) ? 'dynamica_down' : 'dynamica_up').html(diff))),
+                            .append($('<span class="val" />').text(data_files[i].value))
+                            .append($('<sup class="graph-dynamica" />').addClass(/-/g.test(data_files[i].diff) ? 'dynamica_down' : 'dynamica_up').text(data_files[i].diff))),
 
                     tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + i)
                         .append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[i].name))))
-                        .append($('<td class="tooltip_val" />').append($('<b class="" />').html(value)));
+                        .append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[i].value)));
 
                 legendItem.attr('data-graph', '#family_area_' + i).on('click', function () {
                     var firedEl = $(this),
@@ -909,7 +769,7 @@ function init_area_chart(el) {
         width = el.width() - margin.left - margin.right,
         height = el.height() - margin.top - margin.bottom;
 
-    var parseDate = d3.time.format(getFormatOfDate()).parse;
+    var parseDate = d3.time.format("%d-%b-%y").parse;
 
     var area_x = d3.time.scale()
         .range([0, width]);
@@ -979,6 +839,7 @@ function init_area_chart(el) {
 }
 
 function init_donut_chart(el) {
+
     el.empty();
 
     var legendBlock = el.parent().find('.legend_v1');
@@ -1010,40 +871,26 @@ function init_donut_chart(el) {
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+    d3.csv("customers_data.csv", type, function (error, data) {
+        if (error) throw error;
 
-    var t = $.extend(true, [], $('.dashboard').data('other_charts'));
-    var data = t[el.attr('id')] || {};
-    var value = parseFloat(data['value']).number_with_delimiter('&thinsp;');
-    if (el.attr('id') == 'total_revenu') {
-      value += '&nbsp;' + data['value'].slice(-1);
-    }
-    var diff = parseFloat(data['diff']).number_with_delimiter('&thinsp;');
-    diff += '&nbsp;%';
+        var g = svg.selectAll(".arc")
+            .data(pie(data))
+            .enter().append("g")
+            .attr("class", "arc");
 
-    value = data['value'] == '' ? '' : value;
-    diff = data['diff'] == '' ? '' : diff;
-    el.parent().parent().children('.graph-value').children('.val').html(value)
-    el.parent().parent().children('.graph-value').children('.graph-dynamica').removeClass('dynamica_up dynamica_down').addClass(/-/g.test(data['diff']) ? 'dynamica_down' : 'dynamica_up');
-    el.parent().parent().children('.graph-value').children('.graph-dynamica').html(diff)
-    data = data['data'] || [];
+        g.append("path")
+            .attr("d", arc)
+            .style("fill", function (d) {
 
+                var color = d.data.color, legendItem = $('<li class="legend_item" />')
+                    .append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(d.data.name)))
+                    .append($('<div class="legend_val" />').text(d.data.value));
 
-    var g = svg.selectAll(".arc")
-        .data(pie(data))
-        .enter().append("g")
-        .attr("class", "arc");
-
-    g.append("path")
-        .attr("d", arc)
-        .style("fill", function (d) {
-
-            var color = d.data.color, legendItem = $('<li class="legend_item" />')
-                .append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(d.data.name)))
-                .append($('<div class="legend_val" />').html(parseFloat(d.data.value).number_with_delimiter('&thinsp;')));
-
-            el.next().append(legendItem);
-            return color;
-        });
+                el.next().append(legendItem);
+                return color;
+            });
+    });
 
     function type(d) {
         d.value = +d.value;
@@ -1053,19 +900,15 @@ function init_donut_chart(el) {
 
 
 $(window).resize(function () {
-    if ($('#project_dashboard').length == 0) {
-      return ;
-    }
 
     clearTimeout(resizeHndl);
 
-    resizeHndlndl = setTimeout(function () {
-      drawCharts();
+    resizeHndl = setTimeout(function () {
+        init_charts();
     }, 10);
 
 }).load(function () {
-    if ($('#project_dashboard').length == 0) {
-      return ;
-    }
-    redrawCharts();
+
+    init_charts();
+
 });

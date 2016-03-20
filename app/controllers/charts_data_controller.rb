@@ -2,6 +2,9 @@ class ChartsDataController < ApplicationController
   before_action :set_project
   before_action :authenticate_user!
 
+  SCOPE_TYPES = ['day', 'week', 'month']
+  DEFAULT_SCOPE = 'day'
+
   include ActionView::Helpers::NumberHelper
 
   def big_chart_data
@@ -331,8 +334,13 @@ class ChartsDataController < ApplicationController
     (result.nan? || result.infinite?) ? result : result.round(1)
   end
 
+  def chart_period
+    scope = (params[:period] && SCOPE_TYPES.include?(params[:period])) ? params[:period] : 'day'
+    "group_date_by_#{scope}"
+  end
+
   def big_charts_data
-    scope = "group_date_by_#{params[:period]}"
+    scope = chart_period
     result = [
         {
             "name": "Revenue",

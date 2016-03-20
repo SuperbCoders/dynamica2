@@ -2,6 +2,17 @@ html, body {
 	height: 100%;
 }
 
+html {
+	overflow-y: scroll;
+}
+
+.fa::before,
+a {
+	-webkit-transition: color .3s, background-color .3s;
+	-ms-transition: color .3s, background-color .3s;
+	transition: color .3s, background-color .3s;
+}
+
 .page {
 	min-width: 320px;
 	min-height: 100%;
@@ -9,7 +20,7 @@ html, body {
 }
 
 .globalwidth {
-	max-width: 1280px;
+	max-width: 970px;
 	margin: 0 auto;
 }
 

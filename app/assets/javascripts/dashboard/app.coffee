@@ -59,7 +59,7 @@
   .state 'projects.view',
     url: '/:slug',
     templateUrl: 'templates/projects/view'
-    controller: 'ProjectViewController',
+    controller: 'DashboardController',
     controllerAs: 'vm'
     resolve:
       Projects: ['Resource', (Resource) ->

@@ -54,4 +54,7 @@ end
 
 after 'deploy:publishing', 'deploy:restart'
 after 'deploy:updated', 'deploy:seed'
-before 'deploy:compile_assets', 'bower:install'
+
+if :branch == :angular_js
+  before 'deploy:compile_assets', 'bower:install'
+end
