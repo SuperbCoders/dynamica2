@@ -11,17 +11,17 @@
   $stateProvider
   .state 'profile',
     url: '/profile',
-    templateUrl: '/templates/profile/edit'
+    templateUrl: 'templates/profile/edit'
     controller: 'ProfileController',
     controllerAs: 'vm'
 
   .state 'projects',
     url: '/projects',
-    templateUrl: '/templates/projects/index'
+    templateUrl: 'templates/projects/index'
 
   .state 'projects.list',
     url: '/list',
-    templateUrl: '/templates/projects/list'
+    templateUrl: 'templates/projects/list'
     controller: 'ProjectsController',
     controllerAs: 'vm',
     resolve:
@@ -35,7 +35,7 @@
 
   .state 'projects.new',
     url: '/new',
-    templateUrl: '/templates/projects/new'
+    templateUrl: 'templates/projects/new'
     controller: 'ProjectsController',
     controllerAs: 'vm',
     resolve:
@@ -45,7 +45,7 @@
 
   .state 'projects.edit',
     url: '/edit/:slug'
-    templateUrl: '/templates/projects/new'
+    templateUrl: 'templates/projects/new'
     controller: 'ProjectsController',
     controllerAs: 'vm',
     resolve:
@@ -58,7 +58,7 @@
 
   .state 'projects.view',
     url: '/:slug',
-    templateUrl: '/templates/projects/view'
+    templateUrl: 'templates/projects/view'
     controller: 'ProjectViewController',
     controllerAs: 'vm'
     resolve:
@@ -71,11 +71,11 @@
 
   .state 'team',
     url: '/team',
-    templateUrl: '/templates/team/index'
+    templateUrl: 'templates/team/index'
 
   .state 'team.list',
     url: '/list',
-    templateUrl: '/templates/team/list'
+    templateUrl: 'templates/team/list'
     controller: 'ProjectsController',
     controllerAs: 'vm',
     resolve:
@@ -91,8 +91,12 @@
 ]
 
 @application.run ['$rootScope', '$state', '$stateParams', '$http', ($rootScope, $state, $stateParams, $http) ->
-  $rootScope.$state = $state;
-  $rootScope.$stateParams = $stateParams;
+  $rootScope.$state = $state
+  $rootScope.$stateParams = $stateParams
+  $rootScope.locale = $("meta[name=locale]").attr('content')
+
+  if $('.switcher').length
+    $("[data-toggle='switch']").bootstrapSwitch({baseClass: 'switch'})
 
   # Load user profile
   $http.get('/profile').success((response) ->

@@ -4,6 +4,7 @@
 #= require lodash/lodash
 
 #= require bootstrap.min.js
+#= require bootstrap-switch
 #= require bootstrap-datepicker
 #= require bootstrap-select.min.js
 

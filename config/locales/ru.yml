@@ -90,7 +90,7 @@ ru:
     index:
       back: Назад
     permissions_of_project:
-      title: "Команда проекта «%{project}»"
+      title: "Команда проекта "
       user: Пользователь
       read: Чтение
       forecasting: Прогнозирование

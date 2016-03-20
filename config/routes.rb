@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'templates(/*url)' => 'application#templates'
   get 'charts_data/full_chart_data'
   get 'charts_data/big_chart_data'
   get 'charts_data/other_chart_data'
@@ -8,6 +7,7 @@ Rails.application.routes.draw do
   apipie
 
   scope "(:locale)", locale: /en|ru/ do
+    get 'templates(/*url)' => 'application#templates'
     root 'welcome#index'
 
     get 'apidocs' => 'apidocs#index'

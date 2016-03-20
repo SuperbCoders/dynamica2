@@ -2,7 +2,7 @@
   .case-cnt.wrap-b
     %form.form-horizontal.form
       .form-group
-        %label.control-label.col-md-3.col-sm-3 t.personal
+        %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.personal')
         .col-md-7.col-sm-9
           .control-box
             .upload-box
@@ -10,12 +10,11 @@
                 %img.img-circle{'ng-src' => "user.avatar.medium", width: '80px', height: '80px'}
                 %a#js-delete-avatar.btn-delete{href: "#", 'ng-show' => "user.avatar"}
                   %i.icon.fa.fa-trash
-              .descript
-                t.avatar_select
+              .descript= t('devise.registrations.edit.avatar_select').html_safe
           .control-box
-            %input.form-control{placeholder: 't.form.name', 'ng-model' => "user.name"}
+            %input.form-control{placeholder: t('devise.registrations.edit.form.name'), 'ng-model' => "user.name"}
           .control-box{'ng-class' => "{haserror: user.errors.length > 0}"}
-            %input.form-control{type: 'email', placeholder: 't.form.email', 'ng-model' => "user.email"}
+            %input.form-control{type: 'email', placeholder: t('devise.registrations.edit.form.email'), 'ng-model' => "user.email"}
       -#.form-group
       -#  %label.control-label.col-md-3.col-sm-3
       -#    | Import data from
@@ -30,19 +29,19 @@
       -#        i.icon.fa.fa-twitter
       -#        | Facebook
       .form-group
-        %label.control-label.col-md-3.col-sm-3 t.api_token
+        %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.api_token')
         .col-md-7.col-sm-9
           .control-box
             %input.form-control{readonly: true, 'ng-model' => "user.api_token"}
       .form-group
-        %label.control-label.col-md-3.col-sm-3 Password
+        %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.password')
         .col-md-7.col-sm-9
           .control-box{'ng-class' => "{'has-error': vm.password.new_password}"}
-            %input.form-control{type: 'password', 'ng-model' => "user.password", placeholder: 't.form.new_password'}
+            %input.form-control{type: 'password', 'ng-model' => "user.password", placeholder: t('devise.registrations.edit.form.new_password')}
           .control-box{'ng-class' => "{'has-error': vm.password.password_confirmation}"}
-            %input.form-control{type: 'password', 'ng-model' => "user.password_confirmation", placeholder: 't.form.confirm_new_password'}
+            %input.form-control{type: 'password', 'ng-model' => "user.password_confirmation", placeholder: t('devise.registrations.edit.form.confirm_new_password')}
           .control-box{'ng-class' => "{'has-error': vm.password.current_password}"}
-            %input.form-control{type: 'password', 'ng-model' => "user.current_password", placeholder: 't.form.current_password'}
+            %input.form-control{type: 'password', 'ng-model' => "user.current_password", placeholder: t('devise.registrations.edit.form.current_password')}
       .form-group
         .col-md-offset-3.col-md-7.col-sm-offset-3.col-sm-9
-          %a.btn.btn-lg.btn-danger{'ng-click' => "vm.save()"} t.form.submit
+          %a.btn.btn-lg.btn-danger{'ng-click' => "vm.save()"}= t('devise.registrations.edit.form.submit')

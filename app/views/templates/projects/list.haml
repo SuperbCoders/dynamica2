@@ -1,6 +1,6 @@
 .section.case.case-projects
   .case-capt
-    %a{href: '', 'ui-sref' => "projects.new", "ng-click" => "vm.project = {}"} Add new project
+    %a{href: '', 'ui-sref' => "projects.new", "ng-click" => "vm.project = {}"} #{t('projects.index.new')}
   .case-cnt
     .items
       .row
@@ -11,11 +11,11 @@
               %a{href: '', 'ui-sref' => "projects.view({slug: project.slug, id: project.id })"} {{project.name}}
             .descript
               .demo{'ng-show' => "project.demo"}
-                demo
+                #{t('projects.project.no_forecasts_demo')}
               .forecast{'ng-show' => "project.last_forecast"}
                 {{project.last_forecast}}
               .no_forecast{'ng-show' => "!project.last_forecast"}
-                no_forecast
+                #{t('projects.project.no_forecasts')}
             .users
               %ul{'ng-repeat' => "user in project.users"}
                 %li.user-pic
@@ -29,7 +29,9 @@
                 .setting-menu.dropdown-menu.right
                   %ul
                     %li
-                      %a{href: '', 'ui-sref' => "projects.edit({slug: project.slug})"} edit_project_path
+                      %a{href: '', 'ui-sref' => "projects.edit({slug: project.slug})"}
+                        #{t('projects.project.edit')}
                     %li
-                      %a{href: '', 'ng-click' => "vm.destroy(project)"} destroy_project
+                      %a{href: '', 'ng-click' => "vm.destroy(project)"}
+                        #{t('projects.project.delete')}
           .clearfix{'ng-show' => "$index % 3 == 0"}

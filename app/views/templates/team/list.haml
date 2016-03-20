@@ -1,14 +1,16 @@
 .project{id: "project-{{project.id}}", 'ng-repeat' => "project in vm.projects"}
 
-  %h1 {{project.name}}
+  %h1
+    #{t('permissions.permissions_of_project.title')}
+    {{project.name}}
 
   %table.table.permissions
     %tr
-      %th{width: '30%'} t.user
-      %th{width: '15%'} t.read
-      %th{width: '15%'} t.forecasting
-      %th{width: '15%'} t.manage
-      %th{width: '15%'} t.api
+      %th{width: '30%'}= t('permissions.permissions_of_project.user')
+      %th{width: '15%'}= t('permissions.permissions_of_project.read')
+      %th{width: '15%'}= t('permissions.permissions_of_project.forecasting')
+      %th{width: '15%'}= t('permissions.permissions_of_project.manage')
+      %th{width: '15%'}= t('permissions.permissions_of_project.api')
       %th{width: '10%'}
     %tr.permission{id: "permission-{{permission.id}}", 'data-id'=>"{{permission.id}}", 'ng-repeat' => "permission in project.permissions" }
       %td
@@ -34,8 +36,7 @@
       %td.edit-permission-wrapper{colspan: 6}
         %table{width: '100%'}
           %tr
-            %td{width: '30%'}
-              permission.user.email
+            %td{width: '30%'}= t('permission.user.email')
             %td{width: '15%'}
               f.check_box :read
             %td{width: '15%'}
@@ -45,10 +46,8 @@
             %td{width: '15%'}
               f.check_box :api
             %td{width: '10%'}
-              %button.btn.btn-primary.btn-sm
-                t.save
-              %a.js-edit-permission-toggle.btn.btn-sm
-                t.invite_cancel
+              %button.btn.btn-primary.btn-sm= t('permissions.permissions_of_project.save')
+              %a.js-edit-permission-toggle.btn.btn-sm= t('permissions.permissions_of_project.invite_cancel')
 
     -#= render partial: 'permissions/pending_permission', collection: pending_permissions, as: :permission
     -#tr.new-pending-permission
