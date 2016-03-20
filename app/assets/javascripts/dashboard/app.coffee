@@ -111,6 +111,7 @@
   $('html').on('click', (element) ->
     element_id = element.toElement.id
 
+    console.log "Clicked #{element_id}"
 
     # Close user menu in header
     if element_id != 'user_dropdown' and $('.user.dropdown').hasClass('open')
