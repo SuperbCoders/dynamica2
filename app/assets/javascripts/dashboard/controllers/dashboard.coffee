@@ -29,17 +29,8 @@ class DashboardController
         ]).datepicker 'update'
     )
 
-    @scope.$watch('vm.range.date', (old_v, new_v) ->
-      vm.Charts.full_chart_data().success((response)->
-        vm.data = response
-      )
-    )
-
-    @scope.$watch('vm.range.chart', (old_v, new_v) ->
-      vm.Charts.full_chart_data().success((response)->
-        vm.data = response
-      )
-    )
+    @scope.$watch('vm.range.date', (old_v, new_v) -> vm.fetch() if new_v )
+    @scope.$watch('vm.range.chart', (old_v, new_v) -> vm.fetch() if new_v )
 
     @scope.$on('$destroy', -> $('.page').removeClass('dashboard_page') )
 
@@ -51,10 +42,234 @@ class DashboardController
 
 
   # - - - - - - - - - - - - - - - - CUT HERE - - - - - - - - - - - - - - -
-  data_callback: (response) ->
+  fetch: ->
     vm = @
-    console.log 'data recieved'
-    vm.data = response
+    vm.Charts.full_chart_data().success((response)->
+      vm.data = response
+
+#      vm.init_donut_chart $('.donutChart_1', vm.data)
+
+#      $('.areaChartFamily_1').each (ind) -> vm.init_area_family_chart($(this), vm.data)
+
+#      $('.areaChart_1').each (ind) -> vm.init_area_chart $(this)
+#
+#      $('.areaChart_2').each (ind) -> vm.init_line_chart $(this)
+#
+#      $('.lineAreaChart_1').each (ind) ->
+#        vm.init_line_area_chart $(this), (el) ->
+#          el.parent().addClass 'animated fadeInUp'
+#          return
+#        return
+#
+#      $('.areaChart_3').each (ind) -> vm.init_line_area2_chart $(this)
+
+    )
+
+
+  init_area_family_chart: (el, data_files) ->
+    el.find('svg').remove()
+    legendBlock = el.parents('.graph-unit').find('.legend_v2')
+    if !legendBlock.length
+      legendBlock = $('<ul class="legend_v2 graph-unit-legend" />')
+      el.parents('.graph-unit').append legendBlock
+
+    legendBlock.empty()
+
+    tooltip = $('<table class="graph-tooltip-table" />')
+
+    margin =
+      top: 80
+      right: 0
+      bottom: 30
+      left: 0
+    width = el.width() - (margin.left) - (margin.right)
+    height = el.height() - (margin.top) - (margin.bottom)
+    parseDate = d3.time.format('%d-%b-%y').parse
+
+    area_x = d3.time.scale().domain([
+      moment.min(dates)
+      moment.max(dates)
+    ]).range([
+      0
+      width
+    ])
+
+    area_y = d3.scale.linear().domain([
+      0
+      1000 * Math.floor(Math.max.apply(null, values) / 1000 + 1)
+    ]).range([
+      height
+      0
+    ])
+
+    area = d3.svg.area().x((d) ->
+      area_x d.date
+    ).y0(height).y1((d) ->
+      area_y d.close
+    ).interpolate('monotone')
+
+    xAxis = d3.svg.axis().scale(area_x).ticks(dates.length - 1).tickFormat(d3.time.format('%b %d')).orient('bottom')
+
+    svg = d3.select(el[0])
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').on('mousemove', (d) ->
+      `var i`
+      `var tooltip`
+      #console.log(d3.mouse(this));
+      tooltip = d3.select('#tooltip')
+      tooltip_content = $('#tooltip_content')
+      tooltip_dot = $('#tooltip_dot')
+      tool_table = $('<table class="graph-tooltip-table" />')
+      distance = area_x(data_files[activeFamilyGraph].data[0].date) - area_x(data_files[activeFamilyGraph].data[1].date) or 0
+      x = d3.mouse(this)[0] + distance / 2
+      x0 = area_x.invert(x)
+      ind = undefined
+      while k < dates.length
+        obj1 = dates[k]
+        if moment(x0).startOf('day').isSame(obj1, 'day')
+          ind = k
+          break
+        k++
+      while j < data_files.length
+        color = data_files[j].color
+        data = data_files[j].data
+        #var i = bisectDate(data, x0, 1);
+        tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + j).addClass(if j == activeFamilyGraph then 'active_row' else '').addClass(if $('.graph-unit-legend .legend_item[data-graph=#family_area_' + j + ']').hasClass('disabled') then 'disabled' else '').append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[j].name)))).append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[j].data[ind].close)))
+        tool_table.append tooltip_item
+        j++
+      tooltip_content.empty().append($('<div class="tooltip-title" />').text(moment(x0).format('dddd, D MMMM YYYY'))).append tool_table
+      tooltip.classed('flipped_left', x < tooltip_content.outerWidth() + 25).style 'left', area_x(data_files[activeFamilyGraph].data[ind].date) + 'px'
+      tooltip_dot.css 'top', margin.top + area_y(data_files[activeFamilyGraph].data[ind].close) - 11
+      return
+    )
+    svg.append('g').attr('class', 'x axis family_x_axis').style('font-size', '14px').style('fill', '#fff').attr('transform', 'translate(0,' + height + ')').call xAxis
+    i = 0
+    while i < data_files.length
+      data = data_files[i].data
+      data.forEach (d) ->
+        d.date = parseDate(d.date)
+        d.close = +d.close
+        return
+      area_x.domain d3.extent(data, (d) ->
+        d.date
+      )
+      area_y.domain [
+        0
+        d3.max(data, (d) ->
+          d.close
+        )
+      ]
+      svg.append('path').datum(data).attr('class', 'area area_v1').attr('id', 'family_area_' + i).attr('d', area).style('fill', (d) ->
+        color = data_files[i].color
+        legendItem = $('<li class="legend_item" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[i].name))).append($('<div class="legend_val" />').append($('<span class="val" />').text(data_files[i].value)).append($('<sup class="graph-dynamica" />').addClass(if /-/g.test(data_files[i].diff) then 'dynamica_down' else 'dynamica_up').text(data_files[i].diff)))
+        tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + i).append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[i].name)))).append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[i].value)))
+        legendItem.attr('data-graph', '#family_area_' + i).on 'click', ->
+          firedEl = $(this)
+          graph = d3.select(firedEl.attr('data-graph'))
+          tip = $('.tooltip_row[data-graph=' + graph.attr('id') + ']')
+          graph_cls = graph.attr('class')
+          if /hidden/g.test(graph_cls)
+            firedEl.removeClass 'disabled'
+            tip.removeClass 'disabled'
+            graph.classed 'hidden', false
+          else
+            firedEl.addClass 'disabled'
+            tip.addClass 'disabled'
+            graph.classed 'hidden', true
+          false
+        tooltip.append tooltip_item
+        legendBlock.append legendItem
+        color
+      ).style('opacity', .5).on 'mouseenter', ->
+
+      i++
+    i = 0
+    while i < data_files.length
+      svg.append('rect').attr('class', 'graph-hover-catcher hoverCatcher').attr('data-area', '#family_area_' + i).style('opacity', 0).attr('transform', 'translate(0,-' + margin.top + ')').attr('x', 0).attr('y', i * 100 / data_files.length + '%').attr('width', '100%').attr 'height', 100 / data_files.length + '%'
+      i++
+    return
+
+  init_area_chart: (el) ->
+    el.empty()
+    margin =
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+    width = el.width() - (margin.left) - (margin.right)
+    height = el.height() - (margin.top) - (margin.bottom)
+    parseDate = d3.time.format('%d-%b-%y').parse
+    area_x = d3.time.scale().range([
+      0
+      width
+    ])
+    area_y = d3.scale.linear().range([
+      height
+      0
+    ])
+    area = d3.svg.area().x((d) ->
+      area_x d.date
+    ).y0(height).y1((d) ->
+      area_y d.close
+    )
+    svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    d3.tsv 'data.tsv', (error, data) ->
+      if error
+        throw error
+      data.forEach (d) ->
+        d.date = parseDate(d.date)
+        d.close = +d.close
+        return
+      area_x.domain d3.extent(data, (d) ->
+        d.date
+      )
+      area_y.domain [
+        0
+        d3.max(data, (d) ->
+          d.close
+        )
+      ]
+      gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
+      gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
+      gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
+      svg.append('path').datum(data).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
+      return
+    return
+
+  init_donut_chart: (el, data) ->
+    type = (d) ->
+      d.value = +d.value
+      d
+
+    el.empty()
+    legendBlock = el.parent().find('.legend_v1')
+    if !legendBlock.length
+      legendBlock = $('<ul class="legend_v1" />')
+      el.after legendBlock
+    legendBlock.empty()
+    width = el.width()
+    height = el.height()
+    radius = Math.min(width, height) / 2
+    arc = d3.svg.arc().outerRadius(radius).innerRadius(radius - 10)
+    pie = d3.layout.pie().sort(null).value((d) ->
+      d.value
+    )
+    svg = d3.select(el[0]).append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
+    svg.selectAll('.arc').data(data).enter().append('g').attr('class', 'arc')
+#    d3.csv 'customers_data.csv', type, (error, data) ->
+#      if error
+#        throw error
+#      g = svg.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc')
+#      g.append('path').attr('d', arc).style 'fill', (d) ->
+#        color = d.data.color
+#        legendItem = $('<li class="legend_item" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(d.data.name))).append($('<div class="legend_val" />').text(d.data.value))
+#        el.next().append legendItem
+#        color
+#      return
+    return
 
   chart_changed: (chart_type) ->
     value = @range[chart_type]

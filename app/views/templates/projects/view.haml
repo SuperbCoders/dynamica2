@@ -17,17 +17,6 @@
                   %option{value: "average_order_size"}= t 'projects.show.average_order_size'
               %a.dashboard-panel-link{href: "#"}= t 'projects.show.general'
 
-            / Products
-            %li.filter-holder
-              .hover-select-box.filter-mod
-                %select.selectpicker.filterSelect{'ng-model' => "vm.range.product_charts", 'ng-change' => "vm.chart_changed('product_charts')"}
-                  %option{value: "products_in_stock_number"}= t 'projects.show.products_in_stock_number'
-                  %option{value: "items_in_stock_number"}= t 'projects.show.items_in_stock_number'
-                  %option{value: "percentage_of_inventory_sold"}= t 'projects.show.percentage_of_inventory_sold'
-                  %option{value: "percentage_of_stock_sold"}= t 'projects.show.percentage_of_stock_sold'
-                  %option{value: "products_number"}= t 'projects.show.products_number'
-              %a.dashboard-panel-link{href: "#"}= t 'projects.show.inventory'
-
             / Customers
             %li.filter-holder
               .hover-select-box.filter-mod
@@ -42,6 +31,18 @@
                   %option{value: "visits"}= t 'projects.show.visits'
               %a.dashboard-panel-link{href: "#"}= t 'projects.show.customers'
 
+            / Products
+            %li.filter-holder
+              .hover-select-box.filter-mod
+                %select.selectpicker.filterSelect{'ng-model' => "vm.range.product_charts", 'ng-change' => "vm.chart_changed('product_charts')"}
+                  %option{value: "products_in_stock_number"}= t 'projects.show.products_in_stock_number'
+                  %option{value: "items_in_stock_number"}= t 'projects.show.items_in_stock_number'
+                  %option{value: "percentage_of_inventory_sold"}= t 'projects.show.percentage_of_inventory_sold'
+                  %option{value: "percentage_of_stock_sold"}= t 'projects.show.percentage_of_stock_sold'
+                  %option{value: "products_number"}= t 'projects.show.products_number'
+              %a.dashboard-panel-link{href: "#"}= t 'projects.show.inventory'
+
+
             %li.filter-holder
               %a{href: '', 'ng-click' => "vm.debug = true"} Debug on
             %li.filter-holder
@@ -50,7 +51,7 @@
       / Big chart date picker
       .row.dashboard-title-row
         .col-sm-6
-          %h2 Bling-Blings Dashboard
+          %h2 Bling-Blings Dashboard.
         .col-sm-6
           .pull-right.datepicker-v1.datepickerComponent
             .pull-left.datepicker-parent
@@ -92,7 +93,7 @@
 
       / Finance overview
       .dashboard-caption
-        %h3.caption-text Finance overview
+        %h3.caption-text= t 'projects.show.general'
         %i.icon.fa.fa-angle-right
       .graph-unit-holder.graph-unit-hover
         .row
@@ -138,7 +139,7 @@
 
       / Customers overview
       .dashboard-caption
-        %h3.caption-text Customers overview
+        %h3.caption-text= t 'projects.show.customers'
         %i.icon.fa.fa-angle-right
       .graph-unit-holder.graph-unit-hover
         .row
@@ -181,7 +182,7 @@
 
       / Products overview
       .dashboard-caption
-        %h3.caption-text Products overview
+        %h3.caption-text= t 'projects.show.inventory'
         %i.icon.fa.fa-angle-right
       .graph-unit-holder.graph-unit-hover
         .row
