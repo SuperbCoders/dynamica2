@@ -6,11 +6,15 @@ class DashboardController
     vm.range =
       date: undefined
       period: "0"
+      general_charts: undefined
+      customer_charts: undefined
+      product_charts: undefined
+      chart: undefined
+
     vm.datepicker = $('.datePicker')
 
-    @Charts.set_range(vm.range)
-    @init_dashboard()
 
+    @init_dashboard()
 
     @scope.$watch('vm.range.period', (old_v, new_v) ->
       if new_v is '0'
@@ -24,18 +28,27 @@ class DashboardController
         ]).datepicker 'update'
     )
 
-    @scope.$watch('vm.range.date', (old_v, new_v) -> vm.Charts.full_chart_data(vm.range) )
+    @scope.$watch('vm.range.date', (old_v, new_v) -> vm.Charts.full_chart_data() )
+    @scope.$watch('vm.range.chart', (old_v, new_v) -> vm.Charts.full_chart_data() )
 
     @scope.$on('$destroy', -> $('.page').removeClass('dashboard_page') )
 
     @Projects.search({slug: vm.params.slug}).$promise.then( (project) ->
       vm.project = project
       vm.Charts.set_project(vm.project)
-      vm.Charts.full_chart_data()
+      vm.Charts.set_range(vm.range)
     )
 
 
   # - - - - - - - - - - - - - - - - CUT HERE - - - - - - - - - - - - - - -
+  chart_changed: (chart_type) ->
+    value = @range[chart_type]
+    @range.general_charts = undefined
+    @range.customer_charts = undefined
+    @range.product_charts = undefined
+    @range[chart_type] = value
+    @range.chart = @range[chart_type]
+
   period_changed: ->
     vm = @
     return if vm.range.period not in ["0","1","2","3","4","5"]
@@ -87,10 +100,9 @@ class DashboardController
     else
       moment.min(end, date).startOf('day')._d
 
-
   init_dashboard: ->
     vm = @
-    $('.selectpicker').selectpicker({size: 7, showTick: false, showIcon: false})
+    $('.selectpicker').selectpicker({size: 70, showTick: false, showIcon: false})
     $('.page').addClass('dashboard_page')
 
     today = moment()
@@ -103,6 +115,10 @@ class DashboardController
       format: 'M dd, yyyy'
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
+
+
+
+
 #        beforeShowDay: (date, e) ->
 #          dataPicker = $(e.picker)
 #          dPickerElement = $(e.element)

@@ -1,8 +1,8 @@
 @application.factory 'Charts', ['$http', ($http) ->
   new class Charts
     constructor: ->
-      @project = {}
-      @range = {}
+      @project = undefined
+      @range = undefined
 
     set_project: (project) -> @project = project
     set_range: (range) -> @range = range
@@ -34,11 +34,14 @@
 
       @start_loading
 
+      console.log @range
+
       chart_url = "/charts_data/#{chart_type}"
       chart_params =
         from: @range.raw_start.format('DD-MM-YYYY')
         to: @range.raw_end.format('DD-MM-YYYY')
         project_id: @project.id
+        chart: @range.chart
 
       request = $http.get chart_url, params: chart_params
       request.then (result) =>
