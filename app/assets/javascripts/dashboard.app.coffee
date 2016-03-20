@@ -15,6 +15,7 @@
 
 #= require d3
 #= require script
+#= require full_chart
 
 #= require ./dashboard/app
 #= require_tree ./dashboard/

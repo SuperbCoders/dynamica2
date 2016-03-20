@@ -5,7 +5,7 @@
         .col-sm-12
           %ul.dashboard-panel
             %li.current
-              %a.dashboard-panel-link{:href => "#"} Overview
+              %a.dashboard-panel-link{:href => ""} Overview
             %li.filter-holder
               .hover-select-box.filter-mod
                 %select.selectpicker.filterSelect
@@ -39,22 +39,28 @@
                   %option{:value => "Avg. Customer Lifetime Value"} Avg. Customer Lifetime Value
                   %option{:value => "Shipping cost as a percentage of total revenue"} Shipping cost as a percentage of total revenue
               %a.dashboard-panel-link{:href => "#"} Products
+
+      / Big chart date picker
       .row.dashboard-title-row
         .col-sm-6
           %h2 Bling-Blings Dashboard
         .col-sm-6
           .pull-right.datepicker-v1.datepickerComponent
             .pull-left.datepicker-parent
-              %input.form-control.datePicker.form-control-small{:type => "text"}
+              %input.form-control.datePicker.form-control-small{:type => "text", 'ng-model' => 'vm.range.date'}
             .pull-left
-              %select.selectpicker.graphFilterDate
-                %option{"data-hidden" => "true", :value => "-1"}
-                %option{:selected => "", :value => "0"} Current month
+              %select.selectpicker.graphFilterDate{'ng-model' => 'vm.range.period', 'ng-change' => "vm.period_changed()"}
+                %option{:selected => true, :value => "0"} Current month
                 %option{:value => "1"} Previous month
                 %option{:value => "2"} Last 3 month
                 %option{:value => "3"} Last 6 month
                 %option{:value => "4"} Last year
                 %option{:value => "5"} All time
+
+      .dashboard-caption
+        %pre
+          {{vm.range}}
+      / Current status of your primary data
       .graph-unit-holder
         .graph-unit
           .graph-unit-large
@@ -72,6 +78,8 @@
                 #tooltip.graph-tooltip-holder.hidden_
                   #tooltip_dot.tooltip-dot
                   #tooltip_content.graph-tooltip
+
+      / Finance overview
       .dashboard-caption
         %h3.caption-text Finance overview
         %i.icon.fa.fa-angle-right
@@ -116,6 +124,8 @@
                     it now
               .graph-block
                 .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+
+      / Customers overview
       .dashboard-caption
         %h3.caption-text Customers overview
         %i.icon.fa.fa-angle-right
@@ -157,6 +167,8 @@
                 %sup.graph-dynamica.dynamica_up +8%
               .graph-block
                 .graph_2.areaChart_2.d3graph.hide_x_axis
+
+      / Products overview
       .dashboard-caption
         %h3.caption-text Products overview
         %i.icon.fa.fa-angle-right
