@@ -3,13 +3,10 @@
     constructor: ->
       @project = undefined
       @range = undefined
-
-    set_project: (project) -> @project = project
-    set_range: (range) -> @range = range
+      @data = {test: '123'}
 
     full_chart_data: ->
       return unless @project
-      console.log @project
       @fetch('full_chart_data')
 
 
@@ -32,10 +29,6 @@
 
       return false if not @project
 
-      @start_loading
-
-      console.log @range
-
       chart_url = "/charts_data/#{chart_type}"
       chart_params =
         from: @range.raw_start.format('DD-MM-YYYY')
@@ -43,11 +36,8 @@
         project_id: @project.id
         chart: @range.chart
 
-      request = $http.get chart_url, params: chart_params
-      request.then (result) =>
-        console.log result
+      $http.get chart_url, params: chart_params
 
-      @stop_loading
     start_loading: ->
       $('.pageOverlay').addClass 'show_overlay'
       return

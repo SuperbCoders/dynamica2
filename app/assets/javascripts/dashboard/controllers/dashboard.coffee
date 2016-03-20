@@ -3,6 +3,7 @@ class DashboardController
     vm = @
     vm.params = @rootScope.$stateParams
     vm.project = {}
+    vm.data = {}
     vm.range =
       date: undefined
       period: "0"
@@ -28,19 +29,33 @@ class DashboardController
         ]).datepicker 'update'
     )
 
-    @scope.$watch('vm.range.date', (old_v, new_v) -> vm.Charts.full_chart_data() )
-    @scope.$watch('vm.range.chart', (old_v, new_v) -> vm.Charts.full_chart_data() )
+    @scope.$watch('vm.range.date', (old_v, new_v) ->
+      vm.Charts.full_chart_data().success((response)->
+        vm.data = response
+      )
+    )
+
+    @scope.$watch('vm.range.chart', (old_v, new_v) ->
+      vm.Charts.full_chart_data().success((response)->
+        vm.data = response
+      )
+    )
 
     @scope.$on('$destroy', -> $('.page').removeClass('dashboard_page') )
 
     @Projects.search({slug: vm.params.slug}).$promise.then( (project) ->
       vm.project = project
-      vm.Charts.set_project(vm.project)
-      vm.Charts.set_range(vm.range)
+      vm.Charts.project = vm.project
+      vm.Charts.range = vm.range
     )
 
 
   # - - - - - - - - - - - - - - - - CUT HERE - - - - - - - - - - - - - - -
+  data_callback: (response) ->
+    vm = @
+    console.log 'data recieved'
+    vm.data = response
+
   chart_changed: (chart_type) ->
     value = @range[chart_type]
     @range.general_charts = undefined

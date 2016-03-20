@@ -28,7 +28,6 @@
                   %option{value: "products_number"}= t 'projects.show.products_number'
               %a.dashboard-panel-link{href: "#"}= t 'projects.show.inventory'
 
-
             / Customers
             %li.filter-holder
               .hover-select-box.filter-mod
@@ -42,6 +41,11 @@
                   %option{value: "unique_users_number"}= t 'projects.show.unique_users_number'
                   %option{value: "visits"}= t 'projects.show.visits'
               %a.dashboard-panel-link{href: "#"}= t 'projects.show.customers'
+
+            %li.filter-holder
+              %a{href: '', 'ng-click' => "vm.debug = true"} Debug on
+            %li.filter-holder
+              %a{href: '', 'ng-click' => "vm.debug = false"} Debug off
 
       / Big chart date picker
       .row.dashboard-title-row
@@ -60,9 +64,13 @@
                 %option{:value => "4"} Last year
                 %option{:value => "5"} All time
 
-      .dashboard-caption
+      .dashboard-caption{'ng-init' => "vm.debug = false", 'ng-show' => "vm.debug"}
         %pre
           {{vm.range | json}}
+        %p Data
+        %pre
+          {{vm.data | json}}
+
       / Current status of your primary data
       .graph-unit-holder
         .graph-unit
