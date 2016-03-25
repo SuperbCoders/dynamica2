@@ -1,5 +1,5 @@
 class DashboardController
-  constructor: (@rootScope, @scope, @Projects, @Charts) ->
+  constructor: (@rootScope, @scope, @Projects, @Charts, @http) ->
     vm = @
     vm.params = @rootScope.$stateParams
     vm.project = {}
@@ -42,10 +42,28 @@ class DashboardController
 
 
   # - - - - - - - - - - - - - - - - CUT HERE - - - - - - - - - - - - - - -
+  charts_fetch: (chart_type) ->
+    vm = @
+
+    chart_url = "/charts_data/#{chart_type}"
+    chart_params =
+      from: vm.range.raw_start.format('DD-MM-YYYY')
+      to: vm.range.raw_end.format('DD-MM-YYYY')
+      project_id: vm.project.id
+      chart: vm.range.chart
+
+    vm.http.get chart_url, params: chart_params
+
   fetch: ->
     vm = @
-    vm.Charts.full_chart_data().success((response)->
+    @charts_fetch('full_chart_data').success((response) ->
       vm.data = response
+      console.log vm.data
+    )
+
+
+#    .success((response)->
+#      vm.data = response
 
 #      vm.init_donut_chart $('.donutChart_1', vm.data)
 
@@ -63,7 +81,6 @@ class DashboardController
 #
 #      $('.areaChart_3').each (ind) -> vm.init_line_area2_chart $(this)
 
-    )
 
 
   init_area_family_chart: (el, data_files) ->
@@ -448,5 +465,5 @@ class DashboardController
 #    ).change()
 
 
-@application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', 'Charts', DashboardController]
+@application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', 'Charts', '$http', DashboardController]
 
