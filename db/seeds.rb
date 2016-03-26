@@ -90,7 +90,7 @@ def create_demo_project
     previous_line_items.concat line_items
   end
 
-  create_demo_user.permissions.create! project: current_project, manage: true, read: true, forecasting: true, api: true}
+  create_demo_user.permissions.create! project: current_project, manage: true, read: true, forecasting: true, api: true
 
 
   # items.each do |product|
