@@ -68,6 +68,10 @@ class ChartsDataController < ApplicationController
     @date_to ||= Date.parse params[:to]
   end
 
+  def period
+    params[:period] ? params[:period] : 'day'
+  end
+
   def set_project
     @project = current_user.projects.where(id: params[:project_id]).first
   end
@@ -346,7 +350,7 @@ class ChartsDataController < ApplicationController
   end
 
   def big_charts_data
-    scope = "group_date_by_#{params[:period]}"
+    scope = "group_date_by_#{period}"
     result = [
         {
             "name": "Revenue",

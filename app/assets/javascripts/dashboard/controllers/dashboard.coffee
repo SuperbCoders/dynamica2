@@ -6,7 +6,7 @@ class DashboardController
     vm.data = {}
     vm.range =
       date: undefined
-      period: "0"
+      period: 'day'
       general_charts: undefined
       customer_charts: undefined
       product_charts: undefined
@@ -29,8 +29,9 @@ class DashboardController
         ]).datepicker 'update'
     )
 
-    @scope.$watch('vm.range.date', (old_v, new_v) -> vm.fetch() if new_v )
-    @scope.$watch('vm.range.chart', (old_v, new_v) -> vm.fetch() if new_v )
+    @scope.$watch('vm.range.period',(o, n) -> vm.fetch() if n )
+    @scope.$watch('vm.range.date',  (o, n) -> vm.fetch() if n )
+    @scope.$watch('vm.range.chart', (o, n) -> vm.fetch() if n )
 
     @scope.$on('$destroy', -> $('.page').removeClass('dashboard_page') )
 
@@ -47,6 +48,7 @@ class DashboardController
 
     chart_url = "/charts_data/#{chart_type}"
     chart_params =
+      period: vm.range.period
       from: vm.range.raw_start.format('DD-MM-YYYY')
       to: vm.range.raw_end.format('DD-MM-YYYY')
       project_id: vm.project.id
@@ -57,9 +59,9 @@ class DashboardController
   fetch: ->
     return unless @project.id
     vm = @
-    @charts_fetch('full_chart_data').success((response) ->
+    @charts_fetch('big_chart_data').success((response) ->
       vm.data = response
-      console.log vm.data
+      $('.areaChartFamily_1').each (ind) -> vm.init_area_family_chart($(this), vm.data)
     )
 
 
@@ -83,13 +85,33 @@ class DashboardController
 #      $('.areaChart_3').each (ind) -> vm.init_line_area2_chart $(this)
 
 
+  getFormatOfDateForMoment: ->
+    switch @range.period
+      when 'day'
+        return 'DD-MMM-YY'
+      when 'week'
+        return 'WW-GG'
+      when 'month'
+        return 'MMM-YY'
+    return
 
   init_area_family_chart: (el, data_files) ->
+    vm = @
     el.find('svg').remove()
     legendBlock = el.parents('.graph-unit').find('.legend_v2')
     if !legendBlock.length
       legendBlock = $('<ul class="legend_v2 graph-unit-legend" />')
       el.parents('.graph-unit').append legendBlock
+
+    dates = []
+    values = []
+
+    i = 0
+    while i < data_files[0].data.length
+      obj = data_files[0].data[i]
+      dates.push moment(obj.date, vm.getFormatOfDateForMoment())
+      values.push obj.close
+      i++
 
     legendBlock.empty()
 
@@ -297,12 +319,12 @@ class DashboardController
     @range[chart_type] = value
     @range.chart = @range[chart_type]
 
-  period_changed: ->
+  set_date_range: (range_type) ->
     vm = @
-    return if vm.range.period not in ["0","1","2","3","4","5"]
+    return if range_type not in ["0","1","2","3","4","5"]
     return if not vm.datepicker
 
-    period = parseInt(vm.range.period)
+    period = parseInt(range_type)
     today = moment()
 
     if period == 0
@@ -338,6 +360,7 @@ class DashboardController
       vm.fit2Limits(vm.datepicker, rangeEnd)
     ]).datepicker 'update'
 
+    console.log 'Range type changed'
     return
 
   fit2Limits: (pckr, date, max) ->
