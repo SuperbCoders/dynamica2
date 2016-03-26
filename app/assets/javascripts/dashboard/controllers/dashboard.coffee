@@ -65,24 +65,209 @@ class DashboardController
     )
 
 
-#    .success((response)->
-#      vm.data = response
+    @charts_fetch('other_chart_data').success((response) ->
+      $('.dashboard').data('other_charts', response)
 
-#      vm.init_donut_chart $('.donutChart_1', vm.data)
+      $('.areaChart_1').each (ind) ->
+        vm.init_area_chart $(this), response
+        return
 
-#      $('.areaChartFamily_1').each (ind) -> vm.init_area_family_chart($(this), vm.data)
+      $('.areaChart_2').each (ind) ->
+        vm.init_line_chart $(this), response
+        return
 
-#      $('.areaChart_1').each (ind) -> vm.init_area_chart $(this)
-#
-#      $('.areaChart_2').each (ind) -> vm.init_line_chart $(this)
-#
-#      $('.lineAreaChart_1').each (ind) ->
-#        vm.init_line_area_chart $(this), (el) ->
-#          el.parent().addClass 'animated fadeInUp'
-#          return
-#        return
-#
-#      $('.areaChart_3').each (ind) -> vm.init_line_area2_chart $(this)
+      $('.lineAreaChart_1').each (ind) ->
+        vm.init_line_area_chart $(this)
+        return
+
+      $('.areaChart_3').each (ind) ->
+        vm.init_line_area2_chart $(this), response
+        return
+
+    )
+
+  init_line_area2_chart: (el, data) ->
+    el.empty()
+    margin =
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+    width = el.width() - (margin.left) - (margin.right)
+    height = el.height() - (margin.top) - (margin.bottom)
+
+    scale =
+      x: d3.scale.linear().domain([
+        0
+        data.length
+      ]).range([
+        0
+        width
+      ])
+      y: d3.scale.linear().domain([
+        0
+        d3.max(data)
+      ]).range([
+        height
+        15
+      ])
+    chart = d3.select(el[0]).append('svg:svg').data([ data ]).attr('width', width).attr('height', height).append('svg:g')
+    line = d3.svg.area().x((d, i) ->
+      scale.x i
+    ).y((d) ->
+      scale.y d
+    ).y0(height).interpolate('cardinal')
+    gradient = chart.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
+    gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
+    gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
+    chart.append('svg:path').attr('d', (d, i) ->
+      line d, i
+    ).style 'fill', 'url(#area_gradient_1)'
+    chart.selectAll('circle.mark').data(data).enter().append('svg:circle').attr('class', 'mark').attr('cx', (d, i) ->
+      scale.x i
+    ).attr('cy', (d) ->
+      scale.y d
+    ).attr 'r', 5.5
+    return
+
+  init_line_chart: (el, data) ->
+    vm = @
+    el.empty()
+    margin =
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+    width = el.width() - (margin.left) - (margin.right)
+    height = el.height() - (margin.top) - (margin.bottom)
+    parseDate = d3.time.format(vm.getFormatOfDate()).parse
+    x = d3.time.scale().range([
+      0
+      width
+    ])
+    y = d3.scale.linear().range([
+      height
+      0
+    ])
+    valueline = d3.svg.line().x((d) ->
+      x d.date
+    ).y((d) ->
+      y d.close
+    )
+    svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
+    # Get the data
+    for d in data
+      d.date = parseDate(d.date)
+      d.close = +d.close
+      
+    # Scale the range of the data
+    x.domain d3.extent(data, (d) ->
+      d.date
+    )
+    y.domain [
+      0
+      d3.max(data, (d) ->
+        Math.max d.close
+      )
+    ]
+    svg.append('path').attr('class', 'line').attr('id', 'blueLine').attr 'd', valueline(data)
+    return
+
+  init_line_area_chart: (el) ->
+    vm = @
+    el.empty()
+    margin =
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+    width = el.width() - (margin.left) - (margin.right)
+    height = el.height() - (margin.top) - (margin.bottom)
+    parseDate = d3.time.format(vm.getFormatOfDate()).parse
+    x = d3.time.scale().range([0,width])
+    y = d3.scale.linear().range([height,0])
+
+    area_x = d3.time.scale().range([0,width])
+    area_y = d3.scale.linear().range([height,0])
+    area = d3.svg.area().x((d) ->
+      area_x d.date
+    ).y0(height).y1((d) ->
+      area_y d.close
+    )
+    valueline = d3.svg.line().x((d) ->
+      #console.log(d);
+      x d.date
+    ).y((d) ->
+      #console.log(d);
+      y d.close
+    )
+    #.interpolate("cardinal");
+    svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    t = $.extend(true, [], $('.dashboard').data('other_charts'))
+    data = t[el.attr('id')] or {}
+    value = parseFloat(data['value']).number_with_delimiter('&thinsp;')
+    if el.attr('id') == 'total_revenu'
+      value += '&nbsp;' + data['value'].slice(-1)
+    diff = parseFloat(data['diff']).number_with_delimiter('&thinsp;')
+    diff += '&nbsp;%'
+    value = if data['value'] == '' then '' else value
+    diff = if data['diff'] == '' then '' else diff
+    el.parent().parent().children('.graph-value').children('.val').html value
+    el.parent().parent().children('.graph-value').children('.graph-dynamica').removeClass('dynamica_up dynamica_down').addClass if /-/g.test(data['diff']) then 'dynamica_down' else 'dynamica_up'
+    el.parent().parent().children('.graph-value').children('.graph-dynamica').html diff
+    data = data['data'] or []
+    # Get the data
+    data.forEach (d) ->
+      d.date = parseDate(d.date)
+      d.close = +d.close
+      return
+    # Scale the range of the data
+    x.domain d3.extent(data, (d) ->
+      d.date
+    )
+    y.domain [
+      0
+      d3.max(data, (d) ->
+        Math.max d.close
+      )
+    ]
+    area_x.domain d3.extent(data, (d) ->
+      d.date
+    )
+    area_y.domain [
+      0
+      d3.max(data, (d) ->
+        d.close
+      )
+    ]
+    gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
+    gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
+    gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
+    svg.append('path').attr('class', 'line').attr 'd', valueline(data)
+    svg.append('path').datum(data).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
+    # Add the scatterplot
+    svg.selectAll('dot').data(data).enter().append('circle').attr('r', 5.5).attr('class', (d, i) ->
+      cls = undefined
+      if i == 0 or i == data.length - 1
+        cls = 'hidden'
+      'mark ' + cls
+    ).attr('cx', (d) ->
+      x d.date
+    ).attr 'cy', (d) ->
+      y d.close
+    return
+
+  getFormatOfDate: ->
+    return '%d-%b-%y'
+    switch @range.period
+      when 'day'
+        return '%d-%b-%y'
+      when 'week'
+        return '%V-%g'
+      when 'month'
+        return '%b-%y'
+    return
 
 
   getFormatOfDateForMoment: ->
@@ -233,7 +418,7 @@ class DashboardController
       i++
     return
 
-  init_area_chart: (el) ->
+  init_area_chart: (el, data) ->
     el.empty()
     margin =
       top: 0
@@ -257,27 +442,25 @@ class DashboardController
       area_y d.close
     )
     svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-    d3.tsv 'data.tsv', (error, data) ->
-      if error
-        throw error
-      data.forEach (d) ->
-        d.date = parseDate(d.date)
-        d.close = +d.close
-        return
-      area_x.domain d3.extent(data, (d) ->
-        d.date
+
+    for d in data
+      d.date = parseDate(d.date)
+      d.close = +d.close
+
+    area_x.domain d3.extent(data, (d) ->
+      d.date
+    )
+    area_y.domain [
+      0
+      d3.max(data, (d) ->
+        d.close
       )
-      area_y.domain [
-        0
-        d3.max(data, (d) ->
-          d.close
-        )
-      ]
-      gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
-      gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
-      gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
-      svg.append('path').datum(data).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
-      return
+    ]
+    gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
+    gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
+    gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
+    svg.append('path').datum(data).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
+
     return
 
   init_donut_chart: (el, data) ->
