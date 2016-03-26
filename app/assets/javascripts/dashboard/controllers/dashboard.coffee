@@ -55,6 +55,7 @@ class DashboardController
     vm.http.get chart_url, params: chart_params
 
   fetch: ->
+    return unless @project.id
     vm = @
     @charts_fetch('full_chart_data').success((response) ->
       vm.data = response
