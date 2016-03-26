@@ -27,9 +27,10 @@ class DashboardController
           vm.fit2Limits(vm.datepicker, rangeStart, true)
           vm.fit2Limits(vm.datepicker, rangeEnd)
         ]).datepicker 'update'
+
+      vm.fetch()
     )
 
-    @scope.$watch('vm.range.period',(o, n) -> vm.fetch() if n )
     @scope.$watch('vm.range.date',  (o, n) -> vm.fetch() if n )
     @scope.$watch('vm.range.chart', (o, n) -> vm.fetch() if n )
 
@@ -66,24 +67,7 @@ class DashboardController
 
 
     @charts_fetch('other_chart_data').success((response) ->
-      $('.dashboard').data('other_charts', response)
-
-      $('.areaChart_1').each (ind) ->
-        vm.init_area_chart $(this), response
-        return
-
-      $('.areaChart_2').each (ind) ->
-        vm.init_line_chart $(this), response
-        return
-
-      $('.lineAreaChart_1').each (ind) ->
-        vm.init_line_area_chart $(this)
-        return
-
-      $('.areaChart_3').each (ind) ->
-        vm.init_line_area2_chart $(this), response
-        return
-
+      vm.other_charts_data = response
     )
 
   init_line_area2_chart: (el, data) ->
@@ -160,7 +144,7 @@ class DashboardController
     for d in data
       d.date = parseDate(d.date)
       d.close = +d.close
-      
+
     # Scale the range of the data
     x.domain d3.extent(data, (d) ->
       d.date
