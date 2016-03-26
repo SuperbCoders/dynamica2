@@ -31,12 +31,3 @@
 //= require script
 
 //= require auth
-//= require items
-//= require forecasts
-//= require permissions
-//= require profile
-//= require dropzone
-//= require hash
-//= require dashboard
-//= require full_chart
-//= require project
