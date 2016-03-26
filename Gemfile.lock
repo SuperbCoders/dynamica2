@@ -50,6 +50,8 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.6)
+    airbrussh (1.0.1)
+      sshkit (>= 1.6.1, != 1.7.0)
     annotate (2.6.10)
       activerecord (>= 3.2, <= 4.3)
       rake (~> 10.4)
@@ -216,8 +218,8 @@ GEM
       railties (= 4.1.8)
       sprockets-rails (~> 2.0)
     rails-assets-d3 (3.5.16)
-    rails-assets-moment (2.11.2)
-    rails-assets-select2 (4.0.1)
+    rails-assets-moment (2.12.0)
+    rails-assets-select2 (4.0.2)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
     railties (4.1.8)
@@ -340,6 +342,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeresource!
+  airbrussh
   annotate (~> 2.6.10)
   apipie-rails
   better_errors (~> 2.1.1)
@@ -401,6 +404,3 @@ DEPENDENCIES
   unicorn
   whenever
   workflow
-
-BUNDLED WITH
-   1.11.2
