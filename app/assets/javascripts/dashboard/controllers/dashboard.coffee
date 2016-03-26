@@ -14,18 +14,24 @@ class DashboardController
 
     vm.datepicker = $('.datePicker')
 
-    today = moment()
-    vm.range.raw_start = rangeStart = moment(today).startOf('month')
-    vm.range.raw_end   = rangeEnd = moment(today).endOf('month')
-
-    
-    vm.datepicker.datepicker('setDates', [
-      vm.fit2Limits(vm.datepicker, rangeStart, true)
-      vm.fit2Limits(vm.datepicker, rangeEnd)
-    ]).datepicker 'update'
 
     @init_dashboard()
 
+    @set_default_range()
+
+    @scope.$watch('vm.range.period', (old_v, new_v) ->
+      if new_v is '0'
+        today = moment()
+        vm.range.raw_start = rangeStart = moment(today).startOf('month')
+        vm.range.raw_end   = rangeEnd = moment(today).endOf('month')
+
+        vm.datepicker.datepicker('setDates', [
+          vm.fit2Limits(vm.datepicker, rangeStart, true)
+          vm.fit2Limits(vm.datepicker, rangeEnd)
+        ]).datepicker 'update'
+
+      vm.fetch()
+    )
 
     @scope.$watch('vm.range.date',  (o, n) -> vm.fetch() if n )
     @scope.$watch('vm.range.chart', (o, n) -> vm.fetch() if n )
@@ -39,6 +45,8 @@ class DashboardController
       vm.fetch()
     )
 
+
+  # - - - - - - - - - - - - - - - - CUT HERE - - - - - - - - - - - - - - -
   charts_fetch: (chart_type) ->
     vm = @
 
@@ -65,57 +73,16 @@ class DashboardController
       vm.other_charts_data = response
     )
 
-  chart_changed: (chart_type) ->
-    value = @range[chart_type]
-    @range.general_charts = undefined
-    @range.customer_charts = undefined
-    @range.product_charts = undefined
-    @range[chart_type] = value
-    @range.chart = @range[chart_type]
-
-  set_date_range: (range_type) ->
+  set_default_range: ->
     vm = @
-    return if range_type not in ["0","1","2","3","4","5"]
-    return if not vm.datepicker
-
-    period = parseInt(range_type)
     today = moment()
-
-    if period == 0
-      #  Current month
-      rangeStart = moment(today).startOf('month')
-      rangeEnd = moment(today).endOf('month')
-    else if period == 1
-      #  Previous month
-      rangeStart = moment(today).subtract(1, 'month').startOf('month')
-      rangeEnd = moment(today).subtract(1, 'month').endOf('month')
-    else if period == 2
-      #  Last 3 month
-      rangeStart = moment(today).subtract(3, 'month')
-      rangeEnd = moment(today)
-    else if period == 3
-      #  Last 6 month
-      rangeStart = moment(today).subtract(6, 'month')
-      rangeEnd = moment(today)
-    else if period == 4
-      #  Last year
-      rangeStart = moment(today).subtract(12, 'month')
-      rangeEnd = moment(today)
-    else if period == 5
-      #  All time
-      rangeStart = moment(vm.datepicker.datepicker('getStartDate'))
-      rangeEnd = moment(vm.datepicker.datepicker('getEndDate'))
-
-    vm.range.raw_start = rangeStart
-    vm.range.raw_end = rangeEnd
+    vm.range.raw_start = rangeStart = moment(today).startOf('month')
+    vm.range.raw_end   = rangeEnd = moment(today).endOf('month')
 
     vm.datepicker.datepicker('setDates', [
       vm.fit2Limits(vm.datepicker, rangeStart, true)
       vm.fit2Limits(vm.datepicker, rangeEnd)
     ]).datepicker 'update'
-
-    vm.fetch()
-    return
 
   init_line_area2_chart: (el, data) ->
     el.empty()
@@ -300,6 +267,7 @@ class DashboardController
         return '%b-%y'
     return
 
+
   getFormatOfDateForMoment: ->
     switch @range.period
       when 'day'
@@ -366,41 +334,41 @@ class DashboardController
     xAxis = d3.svg.axis().scale(area_x).ticks(dates.length - 1).tickFormat(d3.time.format('%b %d')).orient('bottom')
 
     svg = d3.select(el[0])
-    .append('svg')
-    .attr('width', width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-    .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-    #    .on('mousemove', (d) ->
-    #      `var i`
-    #      `var tooltip`
-    #      #console.log(d3.mouse(this));
-    #      tooltip = d3.select('#tooltip')
-    #      tooltip_content = $('#tooltip_content')
-    #      tooltip_dot = $('#tooltip_dot')
-    #      tool_table = $('<table class="graph-tooltip-table" />')
-    #      distance = area_x(data_files[activeFamilyGraph].data[0].date) - area_x(data_files[activeFamilyGraph].data[1].date) or 0
-    #      x = d3.mouse(this)[0] + distance / 2
-    #      x0 = area_x.invert(x)
-    #      ind = undefined
-    #      while k < dates.length
-    #        obj1 = dates[k]
-    #        if moment(x0).startOf('day').isSame(obj1, 'day')
-    #          ind = k
-    #          break
-    #        k++
-    #      while j < data_files.length
-    #        color = data_files[j].color
-    #        data = data_files[j].data
-    #        #var i = bisectDate(data, x0, 1);
-    #        tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + j).addClass(if j == activeFamilyGraph then 'active_row' else '').addClass(if $('.graph-unit-legend .legend_item[data-graph=#family_area_' + j + ']').hasClass('disabled') then 'disabled' else '').append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[j].name)))).append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[j].data[ind].close)))
-    #        tool_table.append tooltip_item
-    #        j++
-    #      tooltip_content.empty().append($('<div class="tooltip-title" />').text(moment(x0).format('dddd, D MMMM YYYY'))).append tool_table
-    #      tooltip.classed('flipped_left', x < tooltip_content.outerWidth() + 25).style 'left', area_x(data_files[activeFamilyGraph].data[ind].date) + 'px'
-    #      tooltip_dot.css 'top', margin.top + area_y(data_files[activeFamilyGraph].data[ind].close) - 11
-    #      return
-    #    )
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+#    .on('mousemove', (d) ->
+#      `var i`
+#      `var tooltip`
+#      #console.log(d3.mouse(this));
+#      tooltip = d3.select('#tooltip')
+#      tooltip_content = $('#tooltip_content')
+#      tooltip_dot = $('#tooltip_dot')
+#      tool_table = $('<table class="graph-tooltip-table" />')
+#      distance = area_x(data_files[activeFamilyGraph].data[0].date) - area_x(data_files[activeFamilyGraph].data[1].date) or 0
+#      x = d3.mouse(this)[0] + distance / 2
+#      x0 = area_x.invert(x)
+#      ind = undefined
+#      while k < dates.length
+#        obj1 = dates[k]
+#        if moment(x0).startOf('day').isSame(obj1, 'day')
+#          ind = k
+#          break
+#        k++
+#      while j < data_files.length
+#        color = data_files[j].color
+#        data = data_files[j].data
+#        #var i = bisectDate(data, x0, 1);
+#        tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + j).addClass(if j == activeFamilyGraph then 'active_row' else '').addClass(if $('.graph-unit-legend .legend_item[data-graph=#family_area_' + j + ']').hasClass('disabled') then 'disabled' else '').append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[j].name)))).append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[j].data[ind].close)))
+#        tool_table.append tooltip_item
+#        j++
+#      tooltip_content.empty().append($('<div class="tooltip-title" />').text(moment(x0).format('dddd, D MMMM YYYY'))).append tool_table
+#      tooltip.classed('flipped_left', x < tooltip_content.outerWidth() + 25).style 'left', area_x(data_files[activeFamilyGraph].data[ind].date) + 'px'
+#      tooltip_dot.css 'top', margin.top + area_y(data_files[activeFamilyGraph].data[ind].close) - 11
+#      return
+#    )
     svg.append('g').attr('class', 'x axis family_x_axis').style('font-size', '14px').style('fill', '#fff').attr('transform', 'translate(0,' + height + ')').call xAxis
     i = 0
     while i < data_files.length
@@ -513,16 +481,68 @@ class DashboardController
     )
     svg = d3.select(el[0]).append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
     svg.selectAll('.arc').data(data).enter().append('g').attr('class', 'arc')
-    #    d3.csv 'customers_data.csv', type, (error, data) ->
-    #      if error
-    #        throw error
-    #      g = svg.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc')
-    #      g.append('path').attr('d', arc).style 'fill', (d) ->
-    #        color = d.data.color
-    #        legendItem = $('<li class="legend_item" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(d.data.name))).append($('<div class="legend_val" />').text(d.data.value))
-    #        el.next().append legendItem
-    #        color
-    #      return
+#    d3.csv 'customers_data.csv', type, (error, data) ->
+#      if error
+#        throw error
+#      g = svg.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc')
+#      g.append('path').attr('d', arc).style 'fill', (d) ->
+#        color = d.data.color
+#        legendItem = $('<li class="legend_item" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(d.data.name))).append($('<div class="legend_val" />').text(d.data.value))
+#        el.next().append legendItem
+#        color
+#      return
+    return
+
+  chart_changed: (chart_type) ->
+    value = @range[chart_type]
+    @range.general_charts = undefined
+    @range.customer_charts = undefined
+    @range.product_charts = undefined
+    @range[chart_type] = value
+    @range.chart = @range[chart_type]
+
+  set_date_range: (range_type) ->
+    vm = @
+    return if range_type not in ["0","1","2","3","4","5"]
+    return if not vm.datepicker
+
+    period = parseInt(range_type)
+    today = moment()
+
+    if period == 0
+      #  Current month
+      rangeStart = moment(today).startOf('month')
+      rangeEnd = moment(today).endOf('month')
+    else if period == 1
+      #  Previous month
+      rangeStart = moment(today).subtract(1, 'month').startOf('month')
+      rangeEnd = moment(today).subtract(1, 'month').endOf('month')
+    else if period == 2
+      #  Last 3 month
+      rangeStart = moment(today).subtract(3, 'month')
+      rangeEnd = moment(today)
+    else if period == 3
+      #  Last 6 month
+      rangeStart = moment(today).subtract(6, 'month')
+      rangeEnd = moment(today)
+    else if period == 4
+      #  Last year
+      rangeStart = moment(today).subtract(12, 'month')
+      rangeEnd = moment(today)
+    else if period == 5
+      #  All time
+      rangeStart = moment(vm.datepicker.datepicker('getStartDate'))
+      rangeEnd = moment(vm.datepicker.datepicker('getEndDate'))
+
+    vm.range.raw_start = rangeStart
+    vm.range.raw_end = rangeEnd
+
+    vm.datepicker.datepicker('setDates', [
+      vm.fit2Limits(vm.datepicker, rangeStart, true)
+      vm.fit2Limits(vm.datepicker, rangeEnd)
+    ]).datepicker 'update'
+
+    vm.fetch()
     return
 
   fit2Limits: (pckr, date, max) ->
@@ -548,6 +568,8 @@ class DashboardController
       format: 'M dd, yyyy'
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
+
+  toggle_debug: -> if @debug is true then @debug = false else @debug = true
 
 @application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', 'Charts', '$http', DashboardController]
 

@@ -1,0 +1,68 @@
+
+/ Products overview
+/ products_in_stock_number
+/ items_in_stock_number
+/ percentage_of_inventory_sold
+/ percentage_of_stock_sold
+/ products_number
+
+.dashboard-caption
+  %h3.caption-text= t 'projects.show.inventory'
+  %i.icon.fa.fa-angle-right
+.graph-unit-holder.graph-unit-hover
+  .row
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link{:href => "total_revenu.html"}
+        %h5.graph-name= t('projects.show.products_in_stock_number')
+        .graph-value
+          %span.val {{ vm.other_chars_data.products_in_stock_number.value}}
+          %sup.graph-dynamica.dynamica_up {{vm.other_charts_data.products_in_stock_number.diff}}
+        .graph-block
+          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link{:href => "total_revenu.html"}
+        %h5.graph-name= t('projects.show.items_in_stock_number')
+        .graph-value
+          %span.val {{ vm.other_chars_data.items_in_stock_number.value}}
+          %sup.graph-dynamica.dynamica_up {{vm.other_charts_data.items_in_stock_number.diff}}
+        .graph-block
+          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link{:href => "total_revenu.html"}
+        %h5.graph-name= t('projects.show.percentage_of_inventory_sold')
+        .graph-value
+          %span.val {{ vm.other_chars_data.percentage_of_inventory_sold.value}}
+          %sup.graph-dynamica.dynamica_up {{vm.other_charts_data.percentage_of_inventory_sold.diff}}
+        .graph-block
+          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %h5.graph-name= t('projects.show.percentage_of_stock_sold')
+        %table.best_sellers
+          %tr
+            %td.col_1
+              .seller_name BUNN BXB Velocity Brew 10-Cup Home...
+            %td.col_2 590
+            %td.col_3
+              .seller_val.best_seller $73,490
+          %tr
+            %td.col_1
+              .seller_name Kitchen forks
+            %td.col_2 9,389
+            %td.col_3
+              .seller_val.best_seller $43,490
+          %tr
+            %td.col_1
+              .seller_name BUNN BXB Velocity Brew 10-Cup Home...
+            %td.col_2 590
+            %td.col_3
+              .seller_val.best_seller $73,490
+          %tr
+            %td.col_1
+              .seller_name Kitchen forks
+            %td.col_2 9,389
+            %td.col_3
+              .seller_val.best_seller $43,490
