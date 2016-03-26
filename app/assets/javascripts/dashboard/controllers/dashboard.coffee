@@ -155,36 +155,37 @@ class DashboardController
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').on('mousemove', (d) ->
-      `var i`
-      `var tooltip`
-      #console.log(d3.mouse(this));
-      tooltip = d3.select('#tooltip')
-      tooltip_content = $('#tooltip_content')
-      tooltip_dot = $('#tooltip_dot')
-      tool_table = $('<table class="graph-tooltip-table" />')
-      distance = area_x(data_files[activeFamilyGraph].data[0].date) - area_x(data_files[activeFamilyGraph].data[1].date) or 0
-      x = d3.mouse(this)[0] + distance / 2
-      x0 = area_x.invert(x)
-      ind = undefined
-      while k < dates.length
-        obj1 = dates[k]
-        if moment(x0).startOf('day').isSame(obj1, 'day')
-          ind = k
-          break
-        k++
-      while j < data_files.length
-        color = data_files[j].color
-        data = data_files[j].data
-        #var i = bisectDate(data, x0, 1);
-        tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + j).addClass(if j == activeFamilyGraph then 'active_row' else '').addClass(if $('.graph-unit-legend .legend_item[data-graph=#family_area_' + j + ']').hasClass('disabled') then 'disabled' else '').append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[j].name)))).append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[j].data[ind].close)))
-        tool_table.append tooltip_item
-        j++
-      tooltip_content.empty().append($('<div class="tooltip-title" />').text(moment(x0).format('dddd, D MMMM YYYY'))).append tool_table
-      tooltip.classed('flipped_left', x < tooltip_content.outerWidth() + 25).style 'left', area_x(data_files[activeFamilyGraph].data[ind].date) + 'px'
-      tooltip_dot.css 'top', margin.top + area_y(data_files[activeFamilyGraph].data[ind].close) - 11
-      return
-    )
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+#    .on('mousemove', (d) ->
+#      `var i`
+#      `var tooltip`
+#      #console.log(d3.mouse(this));
+#      tooltip = d3.select('#tooltip')
+#      tooltip_content = $('#tooltip_content')
+#      tooltip_dot = $('#tooltip_dot')
+#      tool_table = $('<table class="graph-tooltip-table" />')
+#      distance = area_x(data_files[activeFamilyGraph].data[0].date) - area_x(data_files[activeFamilyGraph].data[1].date) or 0
+#      x = d3.mouse(this)[0] + distance / 2
+#      x0 = area_x.invert(x)
+#      ind = undefined
+#      while k < dates.length
+#        obj1 = dates[k]
+#        if moment(x0).startOf('day').isSame(obj1, 'day')
+#          ind = k
+#          break
+#        k++
+#      while j < data_files.length
+#        color = data_files[j].color
+#        data = data_files[j].data
+#        #var i = bisectDate(data, x0, 1);
+#        tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + j).addClass(if j == activeFamilyGraph then 'active_row' else '').addClass(if $('.graph-unit-legend .legend_item[data-graph=#family_area_' + j + ']').hasClass('disabled') then 'disabled' else '').append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[j].name)))).append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[j].data[ind].close)))
+#        tool_table.append tooltip_item
+#        j++
+#      tooltip_content.empty().append($('<div class="tooltip-title" />').text(moment(x0).format('dddd, D MMMM YYYY'))).append tool_table
+#      tooltip.classed('flipped_left', x < tooltip_content.outerWidth() + 25).style 'left', area_x(data_files[activeFamilyGraph].data[ind].date) + 'px'
+#      tooltip_dot.css 'top', margin.top + area_y(data_files[activeFamilyGraph].data[ind].close) - 11
+#      return
+#    )
     svg.append('g').attr('class', 'x axis family_x_axis').style('font-size', '14px').style('fill', '#fff').attr('transform', 'translate(0,' + height + ')').call xAxis
     i = 0
     while i < data_files.length
