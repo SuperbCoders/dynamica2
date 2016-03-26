@@ -117,7 +117,7 @@ gem 'bootstrap-kaminari-views'
 # CSV libraries
 gem 'smarter_csv' # For reading
 gem 'render_csv'  # For export
-
+gem 'airbrussh'
 gem 'rubyzip'
 gem 'russian'
 gem 'celluloid', '~> 0.16.0'
