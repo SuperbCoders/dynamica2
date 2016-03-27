@@ -493,8 +493,7 @@ class DashboardController
 #      return
     return
 
-  chart_changed: (chart) ->
-    @rootScope.$state.go('projects.chart', {project: @project, slug: @project.slug, chart: chart})
+  chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project, slug: @project.slug, chart: chart})
 
   set_date_range: (range_type) ->
     vm = @
