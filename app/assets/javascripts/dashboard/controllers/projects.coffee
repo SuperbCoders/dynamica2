@@ -13,6 +13,9 @@ class ProjectsController
     else
       @Projects.query().$promise.then( (projects) ->
         vm.projects = projects
+
+        if vm.projects.length == 1
+          vm.rootScope.$state.go('projects.view', {slug: vm.projects[0].slug})
       )
 
   # Open projects dropdown setting menu
