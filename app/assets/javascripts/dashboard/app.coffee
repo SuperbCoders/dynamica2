@@ -7,6 +7,7 @@
   $httpProvider.defaults.headers.post['Content-Type']= 'application/json'
   $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
   delete $httpProvider.defaults.headers.common['X-Requested-With']
+  $httpProvider.interceptors.push 'requestOverlay'
 
   $stateProvider
   .state 'profile',
