@@ -2,7 +2,6 @@
   overlay =
     request: (request) ->
       if request.url && request.url.indexOf('chart_data') > 1
-        console.log 'Added overlay for '+request.url
         $('.pageOverlay').addClass('show_overlay')
       request
 

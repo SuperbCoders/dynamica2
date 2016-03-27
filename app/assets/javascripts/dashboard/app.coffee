@@ -6,8 +6,8 @@
   $httpProvider.defaults.useXDomain = true
   $httpProvider.defaults.headers.post['Content-Type']= 'application/json'
   $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
-  delete $httpProvider.defaults.headers.common['X-Requested-With']
   $httpProvider.interceptors.push 'requestOverlay'
+  delete $httpProvider.defaults.headers.common['X-Requested-With']
 
   $stateProvider
   .state 'profile',
@@ -84,24 +84,7 @@
         ]
       ]
 
-#  .state 'team',
-#    url: '/team',
-#    templateUrl: 'templates/team/index'
-#
-#  .state 'team.list',
-#    url: '/list',
-#    templateUrl: 'templates/team/list'
-#    controller: 'ProjectsController',
-#    controllerAs: 'vm',
-#    resolve:
-#      Projects: ['Resource', (Resource) ->
-#        Resource '/projects', {id: @id}, [ {method: 'GET', isArray: false} ]
-#      ]
-
-
-
   $urlRouterProvider.otherwise '/stores/'
-
   return
 ]
 
