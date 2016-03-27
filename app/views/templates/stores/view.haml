@@ -1,0 +1,13 @@
+%section.dashboard-bodya
+  .container-fluid.globalwidth
+    %section.dashboard.projects-dashboard
+      / Dash navigation
+      = render 'templates/stores/dashboard/header'
+
+      / Big chart
+      = render 'templates/stores/dashboard/big_chart'
+
+      / Overviews
+      = render 'templates/stores/dashboard/finance_overview'
+      = render 'templates/stores/dashboard/customers_overview'
+      = render 'templates/stores/dashboard/products_overview'

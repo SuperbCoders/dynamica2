@@ -16,12 +16,12 @@
     controllerAs: 'vm'
 
   .state 'projects',
-    url: '/projects',
-    templateUrl: 'templates/projects/index'
+    url: '/stores',
+    templateUrl: 'templates/stores/index'
 
   .state 'projects.list',
-    url: '/list',
-    templateUrl: 'templates/projects/list'
+    url: '/',
+    templateUrl: 'templates/stores/list'
     controller: 'ProjectsController',
     controllerAs: 'vm',
     resolve:
@@ -35,7 +35,7 @@
 
   .state 'projects.new',
     url: '/new',
-    templateUrl: 'templates/projects/new'
+    templateUrl: 'templates/stores/new'
     controller: 'ProjectsController',
     controllerAs: 'vm',
     resolve:
@@ -45,7 +45,7 @@
 
   .state 'projects.edit',
     url: '/edit/:slug'
-    templateUrl: 'templates/projects/new'
+    templateUrl: 'templates/stores/new'
     controller: 'ProjectsController',
     controllerAs: 'vm',
     resolve:
@@ -58,7 +58,7 @@
 
   .state 'projects.view',
     url: '/:slug',
-    templateUrl: 'templates/projects/view'
+    templateUrl: 'templates/stores/view'
     controller: 'DashboardController',
     controllerAs: 'vm'
     resolve:
@@ -69,23 +69,37 @@
         ]
       ]
 
-  .state 'team',
-    url: '/team',
-    templateUrl: 'templates/team/index'
-
-  .state 'team.list',
-    url: '/list',
-    templateUrl: 'templates/team/list'
-    controller: 'ProjectsController',
+  .state 'projects.chart',
+    url: '/:slug/:chart',
+    templateUrl: 'templates/stores/chart'
+    controller: 'ChartController',
     controllerAs: 'vm',
+    params: {project: null}
     resolve:
-      Projects: ['Resource', (Resource) ->
-        Resource '/projects', {id: @id}, [ {method: 'GET', isArray: false} ]
+      Projects: ['Resources', (Resources) ->
+        Resources '/projects/:id', {id: @id}, [
+          {method: 'GET', isArray: false},
+          {name: 'search', method: 'POST', isArray: false}
+        ]
       ]
 
+#  .state 'team',
+#    url: '/team',
+#    templateUrl: 'templates/team/index'
+#
+#  .state 'team.list',
+#    url: '/list',
+#    templateUrl: 'templates/team/list'
+#    controller: 'ProjectsController',
+#    controllerAs: 'vm',
+#    resolve:
+#      Projects: ['Resource', (Resource) ->
+#        Resource '/projects', {id: @id}, [ {method: 'GET', isArray: false} ]
+#      ]
 
 
-  $urlRouterProvider.otherwise '/projects/list'
+
+  $urlRouterProvider.otherwise '/stores/'
 
   return
 ]
@@ -104,9 +118,7 @@
   )
 
   # Open user dropdown menu
-  $('.user-toggle.dropdown-toggle').on('click', (element) ->
-    $('.user.dropdown').toggleClass('open')
-  )
+  $('.user-toggle.dropdown-toggle').on('click', (element) -> $('.user.dropdown').toggleClass('open'))
 
   $('html').on('click', (element) ->
     element_id = element.toElement.id

@@ -493,13 +493,8 @@ class DashboardController
 #      return
     return
 
-  chart_changed: (chart_type) ->
-    value = @range[chart_type]
-    @range.general_charts = undefined
-    @range.customer_charts = undefined
-    @range.product_charts = undefined
-    @range[chart_type] = value
-    @range.chart = @range[chart_type]
+  chart_changed: (chart) ->
+    @rootScope.$state.go('projects.chart', {project: @project, slug: @project.slug, chart: chart})
 
   set_date_range: (range_type) ->
     vm = @
