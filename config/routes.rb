@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   apipie
 
   scope "(:locale)", locale: /en|ru/ do
-    root 'dashboard#index', as: :dashboard
+    root 'welcome#index'
+    get 'dashboard' => 'dashboard#index', as: :dashboard
     get 'templates(/*url)' => 'application#templates'
     get 'apidocs' => 'apidocs#index'
 

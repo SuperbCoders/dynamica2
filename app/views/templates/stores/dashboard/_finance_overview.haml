@@ -17,7 +17,7 @@
           %span.val {{vm.other_charts_data.total_revenu.value}}
           %sup.graph-dynamica.dynamica_up {{vm.other_charts_data.total_revenu.diff}}
         .graph-block
-          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          #total_revenu.graph_2.lineAreaChart_1.d3graph.hide_x_axis
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'shipping_cost_as_a_percentage_of_total_revenue'})"}
@@ -26,7 +26,7 @@
           %span.val {{vm.other_charts_data.shipping_cost_as_a_percentage_of_total_revenue.value}}
           %sup.graph-dynamica.dynamica_up {{vm.other_charts_data.shipping_cost_as_a_percentage_of_total_revenue.diff}}
         .graph-block
-          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          #shipping_cost_as_a_percentage_of_total_revenue.graph_2.lineAreaChart_1.d3graph.hide_x_axis
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'average_order_value'})"}
@@ -35,7 +35,7 @@
           %span.val {{vm.other_charts_data.average_order_value.value}}
           %sup.graph-dynamica.dynamica_up {{vm.other_charts_data.average_order_value.diff}}
         .graph-block
-          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          #average_order_value.graph_2.lineAreaChart_1.d3graph.hide_x_axis
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit.disabled
         / a.graph-u-link(href='total_revenu.html')
