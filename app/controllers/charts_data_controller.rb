@@ -61,11 +61,11 @@ class ChartsDataController < ApplicationController
   end
 
   def date_from
-    @date_from ||= Date.parse params[:from]
+    @date_from ||= "#{params[:from][3..4]}.#{params[:from][0..1]}.#{params[:from][-4..-1]}".to_datetime
   end
 
   def date_to
-    @date_to ||= Date.parse params[:to]
+    @date_to ||= "#{params[:to][3..4]}.#{params[:to][0..1]}.#{params[:to][-4..-1]}".to_datetime
   end
 
   def period

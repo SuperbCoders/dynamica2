@@ -21,9 +21,7 @@ class DashboardController
 
     @scope.$watch('vm.range.period', (old_v, new_v) ->
       if new_v is '0'
-        today = moment()
-        vm.range.raw_start = rangeStart = moment(today).startOf('month')
-        vm.range.raw_end   = rangeEnd = moment(today).endOf('month')
+        @set_default_range()
 
         vm.datepicker.datepicker('setDates', [
           vm.fit2Limits(vm.datepicker, rangeStart, true)
@@ -53,8 +51,8 @@ class DashboardController
     chart_url = "/charts_data/#{chart_type}"
     chart_params =
       period: vm.range.period
-      from: vm.range.raw_start.format('DD-MM-YYYY')
-      to: vm.range.raw_end.format('DD-MM-YYYY')
+      from: vm.range.raw_start.format('MM.DD.YYYY')
+      to: vm.range.raw_end.format('MM.DD.YYYY')
       project_id: vm.project.id
       chart: vm.range.chart
 
@@ -77,7 +75,9 @@ class DashboardController
     vm = @
     today = moment()
     vm.range.raw_start = rangeStart = moment(today).startOf('month')
-    vm.range.raw_end   = rangeEnd = moment(today).endOf('month')
+    vm.range.raw_end = rangeEnd = moment(today).endOf('month')
+    vm.range.from = rangeStart.format('MM.DD.YYYY')
+    vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
     vm.datepicker.datepicker('setDates', [
       vm.fit2Limits(vm.datepicker, rangeStart, true)
@@ -493,7 +493,14 @@ class DashboardController
 #      return
     return
 
-  chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project, slug: @project.slug, chart: chart})
+  chart_changed: (chart) ->
+    @rootScope.$state.go('projects.chart', {
+      project: @project
+      slug: @project.slug
+      chart: @range[chart]
+      from: @range.from
+      to: @range.to
+    })
 
   set_date_range: (range_type) ->
     vm = @
@@ -530,6 +537,8 @@ class DashboardController
 
     vm.range.raw_start = rangeStart
     vm.range.raw_end = rangeEnd
+    vm.range.from = rangeStart.format('MM.DD.YYYY')
+    vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
     vm.datepicker.datepicker('setDates', [
       vm.fit2Limits(vm.datepicker, rangeStart, true)

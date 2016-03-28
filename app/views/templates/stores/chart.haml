@@ -1,1 +1,9 @@
-{{vm.chart_type}} for {{vm.project.name}}
+%section.dashboard-bodya
+  .container-fluid.globalwidth
+    %section.dashboard.projects-dashboard
+      / Dash navigation
+      = render 'templates/stores/chart/header'
+
+      {{vm.chart_type}} for {{vm.project.name}}
+      %pre
+        {{vm.data | json}}

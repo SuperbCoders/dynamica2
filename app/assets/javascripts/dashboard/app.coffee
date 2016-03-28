@@ -71,7 +71,7 @@
       ]
 
   .state 'projects.chart',
-    url: '/:slug/:chart',
+    url: '/:slug/:chart/:from/:to',
     templateUrl: 'templates/stores/chart'
     controller: 'ChartController',
     controllerAs: 'vm',
