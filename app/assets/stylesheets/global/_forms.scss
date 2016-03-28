@@ -1,45 +1,51 @@
 .form-control {
-  height: 50px;
-  padding: 15px 20px;
-  color: #4f4f4f;
-  &:focus {
-    border-color: #c8c8c8;
+	height: 50px;
+	padding: 15px 20px;
+	color: #4f4f4f;
+	&:focus {
+		border-color: #c8c8c8;
+	}
+  
+  &.form-control-small {
+    padding: 5px 20px;
+    height: 36px;
   }
+  
 }
 
 .form {
-  .form-group {
-    margin-bottom: 20px;
-  }
-  .control-box {
-    margin-bottom: 20px;
+	.form-group {
+		margin-bottom: 20px;
+	}
+	.control-box {
+		margin-bottom: 20px;
     position: relative;
-  }
-  .control-label {
-    margin-bottom: 10px!important;
-    font-size: 20px;
-    line-height: 1.2;
-    text-align: left;
-  }
+	}
+	.control-label {
+		margin-bottom: 10px!important;
+		font-size: 20px;
+		line-height: 1.2;
+		text-align: left;
+	}
 }
 
 .alert-error {
-  padding-top: 15px;
-  padding-left: 25px;
-  padding-bottom: 15px;
-  padding-right: 9999px;
-  margin-left: 54px;
-  position: absolute;
-  bottom: 0;
-  left: 100%;
-  color: #fff;
-  font-size: 18px;
-  background: #ff6363;
-  z-index: 1001;
-  span {
-    display: block;
-    width: 200px;
-  }
+	padding-top: 15px;
+	padding-left: 25px;
+	padding-bottom: 15px;
+	padding-right: 9999px;
+	margin-left: 54px;
+	position: absolute;
+	bottom: 0;
+	left: 100%;
+	color: #fff;
+	font-size: 18px;
+	background: #ff6363;
+	z-index: 1001;
+	span {
+		display: block;
+		width: 200px;
+	}
 }
 
 .has-error {
@@ -50,9 +56,9 @@
 }
 
 .switcher-off {
-  .switcher-label {
-    color: #d1d1d1;
-  }
+	.switcher-label {
+		color: #d1d1d1;
+	}
 }
 
 .switch {
@@ -178,35 +184,35 @@
 }
 
 .el-count {
-  width: 136px;
-  height: 34px;
-  .el-arrow {
-    display: block;
-    width: 34px;
-    height: 34px;
-    float: left;
-  }
-  .el-field {
-    width: 60px;
-    height: 34px;
-    margin: 0 4px;
-    float: left;
-    color: #fff;
-    font-size: 24px;
-    text-align: center;
-    border: 0;
-    background: none;
-  }
+	width: 136px;
+	height: 34px;
+	.el-arrow {
+		display: block;
+		width: 34px;
+		height: 34px;
+		float: left;
+	}
+	.el-field {
+		width: 60px;
+		height: 34px;
+		margin: 0 4px;
+		float: left;
+		color: #fff;
+		font-size: 24px;
+		text-align: center;
+		border: 0;
+		background: none;
+	}
 }
 
 .el-graph {
-  position: relative;
-  overflow: hidden;
-  .el-count {
-    position: absolute;
-    top: 50%;
-    right: 70px;
-  }
+	position: relative;
+	overflow: hidden;
+	.el-count {
+		position: absolute;
+		top: 50%;
+		right: 70px;
+	}
 }
 
 .el-arrow-minus {@include retina-sprite(icon-minus);}

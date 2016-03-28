@@ -1,0 +1,17 @@
+%section.case.case-project-add
+  .case-capt
+    %h1= t('projects.edit.title')
+  .case-cnt
+    %form.form-horizontal
+      .form-group
+        %label.string.required.col-md-3.col-sm-3.control-label
+          %abbr{title: 'required'}
+            *
+          Name
+        .col-md-6.col-sm-9
+          .control-box
+            %input.string.required.form-control{type: "text", 'ng-model' => "vm.project.name"}
+
+      .form-group
+        .col-md-offset-3.col-md-6.col-sm-offset-3.col-sm-9
+          %a.btn.btn-lg.btn-danger{'ng-click' => "vm.save()"}= t('projects.new.form.submit')

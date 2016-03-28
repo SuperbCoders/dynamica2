@@ -1,0 +1,52 @@
+/ Finance overview
+/ total_revenu
+/ shipping_cost_as_a_percentage_of_total_revenue
+/ average_order_value
+/ average_order_size
+
+.dashboard-caption
+  %h3.caption-text= t 'projects.show.general'
+  %i.icon.fa.fa-angle-right
+.graph-unit-holder.graph-unit-hover
+  .row
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'total_revenu'})"}
+        %h5.graph-name= t('projects.show.total_revenu')
+        .graph-value
+          %span.val {{vm.other_charts_data.total_revenu.value}}
+          %sup.graph-dynamica.dynamica_up {{vm.other_charts_data.total_revenu.diff}}
+        .graph-block
+          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'shipping_cost_as_a_percentage_of_total_revenue'})"}
+        %h5.graph-name= t('projects.show.shipping_cost_as_a_percentage_of_total_revenue')
+        .graph-value
+          %span.val {{vm.other_charts_data.shipping_cost_as_a_percentage_of_total_revenue.value}}
+          %sup.graph-dynamica.dynamica_up {{vm.other_charts_data.shipping_cost_as_a_percentage_of_total_revenue.diff}}
+        .graph-block
+          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'average_order_value'})"}
+        %h5.graph-name= t('projects.show.average_order_value')
+        .graph-value
+          %span.val {{vm.other_charts_data.average_order_value.value}}
+          %sup.graph-dynamica.dynamica_up {{vm.other_charts_data.average_order_value.diff}}
+        .graph-block
+          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit.disabled
+        / a.graph-u-link(href='total_revenu.html')
+        %h5.graph-name= t('projects.show.average_order_size')
+        .graph-value
+          %span.val {{vm.other_charts_data.average_order_size.value}}
+          -#%span.val
+          -#  Google analytics is not available,
+          -#  %br
+          -#    %a{:href => "#"} set up
+          -#    it now
+        .graph-block
+          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+

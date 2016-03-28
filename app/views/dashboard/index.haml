@@ -1,0 +1,257 @@
+div(ui-view)
+
+/section.dashboard-body
+/  .container-fluid.globalwidth
+/    section.dashboard.projects-dashboard data-project-id=@project.id
+/      .row
+/        .col-sm-12
+/          ul.dashboard-panel
+/            li.current
+/              a.dashboard-panel-link href="#"  Overview
+/            li.filter-holder
+/              .hover-select-box.filter-mod
+/                select.selectpicker.filterSelect
+/                  option data-hidden="true" value="-1"
+/                  option value=("Gross Revenue")  Gross Revenue
+/                  option value=("Avg. order")  Avg. order
+/                  option value=("Avg. revenue per customer")  Avg. revenue per customer
+/                  option value=("Sales per visitor")  Sales per visitor
+/                  option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
+/                  option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
+/              a.dashboard-panel-link href="#"  Finance
+/            li.filter-holder
+/              .hover-select-box.filter-mod
+/                select.selectpicker.filterSelect
+/                  option data-hidden="true" value="-1"
+/                  option value=("Gross Revenue")  Gross Revenue
+/                  option value=("Avg. order")  Avg. order
+/                  option value=("Avg. revenue per customer")  Avg. revenue per customer
+/                  option value=("Sales per visitor")  Sales per visitor
+/                  option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
+/                  option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
+/              a.dashboard-panel-link href="#"  Customers
+/            li.filter-holder
+/              .hover-select-box.filter-mod
+/                select.selectpicker.filterSelect
+/                  option data-hidden="true" value="-1"
+/                  option value=("Gross Revenue")  Gross Revenue
+/                  option value=("Avg. order")  Avg. order
+/                  option value=("Avg. revenue per customer")  Avg. revenue per customer
+/                  option value=("Sales per visitor")  Sales per visitor
+/                  option value=("Avg. Customer Lifetime Value")  Avg. Customer Lifetime Value
+/                  option value=("Shipping cost as a percentage of total revenue")  Shipping cost as a percentage of total revenue
+/              a.dashboard-panel-link href="#"  Products
+
+/      .row.dashboard-title-row
+/        .col-sm-6
+/          h2 Bling-Blings Dashboard
+/        .col-sm-6
+/          .pull-right.datepicker-v1.datepickerComponent
+/            .pull-left.datepicker-parent
+/              input.form-control.datePicker.form-control-small type="text" /
+/            .pull-left
+/              select.selectpicker.graphFilterDate
+/                option data-hidden="true" value="-1"
+/                option selected="" value="0"  Current month
+/                option value="1"  Previous month
+/                option value="2"  Last 3 month
+/                option value="3"  Last 6 month
+/                option value="4"  Last year
+/                option value="5"  All time
+/      .graph-unit-holder
+/        .graph-unit
+/          .graph-unit-large
+/            h5.graph-name Current status of your primary data
+/            .graph-filters.graph-filter-v1
+/              .btn-group role="group"
+/                input#graph_filter_1 checked="" hidden="" name="graph_filter" type="radio" value='day' /
+/                label.btn.btn-default.first for="graph_filter_1" type="button" Day
+/                input#graph_filter_2 hidden="" name="graph_filter" type="radio" value='week' /
+/                label.btn.btn-default for="graph_filter_2" type="button" Week
+/                input#graph_filter_3 hidden="" name="graph_filter" type="radio" value='month' /
+/                label.btn.btn-default.last for="graph_filter_3" type="button" Month
+/            .graph-block
+/              .graph_3.areaChartFamily_1.d3graph.hide_x_axis
+/                #tooltip.graph-tooltip-holder.hidden_
+/                  #tooltip_dot.tooltip-dot
+/                  #tooltip_content.graph-tooltip
+/      .dashboard-caption
+/        h3.caption-text Finance overview
+/        i.icon.fa.fa-angle-right
+/      .graph-unit-holder.graph-unit-hover
+/        .row
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Gross Revenue
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#total_revenu
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Shipping Cost As A Percentage Of Total Revenue
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#shipping_cost_as_a_percentage_of_total_revenue
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Average Order Value
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_order_value
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Average Order Size
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_order_size
+/      .dashboard-caption
+/        h3.caption-text Customers overview
+/        i.icon.fa.fa-angle-right
+/      .graph-unit-holder.graph-unit-hover
+/        .row
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Customers Number
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#customers_number
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name New Customers Number
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#new_customers_number
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Repeat Customers Number
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#repeat_customers_number
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name New & repeat customers
+/              .graph-value
+/                span.val 3.2
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_1.donutChart_1.d3graph.hide_x_axis#ratio_of_new_customers_to_repeat_customers
+/        .row
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Average Revenue Per Customer
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_revenue_per_customer
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Sales Per Visitor
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#sales_per_visitor
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Average Customer Lifetime Value
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#average_customer_lifetime_value
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Unique Users Number
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#unique_users_number
+/        .row
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Visits
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#visits
+/      .dashboard-caption
+/        h3.caption-text Products overview
+/        i.icon.fa.fa-angle-right
+/      .graph-unit-holder.graph-unit-hover
+/        .row
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Products In Stock Number
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#products_in_stock_number
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Items In Stock Number
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#items_in_stock_number
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Percentage Of Inventory Sold
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#percentage_of_inventory_sold
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Percentage Of Stock Sold
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#percentage_of_stock_sold
+/        .row
+/          .col-lg-3.col-md-4.col-sm-6
+/            .graph-unit
+/              a.graph-u-link href="total_revenu.html"
+/              h5.graph-name Products Number
+/              .graph-value
+/                span.val $4,490
+/                sup.graph-dynamica.dynamica_up +8%
+/              .graph-block
+/                .graph_2.lineAreaChart_1.d3graph.hide_x_axis#products_number

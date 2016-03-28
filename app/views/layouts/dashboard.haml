@@ -1,0 +1,45 @@
+!!!
+%html{lang: "ru", 'ng-app'=>"dynamica.dashboard"}
+  %head
+    %meta{content: "width=device-width, initial-scale=1", name: "viewport" }
+    %meta{charset: "utf-8" }
+    %meta{content: "", name: "keywords" }
+    %meta{content: "", name: "description" }
+    %meta{content: "#{locale}", name: "locale"}
+    %title DYNAMICA
+
+    %link{rel: "apple-touch-icon", href: asset_path('apple-touch-icon.png')}
+    %link{href: "/favicon.ico", rel: ("shortcut icon"), type: "image/x-icon"}
+
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'dashboard.app'
+
+    = csrf_meta_tags
+  %body
+    = render 'counters'
+    .page
+      = render 'dashboard/header'
+
+      .dashboard-body
+        .container-fluid.globalwidth
+          %div(ui-view)
+
+      .page-footer
+        .container-fluid.globalwidth
+          %ul.footer-menu
+            %li
+              %a{href: "#"} Projects
+            %li
+              %a{href: "#"} Team
+            %li
+              %a{href: "#"} Profile
+            %li
+              %a{href: "#"} Billing
+            %li
+              %a{href: "#"} Support
+          .footer-copyright All rights reserved © Osintsev. K.S. 2016
+
+    .page-overlay.pageOverlay
+      .jawn
+    = render 'popups/no_server'
+    = render 'popups/creating_graph'

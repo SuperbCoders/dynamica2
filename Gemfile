@@ -7,6 +7,7 @@ gem 'rails', '4.1.8'
 gem 'pg'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
+gem 'less-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
@@ -17,7 +18,7 @@ gem 'therubyracer',  platforms: :ruby
 # JS libraries
 gem 'jquery-rails'
 gem 'airbrussh'
-
+gem 'bower-rails'
 
 # CSS libraries
 gem 'compass-rails'
@@ -90,6 +91,7 @@ gem 'workflow'
 # gem 'rinruby'
 gem 'whenever'
 gem 'slim-rails'
+gem 'active_model_serializers', '~> 0.10.0.rc4'
 gem 'simple_form'
 gem 'friendly_id', '~> 5.0.0'
 gem 'carrierwave'
@@ -97,6 +99,9 @@ gem 'mini_magick'
 gem 'jquery-fileupload-rails'
 gem 'non-stupid-digest-assets', '~> 1.0.4' # creates both digest and non-digest assets
 gem 'settingslogic'
+
+gem 'haml-rails'
+gem 'haml'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-d3'
@@ -113,7 +118,7 @@ gem 'bootstrap-kaminari-views'
 # CSV libraries
 gem 'smarter_csv' # For reading
 gem 'render_csv'  # For export
-
+gem 'airbrussh'
 gem 'rubyzip'
 gem 'russian'
 gem 'celluloid', '~> 0.16.0'

@@ -10,13 +10,15 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require bootstrap
  *= require style
  *= require_tree ./custom
  *= require_self
  */
  
  #flotTip {white-space: nowrap; border: 1px solid #111; padding: 3px 8px; background:#fff; font-size:12px;}
-
+.hover-select-box.filter-mod .dropdown-menu .glyphicon {display:none !important}
+.dashboard-title-row .glyphicon {display:none !important}
 .dropzone {
 }
 .dropzone.in {

@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :set_locale
+  before_action { @response = {success: false, messages: [], errors: []} }
 
   def default_url_options(options = {})
     { locale: I18n.locale }.merge(options)
@@ -28,7 +29,37 @@ class ApplicationController < ActionController::Base
       project.try :set_project_owner!, current_user, session
     end
 
-    super
+    dashboard_url
+  end
+
+  def serialize_resources(resources, serializer)
+    ActiveModel::SerializableResource.new(
+        resources,
+        each_serializer: serializer,
+        scope: current_user,
+        root: false
+    ).serializable_hash
+  end
+
+  def serialize_resource(resource, serializer)
+    ActiveModel::SerializableResource.new(
+        resource,
+        serializer: serializer,
+        scope: current_user,
+        root: false
+    ).serializable_hash
+  end
+
+  def templates
+    if Rails.env == 'development'
+      render '/templates/' + params[:url], layout: false
+    else
+      begin
+        render '/templates/' + params[:url], layout: false
+      rescue Exception => e
+        render nothing: true, layout: false
+      end
+    end
   end
 
   protected
