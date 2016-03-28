@@ -17,9 +17,10 @@
           %option{:value => "4"} Last year
           %option{:value => "5"} All time
 
-.dashboard-caption{'ng-init' => "vm.debug = false", 'ng-show' => "vm.debug"}
-  %pre
-    {{vm.range | json}}
-  %p Data
-  %pre
-    {{vm.data | json}}
+- if Rails.env.development?
+  .dashboard-caption{'ng-init' => "vm.debug = false", 'ng-show' => "vm.debug"}
+    %pre
+      {{vm.range | json}}
+    %p Data
+    %pre
+      {{vm.data | json}}
