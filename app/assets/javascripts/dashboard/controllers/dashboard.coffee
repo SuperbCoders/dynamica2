@@ -494,6 +494,7 @@ class DashboardController
     return
 
   chart_changed: (chart) ->
+    console.log chart
     @rootScope.$state.go('projects.chart', {
       project: @project
       slug: @project.slug

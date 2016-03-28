@@ -17,7 +17,7 @@
           %option{:value => "4"} Last year
           %option{:value => "5"} All time
 
-.dashboard-caption{'ng-init' => "vm.debug = true", 'ng-show' => "vm.debug"}
+.dashboard-caption{'ng-init' => "vm.debug = false", 'ng-show' => "vm.debug"}
   %pre
     {{vm.range | json}}
   %p Data

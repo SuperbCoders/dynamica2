@@ -5,6 +5,7 @@ class ChartController
     vm.chart = @rootScope.$stateParams.chart
     vm.project = @rootScope.$stateParams.project
     vm.range =
+      chart: vm.chart
       from: @rootScope.$stateParams.from
       to: @rootScope.$stateParams.to
 
@@ -19,7 +20,7 @@ class ChartController
     if not @project
       @Projects.search({slug: vm.slug}).$promise.then( (project) ->
         vm.project = project
-        @fetch()
+        vm.fetch()
       )
     else
       @fetch()
@@ -39,10 +40,10 @@ class ChartController
     vm.http.get chart_url, params: chart_params
 
   fetch: ->
-    return unless @project.id
     vm = @
     @charts_fetch('full_chart_data').success((response) ->
       vm.data = response
+      vm.init_line_area3_chart($('.areaChartTotal_1'), vm.data)
     )
 
   fit2Limits: (pckr, date, max) ->
@@ -78,6 +79,162 @@ class ChartController
       format: 'M dd, yyyy'
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
+
+  init_line_area3_chart: (el, packet) ->
+    data = packet.data
+    make_y_axis = ->
+      d3.svg.axis().scale(y).orient('left').ticks 5
+
+    make_x_axis = ->
+      d3.svg.axis().scale(x).orient('bottom').ticks 5
+
+    el.find('svg').remove()
+    dates = []
+    values = []
+    i = 0
+    while i < data.length
+      obj = data[i]
+      dates.push moment(obj.date)
+      values.push obj.close
+      i++
+    margin =
+      top: 30
+      right: 35
+      bottom: 50
+      left: 100
+    width = el.width() - (margin.left) - (margin.right)
+    height = el.height() - (margin.top) - (margin.bottom)
+    tooltip = $('#tooltip')
+    tooltip_content = $('#tooltip_content')
+    bisectDate = d3.bisector((d) ->
+      #console.log(d);
+      d.date
+    ).left
+    parseDate = d3.time.format('%d-%b-%y').parse
+    #var currencyFormatter = d3.format(",.0f");
+
+    currencyFormatter = (e) ->
+      e.toString().replace /(\d)(?=(\d{3})+(?!\d))/g, '$1 '
+
+    x = d3.time.scale().domain([
+      moment.min(dates)
+      moment.max(dates)
+    ]).range([0,width])
+    y = d3.scale.linear().domain([
+      0
+      1000 * Math.floor(Math.max.apply(null, values) / 1000 + 1)
+    ]).range([height,0])
+    line = d3.svg.line().x((d) ->
+      x d.x
+    ).y((d) ->
+      y d.y
+    )
+    area_x = d3.time.scale().range([0,width])
+    area_y = d3.scale.linear().range([height,0])
+    area = d3.svg.area().x((d) ->
+      area_x d.date
+    ).y0(height).y1((d) ->
+      area_y d.close
+    ).interpolate('monotone')
+    valueline = d3.svg.line().x((d) ->
+      x d.date
+    ).y((d) ->
+      y d.close
+    ).interpolate('monotone')
+    xAxis = d3.svg.axis().scale(x).ticks(data.length - 1).tickFormat(d3.time.format('%b %d')).orient('bottom')
+    yAxis = d3.svg.axis().scale(y).ticks(5).tickFormat((d) ->
+      if d == 0 then '' else currencyFormatter(d) + '$'
+    ).orient('left')
+    svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    svg.append('g').attr('class', 'x axis').style('font-size', '14px').style('fill', '#A5ADB3').attr('transform', 'translate(0,' + height + ')').call xAxis
+    svg.append('g').attr('class', 'y axis').attr('transform', 'translate(' + -25 + ', 0)').style('font-size', '14px').style('fill', '#A5ADB3').attr('class', 'grid').call yAxis
+
+    ###   svg.append("g")
+     .attr("class", "gray_grid")
+     .attr("transform", "translate(0," + height + ")")
+     .call(make_x_axis()
+     .tickSize(-height, 0, 0)
+     .tickFormat("")
+     );
+    ###
+
+    svg.append('g').attr('class', 'gray_grid').call make_y_axis().tickSize(-width, 0, 0).tickFormat('')
+
+    ###svg.append("path")
+     .data(data)
+     .attr("class", "grid_line")
+     .attr("d", line);
+    ###
+
+    # Get the data
+    for d in data
+      d.date = parseDate(d.date)
+      d.close = +d.close
+      return
+
+    # Scale the range of the data
+    x.domain d3.extent(data, (d) ->
+      d.date
+    )
+    y.domain [
+      0
+      d3.max(data, (d) ->
+        Math.max d.close
+      )
+    ]
+    area_x.domain d3.extent(data, (d) ->
+      d.date
+    )
+    area_y.domain [
+      0
+      d3.max(data, (d) ->
+        d.close
+      )
+    ]
+    svg.append('path').attr('class', 'line').attr 'd', valueline(data)
+    # Add the scatterplot
+    svg.append('line').attr('id', 'line_for_dot').attr('class', 'line_for_dot').style('stroke', '#D0E3EE').style('stroke-width', '2').attr('x1', 0).attr('x2', 0).attr('y1', height).attr 'y2', 0
+    line_for_dot = d3.select('#line_for_dot')
+    svg.selectAll('dot').data(data).enter().append('circle').attr('r', 0).attr('data-y-value', (d, i) ->
+      y d.close
+    ).attr('class', (d, i) ->
+      'mark_v3 '
+      #return 'mark_v3 ' + (i == 0 || (i == data.length - 1) ? ' hidden' : '');
+    ).attr('id', (d, i) ->
+      'dot_' + i
+    ).attr('cx', (d) ->
+      x d.date
+    ).attr 'cy', (d) ->
+      `var i`
+      y d.close
+    svg.append('circle').attr('r', 7).attr('id', 'big_dot').attr('class', 'big_dot mark_v2').attr('cx', 0).attr 'cy', 0
+    tracing_anim_duration = 150
+    distance = x(data[0].date) - x(data[1].date)
+    big_dot = d3.select('#big_dot')
+    i = 0
+    while i < data.length
+      svg.append('rect').attr('class', 'graph-tracing-catcher tracingCatcher').attr('data-dot', '#dot_' + data.length - i - 1).style('opacity', 0).attr('x', ->
+        width - x(data[i].date)
+      ).attr('y', 0).attr('width', width).attr('height', height).style('transform', 'translate(' + distance / -2 + 'px)').on('mouseenter', (e) ->
+        $this = $(this)
+        dot_id = d3.select(this).attr('data-dot')
+        cur_id = dot_id.replace(/\D/g, '') * 1
+        cur_dot = $('#dot_' + cur_id)
+        x0 = area_x.invert(cur_dot.attr('cx'))
+        y0 = area_y.invert(cur_dot.attr('cy')).toFixed(0)
+        if prevTracingDot != undefined
+          big_dot.transition().duration(tracing_anim_duration).attr('cx', $this.attr('x')).attr 'cy', cur_dot.attr('data-y-value')
+          line_for_dot.transition().duration(tracing_anim_duration).attr('x1', $this.attr('x')).attr('x2', $this.attr('x')).attr 'y2', cur_dot.attr('data-y-value')
+          tooltip_content.empty().css('top', cur_dot.attr('data-y-value') * 1 + margin.top - 15 + 'px').append($('<div class="tooltip-title" />').text(moment(x0).format('dddd, D MMMM YYYY'))).append $('<div class="tooltip-value" />').text(currencyFormatter(y0) + '$')
+          tooltip.css 'left', $this.attr('x') * 1 + margin.left + 'px'
+          splashTracing cur_id, if cur_id > prevTracingDot then 'left' else 'right'
+        return
+      ).on 'mouseleave', (e) ->
+        dot_id = d3.select(this).attr('data-dot')
+        prevTracingDot = dot_id.replace(/\D/g, '') * 1
+        return
+      i++
+    return
 
 
   toggle_debug: -> if @debug is true then @debug = false else @debug = true

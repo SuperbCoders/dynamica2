@@ -11,6 +11,7 @@
       %li.filter-holder
         .hover-select-box.filter-mod
           %select.selectpicker.filterSelect{'ng-model' => "vm.range.general_charts", 'ng-change' => "vm.chart_changed('general_charts')"}
+            %option{value: ''}
             %option{value: "total_revenu"}= t 'projects.show.total_revenu'
             %option{value: "shipping_cost_as_a_percentage_of_total_revenue"}= t 'projects.show.shipping_cost_as_a_percentage_of_total_revenue'
             %option{value: "average_order_value"}= t 'projects.show.average_order_value'
@@ -21,6 +22,7 @@
       %li.filter-holder
         .hover-select-box.filter-mod
           %select.selectpicker.filterSelect{'ng-model' => "vm.range.customer_charts", 'ng-change' => "vm.chart_changed('customer_charts')"}
+            %option{value: ''}
             %option{value: "customers_number"}= t 'projects.show.customers_number'
             %option{value: "new_customers_number"}= t 'projects.show.new_customers_number'
             %option{value: "repeat_customers_number"}= t 'projects.show.repeat_customers_number'
