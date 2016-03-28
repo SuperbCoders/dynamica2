@@ -93,7 +93,7 @@ class Project < ActiveRecord::Base
         !Project.exists?(slug: derived_slug)
         derived_slug
       else
-        Project.generate_unique_slug
+        "#{derived_slug}-#{Project.generate_unique_slug[0..4]}"
       end
     end
 

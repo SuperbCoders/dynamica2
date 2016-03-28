@@ -37,6 +37,7 @@
       %li.filter-holder
         .hover-select-box.filter-mod
           %select.selectpicker.filterSelect{'ng-model' => "vm.range.product_charts", 'ng-change' => "vm.chart_changed('product_charts')"}
+            %option{value: ''}
             %option{value: "products_in_stock_number"}= t 'projects.show.products_in_stock_number'
             %option{value: "items_in_stock_number"}= t 'projects.show.items_in_stock_number'
             %option{value: "percentage_of_inventory_sold"}= t 'projects.show.percentage_of_inventory_sold'

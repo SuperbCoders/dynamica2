@@ -243,6 +243,52 @@ class ChartController
       to: @range.to
     })
 
+  set_date_range: (range_type) ->
+    vm = @
+    return if range_type not in ["0","1","2","3","4","5"]
+    return if not vm.datepicker
+
+    period = parseInt(range_type)
+    today = moment()
+
+    if period == 0
+      #  Current month
+      rangeStart = moment(today).startOf('month')
+      rangeEnd = moment(today).endOf('month')
+    else if period == 1
+      #  Previous month
+      rangeStart = moment(today).subtract(1, 'month').startOf('month')
+      rangeEnd = moment(today).subtract(1, 'month').endOf('month')
+    else if period == 2
+      #  Last 3 month
+      rangeStart = moment(today).subtract(3, 'month')
+      rangeEnd = moment(today)
+    else if period == 3
+      #  Last 6 month
+      rangeStart = moment(today).subtract(6, 'month')
+      rangeEnd = moment(today)
+    else if period == 4
+      #  Last year
+      rangeStart = moment(today).subtract(12, 'month')
+      rangeEnd = moment(today)
+    else if period == 5
+      #  All time
+      rangeStart = moment(vm.datepicker.datepicker('getStartDate'))
+      rangeEnd = moment(vm.datepicker.datepicker('getEndDate'))
+
+    vm.range.raw_start = rangeStart
+    vm.range.raw_end = rangeEnd
+    vm.range.from = rangeStart.format('MM.DD.YYYY')
+    vm.range.to = rangeEnd.format('MM.DD.YYYY')
+
+    vm.datepicker.datepicker('setDates', [
+      vm.fit2Limits(vm.datepicker, rangeStart, true)
+      vm.fit2Limits(vm.datepicker, rangeEnd)
+    ]).datepicker 'update'
+
+    vm.fetch()
+    return
+
   translate_chart_name: (name) ->
     names_ru =
       overview: 'Обзор'
