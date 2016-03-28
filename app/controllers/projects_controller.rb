@@ -18,8 +18,6 @@ class ProjectsController < BaseController
   end
 
   def authorize_user
-    logger.info "Resource #{@resource.to_json}"
-    logger.info "Action #{action_name}"
     case action_name.to_sym
       when :index
         authorize! :read, Project
@@ -35,13 +33,10 @@ class ProjectsController < BaseController
   end
 
   def create
-
     @resource.user = current_user
-
     if @resource.save
       current_user.permissions.create!(project: @resource, all: true)
     end
-
     send_json serialize_resource(@resource, resource_serializer), @resource.valid?
   end
 
