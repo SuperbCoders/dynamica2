@@ -6,8 +6,6 @@ class ProfileController
       password_confirmation: false
       current_password: false
 
-    console.log 'ProfileController'
-
   save: ->
     vm = @
     vm.http.post('/profile', @rootScope.user).then((response) ->

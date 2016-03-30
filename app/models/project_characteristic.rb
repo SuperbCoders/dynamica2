@@ -51,8 +51,8 @@ class ProjectCharacteristic < ActiveRecord::Base
   end
 
   scope :group_date_by_day, -> { group_by_day(:date, format: "%d-%b-%y", locale: :en) }
-  scope :group_date_by_week, -> { group_by_week(:date, week_start: :mon, format: "%V-%g", locale: :en) }
-  scope :group_date_by_month, -> { group_by_month(:date, week_start: :mon, format: "%b-%y", locale: :en) }
+  scope :group_date_by_week, -> { group_by_week(:date, week_start: :mon, format: "%d-%b-%y", locale: :en) }
+  scope :group_date_by_month, -> { group_by_month(:date, week_start: :mon, format: "%d-%b-%y", locale: :en) }
 
   private
 

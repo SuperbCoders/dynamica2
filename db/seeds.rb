@@ -1,10 +1,5 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-
-def create_demo_user
-  User.where(email: 'demo@dynamica2.cc').first_or_create!(password: '123123Demo')
-end
-
 # def create_demo_project_for_sales(user)
 #   return if user.own_projects.exists?(name: 'Sales (demo)')
 #   project = user.own_projects.create!(slug: SecureRandom.hex(32), name: 'Sales (demo)')
@@ -36,7 +31,13 @@ end
 # create_demo_project_for_sales(demo_user)
 # create_demo_project_for_subscriptions(demo_user)
 
-def create_demo_project
+def create_demo_user
+  User.where(email: 'demo@dynamica2.cc').first_or_create!(password: '123123Demo')
+end
+
+
+
+def create_demo_project(user)
   project_name = 'New test project'
   return if Project.where(name: project_name).first
 
@@ -90,10 +91,11 @@ def create_demo_project
     previous_line_items.concat line_items
   end
 
-  User.all.each do |user|
-    user.permissions.find_or_create_by! project: current_project, manage: true, read: true, forecasting: true, api: true
-  end
-
+  user.permissions.find_or_create_by! project: current_project,
+      manage: true,
+      read: true,
+      forecasting: true,
+      api: true
 
 
   # items.each do |product|
@@ -113,4 +115,4 @@ def create_demo_project
   # end
 end
 
-create_demo_project
+create_demo_project(create_demo_user)

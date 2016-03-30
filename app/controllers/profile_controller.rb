@@ -18,6 +18,10 @@ class ProfileController < ApplicationController
     render json: @response
   end
 
+  def email_uniqueness
+    render json: {exist: User.where(email: params[:email]).any?}
+  end
+
   private
 
 

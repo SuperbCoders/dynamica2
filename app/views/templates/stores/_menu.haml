@@ -12,7 +12,7 @@
         .hover-select-box.filter-mod
           %select.selectpicker.filterSelect{'ng-model' => "vm.range.general_charts", 'ng-change' => "vm.chart_changed('general_charts')"}
             %option{value: ''}
-            %option{value: "total_revenu"}= t 'projects.show.total_revenu'
+            %option{value: "total_gross_revenues"}= t 'projects.show.total_revenu'
             %option{value: "shipping_cost_as_a_percentage_of_total_revenue"}= t 'projects.show.shipping_cost_as_a_percentage_of_total_revenue'
             %option{value: "average_order_value"}= t 'projects.show.average_order_value'
             %option{value: "average_order_size"}= t 'projects.show.average_order_size'

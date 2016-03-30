@@ -10,19 +10,25 @@
   delete $httpProvider.defaults.headers.common['X-Requested-With']
 
   $stateProvider
+  .state 'setup',
+    url: '/setup'
+    templateUrl: '/templates/setup'
+    controller: 'SetupController'
+    controllerAs: 'vm'
+    
   .state 'profile',
     url: '/profile',
-    templateUrl: 'templates/profile/edit'
+    templateUrl: '/templates/profile/edit'
     controller: 'ProfileController',
     controllerAs: 'vm'
 
   .state 'projects',
     url: '/stores',
-    templateUrl: 'templates/stores/index'
+    templateUrl: '/templates/stores/index'
 
   .state 'projects.list',
     url: '/',
-    templateUrl: 'templates/stores/list'
+    templateUrl: '/templates/stores/list'
     controller: 'ProjectsController',
     controllerAs: 'vm',
     resolve:
@@ -36,7 +42,7 @@
 
   .state 'projects.new',
     url: '/new',
-    templateUrl: 'templates/stores/new'
+    templateUrl: '/templates/stores/new'
     controller: 'ProjectsController',
     controllerAs: 'vm',
     resolve:
@@ -46,7 +52,7 @@
 
   .state 'projects.edit',
     url: '/edit/:slug'
-    templateUrl: 'templates/stores/new'
+    templateUrl: '/templates/stores/new'
     controller: 'ProjectsController',
     controllerAs: 'vm',
     resolve:
@@ -59,7 +65,7 @@
 
   .state 'projects.view',
     url: '/:slug',
-    templateUrl: 'templates/stores/view'
+    templateUrl: '/templates/stores/view'
     controller: 'DashboardController',
     controllerAs: 'vm'
     resolve:
@@ -72,7 +78,7 @@
 
   .state 'projects.chart',
     url: '/:slug/:chart/:from/:to',
-    templateUrl: 'templates/stores/chart'
+    templateUrl: '/templates/stores/chart'
     controller: 'ChartController',
     controllerAs: 'vm',
     params: {project: null}

@@ -1,0 +1,18 @@
+.section.modal-login
+  .modal-cnt
+    .form
+      %form{method: 'POST', action: third_party_shopify_oauth_callback_path}
+        .control-box
+          %p= t('.third_party.sign_up.please_enter_email')
+        .form-group
+          = hidden_field_tag :authenticity_token, form_authenticity_token
+          %input{type: 'hidden', name: 'shop', value: params[:shop]}
+          %input{type: 'hidden', name: 'code', value: params[:code]}
+          %input{type: 'hidden', name: 'hmac', value: params[:hmac]}
+          %input{type: 'hidden', name: 'signature', value: params[:signature]}
+          %input{type: 'hidden', name: 'state', value: params[:state]}
+          %input{type: 'hidden', name: 'timestamp', value: params[:timestamp]}
+          .control-box
+            %input.form-control{placeholder: t('.log_in.form.email')}
+          .control-box
+            %input.btn.btn-lg.btn-danger{type: 'submit'}= t('.log_in.form.submit')

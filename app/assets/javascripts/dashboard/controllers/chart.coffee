@@ -15,7 +15,7 @@ class ChartController
       @rootScope.$state.go('projects.list')
 
     @init_dashboard()
-    @set_range()
+    @set_default_range()
 
     if not @project
       @Projects.search({slug: vm.slug}).$promise.then( (project) ->
@@ -24,8 +24,6 @@ class ChartController
       )
     else
       @fetch()
-
-
 
   charts_fetch: (chart_type) ->
     vm = @
@@ -42,7 +40,8 @@ class ChartController
   fetch: ->
     vm = @
     @charts_fetch('full_chart_data').success((response) ->
-      vm.data = response
+      vm.data = response['full']
+      vm.check_points = response['check_points']
       vm.init_line_area3_chart($('.areaChartTotal_1'), vm.data)
     )
 
@@ -54,47 +53,31 @@ class ChartController
     else
       moment.min(end, date).startOf('day')._d
 
-  set_range: ->
+  set_default_range: ->
     vm = @
-    vm.range.raw_start = rangeStart = moment(vm.range.from)
-    vm.range.raw_end = rangeEnd = moment(vm.range.to)
-
-    vm.datepicker.datepicker('setDates', [
-      vm.fit2Limits(vm.datepicker, rangeStart, true)
-      vm.fit2Limits(vm.datepicker, rangeEnd)
-    ]).datepicker 'update'
-
-  init_dashboard: ->
-    vm = @
-    $('.selectpicker').selectpicker({size: 70, showTick: false, showIcon: false})
-    $('.page').addClass('dashboard_page')
-
     today = moment()
-    vm.datepicker.datepicker(
-      multidate: 2
-      startDate: '-477d'
-      endDate: '0'
-      toggleActive: true
-      orientation: 'bottom left'
-      format: 'M dd, yyyy'
-      container: $('.datePicker').parent()
-      multidateSeparator: ' – ')
+    vm.range.raw_start = rangeStart = moment(today).startOf('month')
+    vm.range.raw_end = rangeEnd = moment(today).endOf('month')
+    vm.range.from = rangeStart.format('MM.DD.YYYY')
+    vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
-  init_line_area3_chart: (el, packet) ->
-    data = packet.data
-    make_y_axis = ->
-      d3.svg.axis().scale(y).orient('left').ticks 5
+    vm.set_datepicker_date(rangeStart, rangeEnd)
 
-    make_x_axis = ->
-      d3.svg.axis().scale(x).orient('bottom').ticks 5
+  init_line_area3_chart: (el, data) ->
+    console.log data
 
-    el.find('svg').remove()
     dates = []
     values = []
+
+    el.find('svg').remove()
+    make_y_axis = -> d3.svg.axis().scale(y).orient('left').ticks 5
+    make_x_axis = -> d3.svg.axis().scale(x).orient('bottom').ticks 5
+
+
     i = 0
 
-    while i < data.length
-      obj = data[i]
+    while i < data['data'].length
+      obj = data['data'][i]
       dates.push moment(obj.date)
       values.push obj.close
       i++
@@ -104,14 +87,12 @@ class ChartController
       right: 35
       bottom: 50
       left: 100
+
     width = el.width() - (margin.left) - (margin.right)
     height = el.height() - (margin.top) - (margin.bottom)
     tooltip = $('#tooltip')
     tooltip_content = $('#tooltip_content')
-    bisectDate = d3.bisector((d) ->
-      #console.log(d);
-      d.date
-    ).left
+    bisectDate = d3.bisector((d) -> d.date).left
     parseDate = d3.time.format('%d-%b-%y').parse
     #var currencyFormatter = d3.format(",.0f");
 
@@ -150,50 +131,33 @@ class ChartController
     svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
     svg.append('g').attr('class', 'x axis').style('font-size', '14px').style('fill', '#A5ADB3').attr('transform', 'translate(0,' + height + ')').call xAxis
     svg.append('g').attr('class', 'y axis').attr('transform', 'translate(' + -25 + ', 0)').style('font-size', '14px').style('fill', '#A5ADB3').attr('class', 'grid').call yAxis
-
-    ###   svg.append("g")
-     .attr("class", "gray_grid")
-     .attr("transform", "translate(0," + height + ")")
-     .call(make_x_axis()
-     .tickSize(-height, 0, 0)
-     .tickFormat("")
-     );
-    ###
-
     svg.append('g').attr('class', 'gray_grid').call make_y_axis().tickSize(-width, 0, 0).tickFormat('')
 
-    ###svg.append("path")
-     .data(data)
-     .attr("class", "grid_line")
-     .attr("d", line);
-    ###
-
-    # Get the data
-    for d in data
+    for d in data['data']
       d.date = parseDate(d.date)
       d.close = +d.close
       return
 
     # Scale the range of the data
-    x.domain d3.extent(data, (d) -> d.date )
+    x.domain d3.extent(data['data'], (d) -> d.date )
     y.domain [
       0
-      d3.max(data, (d) ->
+      d3.max(data['data'], (d) ->
         Math.max d.close
       )
     ]
-    area_x.domain d3.extent(data, (d) -> d.date )
+    area_x.domain d3.extent(data['data'], (d) -> d.date )
     area_y.domain [
       0
-      d3.max(data, (d) ->
+      d3.max(data['data'], (d) ->
         d.close
       )
     ]
-    svg.append('path').attr('class', 'line').attr 'd', valueline(data)
+    svg.append('path').attr('class', 'line').attr 'd', valueline(data['data'])
     # Add the scatterplot
     svg.append('line').attr('id', 'line_for_dot').attr('class', 'line_for_dot').style('stroke', '#D0E3EE').style('stroke-width', '2').attr('x1', 0).attr('x2', 0).attr('y1', height).attr 'y2', 0
     line_for_dot = d3.select('#line_for_dot')
-    svg.selectAll('dot').data(data).enter().append('circle').attr('r', 0).attr('data-y-value', (d, i) ->
+    svg.selectAll('dot').data(data['data']).enter().append('circle').attr('r', 0).attr('data-y-value', (d, i) ->
       y d.close
     ).attr('class', (d, i) ->
       'mark_v3 '
@@ -207,10 +171,10 @@ class ChartController
       y d.close
     svg.append('circle').attr('r', 7).attr('id', 'big_dot').attr('class', 'big_dot mark_v2').attr('cx', 0).attr 'cy', 0
     tracing_anim_duration = 150
-    distance = x(data[0].date) - x(data[1].date)
+    distance = x(data['data'][0].date) - x(data['data'][1].date)
     big_dot = d3.select('#big_dot')
     i = 0
-    while i < data.length
+    while i < data['data'].length
       svg.append('rect').attr('class', 'graph-tracing-catcher tracingCatcher').attr('data-dot', '#dot_' + data.length - i - 1).style('opacity', 0).attr('x', ->
         width - x(data[i].date)
       ).attr('y', 0).attr('width', width).attr('height', height).style('transform', 'translate(' + distance / -2 + 'px)').on('mouseenter', (e) ->
@@ -233,15 +197,6 @@ class ChartController
         return
       i++
     return
-
-  chart_changed: (chart) ->
-    @rootScope.$state.go('projects.chart', {
-      project: @project
-      slug: @project.slug
-      chart: @range[chart]
-      from: @range.from
-      to: @range.to
-    })
 
   set_date_range: (range_type) ->
     vm = @
@@ -281,11 +236,7 @@ class ChartController
     vm.range.from = rangeStart.format('MM.DD.YYYY')
     vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
-    vm.datepicker.datepicker('setDates', [
-      vm.fit2Limits(vm.datepicker, rangeStart, true)
-      vm.fit2Limits(vm.datepicker, rangeEnd)
-    ]).datepicker 'update'
-
+    vm.set_datepicker_date(rangeStart, rangeEnd)
     vm.fetch()
     return
 
@@ -312,7 +263,7 @@ class ChartController
       percentage_of_inventory_sold: 'Процент проданных товаров'
       percentage_of_stock_sold: 'Процент запаса на складе'
       products_number: 'Количество товаров'
-      total_revenu: 'Общая выручка'
+      total_gross_revenues: 'Общая выручка'
     names_en =
       overview: 'Overview'
       general: 'General'
@@ -336,9 +287,32 @@ class ChartController
       percentage_of_inventory_sold: 'Percentage Of Inventory Sold'
       percentage_of_stock_sold: 'Rercentage Of Stock Sold'
       products_number: 'Products Number'
-      total_revenu: 'Gross Revenue'
+      total_gross_revenues: 'Gross Revenue'
     if @rootScope.locale is 'ru' then names_ru[name] else names_en[name]
 
+  set_datepicker_date: (rangeStart, rangeEnd) ->
+    vm = @
+    vm.datepicker.datepicker('setDates', [
+      vm.fit2Limits(vm.datepicker, rangeStart, true)
+      vm.fit2Limits(vm.datepicker, rangeEnd)
+    ]).datepicker 'update'
 
+  init_dashboard: ->
+    vm = @
+    $('.selectpicker').selectpicker({size: 70, showTick: false, showIcon: false})
+    $('.page').addClass('dashboard_page')
+
+    vm.datepicker.datepicker(
+      multidate: 2
+      startDate: '-477d'
+      endDate: '0'
+      toggleActive: true
+      orientation: 'bottom left'
+      format: 'M dd, yyyy'
+      container: $('.datePicker').parent()
+      multidateSeparator: ' – ')
+
+  parse_diff: (diff_str) -> parseInt(diff_str)
+  chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
 @application.controller 'ChartController', ['$rootScope', '$scope', 'Projects', '$http', ChartController]
