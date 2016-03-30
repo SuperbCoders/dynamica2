@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'charts_data/full_chart_data'
+  get 'charts_data/full_chart_check_points'
   get 'charts_data/big_chart_data'
   get 'charts_data/other_chart_data'
   get 'charts_data/sorted_full_chart_data'

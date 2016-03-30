@@ -1,5 +1,5 @@
 class DashboardController
-  constructor: (@rootScope, @scope, @Projects, @Charts, @http) ->
+  constructor: (@rootScope, @scope, @Projects, @http) ->
     vm = @
     vm.params = @rootScope.$stateParams
     vm.project = {}
@@ -14,37 +14,25 @@ class DashboardController
 
     vm.datepicker = $('.datePicker')
 
-
     @init_dashboard()
-
     @set_default_range()
 
     @scope.$watch('vm.range.period', (old_v, new_v) ->
       if new_v is '0'
         @set_default_range()
-
-        vm.datepicker.datepicker('setDates', [
-          vm.fit2Limits(vm.datepicker, rangeStart, true)
-          vm.fit2Limits(vm.datepicker, rangeEnd)
-        ]).datepicker 'update'
-
       vm.fetch()
     )
 
     @scope.$watch('vm.range.date',  (o, n) -> vm.fetch() if n )
     @scope.$watch('vm.range.chart', (o, n) -> vm.fetch() if n )
 
-    @scope.$on('$destroy', -> $('.page').removeClass('dashboard_page') )
-
     @Projects.search({slug: vm.params.slug}).$promise.then( (project) ->
       vm.project = project
-      vm.Charts.project = vm.project
-      vm.Charts.range = vm.range
       vm.fetch()
     )
 
+    #
 
-  # - - - - - - - - - - - - - - - - CUT HERE - - - - - - - - - - - - - - -
   charts_fetch: (chart_type) ->
     vm = @
 
@@ -61,38 +49,27 @@ class DashboardController
   fetch: ->
     return unless @project.id
     vm = @
+
     @charts_fetch('big_chart_data').success((response) ->
-      vm.data = response
-      $('.areaChartFamily_1').each (ind) -> vm.init_area_family_chart($(this), vm.data)
+      vm.big_chart = response
+      $('.areaChartFamily_1').each (ind) ->
+        vm.init_area_family_chart($(this), response)
 
     )
-
 
     @charts_fetch('other_chart_data').success((response) ->
       vm.other_charts_data = response
 
       $('.areaChart_1').each (index) ->
         el_id = $(this).context.id
-        vm.init_area_chart($(this), vm.other_charts_data[el_id]['data'])
+        vm.init_area_chart($(this), vm.avgBuilder(vm.other_charts_data[el_id]['data'], 11))
 
       $('.lineAreaChart_1').each (index) ->
         el_id = $(this).context.id
         vm.init_line_area_chart($(this), vm.other_charts_data[el_id])
     )
 
-  set_default_range: ->
-    vm = @
-    today = moment()
-    vm.range.raw_start = rangeStart = moment(today).startOf('month')
-    vm.range.raw_end = rangeEnd = moment(today).endOf('month')
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
-
-    vm.datepicker.datepicker('setDates', [
-      vm.fit2Limits(vm.datepicker, rangeStart, true)
-      vm.fit2Limits(vm.datepicker, rangeEnd)
-    ]).datepicker 'update'
-
+  # Draw block line area chart
   init_line_area_chart: (el, data) ->
     return if not data
     vm = @
@@ -175,6 +152,7 @@ class DashboardController
 
     return
 
+  # Draw global chart
   init_area_family_chart: (el, data_files) ->
     vm = @
     el.find('svg').remove()
@@ -236,36 +214,6 @@ class DashboardController
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-#    .on('mousemove', (d) ->
-#      `var i`
-#      `var tooltip`
-#      #console.log(d3.mouse(this));
-#      tooltip = d3.select('#tooltip')
-#      tooltip_content = $('#tooltip_content')
-#      tooltip_dot = $('#tooltip_dot')
-#      tool_table = $('<table class="graph-tooltip-table" />')
-#      distance = area_x(data_files[activeFamilyGraph].data[0].date) - area_x(data_files[activeFamilyGraph].data[1].date) or 0
-#      x = d3.mouse(this)[0] + distance / 2
-#      x0 = area_x.invert(x)
-#      ind = undefined
-#      while k < dates.length
-#        obj1 = dates[k]
-#        if moment(x0).startOf('day').isSame(obj1, 'day')
-#          ind = k
-#          break
-#        k++
-#      while j < data_files.length
-#        color = data_files[j].color
-#        data = data_files[j].data
-#        #var i = bisectDate(data, x0, 1);
-#        tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + j).addClass(if j == activeFamilyGraph then 'active_row' else '').addClass(if $('.graph-unit-legend .legend_item[data-graph=#family_area_' + j + ']').hasClass('disabled') then 'disabled' else '').append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[j].name)))).append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[j].data[ind].close)))
-#        tool_table.append tooltip_item
-#        j++
-#      tooltip_content.empty().append($('<div class="tooltip-title" />').text(moment(x0).format('dddd, D MMMM YYYY'))).append tool_table
-#      tooltip.classed('flipped_left', x < tooltip_content.outerWidth() + 25).style 'left', area_x(data_files[activeFamilyGraph].data[ind].date) + 'px'
-#      tooltip_dot.css 'top', margin.top + area_y(data_files[activeFamilyGraph].data[ind].close) - 11
-#      return
-#    )
     svg.append('g').attr('class', 'x axis family_x_axis').style('font-size', '14px').style('fill', '#fff').attr('transform', 'translate(0,' + height + ')').call xAxis
     i = 0
     while i < data_files.length
@@ -285,7 +233,15 @@ class DashboardController
       ]
       svg.append('path').datum(data).attr('class', 'area area_v1').attr('id', 'family_area_' + i).attr('d', area).style('fill', (d) ->
         color = data_files[i].color
-        legendItem = $('<li class="legend_item" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[i].name))).append($('<div class="legend_val" />').append($('<span class="val" />').text(data_files[i].value)).append($('<sup class="graph-dynamica" />').addClass(if /-/g.test(data_files[i].diff) then 'dynamica_down' else 'dynamica_up').text(data_files[i].diff)))
+        legendItem = $('<li class="legend_item" />')
+          .append($('<div class="legend_name" />')
+          .css('color', color)
+          .append($('<span/>').text(vm.translate_chart_name(data_files[i].tr_name)))
+        ).append($('<div class="legend_val" />').append($('<span class="val" />').text(data_files[i].value))
+          .append($('<sup class="graph-dynamica" />')
+            .addClass(if /-/g.test(data_files[i].diff) then 'dynamica_down' else 'dynamica_up')
+            .text(data_files[i].diff)))
+
         tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + i).append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[i].name)))).append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[i].value)))
         legendItem.attr('data-graph', '#family_area_' + i).on 'click', ->
           firedEl = $(this)
@@ -313,6 +269,7 @@ class DashboardController
       i++
     return
 
+  # Draw block chart #1
   init_area_chart: (el, data) ->
     return if not data
     el.empty()
@@ -359,8 +316,17 @@ class DashboardController
 
     return
 
+  set_default_range: ->
+    vm = @
+    today = moment()
+    vm.range.raw_start = rangeStart = moment(today).startOf('month')
+    vm.range.raw_end = rangeEnd = moment(today).endOf('month')
+    vm.range.from = rangeStart.format('MM.DD.YYYY')
+    vm.range.to = rangeEnd.format('MM.DD.YYYY')
+
+    vm.set_datepicker_date(rangeStart, rangeEnd)
+
   chart_changed: (chart) ->
-    console.log chart
     @rootScope.$state.go('projects.chart', {
       project: @project
       slug: @project.slug
@@ -379,6 +345,28 @@ class DashboardController
       when 'month'
         return '%b-%y'
     return
+
+  avgBuilder: (arr, step) ->
+    ret = []
+    part = 1 * (arr.length / step).toFixed(0)
+    if part < 2
+      return arr
+    i = 0
+    while i < arr.length
+      obj = arr.slice(i, i + (if arr.length - (part * 2) >= i then part else arr.length))
+      val = 0
+      j = 0
+      while j < obj.length
+        val += 1 * obj[j].close
+        j++
+      ret.push
+        'close': 1 * (val / obj.length).toFixed(0)
+        'date': arr[i].date
+      val = 0
+      if !(arr.length - (part * 2) >= i)
+        break
+      i += part
+    ret
 
   getFormatOfDateForMoment: ->
     switch @range.period
@@ -428,11 +416,7 @@ class DashboardController
     vm.range.from = rangeStart.format('MM.DD.YYYY')
     vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
-    vm.datepicker.datepicker('setDates', [
-      vm.fit2Limits(vm.datepicker, rangeStart, true)
-      vm.fit2Limits(vm.datepicker, rangeEnd)
-    ]).datepicker 'update'
-
+    vm.set_datepicker_date(rangeStart, rangeEnd)
     vm.fetch()
     return
 
@@ -444,12 +428,20 @@ class DashboardController
     else
       moment.min(end, date).startOf('day')._d
 
+  set_datepicker_date: (rangeStart, rangeEnd) ->
+    vm = @
+    vm.datepicker.datepicker('setDates', [
+      vm.fit2Limits(vm.datepicker, rangeStart, true)
+      vm.fit2Limits(vm.datepicker, rangeEnd)
+    ]).datepicker 'update'
+
   init_dashboard: ->
     vm = @
     $('.selectpicker').selectpicker({size: 70, showTick: false, showIcon: false})
     $('.page').addClass('dashboard_page')
 
-    today = moment()
+    vm.scope.$on('$destroy', -> $('.page').removeClass('dashboard_page') )
+
     vm.datepicker.datepicker(
       multidate: 2
       startDate: '-477d'
@@ -460,7 +452,67 @@ class DashboardController
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
 
-  toggle_debug: -> if @debug is true then @debug = false else @debug = true
+  translate_chart_name: (name) ->
+    names_ru =
+      revenue: 'Выручка'
+      orders: 'Заказы'
+      products_sell: 'Товаров продано'
+      unic_users: 'Посетителей'
+      customers: 'Клиентов'
+      overview: 'Обзор'
+      general: 'Базовые'
+      customers: 'Покупатели'
+      inventory: 'Товары'
+      shipping_cost_as_a_percentage_of_total_revenue: 'Доля доставки от общей стоимости'
+      average_order_value: 'Средния стоимость заказа'
+      average_order_size: 'Средняя размер заказа'
+      customers_number: 'Число покупателей'
+      new_customers_number: 'Число новых покупателей'
+      repeat_customers_number: 'Чилсо повторных покупателей'
+      ratio_of_new_customers_to_repeat_customers: 'Отшение новых покупателей к повторным'
+      average_revenue_per_customer: 'Средняя сумма на покупателя'
+      sales_per_visitor: 'Покупок на посетителей'
+      average_customer_lifetime_value: 'Среднее время проведенное клиентом'
+      unique_users_number: 'Количество уникальных посетителей'
+      visits: 'Число визитов'
+      products_in_stock_number: 'Продуктов в продаже'
+      items_in_stock_number: 'Позиций на складе'
+      percentage_of_inventory_sold: 'Процент проданных товаров'
+      percentage_of_stock_sold: 'Процент запаса на складе'
+      products_number: 'Количество товаров'
+      total_gross_revenues: 'Общая выручка'
+    names_en =
+      revenue: 'Revenue'
+      orders: 'Orders'
+      products_sell: 'Products sell'
+      unic_users: 'Unic users'
+      customers: 'Customers'
+      overview: 'Overview'
+      general: 'General'
+      customers: 'Customers'
+      inventory: 'Inventory'
+      total_revenu: 'Gross Revenue'
+      shipping_cost_as_a_percentage_of_total_revenue: 'Shipping Cost As A Percentage Of Total Revenue'
+      average_order_value: 'Average Order Value'
+      average_order_size: 'Average Order Size'
+      customers_number: 'Customers Number'
+      new_customers_number: 'New Customers Number'
+      repeat_customers_number: 'Repeat Customers Number'
+      ratio_of_new_customers_to_repeat_customers: 'Ratio Of New Customers To Repeat Customers'
+      average_revenue_per_customer: 'Average Revenue Per Customer'
+      sales_per_visitor: 'Sales Per Visitor'
+      average_customer_lifetime_value: 'Average Customer Lifetime Value'
+      unique_users_number: 'Unique Users Number'
+      visits: 'Visits'
+      products_in_stock_number: 'Products_in_stock_number'
+      items_in_stock_number: 'Items In Stock Number'
+      percentage_of_inventory_sold: 'Percentage Of Inventory Sold'
+      percentage_of_stock_sold: 'Rercentage Of Stock Sold'
+      products_number: 'Products Number'
+      total_gross_revenues: 'Gross Revenue'
+    if @rootScope.locale is 'ru' then names_ru[name] else names_en[name]
 
-@application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', 'Charts', '$http', DashboardController]
+  parse_diff: (diff_str) -> parseInt(diff_str)
+  toggle_debug: -> if @debug is true then @debug = false else @debug = true
+@application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', '$http', DashboardController]
 

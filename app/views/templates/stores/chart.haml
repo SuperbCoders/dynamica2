@@ -7,8 +7,8 @@
       .graph-unit-holder
         .graph-unit.dark_mod
           .graph-value
-            %span.val 42,489$
-            %sup.graph-dynamica.dynamica_up +8%
+            %span.val {{vm.data['value']}}
+            %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.data['diff']) > 0, dynamica_down: vm.parse_diff(vm.data['diff']) < 0}"} {{vm.data['diff']}}
           .graph-unit-large-v2
             .graph-block
               .areaChartTotal_1.hide_y_axis.hide_x_axis.d3graph.graph_3
@@ -18,36 +18,41 @@
       .graph-unit-holder
         .legend-standalone.dark_mod
           %ul.legend_v2.graph-unit-legend.no_pointer
+
             %li.legend_item{"data-graph" => "#family_area_0"}
               .legend_name_v2
-                %span Current
+                %span= t('projects.full_chart.check_points.current')
               .legend_val
-                %span.val 35,489$
-                %sup.graph-dynamica.dynamica_up +8%
+                %span.val {{vm.data['value']}}
+                %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.data['diff']) > 0, dynamica_down: vm.parse_diff(vm.data['diff']) < 0}"} {{vm.data['diff']}}
+
             %li.legend_item{"data-graph" => "#family_area_1"}
               .legend_name_v2
-                %span Orders
+                %span= t('projects.full_chart.check_points.year_ago')
               .legend_val
-                %span.val 490
-                %sup.graph-dynamica.dynamica_down -9%
+                %span.val {{vm.check_points.year_ago['value']}}
+                %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.year_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.year_ago['diff']) < 0}"} {{vm.check_points.year_ago['diff']}}
+
             %li.legend_item{"data-graph" => "#family_area_2"}
               .legend_name_v2
-                %span Products sell
+                %span= t('projects.full_chart.check_points.half_a_year_ago')
               .legend_val
-                %span.val 9,483
-                %sup.graph-dynamica.dynamica_down -9%
+                %span.val {{vm.check_points.half_a_year_ago['value']}}
+                %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.half_a_year_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.half_a_year_ago['diff']) < 0}"} {{vm.check_points.half_a_year_ago['diff']}}
+
             %li.legend_item{"data-graph" => "#family_area_3"}
               .legend_name_v2
-                %span Unic users
+                %span= t('projects.full_chart.check_points.three_month_ago')
               .legend_val
-                %span.val 109,330
-                %sup.graph-dynamica.dynamica_down -1%
+                %span.val {{vm.check_points.three_month_ago['value']}}
+                %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.three_month_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.three_month_ago['diff']) < 0}"} {{vm.check_points.three_month_ago['diff']}}
+
             %li.legend_item{"data-graph" => "#family_area_4"}
               .legend_name_v2
-                %span Customers
+                %span= t('projects.full_chart.check_points.month_ago')
               .legend_val
-                %span.val 477
-                %sup.graph-dynamica.dynamica_up +2
+                %span.val {{vm.check_points.month_ago['value']}}
+                %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.month_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.month_ago['diff']) < 0}"} {{vm.check_points.month_ago['diff']}}
 
         .graph-unit-filter
           %form{:action => "#"}

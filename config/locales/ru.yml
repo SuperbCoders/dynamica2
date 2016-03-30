@@ -23,6 +23,26 @@ ru:
           <<: *permission
 
   projects:
+    full_chart:
+      check_points:
+        current: 'Текущий'
+        year_ago: 'Год назад'
+        half_a_year_ago: 'Полгода назад'
+        three_month_ago: '3 месяц'
+        month_ago: '1 месяц'
+
+    dashboard:
+      period:
+        day: 'День'
+        week: 'Неделя'
+        month: 'Месяц'
+      current_status_of_data: 'Текущее состояние вашей первичной информации'
+      legend:
+        revenue: 'Выручка'
+        orders: 'Заказы'
+        products_sell: 'Продано товаров'
+        unique_users: 'Уникальные посетители'
+        customers: 'Клиенты'
     project:
       edit: Редактировать
       delete: Удалить

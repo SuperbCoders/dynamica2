@@ -1,52 +1,56 @@
 class ChartsDataController < ApplicationController
   before_action :set_project
   before_action :authenticate_user!
-  before_action :set_chart_data, only: [:big_chart_data, :other_chart_data, :full_chart_data, :sorted_chart_data]
+  before_action :set_chart_data, only: [:big_chart_data, :other_chart_data, :full_chart_data, :sorted_chart_data, :full_chart_check_points]
 
   include ActionView::Helpers::NumberHelper
 
   respond_to :json
 
-  # First graph - big_chart_data.json?
-  # period=day&
-  # from=Sat%20Dec%2026%202015%2000:00:00%20GMT+0500%20(AQTT)&
-  # to=Sat%20Mar%2026%202016%2000:00:00%20GMT+0500%20(AQTT)&
-  # project_id=18
-  #
-  # Use https://github.com/SuperbCoders/dynamica2/blob/07f85e826b2a541889094703b78e18d4503f9c48/app/assets/javascripts/dashboard.js#L188
   def big_chart_data
-    render json: big_charts_data
+    render json: big_charts_data(@current_project_characteristics, @previous_project_characteristics)
   end
 
-  # Square blocks after big chart - other_chart_data.json?
-  # period=day&
-  # from=Sat%20Dec%2026%202015%2000:00:00%20GMT+0500%20(AQTT)&
-  # to=Sat%20Mar%2026%202016%2000:00:00%20GMT+0500%20(AQTT)&
-  # project_id=18
-  #
-  # Use https://github.com/SuperbCoders/dynamica2/blob/07f85e826b2a541889094703b78e18d4503f9c48/app/assets/javascripts/dashboard.js#L201
   def other_chart_data
-    render json: other_charts_data
+    render json: other_charts_data(@current_project_characteristics, @previous_project_characteristics)
   end
 
-  # When other chart clicked
-  # Request http://localhost:3000/charts_data/full_chart_data?chart=average_order_size&from=Tue%20Mar%2001%202016%2000:00:00%20GMT+0500%20(AQTT)&to=Sat%20Mar%2026%202016%2000:00:00%20GMT+0500%20(AQTT)&project_id=18&_=1458974488988
-  # Use https://github.com/SuperbCoders/dynamica2/blob/07f85e826b2a541889094703b78e18d4503f9c48/app/assets/javascripts/full_chart.js#L238
   def full_chart_data
     @chart = params[:chart]
+    @result = {}
 
-    @result = send(params[:chart], 'group_date_by_day') 
-    @result[:data] = @result[:data].map {|k, v| {'date' => k, 'close' => v}}
-
-    render json: other_charts_data[params[:chart].to_sym]
+    @result[:full] = send(params[:chart], period, @current_project_characteristics, @previous_project_characteristics)
+    @result[:full][:data] = @result[:full][:data].map {|k, v| {'date' => k, 'close' => v}}
+    @result[:check_points] = full_chart_check_points
+    render json: @result
   end
 
-  # Other chart sort
-  # https://github.com/SuperbCoders/dynamica2/blob/07f85e826b2a541889094703b78e18d4503f9c48/app/assets/javascripts/full_chart.js#L137
+  def full_chart_check_points
+    result = {}
+
+    current = @project.project_characteristics.where(date: date_from - 12.month..(date_from - 11.month))
+    prev = @project.project_characteristics.where(date: date_from - 13.month..(date_from - 12.month))
+    result[:year_ago] = send(params[:chart], period, current, prev)
+
+    current = @project.project_characteristics.where(date: date_from - 6.month..(date_from - 5.month))
+    prev = @project.project_characteristics.where(date: date_from - 7.month..(date_from - 7.month))
+    result[:half_a_year_ago] = send(params[:chart], period,  current, prev)
+
+    current = @project.project_characteristics.where(date: date_from - 3.month..(date_from - 2.month))
+    prev = @project.project_characteristics.where(date: date_from - 4.month..(date_from - 2.month))
+    result[:three_month_ago] = send(params[:chart], period,  current, prev)
+
+    current = @project.project_characteristics.where(date: date_from - 1.month..(date_from))
+    prev = @project.project_characteristics.where(date: date_from - 2.month..(date_from - 1.month))
+    result[:month_ago] = send(params[:chart], period,  current, prev)
+
+    result
+  end
+
   def sorted_full_chart_data
     @chart = params[:chart]
 
-    @result = send(params[:chart], 'group_date_by_day')
+    @result = send(params[:chart], period)
     @result[:data] = @result[:data].map {|k, v| {'date' => k, 'close' => v}}.sort_by {|v| params[:date] ? Date.parse(v['date']) : v['close']}
     @result[:data] = @result[:data].reverse if (params[:date] || params[:value]) == 'desc'
 
@@ -69,7 +73,7 @@ class ChartsDataController < ApplicationController
   end
 
   def period
-    params[:period] ? params[:period] : 'day'
+    params[:period] ? "group_date_by_#{params[:period]}" : 'group_date_by_day'
   end
 
   def set_project
@@ -87,241 +91,125 @@ class ChartsDataController < ApplicationController
     (relation.sum(field) / relation.count).round 1
   end
 
-  def diff_sum(field)
-    diff_values @current_project_characteristics.sum(field), @previous_project_characteristics.sum(field)
+  def diff_sum(field, current_data, prev_data)
+    diff_values current_data.sum(field), prev_data.sum(field)
   end
 
-  def diff_average_sum(field)
-    diff_values(average_sum(@current_project_characteristics, field), average_sum(@previous_project_characteristics, field))
+  def diff_average_sum(field, current_data, prev_data)
+    diff_values(average_sum(current_data, field), average_sum(prev_data, field))
   end
 
-  def total_revenu(scope)
-    {
-        diff: diff_sum(:total_gross_revenues),
-        value: "#{@current_project_characteristics.sum :total_gross_revenues}$",
-        data: @current_project_characteristics.send(scope).sum(:total_gross_revenues)
-    }
+  Dynamica::CHART_TYPES.each do |chart_type|
+    define_method chart_type do |scope, current_data, prev_data|
+      {
+          diff: diff_sum(chart_type, current_data, prev_data),
+          value: "#{current_data.sum chart_type}$",
+          data: current_data.send(scope).sum(chart_type)
+      }
+    end
   end
 
-  def products_number(scope)
-    {
-        diff: diff_sum(:products_number),
-        value: "#{@current_project_characteristics.sum :products_number}",
-        data: @current_project_characteristics.send(scope).sum(:products_number)
-    }
-  end
-
-  def average_order_value(scope)
-    {
-        diff: diff_average_sum(:average_order_value),
-        value: "#{average_sum @current_project_characteristics, :average_order_value}",
-        data: @current_project_characteristics.send(scope).sum(:average_order_value)
-    }
-  end
-
-  def average_order_size(scope)
-    {
-        diff: diff_average_sum(:average_order_size),
-        value: "#{average_sum @current_project_characteristics, :average_order_size}",
-        data: @current_project_characteristics.send(scope).sum(:average_order_size)
-    }
-  end
-
-  def customers_number(scope)
-    {
-        diff: diff_sum(:customers_number),
-        value: "#{@current_project_characteristics.sum :customers_number}",
-        data: @current_project_characteristics.send(scope).sum(:customers_number)
-    }
-  end
-
-  def new_customers_number(scope)
-    {
-        diff: diff_sum(:new_customers_number),
-        value: "#{@current_project_characteristics.sum :new_customers_number}",
-        data: @current_project_characteristics.send(scope).sum(:new_customers_number)
-    }
-  end
-
-  def repeat_customers_number(scope)
-    {
-        diff: diff_sum(:repeat_customers_number),
-        value: "#{@current_project_characteristics.sum :repeat_customers_number}",
-        data: @current_project_characteristics.send(scope).sum(:repeat_customers_number)
-    }
-  end
-
-  def average_revenue_per_customer(scope)
-    {
-        diff: diff_average_sum(:average_revenue_per_customer),
-        value: "#{average_sum(@current_project_characteristics, :average_revenue_per_customer)}",
-        data: @current_project_characteristics.send(scope).sum(:average_revenue_per_customer)
-    }
-  end
-
-  def products_in_stock_number(scope)
-    {
-        diff: diff_sum(:products_in_stock_number),
-        value: "#{@current_project_characteristics.sum :products_in_stock_number}",
-        data: @current_project_characteristics.send(scope).sum(:products_in_stock_number)
-    }
-  end
-
-  def sales_per_visitor(scope)
-    {
-        diff: diff_sum(:sales_per_visitor),
-        value: "#{@current_project_characteristics.sum :sales_per_visitor}",
-        data: @current_project_characteristics.send(scope).sum(:sales_per_visitor)
-    }
-  end
-
-  def average_customer_lifetime_value(scope)
-    {
-        diff: diff_sum(:average_customer_lifetime_value),
-        value: "#{@current_project_characteristics.sum :average_customer_lifetime_value}",
-        data: @current_project_characteristics.send(scope).sum(:average_customer_lifetime_value)
-    }
-  end
-
-  def unique_users_number(scope)
-    {
-        diff: diff_sum(:unique_users_number),
-        value: "#{@current_project_characteristics.sum :unique_users_number}",
-        data: @current_project_characteristics.send(scope).sum(:unique_users_number)
-    }
-  end
-
-  def visits(scope)
-    {
-        diff: diff_sum(:visits),
-        value: "#{@current_project_characteristics.sum :visits}",
-        data: @current_project_characteristics.send(scope).sum(:visits)
-    }
-  end
-
-  def items_in_stock_number(scope)
-    {
-        diff: diff_sum(:items_in_stock_number),
-        value: "#{@current_project_characteristics.sum :items_in_stock_number}",
-        data: @current_project_characteristics.send(scope).sum(:items_in_stock_number)
-    }
-  end
-
-  def percentage_of_inventory_sold(scope)
-    {
-        diff: diff_average_sum(:percentage_of_inventory_sold),
-        value: "#{average_sum(@current_project_characteristics, :percentage_of_inventory_sold)}",
-        data: @current_project_characteristics.send(scope).sum(:percentage_of_inventory_sold)
-    }
-  end
-
-  def percentage_of_stock_sold(scope)
-    {
-        diff: diff_average_sum(:percentage_of_stock_sold),
-        value: "#{average_sum(@current_project_characteristics, :percentage_of_stock_sold)}",
-        data: @current_project_characteristics.send(scope).sum(:percentage_of_stock_sold)
-    }
-  end
-
-  def shipping_cost_as_a_percentage_of_total_revenue(scope)
-    {
-        diff: diff_average_sum(:shipping_cost_as_a_percentage_of_total_revenue),
-        value: "#{average_sum @current_project_characteristics, :shipping_cost_as_a_percentage_of_total_revenue}",
-        data: @current_project_characteristics.send(scope).sum(:shipping_cost_as_a_percentage_of_total_revenue)
-    }
-  end
-
-  def other_charts_data
-    scope = "group_date_by_day"
+  def other_charts_data(current_data, prev_data)
+    scope = period
     result = {
         total_revenu: {
-            diff: diff_sum(:total_gross_revenues),
-            value: "#{@current_project_characteristics.sum :total_gross_revenues}$",
-            data: @current_project_characteristics.send(scope).sum(:total_gross_revenues)
+            diff: diff_sum(:total_gross_revenues, current_data, prev_data),
+            value: "#{current_data.sum :total_gross_revenues}$",
+            data: current_data.send(scope).sum(:total_gross_revenues)
         },
         products_number: {
-            diff: diff_sum(:products_number),
-            value: "#{@current_project_characteristics.sum :products_number}",
-            data: @current_project_characteristics.send(scope).sum(:products_number)
+            diff: diff_sum(:products_number, current_data, prev_data),
+            value: "#{current_data.sum :products_number}",
+            data: current_data.send(scope).sum(:products_number)
         },
         average_order_value: {
-            diff: diff_average_sum(:average_order_value),
-            value: "#{average_sum @current_project_characteristics, :average_order_value}",
-            data: @current_project_characteristics.send(scope).sum(:average_order_value)
+            diff: diff_average_sum(:average_order_value, current_data, prev_data),
+            value: "#{average_sum current_data, :average_order_value}",
+            data: current_data.send(scope).sum(:average_order_value)
         },
         average_order_size: {
-            diff: diff_average_sum(:average_order_size),
-            value: "#{average_sum @current_project_characteristics, :average_order_size}",
-            data: @current_project_characteristics.send(scope).sum(:average_order_size)
+            diff: diff_average_sum(:average_order_size, current_data, prev_data),
+            value: "#{average_sum current_data, :average_order_size}",
+            data: current_data.send(scope).sum(:average_order_size)
         },
         customers_number: {
-            diff: diff_sum(:customers_number),
-            value: "#{@current_project_characteristics.sum :customers_number}",
-            data: @current_project_characteristics.send(scope).sum(:customers_number)
+            diff: diff_sum(:customers_number, current_data, prev_data),
+            value: "#{current_data.sum :customers_number}",
+            data: current_data.send(scope).sum(:customers_number)
         },
         new_customers_number: {
-            diff: diff_sum(:new_customers_number),
-            value: "#{@current_project_characteristics.sum :new_customers_number}",
-            data: @current_project_characteristics.send(scope).sum(:new_customers_number)
+            diff: diff_sum(:new_customers_number, current_data, prev_data),
+            value: "#{current_data.sum :new_customers_number}",
+            data: current_data.send(scope).sum(:new_customers_number)
         },
         repeat_customers_number: {
-            diff: diff_sum(:repeat_customers_number),
-            value: "#{@current_project_characteristics.sum :repeat_customers_number}",
-            data: @current_project_characteristics.send(scope).sum(:repeat_customers_number)
+            diff: diff_sum(:repeat_customers_number, current_data, prev_data),
+            value: "#{current_data.sum :repeat_customers_number}",
+            data: current_data.send(scope).sum(:repeat_customers_number)
         },
         average_revenue_per_customer: {
-            diff: diff_average_sum(:average_revenue_per_customer),
-            value: "#{average_sum(@current_project_characteristics, :average_revenue_per_customer)}",
-            data: @current_project_characteristics.send(scope).sum(:average_revenue_per_customer)
+            diff: diff_average_sum(:average_revenue_per_customer, current_data, prev_data),
+            value: "#{average_sum(current_data, :average_revenue_per_customer)}",
+            data: current_data.send(scope).sum(:average_revenue_per_customer)
         },
         products_in_stock_number: {
-            diff: diff_sum(:products_in_stock_number),
-            value: "#{@current_project_characteristics.sum :products_in_stock_number}",
-            data: @current_project_characteristics.send(scope).sum(:products_in_stock_number)
+            diff: diff_sum(:products_in_stock_number, current_data, prev_data),
+            value: "#{current_data.sum :products_in_stock_number}",
+            data: current_data.send(scope).sum(:products_in_stock_number)
         },
         sales_per_visitor: {
-            diff: diff_sum(:sales_per_visitor),
-            value: "#{@current_project_characteristics.sum :sales_per_visitor}",
-            data: @current_project_characteristics.send(scope).sum(:sales_per_visitor)
+            diff: diff_sum(:sales_per_visitor, current_data, prev_data),
+            value: "#{current_data.sum :sales_per_visitor}",
+            data: current_data.send(scope).sum(:sales_per_visitor)
         },
         average_customer_lifetime_value: {
-            diff: diff_sum(:average_customer_lifetime_value),
-            value: "#{@current_project_characteristics.sum :average_customer_lifetime_value}",
-            data: @current_project_characteristics.send(scope).sum(:average_customer_lifetime_value)
+            diff: diff_sum(:average_customer_lifetime_value, current_data, prev_data),
+            value: "#{current_data.sum :average_customer_lifetime_value}",
+            data: current_data.send(scope).sum(:average_customer_lifetime_value)
         },
         unique_users_number: {
-            diff: diff_sum(:unique_users_number),
-            value: "#{@current_project_characteristics.sum :unique_users_number}",
-            data: @current_project_characteristics.send(scope).sum(:unique_users_number)
+            diff: diff_sum(:unique_users_number, current_data, prev_data),
+            value: "#{current_data.sum :unique_users_number}",
+            data: current_data.send(scope).sum(:unique_users_number)
         },
         visits: {
-            diff: diff_sum(:visits),
-            value: "#{@current_project_characteristics.sum :visits}",
-            data: @current_project_characteristics.send(scope).sum(:visits)
+            diff: diff_sum(:visits, current_data, prev_data),
+            value: "#{current_data.sum :visits}",
+            data: current_data.send(scope).sum(:visits)
         },
         items_in_stock_number: {
-            diff: diff_sum(:items_in_stock_number),
-            value: "#{@current_project_characteristics.sum :items_in_stock_number}",
-            data: @current_project_characteristics.send(scope).sum(:items_in_stock_number)
+            diff: diff_sum(:items_in_stock_number, current_data, prev_data),
+            value: "#{current_data.sum :items_in_stock_number}",
+            data: current_data.send(scope).sum(:items_in_stock_number)
         },
         percentage_of_inventory_sold: {
-            diff: diff_average_sum(:percentage_of_inventory_sold),
-            value: "#{average_sum(@current_project_characteristics, :percentage_of_inventory_sold)}",
-            data: @current_project_characteristics.send(scope).sum(:percentage_of_inventory_sold)
+            diff: diff_average_sum(:percentage_of_inventory_sold, current_data, prev_data),
+            value: "#{average_sum(current_data, :percentage_of_inventory_sold)}",
+            data: current_data.send(scope).sum(:percentage_of_inventory_sold)
         },
         percentage_of_stock_sold: {
-            diff: diff_average_sum(:percentage_of_stock_sold),
-            value: "#{average_sum(@current_project_characteristics, :percentage_of_stock_sold)}",
-            data: @current_project_characteristics.send(scope).sum(:percentage_of_stock_sold)
+            diff: diff_average_sum(:percentage_of_stock_sold, current_data, prev_data),
+            value: "#{average_sum(current_data, :percentage_of_stock_sold)}",
+            data: current_data.send(scope).sum(:percentage_of_stock_sold)
         },
         shipping_cost_as_a_percentage_of_total_revenue: {
-            diff: diff_average_sum(:shipping_cost_as_a_percentage_of_total_revenue),
-            value: "#{average_sum @current_project_characteristics, :shipping_cost_as_a_percentage_of_total_revenue}",
-            data: @current_project_characteristics.send(scope).sum(:shipping_cost_as_a_percentage_of_total_revenue)
+            diff: diff_average_sum(:shipping_cost_as_a_percentage_of_total_revenue, current_data, prev_data),
+            value: "#{average_sum current_data, :shipping_cost_as_a_percentage_of_total_revenue}",
+            data: current_data.send(scope).sum(:shipping_cost_as_a_percentage_of_total_revenue)
         }
     }
 
     result.each {|k, v| result[k][:data] = v[:data].map {|k, v| {'date' => k, 'close' => v}}}
+    
+    result.each { |k, chart_data|
+      temp_data = result[k][:data]
+      result[k][:data] = []
+      temp_data.each_slice(temp_data.length / 8) do |e, *_|
+        result[k][:data] << e
+      end
+
+    }
+    
     # result.each {|k, v| result[k][:data] = v[:data].reverse}
 
     result.merge({
@@ -349,44 +237,49 @@ class ChartsDataController < ApplicationController
     (result.nan? || result.infinite?) ? result : result.round(1)
   end
 
-  def big_charts_data
-    scope = "group_date_by_#{period}"
+  def big_charts_data(current_data, prev_data)
+    scope = period
     result = [
         {
             "name": "Revenue",
-        "color": "#6AFFCB",
-        "value": "#{@current_project_characteristics.sum :total_gross_revenues}$",
-        "diff": diff_sum(:total_gross_revenues),
-        "data": @current_project_characteristics.send(scope).sum(:total_gross_revenues)
-    },
+            "tr_name": "revenue",
+            "color": "#6AFFCB",
+            "value": "#{current_data.sum :total_gross_revenues}$",
+            "diff": diff_sum(:total_gross_revenues, current_data, prev_data),
+            "data": current_data.send(scope).sum(:total_gross_revenues)
+        },
         {
             "name": "Orders",
-        "color": "#FF1FA7",
-        "value": "#{@current_project_characteristics.sum :orders_number}",
-        "diff": diff_sum(:orders_number),
-        "data": @current_project_characteristics.send(scope).sum(:orders_number)
-    },
+            "tr_name": "orders",
+            "color": "#FF1FA7",
+            "value": "#{current_data.sum :orders_number}",
+            "diff": diff_sum(:orders_number, current_data, prev_data),
+            "data": current_data.send(scope).sum(:orders_number)
+        },
         {
             "name": "Products sell",
-        "color": "#FF7045",
-        "value": "#{@current_project_characteristics.sum :products_number}",
-        "diff": diff_sum(:products_number),
-        "data": @current_project_characteristics.send(scope).sum(:products_number)
-    },
+            "tr_name": "products_sell",
+            "color": "#FF7045",
+            "value": "#{current_data.sum :products_number}",
+            "diff": diff_sum(:products_number, current_data, prev_data),
+            "data": current_data.send(scope).sum(:products_number)
+        },
         {
             "name": "Unic users",
-        "color": "#3BD7FF",
-        "value": "#{@current_project_characteristics.sum :unique_users_number}",
-        "diff": diff_sum(:unique_users_number),
-        "data": @current_project_characteristics.send(scope).sum(:unique_users_number)
-    },
+            "tr_name": "unic_users",
+            "color": "#3BD7FF",
+            "value": "#{current_data.sum :unique_users_number}",
+            "diff": diff_sum(:unique_users_number, current_data, prev_data),
+            "data": current_data.send(scope).sum(:unique_users_number)
+        },
         {
             "name": "Customers",
-        "color": "#FFD865",
-        "value": "#{@current_project_characteristics.sum :customers_number}",
-        "diff": diff_sum(:customers_number),
-        "data": @current_project_characteristics.send(scope).sum(:customers_number)
-    }
+            "tr_name": "customers",
+            "color": "#FFD865",
+            "value": "#{current_data.sum :customers_number}",
+            "diff": diff_sum(:customers_number, current_data, prev_data),
+            "data": current_data.send(scope).sum(:customers_number)
+        }
     ]
 
     result.each {|gr| gr[:data] = gr[:data].map {|k, v| {'date' => k, 'close' => v}}}
