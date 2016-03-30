@@ -17,7 +17,6 @@ gem 'therubyracer',  platforms: :ruby
 
 # JS libraries
 gem 'jquery-rails'
-gem 'airbrussh'
 gem 'bower-rails'
 
 # CSS libraries
