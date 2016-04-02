@@ -9,8 +9,25 @@ class SetupController
 
 
   save: ->
-    return if not @check_profile()
     vm = @
+    return if not @check_profile()
+
+
+    # Check email uniqueness
+    vm.http.post(vm.R.email_uniqueness_path(), {email: vm.profile.email}).success((result) ->
+      if result.exist
+        vm.Alerts.error(vm.T.t('email_already_taken'))
+      else
+        vm.http.post(vm.R.update_profile_path(), vm.profile).then((response) ->
+          vm.password = response.data.password
+
+          if response.data.profile.valid
+            vm.rootScope.user = response.data.profile
+            vm.Alerts.success(vm.T.t('profile_succefully_updated'))
+            vm.rootScope.$state.go('projects.list')
+        )
+    )
+    return
 
 
   check_profile: ->
@@ -23,15 +40,6 @@ class SetupController
 
     if @profile.password != @profile.password_confirmation
       return @Alerts.error(@T.t('password_mismatch'))
-
-    # Check email uniqueness
-    console.log @R.email_uniqueness_path()
-    vm.http.post(vm.R.email_uniqueness_path(), {email: vm.profile.email}).success((result) ->
-      if result.exist
-        vm.Alerts.error(vm.T.t('email_already_taken'))
-      else
-        vm.Alerts.success(vm.T.t('email_succefull_changed'))
-        console.log result
-    )
+    return true
 
 @application.controller 'SetupController', ['$rootScope', '$scope', 'Alerts', 'Translate', '$http', 'Routes', SetupController]
