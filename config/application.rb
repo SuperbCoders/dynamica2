@@ -37,3 +37,7 @@ module Dynamica
 
   end
 end
+
+Dir[Rails.root.join('app', 'services', '*.rb').to_s].each do |s|
+  require_or_load s
+end

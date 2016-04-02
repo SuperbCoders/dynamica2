@@ -37,9 +37,7 @@ end
 
 
 
-def create_demo_project(user)
-  project_name = 'New test project'
-  return if Project.where(name: project_name).first
+def create_demo_project(user, project)
 
   orders_csv      = CSV.new(File.open("#{Rails.root}/db/seeds/orders.csv").read, headers: true)
   items_csv       = CSV.new(File.open("#{Rails.root}/db/seeds/items.csv").read, headers: true)
@@ -49,7 +47,7 @@ def create_demo_project(user)
   items = items_csv.to_a.map {|row| row.to_hash}
   orders = orders_csv.to_a.map {|row| row.to_hash}
 
-  current_project = Project.create name: project_name
+  current_project = project
   start_date = '06-10-2012'
 
   previous_orders = []
@@ -96,23 +94,6 @@ def create_demo_project(user)
       read: true,
       forecasting: true,
       api: true
-
-
-  # items.each do |product|
-  #   local_product = Product.find_or_initialize_by(remote_id: product['id'], project_id: current_project.id)
-  #   local_product.update_attributes!(
-  #     title: product['title'],
-  #     remote_updated_at: product['updated_at']
-  #   )
-  # end
-
-  # items.each do |product|
-  #   local_product = Product.find_or_initialize_by(remote_id: product['id'], project_id: current_project.id)
-  #   local_product.update_attributes!(
-  #     title: product['title'],
-  #     remote_updated_at: product['updated_at']
-  #   )
-  # end
 end
 
-create_demo_project(create_demo_user)
+User.all.map { |user| user.projects.map { |p| create_demo_project(user, p) } }

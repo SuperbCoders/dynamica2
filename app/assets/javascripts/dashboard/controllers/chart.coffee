@@ -1,5 +1,5 @@
 class ChartController
-  constructor: (@rootScope, @scope, @Projects, @http) ->
+  constructor: (@rootScope, @scope, @Projects, @http, @T) ->
     vm = @
     vm.slug = @rootScope.$stateParams.slug
     vm.chart = @rootScope.$stateParams.chart
@@ -39,11 +39,19 @@ class ChartController
 
   fetch: ->
     vm = @
+
+#    path = @rootScope.$location.absUrl().split('/')
+#    path[path.length - 1] = vm.range.to
+#    path[path.length - 2] = vm.range.from
+#
+#    console.log path
+#    window.history.pushState(window.location.pathname, 'Title', path.join('/'))
+
     @charts_fetch('full_chart_data').success((response) ->
-      vm.data = response['full']
-      vm.check_points = response['check_points']
-      vm.init_line_area3_chart($('.areaChartTotal_1'), vm.data)
-    )
+        vm.data = response['full']
+        vm.check_points = response['check_points']
+        vm.init_line_area3_chart($('.areaChartTotal_1'), vm.data)
+      )
 
   fit2Limits: (pckr, date, max) ->
     start = moment(pckr.datepicker('getStartDate'))
@@ -64,17 +72,16 @@ class ChartController
     vm.set_datepicker_date(rangeStart, rangeEnd)
 
   init_line_area3_chart: (el, data) ->
-    console.log data
-
+    return if data['data'].length < 1
+    vm = @
     dates = []
     values = []
+    i = 0
 
-    el.find('svg').remove()
     make_y_axis = -> d3.svg.axis().scale(y).orient('left').ticks 5
     make_x_axis = -> d3.svg.axis().scale(x).orient('bottom').ticks 5
 
-
-    i = 0
+    el.find('svg').remove()
 
     while i < data['data'].length
       obj = data['data'][i]
@@ -86,13 +93,15 @@ class ChartController
       top: 30
       right: 35
       bottom: 50
-      left: 100
-
+      left: 80
     width = el.width() - (margin.left) - (margin.right)
     height = el.height() - (margin.top) - (margin.bottom)
     tooltip = $('#tooltip')
     tooltip_content = $('#tooltip_content')
-    bisectDate = d3.bisector((d) -> d.date).left
+    bisectDate = d3.bisector((d) ->
+      #console.log(d);
+      d.date
+    ).left
     parseDate = d3.time.format('%d-%b-%y').parse
     #var currencyFormatter = d3.format(",.0f");
 
@@ -102,18 +111,30 @@ class ChartController
     x = d3.time.scale().domain([
       moment.min(dates)
       moment.max(dates)
-    ]).range([0,width])
+    ]).range([
+      0
+      width
+    ])
     y = d3.scale.linear().domain([
       0
       1000 * Math.floor(Math.max.apply(null, values) / 1000 + 1)
-    ]).range([height,0])
+    ]).range([
+      height
+      0
+    ])
     line = d3.svg.line().x((d) ->
       x d.x
     ).y((d) ->
       y d.y
     )
-    area_x = d3.time.scale().range([0,width])
-    area_y = d3.scale.linear().range([height,0])
+    area_x = d3.time.scale().range([
+      0
+      width
+    ])
+    area_y = d3.scale.linear().range([
+      height
+      0
+    ])
     area = d3.svg.area().x((d) ->
       area_x d.date
     ).y0(height).y1((d) ->
@@ -124,7 +145,7 @@ class ChartController
     ).y((d) ->
       y d.close
     ).interpolate('monotone')
-    xAxis = d3.svg.axis().scale(x).ticks(data.length - 1).tickFormat(d3.time.format('%b %d')).orient('bottom')
+    xAxis = d3.svg.axis().scale(x).ticks(data['data'].length - 1).tickFormat(d3.time.format('%b %d')).orient('bottom')
     yAxis = d3.svg.axis().scale(y).ticks(5).tickFormat((d) ->
       if d == 0 then '' else currencyFormatter(d) + '$'
     ).orient('left')
@@ -136,24 +157,36 @@ class ChartController
     for d in data['data']
       d.date = parseDate(d.date)
       d.close = +d.close
-      return
 
+#    data.forEach (d) ->
+#      d.date = parseDate(d.date)
+#      d.close = +d.close
+#      return
     # Scale the range of the data
-    x.domain d3.extent(data['data'], (d) -> d.date )
+
+    x.domain d3.extent(data['data'], (d) ->
+      d.date
+    )
     y.domain [
       0
       d3.max(data['data'], (d) ->
         Math.max d.close
       )
     ]
-    area_x.domain d3.extent(data['data'], (d) -> d.date )
+    area_x.domain d3.extent(data['data'], (d) ->
+      d.date
+    )
     area_y.domain [
       0
       d3.max(data['data'], (d) ->
         d.close
       )
     ]
+    gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
+    gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
+    gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
     svg.append('path').attr('class', 'line').attr 'd', valueline(data['data'])
+    svg.append('path').datum(data['data']).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
     # Add the scatterplot
     svg.append('line').attr('id', 'line_for_dot').attr('class', 'line_for_dot').style('stroke', '#D0E3EE').style('stroke-width', '2').attr('x1', 0).attr('x2', 0).attr('y1', height).attr 'y2', 0
     line_for_dot = d3.select('#line_for_dot')
@@ -174,9 +207,10 @@ class ChartController
     distance = x(data['data'][0].date) - x(data['data'][1].date)
     big_dot = d3.select('#big_dot')
     i = 0
+
     while i < data['data'].length
-      svg.append('rect').attr('class', 'graph-tracing-catcher tracingCatcher').attr('data-dot', '#dot_' + data.length - i - 1).style('opacity', 0).attr('x', ->
-        width - x(data[i].date)
+      svg.append('rect').attr('class', 'graph-tracing-catcher tracingCatcher').attr('data-dot', '#dot_' + data['data'].length - i - 1).style('opacity', 0).attr('x', ->
+        width - x(data['data'][i].date)
       ).attr('y', 0).attr('width', width).attr('height', height).style('transform', 'translate(' + distance / -2 + 'px)').on('mouseenter', (e) ->
         $this = $(this)
         dot_id = d3.select(this).attr('data-dot')
@@ -184,12 +218,13 @@ class ChartController
         cur_dot = $('#dot_' + cur_id)
         x0 = area_x.invert(cur_dot.attr('cx'))
         y0 = area_y.invert(cur_dot.attr('cy')).toFixed(0)
+        prevTracingDot = dot_id.replace(/\D/g, '') * 1
         if prevTracingDot != undefined
           big_dot.transition().duration(tracing_anim_duration).attr('cx', $this.attr('x')).attr 'cy', cur_dot.attr('data-y-value')
           line_for_dot.transition().duration(tracing_anim_duration).attr('x1', $this.attr('x')).attr('x2', $this.attr('x')).attr 'y2', cur_dot.attr('data-y-value')
           tooltip_content.empty().css('top', cur_dot.attr('data-y-value') * 1 + margin.top - 15 + 'px').append($('<div class="tooltip-title" />').text(moment(x0).format('dddd, D MMMM YYYY'))).append $('<div class="tooltip-value" />').text(currencyFormatter(y0) + '$')
           tooltip.css 'left', $this.attr('x') * 1 + margin.left + 'px'
-          splashTracing cur_id, if cur_id > prevTracingDot then 'left' else 'right'
+          vm.splashTracing cur_id, if cur_id > prevTracingDot then 'left' else 'right'
         return
       ).on 'mouseleave', (e) ->
         dot_id = d3.select(this).attr('data-dot')
@@ -238,6 +273,37 @@ class ChartController
 
     vm.set_datepicker_date(rangeStart, rangeEnd)
     vm.fetch()
+    return
+
+  splashTracing: (id, direction) ->
+    new_r = 5
+    #console.log(id, direction);
+    if direction == 'right'
+      setTimeout (->
+        obj = $('#dot_' + id + 1)
+        #console.log('in', obj);
+        obj.attr 'r', new_r
+        return
+      ), 50 * 1
+      setTimeout (->
+        obj = $('#dot_' + id * 1 + 1)
+        #console.log('out', obj);
+        obj.attr 'r', 0
+        return
+      ), 300 + 50 * 1
+    else if direction == 'left'
+      setTimeout (->
+        obj = $('#dot_' + id - 1)
+        #console.log('in', obj);
+        obj.attr 'r', new_r
+        return
+      ), 50 * 1
+      setTimeout (->
+        obj = $('#dot_' + id * 1 - 1)
+        #console.log('out', obj);
+        obj.attr 'r', 0
+        return
+      ), 300 + 50 * 1
     return
 
   translate_chart_name: (name) ->
@@ -315,4 +381,4 @@ class ChartController
   parse_diff: (diff_str) -> parseInt(diff_str)
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
-@application.controller 'ChartController', ['$rootScope', '$scope', 'Projects', '$http', ChartController]
+@application.controller 'ChartController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', ChartController]

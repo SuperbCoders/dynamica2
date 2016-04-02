@@ -61,7 +61,7 @@
         products_number: 'Products Number'
         total_gross_revenues: 'Gross Revenue'
 
-      if dict[$rootScope.locale][name] then dict[$rootScope.locale][name] else 'no_translate_'+string
+      if dict[$rootScope.locale][string] then dict[$rootScope.locale][string] else 'no_translate_'+string
 
   new Translate
 ]

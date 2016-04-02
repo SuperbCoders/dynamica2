@@ -3,7 +3,6 @@ class ProjectsController < BaseController
   before_action :set_project, only: [:update, :destroy]
 
   before_action :authorize_user
-  before_action :log_params
   before_action :find_resources, only: %w(index)
   before_action :new_resource, only: %w(create new)
   before_action :find_resource, only: %w(show update destroy)

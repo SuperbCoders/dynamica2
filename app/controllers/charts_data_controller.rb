@@ -201,14 +201,13 @@ class ChartsDataController < ApplicationController
 
     result.each {|k, v| result[k][:data] = v[:data].map {|k, v| {'date' => k, 'close' => v}}}
 
-    result.each { |k, chart_data|
-      temp_data = result[k][:data]
-      result[k][:data] = []
-      temp_data.each_slice(temp_data.length / 8) do |e, *_|
-        result[k][:data] << e
-      end
-
-    }
+    # result.each { |k, chart_data|
+    #   temp_data = result[k][:data]
+    #   result[k][:data] = []
+    #   temp_data.each_slice(temp_data.length / 8) do |e, *_|
+    #     result[k][:data] << e
+    #   end
+    # }
 
     # result.each {|k, v| result[k][:data] = v[:data].reverse}
 

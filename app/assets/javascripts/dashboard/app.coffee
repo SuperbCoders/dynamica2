@@ -94,9 +94,10 @@
   return
 ]
 
-@application.run ['$rootScope', '$state', '$stateParams', '$http', ($rootScope, $state, $stateParams, $http) ->
+@application.run ['$rootScope', '$state', '$stateParams', '$http', '$location', ($rootScope, $state, $stateParams, $http, $location) ->
   $rootScope.$state = $state
   $rootScope.$stateParams = $stateParams
+  $rootScope.$location = $location
   $rootScope.locale = $("meta[name=locale]").attr('content')
 
   if $('.switcher').length
