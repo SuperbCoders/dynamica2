@@ -2,6 +2,7 @@
   {
     locale: (path) -> '/'+$rootScope.locale+'/'+path
     email_uniqueness_path: -> '/profile/email_uniqueness'
+    update_profile_path: -> '/profile'
   }
 ]
 

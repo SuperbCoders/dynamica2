@@ -9,47 +9,41 @@ class ProfileController < ApplicationController
     logger.info "Profile #{profile_params.to_json}"
     @response[:password] = {}
 
-    if current_user.update_attributes(profile_params)
+    if valid_current_password? && current_user.update_attributes(profile_params)
       @response[:profile] = serialize_resource(current_user, UserSerializer)
-    end
+      @response[:success] = true
 
-    update_password
+      sign_in(current_user, bypass: true)
+    end
 
     render json: @response
   end
 
   def email_uniqueness
-    render json: {exist: User.where(email: params[:email]).any?}
+    render json: {exist: email_exists?}
   end
 
   private
 
-
-  def update_password
-    if password_params[:current_password] and password_params[:current_password].length >= 8
-      logger.info "Update password with #{password_params}"
-
-      if not current_user.valid_password?
-        return @response[:password][:current_password] = true
-      end
-
-      if password_params[:password].eql? password_params[:password_confirmation]
-        current_user.password = password_params[:password]
-        if current_user.save
-          sign_in(current_user, bypass: true)
-        end
-      else
-        @response[:password][:new_password] = true
-        @response[:password][:password_confirmation] = true
+  def valid_current_password?
+    if password_params[:current_password]
+      if not current_user.valid_password? password_params[:current_password]
+        false
       end
     end
+    true
   end
+
+  def email_exsists?
+    User.where(email: params[:email]).any?
+  end
+
   def password_params
     params.permit(:password, :password_confirmation, :current_password)
   end
 
   def profile_params
-    params.permit(:name, :email)
+    params.permit(:name, :email, :password)
   end
 
 end
