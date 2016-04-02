@@ -4,4 +4,5 @@ module Dynamica
       :sales_per_visitor, :average_customer_lifetime_value, :unique_users_number, :visits, :items_in_stock_number,
       :percentage_of_inventory_sold, :percentage_of_stock_sold,
       :shipping_cost_as_a_percentage_of_total_revenue]
+  TEMPORARY_MAIL_PREFIX = 'temp.dynamica.cc'
 end

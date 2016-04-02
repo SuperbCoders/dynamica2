@@ -27,3 +27,6 @@ config/shopify.yml
 .rspec
 /.capistrano/*
 /vendor/assets/*
+
+# Ignore application configuration
+/config/application.yml

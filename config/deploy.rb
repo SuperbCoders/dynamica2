@@ -35,7 +35,7 @@ namespace :deploy do
   task :seed do
     on roles(:app), in: :sequence, wait: 5 do
       within release_path do
-        execute :bundle, "exec rake db:seed RAILS_ENV=#{fetch(:stage)}"
+        # execute :bundle, "exec rake db:seed RAILS_ENV=#{fetch(:stage)}"
       end
     end
   end
@@ -53,5 +53,5 @@ namespace :bower do
 end
 
 after 'deploy:publishing', 'deploy:restart'
-after 'deploy:updated', 'deploy:seed'
+# after 'deploy:updated', 'deploy:seed'
 before 'deploy:compile_assets', 'bower:install'

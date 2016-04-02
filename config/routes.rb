@@ -7,18 +7,27 @@ Rails.application.routes.draw do
 
   apipie
 
+  devise_for :users, skip: [:session, :password, :registration, :confirmation],
+      controllers: { omniauth_callbacks: 'customized_devise/omniauth_callbacks' }
+
   scope "(:locale)", locale: /en|ru/ do
     root 'welcome#index'
     get 'dashboard' => 'dashboard#index', as: :dashboard
     get 'templates(/*url)' => 'application#templates'
     get 'apidocs' => 'apidocs#index'
 
-    devise_for :users, controllers: { registrations: 'customized_devise/registrations', sessions: 'customized_devise/sessions', passwords: 'customized_devise/passwords' }
+    devise_for :users, controllers: {
+        registrations: 'customized_devise/registrations',
+        sessions: 'customized_devise/sessions',
+        passwords: 'customized_devise/passwords'
+    }, skip: :omniauth_callbacks
+
     devise_scope :user do
       match 'users/avatar' => 'customized_devise/registrations#avatar', via: [:put, :patch]
     end
 
     scope :profile do
+      post 'email_uniqueness' => 'profile#email_uniqueness'
       get  '/' => 'profile#index', as: :profile
       post '/' => 'profile#update', as: :update
     end

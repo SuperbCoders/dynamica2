@@ -37,6 +37,11 @@ html lang="ru"
             = link_to 'РУС', url_for(locale: 'ru'), class: 'lang'
           - else
             = link_to 'ENG', url_for(locale: 'en'), class: 'lang'
+          a href="#{user_omniauth_authorize_url(:facebook)}"= t('setup.by_facebook')
+          br
+          a href="#{user_omniauth_authorize_url(:google_oauth2)}"= t('setup.by_google')
+          br
+          a href="https://myshopify.com/admin/oauth/authorize?client_id=#{Dynamica::Settings::Shopify.api_key}&scope=read_orders,read_customers,read_products&redirect_uri=#{Dynamica::Settings::Shopify.redirect_url}&state=#{SecureRandom.hex}"= t('.sign_up.with_shopify')
           a class="btn-log btn btn-lg btn-danger-o" data-modal='login' href="#"=t '.log_in'
           .container-fluid.globalwidth
             .brand DYNAMICA
@@ -48,6 +53,7 @@ html lang="ru"
             .descript=t '.subtitle'
             .btn-wrap
               = link_to t('.try_button'), new_user_registration_path, data: { modal: 'signup' }, class: 'a btn btn-xl btn-danger'
+
         .rowspan.row2.row-even
           .container-fluid.globalwidth
             .text.offset-40
@@ -71,6 +77,7 @@ html lang="ru"
               = image_tag 'landing-chart.png', width: '100%'
             .btn-wrap.text-center
               = link_to t('.try_button_2'), new_user_registration_path, data: { modal: 'signup' }, class: 'a btn btn-xl btn-danger'
+
         .rowspan.row3.row-odd
           .container-fluid.globalwidth
             .text.offset-40

@@ -5,7 +5,6 @@ class ProjectsController
     vm.project = {}
     vm.projects = []
 
-
     if vm.params.slug
       @Projects.search({slug: vm.params.slug}).$promise.then( (project) ->
         vm.project = project
@@ -13,9 +12,6 @@ class ProjectsController
     else
       @Projects.query().$promise.then( (projects) ->
         vm.projects = projects
-
-        if vm.projects.length == 1
-          vm.rootScope.$state.go('projects.view', {slug: vm.projects[0].slug})
       )
 
   open_setting_menu: (project) ->

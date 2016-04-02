@@ -200,7 +200,7 @@ class ChartsDataController < ApplicationController
     }
 
     result.each {|k, v| result[k][:data] = v[:data].map {|k, v| {'date' => k, 'close' => v}}}
-    
+
     result.each { |k, chart_data|
       temp_data = result[k][:data]
       result[k][:data] = []
@@ -209,7 +209,7 @@ class ChartsDataController < ApplicationController
       end
 
     }
-    
+
     # result.each {|k, v| result[k][:data] = v[:data].reverse}
 
     result.merge({
@@ -242,44 +242,44 @@ class ChartsDataController < ApplicationController
     result = [
         {
             "name": "Revenue",
-            "tr_name": "revenue",
-            "color": "#6AFFCB",
-            "value": "#{current_data.sum :total_gross_revenues}$",
-            "diff": diff_sum(:total_gross_revenues, current_data, prev_data),
-            "data": current_data.send(scope).sum(:total_gross_revenues)
-        },
+        "tr_name": "revenue",
+        "color": "#6AFFCB",
+        "value": "#{current_data.sum :total_gross_revenues}$",
+        "diff": diff_sum(:total_gross_revenues, current_data, prev_data),
+        "data": current_data.send(scope).sum(:total_gross_revenues)
+    },
         {
             "name": "Orders",
-            "tr_name": "orders",
-            "color": "#FF1FA7",
-            "value": "#{current_data.sum :orders_number}",
-            "diff": diff_sum(:orders_number, current_data, prev_data),
-            "data": current_data.send(scope).sum(:orders_number)
-        },
+        "tr_name": "orders",
+        "color": "#FF1FA7",
+        "value": "#{current_data.sum :orders_number}",
+        "diff": diff_sum(:orders_number, current_data, prev_data),
+        "data": current_data.send(scope).sum(:orders_number)
+    },
         {
             "name": "Products sell",
-            "tr_name": "products_sell",
-            "color": "#FF7045",
-            "value": "#{current_data.sum :products_number}",
-            "diff": diff_sum(:products_number, current_data, prev_data),
-            "data": current_data.send(scope).sum(:products_number)
-        },
+        "tr_name": "products_sell",
+        "color": "#FF7045",
+        "value": "#{current_data.sum :products_number}",
+        "diff": diff_sum(:products_number, current_data, prev_data),
+        "data": current_data.send(scope).sum(:products_number)
+    },
         {
             "name": "Unic users",
-            "tr_name": "unic_users",
-            "color": "#3BD7FF",
-            "value": "#{current_data.sum :unique_users_number}",
-            "diff": diff_sum(:unique_users_number, current_data, prev_data),
-            "data": current_data.send(scope).sum(:unique_users_number)
-        },
+        "tr_name": "unic_users",
+        "color": "#3BD7FF",
+        "value": "#{current_data.sum :unique_users_number}",
+        "diff": diff_sum(:unique_users_number, current_data, prev_data),
+        "data": current_data.send(scope).sum(:unique_users_number)
+    },
         {
             "name": "Customers",
-            "tr_name": "customers",
-            "color": "#FFD865",
-            "value": "#{current_data.sum :customers_number}",
-            "diff": diff_sum(:customers_number, current_data, prev_data),
-            "data": current_data.send(scope).sum(:customers_number)
-        }
+        "tr_name": "customers",
+        "color": "#FFD865",
+        "value": "#{current_data.sum :customers_number}",
+        "diff": diff_sum(:customers_number, current_data, prev_data),
+        "data": current_data.send(scope).sum(:customers_number)
+    }
     ]
 
     result.each {|gr| gr[:data] = gr[:data].map {|k, v| {'date' => k, 'close' => v}}}

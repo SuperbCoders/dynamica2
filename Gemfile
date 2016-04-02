@@ -37,8 +37,13 @@ gem 'spring',        group: :development
 
 # Use unicorn as the app server
 gem 'unicorn'
-
+gem 'figaro'
 gem 'groupdate'
+
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-twitter'
 
 # Use Capistrano for deployment
 group :development do

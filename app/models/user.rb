@@ -26,18 +26,18 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, :omniauthable,
          :recoverable, :rememberable, :trackable, :validatable
 
   mount_uploader :avatar, AvatarUploader
 
+  has_many :user_omnis, dependent: :destroy
   has_many :permissions, dependent: :restrict_with_error
   has_many :projects, through: :permissions
+  has_many :logs, dependent: :destroy
 
   # @return [Array<Project>] project that were created by the user
   has_many :own_projects, class_name: 'Project', dependent: :restrict_with_error
-
-  has_many :logs, dependent: :destroy
 
   validates :api_token, uniqueness: true, if: :api_token
   validates :role, presence: true, inclusion: { in: ROLES }
@@ -50,7 +50,43 @@ class User < ActiveRecord::Base
     [name, email, id].select(&:present?).first
   end
 
+  # return true if user is temporary
+  # from Shopify omniauth
+  # @return [Boolean]
+  def temporary_user?
+    (email && email.include?(Dynamica::TEMPORARY_MAIL_PREFIX))
+  end
+
+  # Class methods
+
+  # Return initialize temporary User
+  # @return [User]
+  def self.build_temporary_user
+    new(email: generate_random_email, password: generate_random_password)
+  end
+
+  # Return User from db if exists? or build new
+  # @return [User]
+  def self.build_from_omni(auth)
+    exists?(email: auth.info.email) ? User.find_by_email(auth.info.email) : new(email: auth.info.email, password: generate_random_password, name: auth.info.name)
+  end
+
   private
+
+    # Generates random email for temporary user
+    # @return [String] random unique email that not exist in db
+    def self.generate_random_email
+      begin
+        @email = [generate_random_password, '@', Dynamica::TEMPORARY_MAIL_PREFIX].join
+      end while User.find_by_email(@email)
+      @email
+    end
+
+    # Generates random password for temporary user
+    # @return [String] random password
+    def self.generate_random_password(length = 8)
+      SecureRandom.hex.to_s[0..length]
+    end
 
     # Generates unique API token
     # @return [String] unique API token

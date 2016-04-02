@@ -63,8 +63,7 @@ class Project < ActiveRecord::Base
   def set_project_owner!(user, session = {})
     return if user_id
 
-    if user
-      update_attributes user_id: user.id, guest_token: nil
+    if user && update_attributes(user_id: user.id, guest_token: nil)
       user.permissions.create! project: self, all: true
       session[:guest_token] = nil
     else

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304095111) do
+ActiveRecord::Schema.define(version: 20160401181655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -251,6 +251,20 @@ ActiveRecord::Schema.define(version: 20160304095111) do
   end
 
   add_index "third_party_shopify_orders", ["integration_id"], name: "index_third_party_shopify_orders_on_integration_id", using: :btree
+
+  create_table "user_omnis", force: true do |t|
+    t.string   "fb_id"
+    t.string   "twitter_id"
+    t.string   "google_id"
+    t.string   "fb_token"
+    t.string   "twitter_token"
+    t.string   "google_token"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_omnis", ["user_id"], name: "index_user_omnis_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

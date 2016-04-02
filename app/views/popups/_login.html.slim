@@ -29,6 +29,7 @@
                   = f.submit t('.log_in.form.submit'), class: 'btn btn-lg btn-danger'
                 .control-box.text-center.clear
                   a href='#' data-modal='recover'=t '.log_in.password_recovery'
+
   #modal-signup.box-modal
     .box-modal_i
       a.box-modal_close.arcticmodal-close href='#'  &times;
@@ -49,6 +50,9 @@
                   = f.password_field :password, class: 'form-control', autocomplete: 'off', placeholder: t('.sign_up.form.password')
                 .control-box.text-center
                   = f.submit t('.sign_up.form.submit'), class: 'btn btn-lg btn-danger'
+                .control-box.text-center.clear
+                  a href="https://myshopify.com/admin/oauth/authorize?client_id=#{Dynamica::Settings::Shopify.api_key}&scope=read_orders,read_customers,read_products&redirect_uri=#{Dynamica::Settings::Shopify.redirect_url}&state=#{SecureRandom.hex}"= t('.sign_up.with_shopify')
+
   #modal-recover.box-modal
     .box-modal_i
       a.box-modal_close.arcticmodal-close href='#'  &times;
@@ -72,6 +76,7 @@
                   = f.email_field :email, class: 'form-control', autofocus: true, placeholder: t('.password_recovery.form.email')
                 .control-box.text-center
                   = f.submit t('.password_recovery.form.submit'), class: 'btn btn-lg btn-danger'
+
   #modal-password-recovery-sent.box-modal
     .box-modal_i
       a.box-modal_close.arcticmodal-close href='#'  &times;
@@ -86,6 +91,7 @@
           .accept
             p
               a.arcticmodal-close href='#'=t '.password_recovery_sent.ok'
+
   #modal-password-new.box-modal
     .box-modal_i
       a.box-modal_close.arcticmodal-close href='#'  &times;
