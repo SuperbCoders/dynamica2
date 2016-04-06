@@ -1,6 +1,7 @@
 @application = angular.module('dynamica.dashboard',
   [ 'ui.router',
-    'ngResource'])
+    'ngResource',
+    'angularUtils.directives.dirPagination'])
 
 @application.config ['$httpProvider', '$stateProvider', '$urlRouterProvider', ($httpProvider, $stateProvider, $urlRouterProvider) ->
   $httpProvider.defaults.useXDomain = true
@@ -76,6 +77,20 @@
         ]
       ]
 
+  .state 'projects.products_revenue',
+    url: '/:slug/products_revenue/:from/:to',
+    templateUrl: '/templates/stores/products_revenue'
+    controller: 'ProductsRevenueController'
+    controllerAs: 'vm'
+    params: {project: null}
+    resolve:
+      Projects: ['Resources', (Resources) ->
+        Resources '/projects/:id', {id: @id}, [
+          {method: 'GET', isArray: false},
+          {name: 'search', method: 'POST', isArray: false}
+        ]
+      ]
+
   .state 'projects.chart',
     url: '/:slug/:chart/:from/:to',
     templateUrl: '/templates/stores/chart'
@@ -94,9 +109,10 @@
   return
 ]
 
-@application.run ['$rootScope', '$state', '$stateParams', '$http', ($rootScope, $state, $stateParams, $http) ->
+@application.run ['$rootScope', '$state', '$stateParams', '$http', '$location', ($rootScope, $state, $stateParams, $http, $location) ->
   $rootScope.$state = $state
   $rootScope.$stateParams = $stateParams
+  $rootScope.$location = $location
   $rootScope.locale = $("meta[name=locale]").attr('content')
 
   if $('.switcher').length

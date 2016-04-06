@@ -12,6 +12,7 @@
 #= require angular
 #= require angular-ui-router
 #= require angular-resource
+#= require angular-utils-pagination
 
 #= require d3
 #= require script

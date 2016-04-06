@@ -23,6 +23,20 @@ ru:
           <<: *permission
 
   projects:
+    products_revenue:
+      product_search: Поиск по названию
+      table:
+        product: Товар
+        sales: Продаж
+        revenu: Выручка
+        price: Цена
+        views: Просмотров
+        category: Категория
+        date_added: Date added
+      all_products: 'Все товары'
+      hot_sales: 'Горячие товары'
+      last_sales: 'Последние товары'
+      bestsellers: 'Лучшие товары'
     full_chart:
       check_points:
         current: 'Текущий'

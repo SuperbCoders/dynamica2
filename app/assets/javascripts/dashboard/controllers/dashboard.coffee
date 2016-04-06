@@ -33,6 +33,21 @@ class DashboardController
 
     #
 
+
+  chart_changed: (chart) ->
+    if chart == 'products_revenue'
+      state = 'project.products_revenue'
+    else
+      state = 'projects.chart'
+
+    @rootScope.$state.go('projects.chart', {
+      project: @project
+      slug: @project.slug
+      chart: @range[chart]
+      from: @range.from
+      to: @range.to
+    })
+
   charts_fetch: (chart_type) ->
     vm = @
 
@@ -325,15 +340,6 @@ class DashboardController
     vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
     vm.set_datepicker_date(rangeStart, rangeEnd)
-
-  chart_changed: (chart) ->
-    @rootScope.$state.go('projects.chart', {
-      project: @project
-      slug: @project.slug
-      chart: @range[chart]
-      from: @range.from
-      to: @range.to
-    })
 
   getFormatOfDate: ->
     return '%d-%b-%y'
