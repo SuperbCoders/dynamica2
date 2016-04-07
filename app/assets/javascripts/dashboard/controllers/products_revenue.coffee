@@ -24,7 +24,20 @@ class ProductsRevenueController
     else
       @fetch()
 
-    console.log vm.range
+  datepicker_changed: ->
+    vm = @
+
+    dates = vm.datepicker_date.split(' – ')
+    console.log dates
+    console.log dates.length
+
+    if dates.length == 2
+      vm.range.raw_start = moment(dates[0])
+      vm.range.raw_end = moment(dates[1])
+      vm.range.from = vm.range.raw_start.format('MM.DD.YYYY')
+      vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
+
+      vm.fetch()
 
   fetch: ->
     vm = @
