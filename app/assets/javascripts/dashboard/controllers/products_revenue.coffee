@@ -139,6 +139,21 @@ class ProductsRevenueController
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
 
+    wnd = $(window)
+    scrollParent = $('.scrollParent')
+    doc = $(document)
+    scrollBottomFixed = $('.scrollBottomFixed')
+
+    $(window).scroll ->
+      if scrollParent.offset().top - doc.scrollTop() + scrollBottomFixed.height() + scrollBottomFixed.css('marginTop').replace('px', '') * 1 <= wnd.height()
+        scrollBottomFixed.addClass('table-footer-fixed').removeClass 'table-footer-bottom'
+      if scrollParent.offset().top - doc.scrollTop() > wnd.height() - (scrollBottomFixed.height() * 2)
+        scrollBottomFixed.removeClass('table-footer-fixed').removeClass 'table-footer-bottom'
+      if doc.scrollTop() + wnd.height() - scrollBottomFixed.height() >= scrollParent.offset().top + scrollParent.height()
+        scrollBottomFixed.removeClass('table-footer-fixed').addClass 'table-footer-bottom'
+
+
+
   parse_diff: (diff_str) -> parseInt(diff_str)
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
