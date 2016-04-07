@@ -1,0 +1,89 @@
+require 'rails_helper'
+
+RSpec.describe ChartsDataController, :type => :controller do
+  clean_database
+
+  DAYS = 22
+  START_DATE = DateTime.now - DAYS.days
+  END_DATE = DateTime.now
+  start_date_str = (START_DATE - 1.day).strftime("%m.%d.%Y")
+  end_date_str = END_DATE.strftime("%m.%d.%Y")
+
+  # Generate user, project and grant permissions
+  user = FactoryGirl.create(:user)
+  project =  FactoryGirl.create(:project, user: user)
+  user.permissions.create(project: project, all: true)
+
+  # Generate test data
+  total_statistic, statistic, products_statistic = generate_test_demo_data(project, START_DATE, END_DATE)
+  puts total_statistic
+  puts statistic
+  before(:each) do
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+    sign_in user
+  end
+
+  describe 'GET #products_characteristics' do
+    it 'should calculate products revenue' do
+      get :products_characteristics, format: :json, chart: 'products_revenue', from: start_date_str, to: end_date_str, project_id: project.id
+      expect(json_body[0][:gross_revenue]).to eq total_gross_revenue(json_body[0][:product_id], products_statistic)
+    end
+  end
+
+  describe 'GET #big_chart_data' do
+    before { get :big_chart_data, format: :json, from: start_date_str, to: end_date_str, project_id: project.id }
+
+    it 'should calculate total revenue' do
+      compare_total_values('revenue', :total_gross_revenues, total_statistic, statistic)
+    end
+
+    it 'should calculate total orders' do
+      compare_total_values('orders', :orders_number, total_statistic, statistic)
+    end
+
+    it 'should calculate total customers' do
+      compare_total_values('customers', :customers_number, total_statistic, statistic)
+    end
+
+    it 'should calculate total products_sell' do
+      compare_total_values('products_sell', :products_number, total_statistic, statistic)
+    end
+  end
+
+  describe 'GET #other_chart_data' do
+    before { get :other_chart_data, format: :json, from: start_date_str, to: end_date_str, project_id: project.id }
+
+
+  end
+
+  describe 'GET #full_chart_data' do
+
+  end
+
+  describe 'GET #full_chart_check_points' do
+
+  end
+
+  def compare_total_values(value_type, value_field, total_statistic, statistic)
+    data = select_total(value_type, json_body)
+    expect(data[:value].to_f).to eq total_statistic[value_field]
+    data[:data].map { |date_values|
+      date = date_values[:date].to_datetime.strftime('%D').gsub('/','-')
+      expect(statistic[date][value_field]).to eq date_values[:close]
+    }
+  end
+
+  def select_total(name, data)
+    data.select { |d| d[:tr_name] == name }[0]
+  end
+
+  def total_gross_revenue(product_id, products_statistic)
+    total_gross_revenue = 0
+    products_statistic.keys.map { |day|
+      products_statistic[day].map { |product_char| total_gross_revenue += product_char.gross_revenue if product_char.product_id == product_id }
+    }
+    total_gross_revenue
+  end
+
+
+end

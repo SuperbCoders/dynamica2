@@ -6,13 +6,9 @@ namespace :dynamica do
     task :seed_products, [:project_id] => :environment do |t, args|
       current_project = Project.find(args.project_id)
 
-      orders_csv      = CSV.new(File.open("#{Rails.root}/db/seeds/orders.csv").read, headers: true)
-      items_csv       = CSV.new(File.open("#{Rails.root}/db/seeds/items.csv").read, headers: true)
-      order_items_csv = CSV.new(File.open("#{Rails.root}/db/seeds/order_items.csv").read, headers: true)
-
-      order_items = order_items_csv.to_a.map {|row| row.to_hash}
-      items = items_csv.to_a.map {|row| row.to_hash}
-      orders = orders_csv.to_a.map {|row| row.to_hash}
+      orders = CSV.new(File.open("#{Rails.root}/db/seeds/orders.csv").read, headers: true).to_a.map {|row| row.to_hash}
+      items = CSV.new(File.open("#{Rails.root}/db/seeds/items.csv").read, headers: true).to_a.map {|row| row.to_hash}
+      order_items = CSV.new(File.open("#{Rails.root}/db/seeds/order_items.csv").read, headers: true).to_a.map {|row| row.to_hash}
 
       start_date = '01-10-2012'
 
@@ -32,6 +28,7 @@ namespace :dynamica do
         puts "For #{date.to_datetime} has #{line_items.count} items sold"
 
         line_items.map { |product|
+
           item = items.select { |i| i['id'] == product['id']}
 
           next if item.length < 1
@@ -72,13 +69,9 @@ namespace :dynamica do
       current_project = Project.find(args.project_id)
       current_project = Project.first if not current_project
 
-      orders_csv      = CSV.new(File.open("#{Rails.root}/db/seeds/orders.csv").read, headers: true)
-      items_csv       = CSV.new(File.open("#{Rails.root}/db/seeds/items.csv").read, headers: true)
-      order_items_csv = CSV.new(File.open("#{Rails.root}/db/seeds/order_items.csv").read, headers: true)
-
-      order_items = order_items_csv.to_a.map {|row| row.to_hash}
-      items = items_csv.to_a.map {|row| row.to_hash}
-      orders = orders_csv.to_a.map {|row| row.to_hash}
+      order_items = CSV.new(File.open("#{Rails.root}/db/seeds/order_items.csv").read, headers: true).to_a.map {|row| row.to_hash}
+      items       = CSV.new(File.open("#{Rails.root}/db/seeds/items.csv").read, headers: true).to_a.map {|row| row.to_hash}
+      orders      = CSV.new(File.open("#{Rails.root}/db/seeds/orders.csv").read, headers: true).to_a.map {|row| row.to_hash}
 
       start_date = '06-10-2012'
 

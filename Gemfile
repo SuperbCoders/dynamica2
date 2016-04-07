@@ -66,9 +66,15 @@ end
 
 group :development, :test do
   gem 'quiet_assets', '~> 1.1.0'
-
+  gem 'guard'
+  gem 'guard-bundler', require: false
+  gem 'guard-rspec', require: false
+  gem 'shoulda-matchers', github: 'thoughtbot/shoulda-matchers'
+  gem 'terminal-notifier-guard'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'airborne'
   gem 'capybara'
 
   # Uncomment to use Poltergeist

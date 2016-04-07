@@ -14,6 +14,7 @@ class ChartsDataController < ApplicationController
     if @product_characteristics
       @product_characteristics.map { |pc|
         @products[pc.product_id] ||= { sales: 0, gross_revenue: 0, title: '', price: 0 }
+        @products[pc.product_id][:product_id] = pc.product_id
         @products[pc.product_id][:price] = pc.price
         @products[pc.product_id][:title] = pc.try(:product).title
         @products[pc.product_id][:sales] += pc.sold_quantity
@@ -78,7 +79,7 @@ class ChartsDataController < ApplicationController
   private
 
   def set_product_characteristics
-    @product_characteristics = @project.product_characteristics.timeline(date_from, date_to)
+    @product_characteristics = @project ? @project.product_characteristics.timeline(date_from, date_to) : nil
   end
 
   def set_chart_data

@@ -15,7 +15,7 @@
 class ProductCharacteristic < ActiveRecord::Base
   default_scope -> { order(created_at: :desc) }
 
-  scope :timeline, lambda { |date_from, date_to| select([:id, :product_id, :gross_revenue, :price, :sold_quantity]).where('date > ? AND date < ?', date_from, date_to) }
+  scope :timeline, lambda { |date_from, date_to| select([:id, :product_id, :gross_revenue, :price, :sold_quantity]).where('date >= ? AND date <= ?', date_from, date_to) }
 
   belongs_to :product
 

@@ -17,8 +17,7 @@
 
 FactoryGirl.define do
   factory :project do
-    user
-    name 'My Project'
+    name { Faker::Name.first_name }
     sequence(:slug) { |i| "project_#{i}" }
   end
 end
