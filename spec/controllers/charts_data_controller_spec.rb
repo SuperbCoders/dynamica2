@@ -16,8 +16,7 @@ RSpec.describe ChartsDataController, :type => :controller do
 
   # Generate test data
   total_statistic, statistic, products_statistic = generate_test_demo_data(project, START_DATE, END_DATE)
-  puts total_statistic
-  puts statistic
+
   before(:each) do
     @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in user
@@ -53,6 +52,73 @@ RSpec.describe ChartsDataController, :type => :controller do
   describe 'GET #other_chart_data' do
     before { get :other_chart_data, format: :json, from: start_date_str, to: end_date_str, project_id: project.id }
 
+    it 'should calculate total_revenu' do
+      compare_other_chart_values(:total_revenu, :total_gross_revenues, total_statistic, statistic)
+    end
+
+    it 'should calculate products_number' do
+      compare_other_chart_values(:products_number, :products_number, total_statistic, statistic)
+    end
+
+    it 'should calculate average_order_value' do
+
+    end
+
+    it 'should calculate average_order_size' do
+
+    end
+
+    it 'should calculate customers_number' do
+      compare_other_chart_values(:customers_number, :customers_number, total_statistic, statistic)
+    end
+
+    it 'should calculate new_customers_number' do
+      compare_other_chart_values(:new_customers_number, :new_customers_number, total_statistic, statistic)
+    end
+
+    it 'should calculate repeat_customers_number' do
+
+    end
+
+    it 'should calculate average_revenue_per_customer' do
+
+    end
+
+    it 'should calculate products_in_stock_number' do
+
+    end
+
+    it 'should calculate sales_per_visitor' do
+
+    end
+
+    it 'should calculate average_customer_lifetime_value' do
+
+    end
+
+    it 'should calculate unique_users_number' do
+
+    end
+
+    it 'should calculate visits' do
+
+    end
+
+    it 'should calculate items_in_stock_number' do
+
+    end
+
+    it 'should calculate percentage_of_inventory_sold' do
+
+    end
+
+    it 'should calculate percentage_of_stock_sold' do
+
+    end
+
+    it 'should calculate shipping_cost_as_a_percentage_of_total_revenue' do
+
+    end
 
   end
 
@@ -62,6 +128,15 @@ RSpec.describe ChartsDataController, :type => :controller do
 
   describe 'GET #full_chart_check_points' do
 
+  end
+
+  def compare_other_chart_values(value_type, value_field, total_statistic, statistic)
+    data = json_body[value_type]
+    expect(data[:value].to_f).to eq total_statistic[value_field]
+    data[:data].map { |date_values|
+      date = date_values[:date].to_datetime.strftime('%D').gsub('/','-')
+      expect(statistic[date][value_field]).to eq date_values[:close]
+    }
   end
 
   def compare_total_values(value_type, value_field, total_statistic, statistic)
