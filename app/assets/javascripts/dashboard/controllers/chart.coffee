@@ -9,6 +9,7 @@ class ChartController
       from: @rootScope.$stateParams.from
       to: @rootScope.$stateParams.to
 
+    console.log 'ChartController'
     vm.datepicker = $('.datePicker')
 
     if not vm.range.from or not vm.range.to

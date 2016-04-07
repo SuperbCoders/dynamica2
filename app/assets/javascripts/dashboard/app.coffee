@@ -66,7 +66,7 @@
 
   .state 'projects.view',
     url: '/:slug',
-    templateUrl: '/templates/stores/view'
+    templateUrl: '/templates/stores/dashboard'
     controller: 'DashboardController',
     controllerAs: 'vm'
     resolve:

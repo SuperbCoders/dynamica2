@@ -14,6 +14,7 @@ class ProductsRevenueController
     if not vm.range.from or not vm.range.to
       @rootScope.$state.go('projects.list')
 
+    console.log vm.range
     @init_dashboard()
 
     if not @project
@@ -26,17 +27,13 @@ class ProductsRevenueController
 
   datepicker_changed: ->
     vm = @
-
     dates = vm.datepicker_date.split(' – ')
     console.log dates
-    console.log dates.length
-
     if dates.length == 2
       vm.range.raw_start = moment(dates[0])
       vm.range.raw_end = moment(dates[1])
       vm.range.from = vm.range.raw_start.format('MM.DD.YYYY')
       vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
-
       vm.fetch()
 
   fetch: ->
@@ -134,7 +131,7 @@ class ProductsRevenueController
 
     vm.datepicker.datepicker(
       multidate: 2
-      startDate: '-877d'
+      startDate: '-1877d'
       endDate: '0'
       toggleActive: true
       orientation: 'bottom left'

@@ -1,5 +1,5 @@
 class DashboardController
-  constructor: (@rootScope, @scope, @Projects, @http) ->
+  constructor: (@rootScope, @scope, @Projects, @http, @T) ->
     vm = @
     vm.params = @rootScope.$stateParams
     vm.project = {}
@@ -24,7 +24,7 @@ class DashboardController
     )
 
     @scope.$watch('vm.range.date',  (o, n) -> vm.fetch() if n )
-    @scope.$watch('vm.range.chart', (o, n) -> vm.fetch() if n )
+    @scope.$watch('vm.range.chart', (o, n) -> vm.fetch() if n and n != 'products_revenue' )
 
     @Projects.search({slug: vm.params.slug}).$promise.then( (project) ->
       vm.project = project
@@ -33,14 +33,23 @@ class DashboardController
 
     #
 
+  datepicker_changed: ->
+    vm = @
+    dates = vm.datepicker_date.split(' – ')
+    if dates.length == 2
+      vm.range.raw_start = moment(dates[0])
+      vm.range.raw_end = moment(dates[1])
+      vm.range.from = vm.range.raw_start.format('MM.DD.YYYY')
+      vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
+      vm.fetch()
 
   chart_changed: (chart) ->
-    if chart == 'products_revenue'
-      state = 'project.products_revenue'
+    if @range[chart] == 'products_revenue'
+      state = 'projects.products_revenue'
     else
       state = 'projects.chart'
 
-    @rootScope.$state.go('projects.chart', {
+    @rootScope.$state.go(state, {
       project: @project
       slug: @project.slug
       chart: @range[chart]
@@ -251,7 +260,7 @@ class DashboardController
         legendItem = $('<li class="legend_item" />')
           .append($('<div class="legend_name" />')
           .css('color', color)
-          .append($('<span/>').text(vm.translate_chart_name(data_files[i].tr_name)))
+          .append($('<span/>').text(vm.T.t(data_files[i].tr_name)))
         ).append($('<div class="legend_val" />').append($('<span class="val" />').text(data_files[i].value))
           .append($('<sup class="graph-dynamica" />')
             .addClass(if /-/g.test(data_files[i].diff) then 'dynamica_down' else 'dynamica_up')
@@ -450,7 +459,7 @@ class DashboardController
 
     vm.datepicker.datepicker(
       multidate: 2
-      startDate: '-477d'
+      startDate: '-1477d'
       endDate: '0'
       toggleActive: true
       orientation: 'bottom left'
@@ -458,67 +467,7 @@ class DashboardController
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
 
-  translate_chart_name: (name) ->
-    names_ru =
-      revenue: 'Выручка'
-      orders: 'Заказы'
-      products_sell: 'Товаров продано'
-      unic_users: 'Посетителей'
-      customers: 'Клиентов'
-      overview: 'Обзор'
-      general: 'Базовые'
-      customers: 'Покупатели'
-      inventory: 'Товары'
-      shipping_cost_as_a_percentage_of_total_revenue: 'Доля доставки от общей стоимости'
-      average_order_value: 'Средния стоимость заказа'
-      average_order_size: 'Средняя размер заказа'
-      customers_number: 'Число покупателей'
-      new_customers_number: 'Число новых покупателей'
-      repeat_customers_number: 'Чилсо повторных покупателей'
-      ratio_of_new_customers_to_repeat_customers: 'Отшение новых покупателей к повторным'
-      average_revenue_per_customer: 'Средняя сумма на покупателя'
-      sales_per_visitor: 'Покупок на посетителей'
-      average_customer_lifetime_value: 'Среднее время проведенное клиентом'
-      unique_users_number: 'Количество уникальных посетителей'
-      visits: 'Число визитов'
-      products_in_stock_number: 'Продуктов в продаже'
-      items_in_stock_number: 'Позиций на складе'
-      percentage_of_inventory_sold: 'Процент проданных товаров'
-      percentage_of_stock_sold: 'Процент запаса на складе'
-      products_number: 'Количество товаров'
-      total_gross_revenues: 'Общая выручка'
-    names_en =
-      revenue: 'Revenue'
-      orders: 'Orders'
-      products_sell: 'Products sell'
-      unic_users: 'Unic users'
-      customers: 'Customers'
-      overview: 'Overview'
-      general: 'General'
-      customers: 'Customers'
-      inventory: 'Inventory'
-      total_revenu: 'Gross Revenue'
-      shipping_cost_as_a_percentage_of_total_revenue: 'Shipping Cost As A Percentage Of Total Revenue'
-      average_order_value: 'Average Order Value'
-      average_order_size: 'Average Order Size'
-      customers_number: 'Customers Number'
-      new_customers_number: 'New Customers Number'
-      repeat_customers_number: 'Repeat Customers Number'
-      ratio_of_new_customers_to_repeat_customers: 'Ratio Of New Customers To Repeat Customers'
-      average_revenue_per_customer: 'Average Revenue Per Customer'
-      sales_per_visitor: 'Sales Per Visitor'
-      average_customer_lifetime_value: 'Average Customer Lifetime Value'
-      unique_users_number: 'Unique Users Number'
-      visits: 'Visits'
-      products_in_stock_number: 'Products_in_stock_number'
-      items_in_stock_number: 'Items In Stock Number'
-      percentage_of_inventory_sold: 'Percentage Of Inventory Sold'
-      percentage_of_stock_sold: 'Rercentage Of Stock Sold'
-      products_number: 'Products Number'
-      total_gross_revenues: 'Gross Revenue'
-    if @rootScope.locale is 'ru' then names_ru[name] else names_en[name]
-
   parse_diff: (diff_str) -> parseInt(diff_str)
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
-@application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', '$http', DashboardController]
+@application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', DashboardController]
 
