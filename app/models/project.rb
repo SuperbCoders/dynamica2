@@ -34,6 +34,8 @@ class Project < ActiveRecord::Base
   has_many :logs, dependent: :destroy
 
   has_many :project_characteristics, dependent: :destroy
+
+  has_many :product_characteristics, dependent: :destroy
   has_many :products, dependent: :destroy
 
   has_one :shopify_integration, dependent: :destroy, class_name: 'ThirdParty::Shopify::Integration'

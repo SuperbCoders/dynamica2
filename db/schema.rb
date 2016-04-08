@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160401181655) do
+ActiveRecord::Schema.define(version: 20160406123145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,9 +166,11 @@ ActiveRecord::Schema.define(version: 20160401181655) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "date",                        null: false
+    t.integer  "project_id"
   end
 
   add_index "product_characteristics", ["product_id"], name: "index_product_characteristics_on_product_id", using: :btree
+  add_index "product_characteristics", ["project_id"], name: "index_product_characteristics_on_project_id", using: :btree
 
   create_table "products", force: true do |t|
     t.integer  "remote_id",          limit: 8,              null: false
@@ -223,9 +225,12 @@ ActiveRecord::Schema.define(version: 20160401181655) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
-    t.boolean  "api_used",    default: false
-    t.boolean  "demo",        default: false
+    t.boolean  "api_used",       default: false
+    t.boolean  "demo",           default: false
     t.string   "guest_token"
+    t.string   "google_site_id"
+    t.integer  "shop_type"
+    t.string   "shop_url"
   end
 
   add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree
@@ -262,6 +267,9 @@ ActiveRecord::Schema.define(version: 20160401181655) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "google_token_ttl"
+    t.string   "google_refresh_token"
+    t.datetime "google_token_expire_at"
   end
 
   add_index "user_omnis", ["user_id"], name: "index_user_omnis_on_user_id", using: :btree

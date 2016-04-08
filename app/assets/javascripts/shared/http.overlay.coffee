@@ -1,8 +1,9 @@
 @application.factory 'requestOverlay', [ '$q', ($q) ->
   overlay =
     request: (request) ->
-      if request.url && request.url.indexOf('chart_data') > 1
-        $('.pageOverlay').addClass('show_overlay')
+      if request.url
+        if request.url.indexOf('charts_data') >= 1 or request.url.indexOf('products_characteristics') > 1
+          $('.pageOverlay').addClass('show_overlay')
       request
 
     response: (response) ->

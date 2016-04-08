@@ -1,0 +1,89 @@
+%section.dashboard-bodya
+  .container-fluid.globalwidth
+    %section.dashboard.projects-dashboard
+      / Dash navigation
+      = render 'templates/stores/chart/header'
+
+      .graph-unit-holder
+        .graph-unit-filter
+          %form{:action => "#"}
+
+            / Filter
+            .graph-filter-block
+              .pull-left
+                %ul.filter-btn-list
+                  %li
+                    %label.btn-filter-check
+                      %input.hidden_input{:checked => "", :name => "product_filter", :type => "radio"}
+                        %span.btn.btn_v1.check_text= t('projects.products_revenue.all_products')
+                  %li
+                    %label.btn-filter-check
+                      %input.hidden_input{:name => "product_filter", :type => "radio"}
+                        %span.btn.btn_v1.check_text= t('projects.products_revenue.hot_sales')
+                  %li
+                    %label.btn-filter-check
+                      %input.hidden_input{:name => "product_filter", :type => "radio"}
+                        %span.btn.btn_v1.check_text= t('projects.products_revenue.last_sales')
+                  %li
+                    %label.btn-filter-check
+                      %input.hidden_input{:name => "product_filter", :type => "radio"}
+                        %span.btn.btn_v1.check_text= t('projects.products_revenue.bestsellers')
+              .pull-right
+                .filter-search_block
+                  %input.form-control(placeholder="#{t('projects.products_revenue.product_search')}" ng-model="vm.filters.title")
+                    %button.filter-search-btn
+                      %i.fa.fa-search
+
+            / Table
+            .graph-unit-info
+              .graph-unit-info-table.scrollParent
+                .table-header.no_pointer
+                  .table-cell.col_1
+                    %span= t('projects.products_revenue.table.product')
+                  .table-cell.col_5.col_right
+                    %span= t('projects.products_revenue.table.sales')
+                  .table-cell.col_6.col_right
+                    %span= t('projects.products_revenue.table.revenu')
+                  .table-cell.col_7.col_right
+                    %span= t('projects.products_revenue.table.price')
+                  .table-cell.col_8.col_right
+                    %span= t('projects.products_revenue.table.views')
+                  .table-cell.col_9
+                    %span= t('projects.products_revenue.table.category')
+                  .table-cell.col_4
+                    %span= t('projects.products_revenue.table.date added')
+                .table-footer.scrollBottomFixed
+                  .table-cell.col_1 Total {{ vm.products.length }} products
+                  .table-cell.col_5.col_right {{ vm.sales }}
+                  .table-cell.col_6.col_right $ {{ vm.gross_revenue }}
+                  .table-cell.col_7 &nbsp;
+                  .table-cell.col_8 &nbsp;
+                  .table-cell.col_9 &nbsp;
+                  .table-cell.col_4 &nbsp;
+                .table-content
+                  .table-row{'dir-paginate' => "product in vm.products | filter:vm.filters | itemsPerPage: 50"}
+                    .table-cell.col_1 {{ product.title }}
+                    .table-cell.col_5.col_right {{ product.sales }}
+                    .table-cell.col_6.col_right
+                      .seller_val $ {{ product.gross_revenue }}
+                    .table-cell.col_7.col_right $ {{ product.price }}
+                    .table-cell.col_8.col_right 5,490
+                    .table-cell.col_9 Kitchen
+                    .table-cell.col_4 130$
+
+                  -#.table-row.no_hover
+                  -#  .table-cell.col_1
+                  -#    %a.btn.btn_v3.check_text.graph-info-reload-btn{:href => "#"}
+                  -#      %i.fa.fa-refresh
+                  -#      %span Show 50 more products
+                  -#  .table-cell.col_5.col_right &nbsp;
+                  -#  .table-cell.col_6.col_right &nbsp;
+                  -#  .table-cell.col_7.col_right &nbsp;
+                  -#  .table-cell.col_8.col_right &nbsp;
+                  -#  .table-cell.col_9 &nbsp;
+                  -#  .table-cell.col_4 &nbsp;
+
+            / Pagination
+
+            .graph-filter-block
+              %dir-pagination-controls{"template-url" => "/templates/dirPagination"}

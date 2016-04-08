@@ -3,11 +3,11 @@
 / Big chart date picker
 .row.dashboard-title-row
   .col-sm-6
-    %h2 {{vm.project.name}} {{vm.translate_chart_name(vm.chart)}}.
+    %h2 {{vm.project.name}} {{vm.T.t(vm.chart)}}.
   .col-sm-6
     .pull-right.datepicker-v1.datepickerComponent
       .pull-left.datepicker-parent
-        %input.form-control.datePicker.form-control-small{:type => "text"}
+        %input.form-control.datePicker.form-control-small(ng-change="vm.datepicker_changed()" ng-model="vm.datepicker_date")
       .pull-left
         %select.selectpicker.graphFilterDate{'ng-model' => "vm.date_range", 'ng-change' => "vm.set_date_range(vm.date_range)"}
           %option{:selected => true, :value => "0"} Current month

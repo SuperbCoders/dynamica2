@@ -7,6 +7,25 @@ class ChartsDataController < ApplicationController
 
   respond_to :json
 
+  def products_characteristics
+    set_product_characteristics
+    @result = []
+    @products = {}
+    if @product_characteristics
+      @product_characteristics.map { |pc|
+        @products[pc.product_id] ||= { sales: 0, gross_revenue: 0, title: '', price: 0 }
+        @products[pc.product_id][:product_id] = pc.product_id
+        @products[pc.product_id][:price] = pc.price
+        @products[pc.product_id][:title] = pc.try(:product).title
+        @products[pc.product_id][:sales] += pc.sold_quantity
+        @products[pc.product_id][:gross_revenue] += pc.gross_revenue
+      }
+
+      @products.keys.map {|k| @result << @products[k] }
+    end
+    render json: @result
+  end
+
   def big_chart_data
     render json: big_charts_data(@current_project_characteristics, @previous_project_characteristics)
   end
@@ -58,6 +77,10 @@ class ChartsDataController < ApplicationController
   end
 
   private
+
+  def set_product_characteristics
+    @product_characteristics = @project ? @project.product_characteristics.timeline(date_from, date_to) : nil
+  end
 
   def set_chart_data
     @current_project_characteristics  = @project.project_characteristics.where(date: date_from..date_to)
@@ -200,17 +223,6 @@ class ChartsDataController < ApplicationController
     }
 
     result.each {|k, v| result[k][:data] = v[:data].map {|k, v| {'date' => k, 'close' => v}}}
-
-    result.each { |k, chart_data|
-      temp_data = result[k][:data]
-      result[k][:data] = []
-      temp_data.each_slice(temp_data.length / 8) do |e, *_|
-        result[k][:data] << e
-      end
-
-    }
-
-    # result.each {|k, v| result[k][:data] = v[:data].reverse}
 
     result.merge({
         ratio_of_new_customers_to_repeat_customers: {

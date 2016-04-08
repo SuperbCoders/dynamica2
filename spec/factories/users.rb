@@ -25,18 +25,8 @@
 
 FactoryGirl.define do
   factory :user do
-    sequence(:email) { |i| "user#{i}@example.com" }
+    email { Faker::Internet.safe_email }
     password 'qwerty123'
     password_confirmation 'qwerty123'
-
-    transient do
-      with_projects []
-    end
-
-    after(:create) do |user, evaluator|
-      evaluator.with_projects.each do |project|
-        user.permissions.create!(project: project, all: true)
-      end
-    end
   end
 end

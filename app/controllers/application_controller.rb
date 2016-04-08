@@ -33,6 +33,7 @@ class ApplicationController < ActionController::Base
   end
 
   def serialize_resources(resources, serializer)
+    return [{}] if not resources
     ActiveModel::SerializableResource.new(
         resources,
         each_serializer: serializer,
@@ -42,6 +43,7 @@ class ApplicationController < ActionController::Base
   end
 
   def serialize_resource(resource, serializer)
+    return {} if not resource
     ActiveModel::SerializableResource.new(
         resource,
         serializer: serializer,

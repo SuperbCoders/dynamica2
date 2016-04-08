@@ -1,5 +1,11 @@
 # Dynamica
-
+## Локальный деплой
+- создать в config: application.yml / database.yml / secrets.yml
+- 
+``` 
+bundle exec rake db:schema:load
+bundle exec rake db:seed
+```
 ## API
 
 Входные данные передаются в виде JSON. Результат возвращается также в виде JSON.
