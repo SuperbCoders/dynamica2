@@ -1,40 +1,21 @@
 class ProjectsController < BaseController
   include Concerns::Resource
-  before_action :set_project, only: [:update, :destroy]
 
+  before_action :set_project, only: [:update, :destroy]
   before_action :authorize_user
   before_action :find_resources, only: %w(index)
   before_action :new_resource, only: %w(create new)
   before_action :find_resource, only: %w(show update destroy)
 
-
-
   def search
-    @resource = resource_scope
-    @resource = @resource.where(slug: params[:slug]) if params[:slug]
-
-    send_json serialize_resource(@resource.first, resource_serializer), true
-  end
-
-  def authorize_user
-    case action_name.to_sym
-      when :index
-        authorize! :read, Project
-      when :create
-        authorize! :create, Project
-      when :show
-        authorize! :read, @resource
-      when :update
-        authorize! :manage, @resource
-      when :destroy
-        authorize! :destroy, @resource
-    end
+    @resource = resource_scope.find_by(slug: params[:slug])  if params[:slug]
+    send_json serialize_resource(@resource, resource_serializer), @resource.present?
   end
 
   def create
     @resource.user = current_user
     if @resource.save
-      current_user.permissions.create!(project: @resource, all: true)
+      current_user.permissions.create(project: @resource, all: true)
     end
     send_json serialize_resource(@resource, resource_serializer), @resource.valid?
   end
@@ -59,7 +40,23 @@ class ProjectsController < BaseController
     [ :id,:name ]
   end
 
+  def authorize_user
+    case action_name.to_sym
+      when :index
+        authorize! :read, Project
+      when :create
+        authorize! :create, Project
+      when :show
+        authorize! :read, @resource
+      when :update
+        authorize! :manage, @resource
+      when :destroy
+        authorize! :destroy, @resource
+    end
+  end
+
   private
+
 
     def set_project
       @resource = Project.friendly.find(params[:id])

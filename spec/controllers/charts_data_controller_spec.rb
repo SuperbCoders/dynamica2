@@ -3,10 +3,10 @@ require 'rails_helper'
 RSpec.describe ChartsDataController, :type => :controller do
   clean_database
 
-  DAYS = 22
+  DAYS = rand(5..15)
   START_DATE = DateTime.now - DAYS.days
   END_DATE = DateTime.now
-  start_date_str = (START_DATE - 1.day).strftime("%m.%d.%Y")
+  start_date_str = START_DATE.strftime("%m.%d.%Y")
   end_date_str = END_DATE.strftime("%m.%d.%Y")
 
   # Generate user, project and grant permissions
@@ -60,13 +60,6 @@ RSpec.describe ChartsDataController, :type => :controller do
       compare_other_chart_values(:products_number, :products_number, total_statistic, statistic)
     end
 
-    it 'should calculate average_order_value' do
-
-    end
-
-    it 'should calculate average_order_size' do
-
-    end
 
     it 'should calculate customers_number' do
       compare_other_chart_values(:customers_number, :customers_number, total_statistic, statistic)
@@ -76,50 +69,19 @@ RSpec.describe ChartsDataController, :type => :controller do
       compare_other_chart_values(:new_customers_number, :new_customers_number, total_statistic, statistic)
     end
 
-    it 'should calculate repeat_customers_number' do
-
-    end
-
-    it 'should calculate average_revenue_per_customer' do
-
-    end
-
-    it 'should calculate products_in_stock_number' do
-
-    end
-
-    it 'should calculate sales_per_visitor' do
-
-    end
-
-    it 'should calculate average_customer_lifetime_value' do
-
-    end
-
-    it 'should calculate unique_users_number' do
-
-    end
-
-    it 'should calculate visits' do
-
-    end
-
-    it 'should calculate items_in_stock_number' do
-
-    end
-
-    it 'should calculate percentage_of_inventory_sold' do
-
-    end
-
-    it 'should calculate percentage_of_stock_sold' do
-
-    end
-
-    it 'should calculate shipping_cost_as_a_percentage_of_total_revenue' do
-
-    end
-
+    pending 'should calculate average_order_value'
+    pending 'should calculate average_order_size'
+    pending 'should calculate repeat_customers_number'
+    pending 'should calculate average_revenue_per_customer'
+    pending 'should calculate products_in_stock_number'
+    pending 'should calculate sales_per_visitor'
+    pending 'should calculate average_customer_lifetime_value'
+    pending 'should calculate unique_users_number'
+    pending 'should calculate visits'
+    pending 'should calculate items_in_stock_number'
+    pending 'should calculate percentage_of_inventory_sold'
+    pending 'should calculate percentage_of_stock_sold'
+    pending 'should calculate shipping_cost_as_a_percentage_of_total_revenue'
   end
 
   describe 'GET #full_chart_data' do
@@ -131,7 +93,12 @@ RSpec.describe ChartsDataController, :type => :controller do
   end
 
   def compare_other_chart_values(value_type, value_field, total_statistic, statistic)
+    # p 'compare_other_chart_values'
+    # p value_type
+    # p value_field
+
     data = json_body[value_type]
+    # p data
     expect(data[:value].to_f).to eq total_statistic[value_field]
     data[:data].map { |date_values|
       date = date_values[:date].to_datetime.strftime('%D').gsub('/','-')
