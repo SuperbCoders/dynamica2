@@ -1,8 +1,0 @@
-- if @project
-  = link_to t('.back'), project_path(@project)
-
-- if @project
-  = render partial: 'permissions_of_project', locals: { project: @project }
-- else
-  - @projects.each do |project|
-    = render partial: 'permissions_of_project', locals: { project: project }

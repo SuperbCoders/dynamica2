@@ -23,6 +23,10 @@ ru:
           <<: *permission
 
   projects:
+    subscription:
+      title: Подписка
+      change_type: Сменить подписку
+      confirm_charge: Подтвердить оплату
     products_revenue:
       product_search: Поиск по названию
       table:
@@ -58,6 +62,8 @@ ru:
         unique_users: 'Уникальные посетители'
         customers: 'Клиенты'
     project:
+      subscription: Подписка
+      settings: Настройки
       edit: Редактировать
       delete: Удалить
       destroy-confirmation: "Вы правда хотите удалить этот проект? Его нельзя будет восстановить."

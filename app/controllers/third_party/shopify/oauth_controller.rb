@@ -9,6 +9,8 @@ module ThirdParty
 
         @project = Project.where(name: shop_name).first_or_initialize
         if @project.new_record?
+          @project.update_attributes(shop_url: params[:shop])
+
           @user = User.build_temporary_user
           if @user.save
 

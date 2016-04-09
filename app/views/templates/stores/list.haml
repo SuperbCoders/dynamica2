@@ -16,6 +16,7 @@
                 {{project.last_forecast}}
               .no_forecast{'ng-show' => "!project.last_forecast"}
                 #{t('projects.project.no_forecasts')}
+              %p(ng-show="project.expired") subscription expired
             .users
               %ul
                 %li.user-pic{'ng-repeat' => "user in project.users"}
@@ -29,9 +30,11 @@
                 .setting-menu.dropdown-menu.right
                   %ul
                     %li
-                      %a{href: '', 'ui-sref' => "projects.edit({slug: project.slug})"}
-                        #{t('projects.project.edit')}
+                      %a(href='' ui-sref="projects.subscription({slug: project.slug})")= t('projects.project.subscription')
+                    -#%li
+                      -#%a(href='' ui-sref="projects.settings({slug: project.slug})")= t('projects.project.settings')
                     %li
-                      %a{href: '', 'ng-click' => "vm.destroy(project)"}
-                        #{t('projects.project.delete')}
+                      %a(href='' ui-sref="projects.edit({slug: project.slug})")= t('projects.project.edit')
+                    %li
+                      %a(href='' ng-click="vm.destroy(project)")= t('projects.project.delete')
           .clearfix{'ng-show' => "$index % 3 == 0"}

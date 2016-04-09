@@ -28,6 +28,8 @@ class DashboardController
 
     @Projects.search({slug: vm.params.slug}).$promise.then( (project) ->
       vm.project = project
+
+      vm.rootScope.$state.go('projects.subscription', {slug: vm.project.slug}) if vm.project.expired
       vm.fetch()
     )
 
