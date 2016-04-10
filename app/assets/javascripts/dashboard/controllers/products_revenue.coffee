@@ -4,6 +4,8 @@ class ProductsRevenueController
     vm.slug = @rootScope.$stateParams.slug
     vm.chart = 'products_revenue'
     vm.project = @rootScope.$stateParams.project
+    vm.sortType = ''
+    vm.sortReverse = false
     vm.range =
       chart: vm.chart
       from: @rootScope.$stateParams.from
@@ -11,10 +13,8 @@ class ProductsRevenueController
 
     vm.datepicker = $('.datePicker')
 
-    if not vm.range.from or not vm.range.to
-      @rootScope.$state.go('projects.list')
+    @rootScope.$state.go('projects.list') if not vm.range.from or not vm.range.to
 
-    console.log vm.range
     @init_dashboard()
 
     if not @project

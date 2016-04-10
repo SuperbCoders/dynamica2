@@ -6,7 +6,7 @@
 
       .graph-unit-holder
         .graph-unit-filter
-          %form{:action => "#"}
+          %form{:action => ""}
 
             / Filter
             .graph-filter-block
@@ -19,15 +19,11 @@
                   %li
                     %label.btn-filter-check
                       %input.hidden_input{:name => "product_filter", :type => "radio"}
-                        %span.btn.btn_v1.check_text= t('projects.products_revenue.hot_sales')
+                        %span.btn.btn_v1.check_text= t('projects.products_revenue.best_sellers')
                   %li
                     %label.btn-filter-check
                       %input.hidden_input{:name => "product_filter", :type => "radio"}
-                        %span.btn.btn_v1.check_text= t('projects.products_revenue.last_sales')
-                  %li
-                    %label.btn-filter-check
-                      %input.hidden_input{:name => "product_filter", :type => "radio"}
-                        %span.btn.btn_v1.check_text= t('projects.products_revenue.bestsellers')
+                        %span.btn.btn_v1.check_text= t('projects.products_revenue.80_20_rule')
               .pull-right
                 .filter-search_block
                   %input.form-control(placeholder="#{t('projects.products_revenue.product_search')}" ng-model="vm.filters.title")
@@ -39,13 +35,25 @@
               .graph-unit-info-table.scrollParent
                 .table-header.no_pointer
                   .table-cell.col_1
-                    %span= t('projects.products_revenue.table.product')
+                    %a(ng-click="vm.sortType = 'title'; vm.sortReverse = !vm.sortReverse")
+                      %span= t('projects.products_revenue.table.product')
+                      %span.fa.fa-caret-down{"ng-show" => "vm.sortType == 'title' && !sortReverse"}
+                      %span.fa.fa-caret-up{"ng-show" => "vm.sortType == 'title' && sortReverse"}
                   .table-cell.col_5.col_right
-                    %span= t('projects.products_revenue.table.sales')
+                    %a(ng-click="vm.sortType = 'sales'; vm.sortReverse = !vm.sortReverse")
+                      %span= t('projects.products_revenue.table.sales')
+                      %span.fa.fa-caret-down{"ng-show" => "vm.sortType == 'sales' && !sortReverse"}
+                      %span.fa.fa-caret-up{"ng-show" => "vm.sortType == 'sales' && sortReverse"}
                   .table-cell.col_6.col_right
-                    %span= t('projects.products_revenue.table.revenu')
+                    %a(ng-click="vm.sortType = 'gross_revenue'; vm.sortReverse = !vm.sortReverse")
+                      %span.fa.fa-caret-down{"ng-show" => "vm.sortType == 'gross_revenue' && !sortReverse"}
+                      %span.fa.fa-caret-up{"ng-show" => "vm.sortType == 'gross_revenue' && sortReverse"}
+                      %span= t('projects.products_revenue.table.revenu')
                   .table-cell.col_7.col_right
-                    %span= t('projects.products_revenue.table.price')
+                    %a(ng-click="vm.sortType = 'price'; vm.sortReverse = !vm.sortReverse")
+                      %span= t('projects.products_revenue.table.price')
+                      %span.fa.fa-caret-down{"ng-show" => "vm.sortType == 'price' && !sortReverse"}
+                      %span.fa.fa-caret-up{"ng-show" => "vm.sortType == 'price' && sortReverse"}
                   .table-cell.col_8.col_right
                     %span= t('projects.products_revenue.table.views')
                   .table-cell.col_9
@@ -61,7 +69,7 @@
                   .table-cell.col_9 &nbsp;
                   .table-cell.col_4 &nbsp;
                 .table-content
-                  .table-row{'dir-paginate' => "product in vm.products | filter:vm.filters | itemsPerPage: 50"}
+                  .table-row{'dir-paginate' => "product in vm.products | filter:vm.filters | orderBy:vm.sortType:vm.sortReverse | itemsPerPage: 50"}
                     .table-cell.col_1 {{ product.title }}
                     .table-cell.col_5.col_right {{ product.sales }}
                     .table-cell.col_6.col_right
