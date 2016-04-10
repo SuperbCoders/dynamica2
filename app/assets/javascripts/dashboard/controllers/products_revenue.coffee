@@ -1,5 +1,5 @@
 class ProductsRevenueController
-  constructor: (@rootScope, @scope, @Projects, @http, @T) ->
+  constructor: (@rootScope, @scope, @Projects, @http, @T, @filter) ->
     vm = @
     vm.slug = @rootScope.$stateParams.slug
     vm.chart = 'products_revenue'
@@ -7,6 +7,7 @@ class ProductsRevenueController
     vm.sortType = ''
     vm.sortReverse = false
     vm.date_range = 0
+    vm.itemsPerPage = 50
     vm.range =
       chart: vm.chart
       from: @rootScope.$stateParams.from
@@ -14,9 +15,38 @@ class ProductsRevenueController
 
     vm.datepicker = $('.datePicker')
 
-    @scope.$watch('vm.date_range', (old_val) -> vm.set_date_range(old_val) )
+    # Scopes
+    vm.sales = 0
+    vm.gross_revenue = 0
+    vm.products_view = 'none'
+    vm.bestsellers = false
+    vm.all_products = true
+    vm.rule_80_20 = false
 
     @rootScope.$state.go('projects.list') if not vm.range.from or not vm.range.to
+
+    @scope.$watch('vm.products_view', (old) ->
+      console.log old
+
+      return if not vm.raw_products
+      switch old
+
+        when 'all_products'
+          vm.products = []
+          for p in vm.raw_products
+            vm.sales += p.sales
+            vm.gross_revenue += p.gross_revenue
+            vm.products.push angular.copy(p)
+
+        when 'best_sellers'
+          vm.products = []
+          vm.bestsellers_products = vm.filter('orderBy')(vm.raw_products, 'sales', true)
+          vm.bestsellers_products = vm.bestsellers_products.slice(0, 50)
+          for p in vm.bestsellers_products
+            vm.sales += p.sales
+            vm.gross_revenue += p.gross_revenue
+            vm.products.push angular.copy(p)
+    )
 
     @init_dashboard()
 
@@ -27,17 +57,6 @@ class ProductsRevenueController
       )
     else
       @fetch()
-
-  datepicker_changed: ->
-    vm = @
-    dates = vm.datepicker_date.split(' – ')
-
-    if dates.length == 2
-      vm.range.raw_start = moment(dates[0])
-      vm.range.raw_end = moment(dates[1])
-      vm.range.from = vm.range.raw_start.format('MM.DD.YYYY')
-      vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
-      vm.fetch()
 
   fetch: ->
     vm = @
@@ -51,15 +70,21 @@ class ProductsRevenueController
       project_id: vm.project.id
       chart: vm.chart
 
-    vm.sales = 0
-    vm.gross_revenue = 0
     vm.http.get(chart_url, params: chart_params).success((response) ->
-      for p in response
-        vm.sales += p.sales
-        vm.gross_revenue += p.gross_revenue
-
-      vm.products = response
+      vm.raw_products = response
+      vm.products_view = 'all_products'
     )
+
+  datepicker_changed: ->
+    vm = @
+    dates = vm.datepicker_date.split(' – ')
+
+    if dates.length == 2
+      vm.range.raw_start = moment(dates[0])
+      vm.range.raw_end = moment(dates[1])
+      vm.range.from = vm.range.raw_start.format('MM.DD.YYYY')
+      vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
+      vm.fetch()
 
   fit2Limits: (pckr, date, max) ->
     start = moment(pckr.datepicker('getStartDate'))
@@ -162,9 +187,7 @@ class ProductsRevenueController
       if doc.scrollTop() + wnd.height() - scrollBottomFixed.height() >= scrollParent.offset().top + scrollParent.height()
         scrollBottomFixed.removeClass('table-footer-fixed').addClass 'table-footer-bottom'
 
-
-
   parse_diff: (diff_str) -> parseInt(diff_str)
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
-@application.controller 'ProductsRevenueController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', ProductsRevenueController]
+@application.controller 'ProductsRevenueController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', '$filter', ProductsRevenueController]

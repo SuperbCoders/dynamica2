@@ -14,15 +14,15 @@
                 %ul.filter-btn-list
                   %li
                     %label.btn-filter-check
-                      %input.hidden_input{:checked => "", :name => "product_filter", :type => "radio"}
+                      %input.hidden_input(checked="" value="all_products" type="radio" ng-model="vm.products_view")
                         %span.btn.btn_v1.check_text= t('projects.products_revenue.all_products')
                   %li
                     %label.btn-filter-check
-                      %input.hidden_input{:name => "product_filter", :type => "radio"}
+                      %input.hidden_input(value="best_sellers" type="radio" ng-model="vm.products_view")
                         %span.btn.btn_v1.check_text= t('projects.products_revenue.best_sellers')
                   %li
                     %label.btn-filter-check
-                      %input.hidden_input{:name => "product_filter", :type => "radio"}
+                      %input.hidden_input(value="rule_80_20" type="radio" ng-model="vm.products_view")
                         %span.btn.btn_v1.check_text= t('projects.products_revenue.80_20_rule')
               .pull-right
                 .filter-search_block
@@ -59,7 +59,6 @@
                   .table-cell.col_4
                     %span= t('projects.products_revenue.table.date added')
 
-                / Table footer
                 .table-footer.scrollBottomFixed
                   .table-cell.col_1 Total {{ vm.products.length }} products
                   .table-cell.col_5.col_right {{ vm.sales }}
@@ -69,7 +68,7 @@
 
                 / Table content
                 .table-content
-                  .table-row{'dir-paginate' => "product in vm.products | filter:vm.filters | orderBy:vm.sortType:vm.sortReverse | itemsPerPage: 50"}
+                  .table-row{'dir-paginate' => "product in vm.products | filter:vm.filters | orderBy:vm.sortType:vm.sortReverse | itemsPerPage: vm.itemsPerPage"}
                     .table-cell.col_1 {{ product.title }}
                     .table-cell.col_5.col_right {{ product.sales }}
                     .table-cell.col_6.col_right
@@ -79,7 +78,7 @@
 
                   .table-row.no_hover
                     .table-cell.col_1
-                      %a.btn.btn_v3.check_text.graph-info-reload-btn(ng-click="setCurrent(pagination.current + 1)")
+                      %a.btn.btn_v3.check_text.graph-info-reload-btn(ng-click="setCurrent(pagination.current + 1)" ng-show="vm.products_view == 'all_products'")
                         %i.fa.fa-refresh
                         %span Show 50 more products
                     .table-cell.col_5.col_right &nbsp;

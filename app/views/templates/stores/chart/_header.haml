@@ -9,7 +9,7 @@
       .pull-left.datepicker-parent
         %input.form-control.datePicker.form-control-small(ng-change="vm.datepicker_changed()" ng-model="vm.datepicker_date")
       .pull-left
-        %select.selectpicker.graphFilterDate(ng-model="vm.date_range" ng-init="vm.date_range = '1'")
+        %select.selectpicker.graphFilterDate(ng-change="vm.set_date_range(vm.date_range)" ng-model="vm.date_range" ng-init="vm.date_range = '1'")
           %option{:value => 1} Current month
           %option{:value => 2} Previous month
           %option{:value => 3} Last 3 month
