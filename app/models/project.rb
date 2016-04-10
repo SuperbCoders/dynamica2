@@ -41,12 +41,23 @@ class Project < ActiveRecord::Base
   has_one :shopify_integration, dependent: :destroy, class_name: 'ThirdParty::Shopify::Integration'
   has_one :integration, dependent: :destroy
 
+  has_one :subscription, dependent: :destroy
+
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[-_A-Za-z0-9]+\z/ }
 
   before_validation :set_default_values
+  after_create :set_trial_subscription
 
   scope :actives, -> { where.not(user_id: nil) }
+
+  def sub_type
+    subscription.sub_type
+  end
+
+  def expired?
+    subscription ? subscription.expired? : !set_trial_subscription
+  end
 
   # Marks project as a project that uses API
   def api_used!
@@ -57,9 +68,21 @@ class Project < ActiveRecord::Base
     forecasts.order(created_at: :asc, finished_at: :asc).last
   end
 
+  def shopify_session
+    nil if not shopify?
+    ShopifyAPI::Session.setup({:api_key => ENV['shopify_api_key'], :secret => ENV['shopify_secret']})
+    session = ShopifyAPI::Session.new(self.shop_url, self.integration.access_token)
+    ShopifyAPI::Base.activate_session(session)
+    session
+  end
+
   # @return [Boolean] whether this project is integrated with Shopify
   def shopify?
-    shopify_integration.present?
+    integration.present?
+  end
+
+  def shopify_shop_name
+    shop_url.split('.myshopify.com')[0]
   end
 
   def set_project_owner!(user, session = {})
@@ -78,7 +101,19 @@ class Project < ActiveRecord::Base
     CharacteristicsFetcherWorker.perform_async self.id, Time.now - time_period, Time.now
   end
 
+  def parse_google_site_id
+    unless google_site_id
+      google_site_id = Dynamica::Google.parse_site_id("https://#{shop_url}")
+      save
+    end
+  end
+
   private
+
+    def set_trial_subscription
+      subscription = Subscription.create_for(user, self)
+      save
+    end
 
     def self.generate_unique_slug
       loop do

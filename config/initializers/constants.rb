@@ -5,4 +5,14 @@ module Dynamica
       :percentage_of_inventory_sold, :percentage_of_stock_sold,
       :shipping_cost_as_a_percentage_of_total_revenue]
   TEMPORARY_MAIL_PREFIX = 'temp.dynamica.cc'
+
+  module Billing
+    TRIAL_DAYS = 31
+    MONTHLY_PRICE = 5
+    YEARLY_PRICE = 4
+    YEARLY_PERIOD = 31.days
+    MONTHLY_PERIOD = 31.days
+    SUBSCRIPTION_TYPES = [:trial, :monthly, :yearly]
+
+  end
 end

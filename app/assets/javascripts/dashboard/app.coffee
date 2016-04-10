@@ -77,6 +77,32 @@
         ]
       ]
 
+  .state 'projects.settings',
+    url: '/:slug/settings'
+    templateUrl: '/templates/stores/settings'
+    controller: 'ProjectsController'
+    controllerAs: 'vm'
+    resolve:
+      Projects: ['Resources', (Resources) ->
+        Resources '/projects/:id', {id: @id}, [
+          {method: 'GET', isArray: false},
+          {name: 'search', method: 'POST', isArray: false}
+        ]
+      ]
+
+  .state 'projects.subscription',
+    url: '/:slug/subscription',
+    templateUrl: '/templates/stores/subscription'
+    controller: 'SubscriptionController'
+    controllerAs: 'vm'
+    resolve:
+      Projects: ['Resource', (Resource) ->
+        Resource '/projects/:id', {id: @id}, [
+          {method: 'GET', isArray: false},
+          {name: 'search', method: 'POST', isArray: false}
+        ]
+      ]
+
   .state 'projects.products_revenue',
     url: '/:slug/products_revenue/:from/:to',
     templateUrl: '/templates/stores/products_revenue'

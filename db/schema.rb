@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160406123145) do
+ActiveRecord::Schema.define(version: 20160410072736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -236,6 +236,21 @@ ActiveRecord::Schema.define(version: 20160406123145) do
   add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree
   add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
 
+  create_table "subscriptions", force: true do |t|
+    t.integer  "project_id"
+    t.integer  "user_id"
+    t.integer  "sub_type",         default: 0
+    t.datetime "expire_at"
+    t.integer  "recurring_id"
+    t.integer  "one_time_id"
+    t.text     "last_charge_body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subscriptions", ["project_id"], name: "index_subscriptions_on_project_id", using: :btree
+  add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id", using: :btree
+
   create_table "third_party_shopify_integrations", force: true do |t|
     t.integer  "project_id"
     t.string   "token"
@@ -267,9 +282,6 @@ ActiveRecord::Schema.define(version: 20160406123145) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "google_token_ttl"
-    t.string   "google_refresh_token"
-    t.datetime "google_token_expire_at"
   end
 
   add_index "user_omnis", ["user_id"], name: "index_user_omnis_on_user_id", using: :btree
