@@ -36,7 +36,7 @@ ru:
         price: Цена
         views: Просмотров
         category: Категория
-        date_added: Date added
+        date_added: Дата
       all_products: 'Все товары'
       hot_sales: 'Горячие товары'
       last_sales: 'Последние товары'

@@ -1,9 +1,11 @@
 class ChartController
   constructor: (@rootScope, @scope, @Projects, @http, @T) ->
+    console.log 'ChartController constructor'
     vm = @
     vm.slug = @rootScope.$stateParams.slug
     vm.chart = @rootScope.$stateParams.chart
     vm.project = @rootScope.$stateParams.project
+    vm.date_range = 1
     vm.range =
       chart: vm.chart
       from: @rootScope.$stateParams.from
@@ -13,6 +15,8 @@ class ChartController
 
     if not vm.range.from or not vm.range.to
       @rootScope.$state.go('projects.list')
+
+    @scope.$watch('vm.date_range', (old_val) -> vm.set_date_range(old_val) )
 
     @init_dashboard()
     @set_default_range()
@@ -25,29 +29,20 @@ class ChartController
     else
       @fetch()
 
-  charts_fetch: (chart_type) ->
+
+  fetch: ->
     vm = @
 
-    chart_url = "/charts_data/#{chart_type}"
+    return if not vm.project
+
+    chart_url = "/charts_data/full_chart_data"
     chart_params =
       from: vm.range.from
       to: vm.range.to
       project_id: vm.project.id
       chart: vm.chart
 
-    vm.http.get chart_url, params: chart_params
-
-  fetch: ->
-    vm = @
-
-#    path = @rootScope.$location.absUrl().split('/')
-#    path[path.length - 1] = vm.range.to
-#    path[path.length - 2] = vm.range.from
-#
-#    console.log path
-#    window.history.pushState(window.location.pathname, 'Title', path.join('/'))
-
-    @charts_fetch('full_chart_data').success((response) ->
+    vm.http.get(chart_url, params: chart_params).success((response) ->
         vm.data = response['full']
         vm.check_points = response['check_points']
         vm.init_line_area3_chart($('.areaChartTotal_1'), vm.data)
@@ -235,33 +230,33 @@ class ChartController
 
   set_date_range: (range_type) ->
     vm = @
-    return if range_type not in ["0","1","2","3","4","5"]
+    return if range_type not in ["1","2","3","4","5","6"]
     return if not vm.datepicker
 
     period = parseInt(range_type)
     today = moment()
 
-    if period == 0
+    if period == 1
       #  Current month
       rangeStart = moment(today).startOf('month')
       rangeEnd = moment(today).endOf('month')
-    else if period == 1
+    else if period == 2
       #  Previous month
       rangeStart = moment(today).subtract(1, 'month').startOf('month')
       rangeEnd = moment(today).subtract(1, 'month').endOf('month')
-    else if period == 2
+    else if period == 3
       #  Last 3 month
       rangeStart = moment(today).subtract(3, 'month')
       rangeEnd = moment(today)
-    else if period == 3
+    else if period == 4
       #  Last 6 month
       rangeStart = moment(today).subtract(6, 'month')
       rangeEnd = moment(today)
-    else if period == 4
+    else if period == 5
       #  Last year
       rangeStart = moment(today).subtract(12, 'month')
       rangeEnd = moment(today)
-    else if period == 5
+    else if period == 6
       #  All time
       rangeStart = moment(vm.datepicker.datepicker('getStartDate'))
       rangeEnd = moment(vm.datepicker.datepicker('getEndDate'))
@@ -370,7 +365,7 @@ class ChartController
 
     vm.datepicker.datepicker(
       multidate: 2
-      startDate: '-477d'
+      startDate: '-730d'
       endDate: '0'
       toggleActive: true
       orientation: 'bottom left'

@@ -397,7 +397,7 @@ class DashboardController
 
   set_date_range: (range_type) ->
     vm = @
-    return if range_type not in ["0","1","2","3","4","5"]
+    return if range_type not in ["1","2","3","4","5","6"]
     return if not vm.datepicker
 
     period = parseInt(range_type)
@@ -461,7 +461,7 @@ class DashboardController
 
     vm.datepicker.datepicker(
       multidate: 2
-      startDate: '-1477d'
+      startDate: '-730d'
       endDate: '0'
       toggleActive: true
       orientation: 'bottom left'

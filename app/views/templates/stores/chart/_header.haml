@@ -9,13 +9,13 @@
       .pull-left.datepicker-parent
         %input.form-control.datePicker.form-control-small(ng-change="vm.datepicker_changed()" ng-model="vm.datepicker_date")
       .pull-left
-        %select.selectpicker.graphFilterDate{'ng-model' => "vm.date_range", 'ng-change' => "vm.set_date_range(vm.date_range)"}
-          %option{:selected => true, :value => "0"} Current month
-          %option{:value => "1"} Previous month
-          %option{:value => "2"} Last 3 month
-          %option{:value => "3"} Last 6 month
-          %option{:value => "4"} Last year
-          %option{:value => "5"} All time
+        %select.selectpicker.graphFilterDate(ng-model="vm.date_range" ng-init="vm.date_range = '1'")
+          %option{:value => 1} Current month
+          %option{:value => 2} Previous month
+          %option{:value => 3} Last 3 month
+          %option{:value => 4} Last 6 month
+          %option{:value => 5} Last year
+          %option{:value => 6} All time
 
 - if Rails.env.development?
   .dashboard-caption{'ng-init' => "vm.debug = false", 'ng-show' => "vm.debug"}

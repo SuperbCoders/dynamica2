@@ -33,6 +33,8 @@
             / Table
             .graph-unit-info
               .graph-unit-info-table.scrollParent
+
+                / Table header
                 .table-header.no_pointer
                   .table-cell.col_1
                     %a(ng-click="vm.sortType = 'title'; vm.sortReverse = !vm.sortReverse")
@@ -54,20 +56,18 @@
                       %span= t('projects.products_revenue.table.price')
                       %span.fa.fa-caret-down{"ng-show" => "vm.sortType == 'price' && !sortReverse"}
                       %span.fa.fa-caret-up{"ng-show" => "vm.sortType == 'price' && sortReverse"}
-                  .table-cell.col_8.col_right
-                    %span= t('projects.products_revenue.table.views')
-                  .table-cell.col_9
-                    %span= t('projects.products_revenue.table.category')
                   .table-cell.col_4
                     %span= t('projects.products_revenue.table.date added')
+
+                / Table footer
                 .table-footer.scrollBottomFixed
                   .table-cell.col_1 Total {{ vm.products.length }} products
                   .table-cell.col_5.col_right {{ vm.sales }}
                   .table-cell.col_6.col_right $ {{ vm.gross_revenue }}
                   .table-cell.col_7 &nbsp;
                   .table-cell.col_8 &nbsp;
-                  .table-cell.col_9 &nbsp;
-                  .table-cell.col_4 &nbsp;
+
+                / Table content
                 .table-content
                   .table-row{'dir-paginate' => "product in vm.products | filter:vm.filters | orderBy:vm.sortType:vm.sortReverse | itemsPerPage: 50"}
                     .table-cell.col_1 {{ product.title }}
@@ -75,9 +75,7 @@
                     .table-cell.col_6.col_right
                       .seller_val $ {{ product.gross_revenue }}
                     .table-cell.col_7.col_right $ {{ product.price }}
-                    .table-cell.col_8.col_right 5,490
-                    .table-cell.col_9 Kitchen
-                    .table-cell.col_4 130$
+                    .table-cell.col_4 {{ product.created_at }}
 
                   .table-row.no_hover
                     .table-cell.col_1
@@ -88,10 +86,7 @@
                     .table-cell.col_6.col_right &nbsp;
                     .table-cell.col_7.col_right &nbsp;
                     .table-cell.col_8.col_right &nbsp;
-                    .table-cell.col_9 &nbsp;
-                    .table-cell.col_4 &nbsp;
 
             / Pagination
-
             .graph-filter-block
               %dir-pagination-controls{"template-url" => "/templates/dirPagination"}

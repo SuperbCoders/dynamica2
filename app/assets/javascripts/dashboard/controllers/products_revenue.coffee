@@ -6,12 +6,15 @@ class ProductsRevenueController
     vm.project = @rootScope.$stateParams.project
     vm.sortType = ''
     vm.sortReverse = false
+    vm.date_range = 0
     vm.range =
       chart: vm.chart
       from: @rootScope.$stateParams.from
       to: @rootScope.$stateParams.to
 
     vm.datepicker = $('.datePicker')
+
+    @scope.$watch('vm.date_range', (old_val) -> vm.set_date_range(old_val) )
 
     @rootScope.$state.go('projects.list') if not vm.range.from or not vm.range.to
 
@@ -28,7 +31,7 @@ class ProductsRevenueController
   datepicker_changed: ->
     vm = @
     dates = vm.datepicker_date.split(' – ')
-    console.log dates
+
     if dates.length == 2
       vm.range.raw_start = moment(dates[0])
       vm.range.raw_end = moment(dates[1])
@@ -38,6 +41,8 @@ class ProductsRevenueController
 
   fetch: ->
     vm = @
+
+    return if not vm.project
 
     chart_url = "/charts_data/products_characteristics"
     chart_params =
@@ -64,7 +69,6 @@ class ProductsRevenueController
     else
       moment.min(end, date).startOf('day')._d
 
-
   set_default_range: ->
     vm = @
     today = moment()
@@ -77,34 +81,40 @@ class ProductsRevenueController
 
   set_date_range: (range_type) ->
     vm = @
-    return if range_type not in ["0","1","2","3","4","5"]
+    return if range_type not in ["1","2","3","4","5", "6"]
     return if not vm.datepicker
 
     period = parseInt(range_type)
     today = moment()
 
-    if period == 0
-      #  Current month
+    if period == 1
+      # Current month
+      console.log 'Period is Current month'
       rangeStart = moment(today).startOf('month')
       rangeEnd = moment(today).endOf('month')
-    else if period == 1
-      #  Previous month
+    else if period == 2
+      # Previous month
+      console.log 'Period is Previous month'
       rangeStart = moment(today).subtract(1, 'month').startOf('month')
       rangeEnd = moment(today).subtract(1, 'month').endOf('month')
-    else if period == 2
-      #  Last 3 month
+    else if period == 3
+      # Last 3 month
+      console.log 'Period is Last 3 month'
       rangeStart = moment(today).subtract(3, 'month')
       rangeEnd = moment(today)
-    else if period == 3
-      #  Last 6 month
+    else if period == 4
+      # Last 6 month
+      console.log 'Period is Last 6 month'
       rangeStart = moment(today).subtract(6, 'month')
       rangeEnd = moment(today)
-    else if period == 4
-      #  Last year
+    else if period == 5
+      # Last year
+      console.log 'Period is Last year'
       rangeStart = moment(today).subtract(12, 'month')
       rangeEnd = moment(today)
-    else if period == 5
-      #  All time
+    else if period == 6
+      # All time
+      console.log 'Period is All time'
       rangeStart = moment(vm.datepicker.datepicker('getStartDate'))
       rangeEnd = moment(vm.datepicker.datepicker('getEndDate'))
 
@@ -131,7 +141,7 @@ class ProductsRevenueController
 
     vm.datepicker.datepicker(
       multidate: 2
-      startDate: '-1877d'
+      startDate: '-730d'
       endDate: '0'
       toggleActive: true
       orientation: 'bottom left'
