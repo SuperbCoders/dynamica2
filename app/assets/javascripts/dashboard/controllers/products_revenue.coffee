@@ -16,12 +16,7 @@ class ProductsRevenueController
     vm.datepicker = $('.datePicker')
 
     # Scopes
-    vm.sales = 0
-    vm.gross_revenue = 0
     vm.products_view = 'none'
-    vm.bestsellers = false
-    vm.all_products = true
-    vm.rule_80_20 = false
 
     @rootScope.$state.go('projects.list') if not vm.range.from or not vm.range.to
 
@@ -29,23 +24,68 @@ class ProductsRevenueController
       console.log old
 
       return if not vm.raw_products
+
+      vm.products = []
+      vm.sales = 0
+      vm.gross_revenue = 0
+
+      $('.pageOverlay').addClass('show_overlay')
+
       switch old
 
         when 'all_products'
-          vm.products = []
           for p in vm.raw_products
             vm.sales += p.sales
             vm.gross_revenue += p.gross_revenue
             vm.products.push angular.copy(p)
 
         when 'best_sellers'
-          vm.products = []
           vm.bestsellers_products = vm.filter('orderBy')(vm.raw_products, 'sales', true)
           vm.bestsellers_products = vm.bestsellers_products.slice(0, 50)
           for p in vm.bestsellers_products
             vm.sales += p.sales
             vm.gross_revenue += p.gross_revenue
             vm.products.push angular.copy(p)
+
+        when 'rule_80_20'
+          vm.products_80 = []
+          vm.products_20 = []
+          vm.total_gross_revenue = 0
+          vm.sorted_products = vm.filter('orderBy')(vm.raw_products, 'sales', true)
+
+          total_products = vm.sorted_products.length
+          # Sum product gross_revenue with total
+          vm.total_gross_revenue += product.gross_revenue for product, index in vm.sorted_products
+
+          vm.temp = 0
+          slice_index = 0
+          console.log "Total gross revenue #{vm.total_gross_revenue}"
+          # Set product ranks and culumative_revenue
+          for product, index in vm.sorted_products
+            slice_index = index
+            if index < total_products - 1
+              product.rank = index + 1
+              product.culumative_revenue = product.gross_revenue + vm.sorted_products[index + 1].gross_revenue
+              product.culumative_precentage = (product.culumative_revenue.toFixed(2) / vm.total_gross_revenue.toFixed(2)) * 100
+
+              vm.temp += product.culumative_precentage
+
+              if vm.temp > 60
+                break
+
+              console.log index+' -> '+vm.temp
+
+          vm.products_80 = vm.sorted_products.slice(0, slice_index)
+          vm.products_20 = vm.sorted_products.slice(slice_index, total_products)
+
+
+
+
+
+
+
+      $('.pageOverlay').removeClass('show_overlay')
+
     )
 
     @init_dashboard()

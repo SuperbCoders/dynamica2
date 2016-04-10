@@ -37,10 +37,9 @@ ru:
         views: Просмотров
         category: Категория
         date_added: Дата
-      all_products: 'Все товары'
-      hot_sales: 'Горячие товары'
-      last_sales: 'Последние товары'
-      bestsellers: 'Лучшие товары'
+      all_products: Все товары
+      best_sellers: Лучшие товары
+      80_20_rule: Правило 80/20
     full_chart:
       check_points:
         current: 'Текущий'

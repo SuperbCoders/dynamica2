@@ -23,6 +23,19 @@ en:
           <<: *permission
 
   projects:
+    products_revenue:
+      product_search: Search by name
+      table:
+        product: Product
+        sales: Sales
+        revenu: Revenue
+        price: Price
+        views: Views
+        category: Category
+        date_added: Date
+      all_products: All products
+      best_sellers: Best sells
+      80_20_rule: 80/20 rule
     full_chart:
       check_points:
         current: 'Текущий'

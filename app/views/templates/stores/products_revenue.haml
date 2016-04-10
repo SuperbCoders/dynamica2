@@ -59,15 +59,51 @@
                   .table-cell.col_4
                     %span= t('projects.products_revenue.table.date added')
 
-                .table-footer.scrollBottomFixed
+                .table-footer.scrollBottomFixed(ng-show="vm.products_view != 'rule_80_20'")
                   .table-cell.col_1 Total {{ vm.products.length }} products
                   .table-cell.col_5.col_right {{ vm.sales }}
                   .table-cell.col_6.col_right $ {{ vm.gross_revenue }}
                   .table-cell.col_7 &nbsp;
                   .table-cell.col_8 &nbsp;
 
+                / Rule 80 20 table
+                .table-content(ng-show="vm.products_view == 'rule_80_20'")
+
+                  .table-row
+                    .table-cell.col_1 80% made of revenue
+                    .table-cell.col_5 &nbsp;
+                    .table-cell.col_6 &nbsp;
+                    .table-cell.col_7 &nbsp;
+                    .table-cell.col_4 &nbsp;
+
+
+                  .table-row{'dir-paginate' => "product in vm.products_80 | itemsPerPage: 100"}
+                    .table-cell.col_1 {{ product.title }}
+                    .table-cell.col_5.col_right {{ product.sales }}
+                    .table-cell.col_6.col_right
+                      .seller_val $ {{ product.gross_revenue }}
+                    .table-cell.col_7.col_right $ {{ product.price }}
+                    .table-cell.col_4 {{ product.created_at }}
+
+
+                  .table-row
+                    .table-cell.col_1 20% made of revenue
+                    .table-cell.col_5 &nbsp;
+                    .table-cell.col_6 &nbsp;
+                    .table-cell.col_7 &nbsp;
+                    .table-cell.col_4 &nbsp;
+
+                  .table-row{'dir-paginate' => "product in vm.products_20 | itemsPerPage: 100"}
+                    .table-cell.col_1 {{ product.title }}
+                    .table-cell.col_5.col_right {{ product.sales }}
+                    .table-cell.col_6.col_right
+                      .seller_val $ {{ product.gross_revenue }}
+                    .table-cell.col_7.col_right $ {{ product.price }}
+                    .table-cell.col_4 {{ product.created_at }}
+
+
                 / Table content
-                .table-content
+                .table-content(ng-show="vm.products_view != 'rule_80_20'")
                   .table-row{'dir-paginate' => "product in vm.products | filter:vm.filters | orderBy:vm.sortType:vm.sortReverse | itemsPerPage: vm.itemsPerPage"}
                     .table-cell.col_1 {{ product.title }}
                     .table-cell.col_5.col_right {{ product.sales }}
