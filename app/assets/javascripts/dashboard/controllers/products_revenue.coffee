@@ -21,10 +21,7 @@ class ProductsRevenueController
     @rootScope.$state.go('projects.list') if not vm.range.from or not vm.range.to
 
     @scope.$watch('vm.products_view', (old) ->
-      console.log old
-
-      return if not vm.raw_products
-
+      console.log 'Watch vm.products_view '+old
       vm.products = []
       vm.sales = 0
       vm.gross_revenue = 0
@@ -52,14 +49,14 @@ class ProductsRevenueController
           vm.products_20 = []
           vm.total_gross_revenue = 0
           vm.sorted_products = vm.filter('orderBy')(vm.raw_products, 'sales', true)
+          temp = 0
+          slice_index = 0
 
           total_products = vm.sorted_products.length
-          # Sum product gross_revenue with total
-          vm.total_gross_revenue += product.gross_revenue for product, index in vm.sorted_products
 
-          vm.temp = 0
-          slice_index = 0
-          console.log "Total gross revenue #{vm.total_gross_revenue}"
+          # Sum product gross_revenue with total
+          vm.total_gross_revenue += p.gross_revenue for p in vm.sorted_products
+
           # Set product ranks and culumative_revenue
           for product, index in vm.sorted_products
             slice_index = index
@@ -70,22 +67,12 @@ class ProductsRevenueController
 
               vm.temp += product.culumative_precentage
 
-              if vm.temp > 60
-                break
-
-              console.log index+' -> '+vm.temp
+              break if temp > 60
 
           vm.products_80 = vm.sorted_products.slice(0, slice_index)
           vm.products_20 = vm.sorted_products.slice(slice_index, total_products)
 
-
-
-
-
-
-
       $('.pageOverlay').removeClass('show_overlay')
-
     )
 
     @init_dashboard()
@@ -99,10 +86,8 @@ class ProductsRevenueController
       @fetch()
 
   fetch: ->
+    return if not @project
     vm = @
-
-    return if not vm.project
-
     chart_url = "/charts_data/products_characteristics"
     chart_params =
       from: vm.range.from
@@ -112,7 +97,14 @@ class ProductsRevenueController
 
     vm.http.get(chart_url, params: chart_params).success((response) ->
       vm.raw_products = response
-      vm.products_view = 'all_products'
+
+      if vm.raw_products.length > 0
+        if vm.products_view == 'none'
+          vm.products_view = 'all_products'
+        else
+          temp_view = vm.products_view
+          vm.products_view = 'none'
+          vm.products_view = temp_view
     )
 
   datepicker_changed: ->
@@ -206,7 +198,7 @@ class ProductsRevenueController
 
     vm.datepicker.datepicker(
       multidate: 2
-      startDate: '-730d'
+      startDate: '-2030d'
       endDate: '0'
       toggleActive: true
       orientation: 'bottom left'
