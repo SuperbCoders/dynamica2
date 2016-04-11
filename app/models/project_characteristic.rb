@@ -42,6 +42,10 @@ class ProjectCharacteristic < ActiveRecord::Base
   before_save :replace_bad_values
   before_validation :calculate_statistics
 
+  scope :group_date_by_day, -> { group_by_day(:date, format: "%d-%b-%y", locale: :en) }
+  scope :group_date_by_week, -> { group_by_week(:date, week_start: :mon, format: "%d-%b-%y", locale: :en) }
+  scope :group_date_by_month, -> { group_by_month(:date, week_start: :mon, format: "%d-%b-%y", locale: :en) }
+
   def total_gross_revenues
     self[:total_gross_revenues].to_f
   end
@@ -49,10 +53,6 @@ class ProjectCharacteristic < ActiveRecord::Base
   def date_week
     self.date.strftime('%W-%Y')
   end
-
-  scope :group_date_by_day, -> { group_by_day(:date, format: "%d-%b-%y", locale: :en) }
-  scope :group_date_by_week, -> { group_by_week(:date, week_start: :mon, format: "%d-%b-%y", locale: :en) }
-  scope :group_date_by_month, -> { group_by_month(:date, week_start: :mon, format: "%d-%b-%y", locale: :en) }
 
   private
 

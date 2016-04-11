@@ -77,13 +77,11 @@ class ProductsRevenueController
 
     @init_dashboard()
 
-    if not @project
-      @Projects.search({slug: vm.slug}).$promise.then( (project) ->
-        vm.project = project
-        vm.fetch()
-      )
-    else
-      @fetch()
+    @Projects.search({slug: vm.slug}).$promise.then( (project) ->
+      vm.project = project
+      vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_product_data)
+      vm.fetch()
+    )
 
   fetch: ->
     return if not @project
@@ -198,7 +196,6 @@ class ProductsRevenueController
 
     vm.datepicker.datepicker(
       multidate: 2
-      startDate: '-2030d'
       endDate: '0'
       toggleActive: true
       orientation: 'bottom left'

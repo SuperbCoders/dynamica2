@@ -50,7 +50,6 @@ namespace :dynamica do
             product_c.sold_quantity += product['quantity'].to_i
             product_c.gross_revenue = product['quantity'].to_i * product['price'].to_i
             product_c.save
-            puts "Product #{product_c.to_json}"
           end
 
         }
@@ -73,7 +72,7 @@ namespace :dynamica do
       items       = CSV.new(File.open("#{Rails.root}/db/seeds/items.csv").read, headers: true).to_a.map {|row| row.to_hash}
       orders      = CSV.new(File.open("#{Rails.root}/db/seeds/orders.csv").read, headers: true).to_a.map {|row| row.to_hash}
 
-      start_date = '06-10-2012'
+      start_date = '01-10-2012'
 
       puts "Seed demo data for #{current_project.name}"
       puts "#{orders.length} orders. #{order_items.length} orders items. #{items.length} items."

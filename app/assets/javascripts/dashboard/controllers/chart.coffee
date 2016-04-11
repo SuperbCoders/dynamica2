@@ -21,14 +21,11 @@ class ChartController
     @init_dashboard()
     @set_default_range()
 
-    if not @project
-      @Projects.search({slug: vm.slug}).$promise.then( (project) ->
-        vm.project = project
-        vm.fetch()
-      )
-    else
-      @fetch()
-
+    @Projects.search({slug: vm.slug}).$promise.then( (project) ->
+      vm.project = project
+      vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_project_data)
+      vm.fetch()
+    )
 
   fetch: ->
     vm = @
@@ -365,7 +362,6 @@ class ChartController
 
     vm.datepicker.datepicker(
       multidate: 2
-      startDate: '-730d'
       endDate: '0'
       toggleActive: true
       orientation: 'bottom left'

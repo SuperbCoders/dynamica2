@@ -30,6 +30,7 @@ class DashboardController
       vm.project = project
 
       vm.rootScope.$state.go('projects.subscription', {slug: vm.project.slug}) if vm.project.expired
+      vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_project_data)
       vm.fetch()
     )
 
@@ -461,7 +462,6 @@ class DashboardController
 
     vm.datepicker.datepicker(
       multidate: 2
-      startDate: '-730d'
       endDate: '0'
       toggleActive: true
       orientation: 'bottom left'

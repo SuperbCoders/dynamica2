@@ -141,6 +141,8 @@
   $rootScope.$location = $location
   $rootScope.locale = $("meta[name=locale]").attr('content')
 
+  $rootScope.set_datepicker_start_date = (datepicker, date) -> datepicker.datepicker('setStartDate', new Date(date))
+
   if $('.switcher').length
     $("[data-toggle='switch']").bootstrapSwitch({baseClass: 'switch'})
 
