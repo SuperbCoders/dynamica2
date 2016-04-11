@@ -14,16 +14,16 @@
         %li{'ui-sref-active' => "active"}
           %a{'ui-sref' => "projects.list"}= t('layouts.application.projects')
 
-      %ul.nav.navbar-right.hidden-xs
+      %ul.nav.navbar-right.hidden-xs{id: 'user_dropdown'}
         %li
           .user.dropdown
             .arrow
-            %a.user-toggle.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :href => ""}
+            %a.user-toggle.dropdown-toggle{href: ""}
               %span.user-pic
-                %img.img-circle(ng-src="https://placeholdit.imgix.net/~text?txtsize=33&txt=AVAT&w=40&h=40" width='40px' height='40px')
-              %span.user-name
+                %img.img-circle{'ng-src' => "https://placeholdit.imgix.net/~text?txtsize=33&txt=AVAT&w=40&h=40",width: '40px', height: '40px'}
+              %span.user-name{id: 'user_dropdown'}
                 {{user.display_name}}
-                %i.icon.fa.fa-angle-down
+                %i.icon.fa.fa-angle-down{id: 'user_dropdown'}
             .user-menu.dropdown-menu.right
               %ul
                 %li

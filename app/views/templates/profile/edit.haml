@@ -15,24 +15,6 @@
             %input.form-control{placeholder: t('devise.registrations.edit.form.name'), 'ng-model' => "user.name"}
           .control-box{'ng-class' => "{haserror: user.errors.length > 0}"}
             %input.form-control{type: 'email', placeholder: t('devise.registrations.edit.form.email'), 'ng-model' => "user.email"}
-      -#.form-group
-      -#  %label.control-label.col-md-3.col-sm-3
-      -#    | Import data from
-      -#    br/
-      -#    | social networks
-      -#  .col-md-7.col-sm-9
-      -#    .control-box
-      -#      a.btn-social.btn-facebook href="#"
-      -#        i.icon.fa.fa-facebook
-      -#        | Facebook
-      -#      a.btn-social.btn-twitter href="#"
-      -#        i.icon.fa.fa-twitter
-      -#        | Facebook
-      .form-group
-        %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.api_token')
-        .col-md-7.col-sm-9
-          .control-box
-            %input.form-control{readonly: true, 'ng-model' => "user.api_token"}
       .form-group
         %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.password')
         .col-md-7.col-sm-9
