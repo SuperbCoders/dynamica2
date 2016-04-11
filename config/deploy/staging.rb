@@ -10,4 +10,4 @@ role :db,  %w{w3dev-dyn2@ono.rrv.ru:2223}
 
 set :application, 'dev-dynamica2'
 set :deploy_to, '/www/dev-dyn2.onomnenado.ru'
-set :branch, :products_view_switcher
+set :branch, :fix_bugz

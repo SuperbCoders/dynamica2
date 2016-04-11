@@ -102,6 +102,7 @@ class ProductsRevenueController
       project_id: vm.project.id
       chart: vm.chart
 
+    $('.pageOverlay').addClass('show_overlay')
     vm.raw_products = []
     vm.products = []
     vm.http.get(chart_url, params: chart_params).success((response) ->
@@ -126,14 +127,6 @@ class ProductsRevenueController
       vm.range.from = vm.range.raw_start.format('MM.DD.YYYY')
       vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
       vm.fetch()
-
-  fit2Limits: (pckr, date, max) ->
-    start = moment(pckr.datepicker('getStartDate'))
-    end = moment(pckr.datepicker('getEndDate'))
-    if max
-      moment.max(start, date).startOf('day')._d
-    else
-      moment.min(end, date).startOf('day')._d
 
   set_date_range: (range_type) ->
     vm = @
@@ -163,6 +156,7 @@ class ProductsRevenueController
     doc = $(document)
     scrollBottomFixed = $('.scrollBottomFixed')
 
+    $(window).scrollTop(12)
     $(window).scroll ->
       if scrollParent.offset().top - doc.scrollTop() + scrollBottomFixed.height() + scrollBottomFixed.css('marginTop').replace('px', '') * 1 <= wnd.height()
         scrollBottomFixed.addClass('table-footer-fixed').removeClass 'table-footer-bottom'
