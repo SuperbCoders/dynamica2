@@ -111,13 +111,13 @@ class Project < ActiveRecord::Base
   # @return [DateTime] date of first project data for calendar filter
   # at frontend
   def first_project_data
-    project_characteristics.minimum('date').try(:to_datetime)
+    (project_characteristics.minimum('date').try(:to_datetime) || created_at.to_datetime)
   end
 
   # @return [DateTime] date of first product data for calendar filter
   # at frontend
   def first_product_data
-    product_characteristics.minimum('date').try(:to_datetime)
+    (product_characteristics.minimum('date').try(:to_datetime) || created_at.to_datetime)
   end
 
   private
