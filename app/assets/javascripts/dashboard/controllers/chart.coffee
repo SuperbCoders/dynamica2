@@ -5,7 +5,7 @@ class ChartController
     vm.slug = @rootScope.$stateParams.slug
     vm.chart = @rootScope.$stateParams.chart
     vm.project = @rootScope.$stateParams.project
-    vm.date_range = 1
+    vm.date_range = 0
     vm.range =
       chart: vm.chart
       from: @rootScope.$stateParams.from
@@ -16,10 +16,21 @@ class ChartController
     if not vm.range.from or not vm.range.to
       @rootScope.$state.go('projects.list')
 
+
+
     @scope.$watch('vm.date_range', (old_val) -> vm.set_date_range(old_val) )
 
     @init_dashboard()
-    @set_default_range()
+
+
+    # Set datepicker dates
+    console.log vm.range
+    vm.range.raw_start = rangeStart = moment(vm.range.from, 'MM.DD.YYYY')
+    vm.range.raw_end = rangeEnd = moment(vm.range.to, 'MM.DD.YYYY')
+    vm.range.from = rangeStart.format('MM.DD.YYYY')
+    vm.range.to = rangeEnd.format('MM.DD.YYYY')
+
+    vm.rootScope.set_datepicker_date(vm.datepicker, rangeStart, rangeEnd)
 
     @Projects.search({slug: vm.slug}).$promise.then( (project) ->
       vm.project = project
@@ -52,16 +63,6 @@ class ChartController
       moment.max(start, date).startOf('day')._d
     else
       moment.min(end, date).startOf('day')._d
-
-  set_default_range: ->
-    vm = @
-    today = moment()
-    vm.range.raw_start = rangeStart = moment(today).startOf('month')
-    vm.range.raw_end = rangeEnd = moment(today).endOf('month')
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
-
-    vm.set_datepicker_date(rangeStart, rangeEnd)
 
   init_line_area3_chart: (el, data) ->
     return if data['data'].length < 1
@@ -225,45 +226,23 @@ class ChartController
       i++
     return
 
+  datepicker_changed: ->
+    vm = @
+    dates = vm.datepicker_date.split(' – ')
+    if dates.length == 2
+      vm.range.raw_start = moment(dates[0])
+      vm.range.raw_end = moment(dates[1])
+      vm.range.from = vm.range.raw_start.format('MM.DD.YYYY')
+      vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
+      vm.fetch()
+
   set_date_range: (range_type) ->
     vm = @
-    return if range_type not in ["1","2","3","4","5","6"]
+    return if range_type not in ["0","1","2","3","4","5","6"]
     return if not vm.datepicker
 
-    period = parseInt(range_type)
-    today = moment()
-
-    if period == 1
-      #  Current month
-      rangeStart = moment(today).startOf('month')
-      rangeEnd = moment(today).endOf('month')
-    else if period == 2
-      #  Previous month
-      rangeStart = moment(today).subtract(1, 'month').startOf('month')
-      rangeEnd = moment(today).subtract(1, 'month').endOf('month')
-    else if period == 3
-      #  Last 3 month
-      rangeStart = moment(today).subtract(3, 'month')
-      rangeEnd = moment(today)
-    else if period == 4
-      #  Last 6 month
-      rangeStart = moment(today).subtract(6, 'month')
-      rangeEnd = moment(today)
-    else if period == 5
-      #  Last year
-      rangeStart = moment(today).subtract(12, 'month')
-      rangeEnd = moment(today)
-    else if period == 6
-      #  All time
-      rangeStart = moment(vm.datepicker.datepicker('getStartDate'))
-      rangeEnd = moment(vm.datepicker.datepicker('getEndDate'))
-
-    vm.range.raw_start = rangeStart
-    vm.range.raw_end = rangeEnd
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
-
-    vm.set_datepicker_date(rangeStart, rangeEnd)
+    vm.rootScope.set_date_range(vm.range, parseInt(range_type))
+    vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
     vm.fetch()
     return
 
@@ -362,7 +341,6 @@ class ChartController
 
     vm.datepicker.datepicker(
       multidate: 2
-      endDate: '0'
       toggleActive: true
       orientation: 'bottom left'
       format: 'M dd, yyyy'

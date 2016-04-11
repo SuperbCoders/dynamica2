@@ -1,8 +1,9 @@
 %section.dashboard-bodya
   .container-fluid.globalwidth
     %section.dashboard.projects-dashboard
-      / Dash navigation
-      = render 'templates/stores/chart/header'
+      = render 'templates/stores/shared/menu'
+      = render 'templates/stores/shared/datepicker'
+      = render 'templates/stores/shared/debug'
 
       .graph-unit-holder
         .graph-unit.dark_mod

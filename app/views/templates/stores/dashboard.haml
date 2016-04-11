@@ -1,8 +1,9 @@
 %section.dashboard-bodya
   .container-fluid.globalwidth
     %section.dashboard.projects-dashboard
-      / Dash navigation
-      = render 'templates/stores/dashboard/header'
+      = render 'templates/stores/shared/menu'
+      = render 'templates/stores/shared/datepicker'
+      = render 'templates/stores/shared/debug'
 
       / Big chart
       = render 'templates/stores/dashboard/big_chart'

@@ -3,7 +3,8 @@ class DashboardController
     vm = @
     vm.params = @rootScope.$stateParams
     vm.project = {}
-    vm.data = {}
+    vm.datepicker = $('.datePicker')
+    vm.date_range = 0
     vm.range =
       date: undefined
       period: 'day'
@@ -12,17 +13,16 @@ class DashboardController
       product_charts: undefined
       chart: undefined
 
-    vm.datepicker = $('.datePicker')
-
     @init_dashboard()
-    @set_default_range()
 
-    @scope.$watch('vm.range.period', (old_v, new_v) ->
-      if new_v is '0'
-        @set_default_range()
-      vm.fetch()
-    )
+    # Set range to month start and end
+    vm.range.raw_start = rangeStart = moment().startOf('month')
+    vm.range.raw_end = rangeEnd = moment().endOf('month')
+    vm.range.from = rangeStart.format('MM.DD.YYYY')
+    vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
+    # Day, Week, Month
+    @scope.$watch('vm.range.period', (old_v, new_v) -> vm.fetch())
     @scope.$watch('vm.range.date',  (o, n) -> vm.fetch() if n )
     @scope.$watch('vm.range.chart', (o, n) -> vm.fetch() if n and n != 'products_revenue' )
 
@@ -31,10 +31,10 @@ class DashboardController
 
       vm.rootScope.$state.go('projects.subscription', {slug: vm.project.slug}) if vm.project.expired
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_project_data)
+      vm.rootScope.set_datepicker_date(vm.datepicker,moment().startOf('month'),moment().endOf('month'))
+
       vm.fetch()
     )
-
-    #
 
   datepicker_changed: ->
     vm = @
@@ -343,16 +343,6 @@ class DashboardController
 
     return
 
-  set_default_range: ->
-    vm = @
-    today = moment()
-    vm.range.raw_start = rangeStart = moment(today).startOf('month')
-    vm.range.raw_end = rangeEnd = moment(today).endOf('month')
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
-
-    vm.set_datepicker_date(rangeStart, rangeEnd)
-
   getFormatOfDate: ->
     return '%d-%b-%y'
     switch @range.period
@@ -398,60 +388,13 @@ class DashboardController
 
   set_date_range: (range_type) ->
     vm = @
-    return if range_type not in ["1","2","3","4","5","6"]
+    return if range_type not in ["0","1","2","3","4","5","6"]
     return if not vm.datepicker
 
-    period = parseInt(range_type)
-    today = moment()
-
-    if period == 0
-      #  Current month
-      rangeStart = moment(today).startOf('month')
-      rangeEnd = moment(today).endOf('month')
-    else if period == 1
-      #  Previous month
-      rangeStart = moment(today).subtract(1, 'month').startOf('month')
-      rangeEnd = moment(today).subtract(1, 'month').endOf('month')
-    else if period == 2
-      #  Last 3 month
-      rangeStart = moment(today).subtract(3, 'month')
-      rangeEnd = moment(today)
-    else if period == 3
-      #  Last 6 month
-      rangeStart = moment(today).subtract(6, 'month')
-      rangeEnd = moment(today)
-    else if period == 4
-      #  Last year
-      rangeStart = moment(today).subtract(12, 'month')
-      rangeEnd = moment(today)
-    else if period == 5
-      #  All time
-      rangeStart = moment(vm.datepicker.datepicker('getStartDate'))
-      rangeEnd = moment(vm.datepicker.datepicker('getEndDate'))
-
-    vm.range.raw_start = rangeStart
-    vm.range.raw_end = rangeEnd
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
-
-    vm.set_datepicker_date(rangeStart, rangeEnd)
+    vm.rootScope.set_date_range(vm.range, parseInt(range_type))
+    vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
     vm.fetch()
     return
-
-  fit2Limits: (pckr, date, max) ->
-    start = moment(pckr.datepicker('getStartDate'))
-    end = moment(pckr.datepicker('getEndDate'))
-    if max
-      moment.max(start, date).startOf('day')._d
-    else
-      moment.min(end, date).startOf('day')._d
-
-  set_datepicker_date: (rangeStart, rangeEnd) ->
-    vm = @
-    vm.datepicker.datepicker('setDates', [
-      vm.fit2Limits(vm.datepicker, rangeStart, true)
-      vm.fit2Limits(vm.datepicker, rangeEnd)
-    ]).datepicker 'update'
 
   init_dashboard: ->
     vm = @
@@ -462,7 +405,6 @@ class DashboardController
 
     vm.datepicker.datepicker(
       multidate: 2
-      endDate: '0'
       toggleActive: true
       orientation: 'bottom left'
       format: 'M dd, yyyy'
