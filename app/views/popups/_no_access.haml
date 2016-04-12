@@ -1,0 +1,17 @@
+#no_access_popup.modal.fade(role = "dialog")
+  .modal-dialog.modal_v1
+    / Modal content
+    .modal-content
+      .modal-header
+        .modal-title &nbsp;
+      .modal-body
+        %h3
+          We didn’t get
+          %br
+            access to your Shopify
+            %br store, want to try again?
+      .form_holder
+        .control-box.text-center.btn_holder
+          %a.btn.btn-lg.btn-danger{:href => "#"} Yes, please
+        .control-box.text-center.btn_holder
+          %a.btn-link.forgot_pass_link{:href => "#"} No

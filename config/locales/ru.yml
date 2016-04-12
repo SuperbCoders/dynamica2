@@ -22,6 +22,32 @@ ru:
         pending_permission:
           <<: *permission
 
+
+  landing:
+    password_sended:
+      check_email: Мы отправили вам ссылку на почту. Проверьте почту.
+      ok:  Хорошо, спасибо!
+    start_trial: Начните бесплатную 30-дневную пробную версию
+    text:
+      promo_1: Тщательно сделанные аналитика для вашего магазина Shopify
+    menu:
+      live_demo: Демо
+      pricing: Цены
+      log_in: Войти
+    auth_popup:
+      enter_mail_manually: ИЛИ ВВЕДИТЕ ПАРОЛЬ ВРУЧНУЮ
+      email: Электронный адрес
+      password: Пароль
+      go: Поехали
+      i_forgot_password: Я забыл пароль
+
+    restore_pass:
+      password_recovery: Восстановление пароля
+      helper_text: 'Введите ваш Email и мы отправим <br> вам пароль'
+      email: Электронный адрес
+      restore: Восстановить
+      back: Назад
+
   projects:
     subscription:
       title: Подписка
