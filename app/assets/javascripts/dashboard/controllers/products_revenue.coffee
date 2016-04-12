@@ -77,6 +77,15 @@ class ProductsRevenueController
 
     @init_dashboard()
 
+    # Set datepicker dates
+    console.log vm.range
+    vm.range.raw_start = rangeStart = moment(vm.range.from, 'MM.DD.YYYY')
+    vm.range.raw_end = rangeEnd = moment(vm.range.to, 'MM.DD.YYYY')
+    vm.range.from = rangeStart.format('MM.DD.YYYY')
+    vm.range.to = rangeEnd.format('MM.DD.YYYY')
+
+    vm.rootScope.set_datepicker_date(vm.datepicker, rangeStart, rangeEnd)
+
     @Projects.search({slug: vm.slug}).$promise.then( (project) ->
       vm.project = project
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_product_data)
@@ -93,6 +102,9 @@ class ProductsRevenueController
       project_id: vm.project.id
       chart: vm.chart
 
+    $('.pageOverlay').addClass('show_overlay')
+    vm.raw_products = []
+    vm.products = []
     vm.http.get(chart_url, params: chart_params).success((response) ->
       vm.raw_products = response
 
@@ -116,78 +128,15 @@ class ProductsRevenueController
       vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
       vm.fetch()
 
-  fit2Limits: (pckr, date, max) ->
-    start = moment(pckr.datepicker('getStartDate'))
-    end = moment(pckr.datepicker('getEndDate'))
-    if max
-      moment.max(start, date).startOf('day')._d
-    else
-      moment.min(end, date).startOf('day')._d
-
-  set_default_range: ->
-    vm = @
-    today = moment()
-    vm.range.raw_start = rangeStart = moment(today).startOf('month')
-    vm.range.raw_end = rangeEnd = moment(today).endOf('month')
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
-
-    vm.set_datepicker_date(rangeStart, rangeEnd)
-
   set_date_range: (range_type) ->
     vm = @
-    return if range_type not in ["1","2","3","4","5", "6"]
+    return if range_type not in ["0","1","2","3","4","5","6"]
     return if not vm.datepicker
 
-    period = parseInt(range_type)
-    today = moment()
-
-    if period == 1
-      # Current month
-      console.log 'Period is Current month'
-      rangeStart = moment(today).startOf('month')
-      rangeEnd = moment(today).endOf('month')
-    else if period == 2
-      # Previous month
-      console.log 'Period is Previous month'
-      rangeStart = moment(today).subtract(1, 'month').startOf('month')
-      rangeEnd = moment(today).subtract(1, 'month').endOf('month')
-    else if period == 3
-      # Last 3 month
-      console.log 'Period is Last 3 month'
-      rangeStart = moment(today).subtract(3, 'month')
-      rangeEnd = moment(today)
-    else if period == 4
-      # Last 6 month
-      console.log 'Period is Last 6 month'
-      rangeStart = moment(today).subtract(6, 'month')
-      rangeEnd = moment(today)
-    else if period == 5
-      # Last year
-      console.log 'Period is Last year'
-      rangeStart = moment(today).subtract(12, 'month')
-      rangeEnd = moment(today)
-    else if period == 6
-      # All time
-      console.log 'Period is All time'
-      rangeStart = moment(vm.datepicker.datepicker('getStartDate'))
-      rangeEnd = moment(vm.datepicker.datepicker('getEndDate'))
-
-    vm.range.raw_start = rangeStart
-    vm.range.raw_end = rangeEnd
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
-
-    vm.set_datepicker_date(rangeStart, rangeEnd)
+    vm.rootScope.set_date_range(vm.range, parseInt(range_type))
+    vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
     vm.fetch()
     return
-
-  set_datepicker_date: (rangeStart, rangeEnd) ->
-    vm = @
-    vm.datepicker.datepicker('setDates', [
-      vm.fit2Limits(vm.datepicker, rangeStart, true)
-      vm.fit2Limits(vm.datepicker, rangeEnd)
-    ]).datepicker 'update'
 
   init_dashboard: ->
     vm = @
@@ -196,7 +145,6 @@ class ProductsRevenueController
 
     vm.datepicker.datepicker(
       multidate: 2
-      endDate: '0'
       toggleActive: true
       orientation: 'bottom left'
       format: 'M dd, yyyy'
@@ -208,6 +156,7 @@ class ProductsRevenueController
     doc = $(document)
     scrollBottomFixed = $('.scrollBottomFixed')
 
+    $(window).scrollTop(12)
     $(window).scroll ->
       if scrollParent.offset().top - doc.scrollTop() + scrollBottomFixed.height() + scrollBottomFixed.css('marginTop').replace('px', '') * 1 <= wnd.height()
         scrollBottomFixed.addClass('table-footer-fixed').removeClass 'table-footer-bottom'
