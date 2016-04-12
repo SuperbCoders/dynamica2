@@ -1,0 +1,20 @@
+!!!
+%html(lang="ru" ng-app = "dynamica.landing")
+  %head
+    %meta(content = "width=device-width, initial-scale=1" name = "viewport")
+    %meta(charset = "utf-8")
+    %meta(content = "" name = "keywords")
+    %meta(content = "" name = "description")
+    %meta{content: "#{locale}", name: "locale"}
+    %link{:href => "https://fonts.googleapis.com/css?family=Montserrat", :rel => "stylesheet", :type => "text/css"}/
+    %title Dynamica
+
+    = stylesheet_link_tag    'landing', media: 'all'
+    = javascript_include_tag 'landing'
+    = csrf_meta_tags
+
+    /[if lt IE 9]
+      <script type="text/javascript" src="js/vendor/html5shiv.js"></script>
+
+%body.land_page
+  %div(ui-view)

@@ -1,0 +1,30 @@
+.page
+  .abs_holder.major_data_section{"data-0" => "transform: translate(0%,100%);", "data-1000" => "transform: translate(0%,100%);", "data-3000" => "transform: translate(0%,-100%);"}
+    .gl_table
+      .gl_table_cell
+        %section{"data-0" => "transform: translate(-50%,0%);", "data-1000" => "transform: translate(-50%,0%);", "data-6500" => "transform: translate(-50%,-100%);", :style => "left: 50%;"}
+          .container-fluid.globalwidth
+            .row.dashboard-title-row.land_v1
+              .col-sm-12
+                %h2.text-center
+                  All major data of your
+                  %br store at single graph
+                .graph-unit-holder
+                  .graph-unit
+                    .graph-unit-large
+                      %h5.graph-name Current status of your primary data
+                      .graph-filters.graph-filter-v1
+                        .btn-group{:role => "group"}
+                          %input#graph_filter_1{:checked => "", :hidden => "", :name => "graph_filter", :type => "radio"}
+                            %label.btn.btn-default.first{:for => "graph_filter_1", :type => "button"} Day
+                            %input#graph_filter_2{:hidden => "", :name => "graph_filter", :type => "radio"}
+                              %label.btn.btn-default{:for => "graph_filter_2", :type => "button"} Week
+                              %input#graph_filter_3{:hidden => "", :name => "graph_filter", :type => "radio"}
+                                %label.btn.btn-default.last{:for => "graph_filter_3", :type => "button"} Month
+                      .graph-block
+                        .graph_3.areaChartFamily_1.d3graph.hide_x_axis
+                          #tooltip.graph-tooltip-holder.hidden_
+                            #tooltip_dot.tooltip-dot
+                            #tooltip_content.graph-tooltip
+                .text-center
+                  %a.hover_on_link{:href => "#"} HOVER ON
