@@ -16,12 +16,9 @@ class ChartController
     if not vm.range.from or not vm.range.to
       @rootScope.$state.go('projects.list')
 
-
-
     @scope.$watch('vm.date_range', (old_val) -> vm.set_date_range(old_val) )
 
     @init_dashboard()
-
 
     # Set datepicker dates
     console.log vm.range
@@ -30,11 +27,10 @@ class ChartController
     vm.range.from = rangeStart.format('MM.DD.YYYY')
     vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
-    vm.rootScope.set_datepicker_date(vm.datepicker, rangeStart, rangeEnd)
-
     @Projects.search({slug: vm.slug}).$promise.then( (project) ->
       vm.project = project
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_project_data)
+      vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
       vm.fetch()
     )
 
@@ -138,7 +134,11 @@ class ChartController
     ).y((d) ->
       y d.close
     ).interpolate('monotone')
-    xAxis = d3.svg.axis().scale(x).ticks(data['data'].length - 1).tickFormat(d3.time.format('%b %d')).orient('bottom')
+
+    RANGE_TICKS = 6 if dates.length > 10
+    RANGE_TICKS = 12 if dates.length > 100
+    RANGE_TICKS = 18 if dates.length > 1000
+    xAxis = d3.svg.axis().scale(x).ticks(RANGE_TICKS).tickFormat(d3.time.format('%b %d')).orient('bottom')
     yAxis = d3.svg.axis().scale(y).ticks(5).tickFormat((d) ->
       if d == 0 then '' else currencyFormatter(d) + '$'
     ).orient('left')
@@ -347,6 +347,7 @@ class ChartController
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
 
+  state_is: (name) -> @rootScope.state_is(name)
   parse_diff: (diff_str) -> parseInt(diff_str)
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true

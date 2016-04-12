@@ -1,14 +1,16 @@
 .row
   .col-sm-12
     %ul.dashboard-panel
-      %li
-        %a.dashboard-panel-link{'ng-click' => "vm.toggle_debug()"} Debug
+      - if Rails.env.development?
+        %li
+          %a.dashboard-panel-link{'ng-click' => "vm.toggle_debug()"}
+            Debug
 
-      %li.current
-        %a.dashboard-panel-link= t('projects.show.overview')
+      %li(ng-class="{current: vm.state_is('dashboard')}")
+        %a.dashboard-panel-link(href='' ui-sref="projects.view({slug: vm.project.slug, id: vm.project.id })")= t('projects.show.overview')
 
       / Базовые
-      %li.filter-holder
+      %li.filter-holder(ng-class="{current: vm.state_is('total')}")
         .hover-select-box.filter-mod
           %select.selectpicker.filterSelect{'ng-model' => "vm.range.general_charts", 'ng-change' => "vm.chart_changed('general_charts')"}
             %option{value: ''}
@@ -19,7 +21,7 @@
         %a.dashboard-panel-link{href: ""}= t 'projects.show.general'
 
       / Customers
-      %li.filter-holder
+      %li.filter-holder(ng-class="{current: vm.state_is('customers')}")
         .hover-select-box.filter-mod
           %select.selectpicker.filterSelect{'ng-model' => "vm.range.customer_charts", 'ng-change' => "vm.chart_changed('customer_charts')"}
             %option{value: ''}
@@ -34,7 +36,7 @@
         %a.dashboard-panel-link{href: ""}= t 'projects.show.customers'
 
       / Products
-      %li.filter-holder
+      %li.filter-holder(ng-class="{current: vm.state_is('products')}")
         .hover-select-box.filter-mod
           %select.selectpicker.filterSelect{'ng-model' => "vm.range.product_charts", 'ng-change' => "vm.chart_changed('product_charts')"}
             %option{value: ''}

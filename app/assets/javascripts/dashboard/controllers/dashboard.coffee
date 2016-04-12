@@ -13,6 +13,8 @@ class DashboardController
       product_charts: undefined
       chart: undefined
 
+    @rootScope.current_vm = vm
+
     @init_dashboard()
 
     # Set range to month start and end
@@ -97,6 +99,7 @@ class DashboardController
     )
 
   # Draw block line area chart
+  # график с точками
   init_line_area_chart: (el, data) ->
     return if not data
     vm = @
@@ -139,28 +142,46 @@ class DashboardController
     el.parent().parent().children('.graph-value').children('.graph-dynamica').removeClass('dynamica_up dynamica_down').addClass if /-/g.test(data['diff']) then 'dynamica_down' else 'dynamica_up'
     el.parent().parent().children('.graph-value').children('.graph-dynamica').html diff
 
+    data['data'] = vm.avgBuilder(data['data'], 10)
+
+    not_null = false
     for d in data['data']
+      not_null = true if d.close > 0
       d.date = parseDate(d.date) if d.date
       d.close = +d.close
 
     x.domain d3.extent(data['data'], (d) ->
       d.date
     )
-    y.domain [
-      0
-      d3.max(data['data'], (d) ->
-        Math.max d.close
-      )
-    ]
     area_x.domain d3.extent(data['data'], (d) ->
       d.date
     )
-    area_y.domain [
-      0
-      d3.max(data['data'], (d) ->
-        d.close
-      )
-    ]
+
+    if not_null
+      y.domain [
+        0
+        d3.max(data['data'], (d) ->
+          Math.max d.close
+        )
+      ]
+      area_y.domain [
+        0
+        d3.max(data['data'], (d) ->
+          d.close
+        )
+      ]
+    else
+      y.domain [
+        0, 100
+      ]
+      area_y.domain [
+        0, 100
+      ]
+
+    if !not_null
+      for d, index in data['data']
+        d.close = 8
+
     gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
     gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
     gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
@@ -233,7 +254,6 @@ class DashboardController
       area_y d.close
     ).interpolate('monotone')
 
-    xAxis = d3.svg.axis().scale(area_x).ticks(dates.length - 1).tickFormat(d3.time.format('%b %d')).orient('bottom')
 
     svg = d3.select(el[0])
         .append('svg')
@@ -241,7 +261,46 @@ class DashboardController
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-    svg.append('g').attr('class', 'x axis family_x_axis').style('font-size', '14px').style('fill', '#fff').attr('transform', 'translate(0,' + height + ')').call xAxis
+
+
+    start_date = moment(dates[0])
+    end_date = moment(dates[DATA_LENGTH - 1])
+
+    DATA_LENGTH = dates.length
+    DATA_DAYS = end_date.diff(start_date, 'days')
+    DATA_GROUP = vm.range.period
+
+    switch DATA_GROUP
+      when 'day', 'week'
+        DATE_FORMAT = '%b %d'
+        TICKS = 10
+
+        if DATA_GROUP is 'day' and DATA_DAYS in [100..200]
+          TICKS = 15
+
+        if DATA_GROUP is 'day' and DATA_DAYS > 365
+          DATE_FORMAT = '%b %d %y'
+
+        if DATA_GROUP is 'week' and DATA_DAYS > 52
+          DATE_FORMAT = '%b %d %y'
+
+      when 'month'
+        TICKS = 10
+        DATE_FORMAT = '%b %d %y'
+
+    # TICKS = DATA_LENGTH if DATA_LENGTH in [10..17]
+
+    console.log DATA_GROUP+' : '+DATA_DAYS
+    console.log start_date.format('lll')+' <-> '+end_date.format('lll')+' : Data length '+DATA_LENGTH+' with '+TICKS+' ticks'
+
+    xAxis = d3.svg.axis().scale(area_x).ticks(TICKS).tickFormat(d3.time.format(DATE_FORMAT)).orient('bottom')
+
+    svg.append('g')
+      .attr('class', 'x axis family_x_axis')
+      .style('font-size', '12px')
+      .style('fill', '#fff')
+      .attr('transform', 'translate(0,' + height + ')').call xAxis
+
     i = 0
     while i < data_files.length
       data = data_files[i].data
@@ -411,6 +470,7 @@ class DashboardController
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
 
+  state_is: (name) -> @rootScope.state_is(name)
   parse_diff: (diff_str) -> parseInt(diff_str)
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
 @application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', DashboardController]

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160410072736) do
+ActiveRecord::Schema.define(version: 20160413055736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -190,9 +190,9 @@ ActiveRecord::Schema.define(version: 20160410072736) do
   create_table "project_characteristics", force: true do |t|
     t.integer  "orders_number",                                  default: 0,     null: false
     t.integer  "products_number",                                default: 0,     null: false
-    t.integer  "project_id",                                                     null: false
+    t.integer  "project_id",                                     default: 0,     null: false
     t.float    "total_gross_revenues",                           default: 0.0,   null: false
-    t.float    "total_prices"
+    t.float    "total_prices",                                   default: 0.0
     t.string   "currency",                                       default: "USD", null: false
     t.integer  "customers_number",                               default: 0,     null: false
     t.integer  "new_customers_number",                           default: 0,     null: false
@@ -200,7 +200,7 @@ ActiveRecord::Schema.define(version: 20160410072736) do
     t.float    "ratio_of_new_customers_to_repeat_customers",     default: 0.0,   null: false
     t.float    "average_order_value",                            default: 0.0,   null: false
     t.float    "average_order_size",                             default: 0.0,   null: false
-    t.integer  "abandoned_shopping_cart_sessions_number"
+    t.integer  "abandoned_shopping_cart_sessions_number",        default: 0
     t.float    "average_revenue_per_customer",                   default: 0.0,   null: false
     t.float    "sales_per_visitor",                              default: 0.0,   null: false
     t.float    "average_customer_lifetime_value",                default: 0.0,   null: false
@@ -225,12 +225,13 @@ ActiveRecord::Schema.define(version: 20160410072736) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
-    t.boolean  "api_used",       default: false
-    t.boolean  "demo",           default: false
+    t.boolean  "api_used",                 default: false
+    t.boolean  "demo",                     default: false
     t.string   "guest_token"
     t.string   "google_site_id"
     t.integer  "shop_type"
     t.string   "shop_url"
+    t.string   "currency",       limit: 4, default: "USD"
   end
 
   add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree

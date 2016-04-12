@@ -84,11 +84,10 @@ class ProductsRevenueController
     vm.range.from = rangeStart.format('MM.DD.YYYY')
     vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
-    vm.rootScope.set_datepicker_date(vm.datepicker, rangeStart, rangeEnd)
-
     @Projects.search({slug: vm.slug}).$promise.then( (project) ->
       vm.project = project
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_product_data)
+      vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
       vm.fetch()
     )
 
@@ -165,6 +164,7 @@ class ProductsRevenueController
       if doc.scrollTop() + wnd.height() - scrollBottomFixed.height() >= scrollParent.offset().top + scrollParent.height()
         scrollBottomFixed.removeClass('table-footer-fixed').addClass 'table-footer-bottom'
 
+  state_is: (name) -> @rootScope.state_is(name)
   parse_diff: (diff_str) -> parseInt(diff_str)
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true

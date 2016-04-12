@@ -23,7 +23,7 @@
           %span.val {{vm.other_charts_data.customers_number.value}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.customers_number.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.customers_number.diff) < 0}"} {{vm.other_charts_data.customers_number.diff}}
         .graph-block
-          #customers_number.graph_2.areaChart_1.d3graph.hide_x_axis
+          #customers_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
 
     .col-lg-3.col-md-4.col-sm-6
@@ -34,7 +34,7 @@
           %span.val {{vm.other_charts_data.new_customers_number.value}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.new_customers_number.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.new_customers_number.diff) < 0}"} {{vm.other_charts_data.new_customers_number.diff}}
         .graph-block
-          #new_customers_number.graph_2.areaChart_1.d3graph.hide_x_axis
+          #new_customers_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
 
     .col-lg-3.col-md-4.col-sm-6
@@ -45,7 +45,7 @@
           %span.val {{vm.other_charts_data.repeat_customers_number.value}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.repeat_customers_number.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.repeat_customers_number.diff) < 0}"} {{vm.other_charts_data.repeat_customers_number.diff}}
         .graph-block
-          #repeat_customers_number.graph_1.donutChart_1.d3graph.hide_x_axis
+          #repeat_customers_number.graph_1.lineAreaChart_1.d3graph.hide_x_axis
 
 
     .col-lg-3.col-md-4.col-sm-6
@@ -56,4 +56,4 @@
           %span.val {{vm.other_charts_data.average_revenue_per_customer.value}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.average_revenue_per_customer.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.average_revenue_per_customer.diff) < 0}"} {{vm.other_charts_data.average_revenue_per_customer.diff}}
         .graph-block
-          #average_revenue_per_customer.graph_2.areaChart_2.d3graph.hide_x_axis
+          #average_revenue_per_customer.graph_2.lineAreaChart_1.d3graph.hide_x_axis

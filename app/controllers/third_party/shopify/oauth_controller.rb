@@ -23,6 +23,11 @@ module ThirdParty
             # Create integration
             @integration = @project.create_integration(type: 'ShopifyIntegration', code: params[:code], access_token: access_token)
 
+
+            session = @project.shopify_session
+            @user.email = session.shop.email
+            @user.name = session.shop.shop_owner
+            @user.save
             redirect_url = "#{dashboard_path}/#/setup"
           else
             @errors ||= @user.errors.full_messages

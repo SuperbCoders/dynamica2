@@ -63,7 +63,7 @@
                 .table-footer.scrollBottomFixed(ng-show="vm.products_view != 'rule_80_20'")
                   .table-cell.col_1 Total {{ vm.products.length }} products
                   .table-cell.col_5.col_right {{ vm.sales }}
-                  .table-cell.col_6.col_right $ {{ vm.gross_revenue }}
+                  .table-cell.col_6.col_right ₽ {{ vm.gross_revenue }}
                   .table-cell.col_7 &nbsp;
                   .table-cell.col_4 &nbsp;
 
@@ -82,8 +82,8 @@
                     .table-cell.col_1 {{ product.title }}
                     .table-cell.col_5.col_right {{ product.sales }}
                     .table-cell.col_6.col_right
-                      .seller_val $ {{ product.gross_revenue }}
-                    .table-cell.col_7.col_right $ {{ product.price }}
+                      .seller_val ₽ {{ product.gross_revenue }}
+                    .table-cell.col_7.col_right ₽ {{ product.price }}
                     .table-cell.col_4 {{ product.created_at }}
 
 
@@ -98,7 +98,7 @@
                     .table-cell.col_1 {{ product.title }}
                     .table-cell.col_5.col_right {{ product.sales }}
                     .table-cell.col_6.col_right
-                      .seller_val $ {{ product.gross_revenue }}
+                      .seller_val ₽ {{ product.gross_revenue }}
                     .table-cell.col_7.col_right $ {{ product.price }}
                     .table-cell.col_4 {{ product.created_at }}
 
@@ -109,7 +109,7 @@
                     .table-cell.col_1 {{ product.title }}
                     .table-cell.col_5.col_right {{ product.sales }}
                     .table-cell.col_6.col_right
-                      .seller_val $ {{ product.gross_revenue }}
+                      .seller_val ₽ {{ product.gross_revenue }}
                     .table-cell.col_7.col_right $ {{ product.price }}
                     .table-cell.col_4 {{ product.created_at }}
 

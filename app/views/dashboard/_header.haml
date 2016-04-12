@@ -5,9 +5,19 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
+
       .navbar-project-switch
-        %a.navbar-brand
-          DYNAMICA
+        %a.navbar-brand{:href => "#"} Dynamica
+
+        / Если проектов больше 1 , то показать селект
+        / Если проект 1 то только название
+        -#.projects_switcher(ng-show="$state.current.name != 'projects.list'")
+        -#  %span
+        -#    of
+        -#  .hover-select-box.front-select-btn(ng-show="user.projects.length > 1")
+        -#    %select.selectpicker
+        -#      %option(ng-repeat="project in user.projects") {{ project.name }}
+        -#  %p(ng-show="user.projects.length == 1") {{user.projects[0].name}}
 
     %nav.collapse.navbar-collapse.bs-navbar-collapse
       %ul.nav.navbar-nav

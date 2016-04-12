@@ -1,30 +1,30 @@
 .btn {
-	padding: 5px 12px;
-	text-align: center;
-	border-radius: 17px;
-	box-shadow: none!important;
-	outline: 0!important;
+  padding: 5px 12px;
+  text-align: center;
+  border-radius: 17px;
+  box-shadow: none !important;
+  outline: 0 !important;
 }
 
 .btn-lg {
-	min-width: 190px;
-	padding: 12px 20px;
-	font-weight: 700;
-	border-radius: 26px;
+  min-width: 190px;
+  padding: 12px 20px;
+  font-weight: 700;
+  border-radius: 26px;
 }
 
 .btn-xl {
-	min-width: 320px;
-	padding: 18px 20px;
-	font-size: 24px;
-	font-weight: 700;
-	border-radius: 36px;
+  min-width: 320px;
+  padding: 18px 20px;
+  font-size: 24px;
+  font-weight: 700;
+  border-radius: 36px;
 }
 
 .btn-danger {
-	color: #fff;
-	background-color: #ff370d;
-	border-color: #ff370d;
+  color: #fff;
+  background-color: #ff370d;
+  border-color: #ff370d;
 }
 
 .btn-danger:hover,
@@ -32,72 +32,79 @@
 .btn-danger.focus,
 .btn-danger:active,
 .btn-danger.active,
-.open>.btn-danger.dropdown-toggle {
-	color: #fff;
-	background-color: #ff6140;
-	border-color: #ff6140;
+.open > .btn-danger.dropdown-toggle {
+  color: #fff;
+  background-color: #ff6140;
+  border-color: #ff6140;
 }
 
 .btn-danger-o {
-	color: #ff6140!important;
-	background-color: inherit;
-	border: 2px solid #ff6140;
+  color: #ff6140 !important;
+  background-color: inherit;
+  border: 2px solid #ff6140;
 }
 
 .btn-social {
-	display: inline-block;
-	min-width: 190px;
-	padding: 14px 15px;
-	margin-right: 20px;
-	position: relative;
-	color: #fff!important;
-	text-align: center;
-	.icon {
-		margin-top: -10px;
-		position: absolute;
-		top: 50%;
-		left: 20px;
-		font-size: 22px;
-	}
+  display: inline-block;
+  min-width: 190px;
+  padding: 14px 15px;
+  margin-right: 20px;
+  position: relative;
+  color: #fff !important;
+  text-align: center;
+  .icon {
+    margin-top: -10px;
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    font-size: 22px;
+  }
 }
 
 .btn-facebook {
-	background-color: #4864a1;
-	&:hover {
-		background-color: #2d4373;
-	}
+  background-color: #4864a1;
+  &:hover {
+    background-color: #2d4373;
+  }
 }
 
 .btn-twitter {
-	background-color: #50abf1;
-	&:hover {
-		background-color: #2795e9;
-	}
+  background-color: #50abf1;
+  &:hover {
+    background-color: #2795e9;
+  }
+}
+
+.btn-google {
+  background-color: #dc4e41;
+  &:hover {
+    background-color: darken(#dc4e41, 5%);
+  }
 }
 
 .bootstrap-select {
-	.btn {
-		padding: 13px 25px 13px 20px;
-		font-size: 16px;
-		border: 1px solid #e3e3e3;
-		background: #fff;
-		border-radius: 0;
-		outline: none;
-		&:hover, &:focus {
-			outline: none!important;
-		}
-	}
-	.dropdown-menu {
-		width: auto;
-		margin: 0;
-		padding: 6px 0;
-		li {
-			padding: 0;
-			outline: none!important;
-			a {
-				padding: 8px 20px;
-				outline: none!important;
-			}
-		}
-	}
+  .btn {
+    padding: 13px 25px 13px 20px;
+    font-size: 16px;
+    border: 1px solid #e3e3e3;
+    background: #fff;
+    border-radius: 0;
+    outline: none;
+    &:hover, &:focus {
+      outline: none !important;
+    }
+  }
+  .dropdown-menu {
+    width: auto;
+    margin: 0;
+    padding: 6px 0;
+    li {
+      padding: 0;
+      outline: none !important;
+      a {
+        padding: 8px 20px;
+        outline: none !important;
+      }
+    }
+  }
 }
