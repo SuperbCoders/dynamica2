@@ -136,6 +136,7 @@
 ]
 
 @application.run ['$rootScope', '$state', '$stateParams', '$http', '$location', ($rootScope, $state, $stateParams, $http, $location) ->
+  $rootScope.currency = '$'
   $rootScope.$state = $state
   $rootScope.$stateParams = $stateParams
   $rootScope.$location = $location

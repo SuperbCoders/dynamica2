@@ -127,7 +127,7 @@ class ChartsDataController < ApplicationController
     define_method chart_type do |scope, current_data, prev_data|
       {
           diff: diff_sum(chart_type, current_data, prev_data),
-          value: "#{current_data.sum chart_type} ₽",
+          value: "#{current_data.sum chart_type}",
           data: current_data.send(scope).sum(chart_type)
       }
     end
@@ -138,7 +138,7 @@ class ChartsDataController < ApplicationController
     result = {
         total_revenu: {
             diff: diff_sum(:total_gross_revenues, current_data, prev_data),
-            value: "#{current_data.sum :total_gross_revenues}$",
+            value: "#{current_data.sum :total_gross_revenues}",
             data: current_data.send(scope).sum(:total_gross_revenues)
         },
         products_number: {
@@ -257,7 +257,7 @@ class ChartsDataController < ApplicationController
             "name": "Revenue",
             "tr_name": "revenue",
             "color": "#6AFFCB",
-            "value": "#{current_data.sum :total_gross_revenues} ₽",
+            "value": "#{current_data.sum :total_gross_revenues}",
             "diff": diff_sum(:total_gross_revenues, current_data, prev_data),
             "data": current_data.send(scope).sum(:total_gross_revenues)
         },

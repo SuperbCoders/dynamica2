@@ -1,5 +1,5 @@
 class DashboardController
-  constructor: (@rootScope, @scope, @Projects, @http, @T) ->
+  constructor: (@rootScope, @scope, @Projects, @http, @T, @filter) ->
     vm = @
     vm.params = @rootScope.$stateParams
     vm.project = {}
@@ -30,7 +30,7 @@ class DashboardController
 
     @Projects.search({slug: vm.params.slug}).$promise.then( (project) ->
       vm.project = project
-
+      vm.rootScope.currency = vm.project.currency
       vm.rootScope.$state.go('projects.subscription', {slug: vm.project.slug}) if vm.project.expired
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_project_data)
       vm.rootScope.set_datepicker_date(vm.datepicker,moment().startOf('month'),moment().endOf('month'))
@@ -103,6 +103,7 @@ class DashboardController
     return if not data
     vm = @
     el.empty()
+    element_id = el.attr('id')
     margin =
       top: 0
       right: 0
@@ -129,14 +130,23 @@ class DashboardController
     #.interpolate("cardinal");
     svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
     t = $.extend(true, [], $('.dashboard').data('other_charts'))
-#    data = t[el.attr('id')] or {}
     value = parseFloat(data['value']).number_with_delimiter('&thinsp;')
-    if el.attr('id') == 'total_revenu'
-      value += '&nbsp;' + data['value'].slice(-1)
     diff = parseFloat(data['diff']).number_with_delimiter('&thinsp;')
     diff += '&nbsp;%'
     value = if data['value'] == '' then '' else value
     diff = if data['diff'] == '' then '' else diff
+
+
+
+    currency_elements = ['total_revenu', 'average_order_value', 'average_revenue_per_customer']
+
+    if element_id in currency_elements
+      console.log 'converting '+element_id+' ['+value+'] converted to ['+vm.filter('dynCurrency')(value)+']'
+      value = vm.filter('dynCurrency')(value)
+    else
+      value = 0 if value is 'NaN'
+      console.log element_id
+
     el.parent().parent().children('.graph-value').children('.val').html value
     el.parent().parent().children('.graph-value').children('.graph-dynamica').removeClass('dynamica_up dynamica_down').addClass if /-/g.test(data['diff']) then 'dynamica_down' else 'dynamica_up'
     el.parent().parent().children('.graph-value').children('.graph-dynamica').html diff
@@ -289,8 +299,8 @@ class DashboardController
 
     # TICKS = DATA_LENGTH if DATA_LENGTH in [10..17]
 
-    console.log DATA_GROUP+' : '+DATA_DAYS
-    console.log start_date.format('lll')+' <-> '+end_date.format('lll')+' : Data length '+DATA_LENGTH+' with '+TICKS+' ticks'
+#    console.log DATA_GROUP+' : '+DATA_DAYS
+#    console.log start_date.format('lll')+' <-> '+end_date.format('lll')+' : Data length '+DATA_LENGTH+' with '+TICKS+' ticks'
 
     xAxis = d3.svg.axis().scale(area_x).ticks(TICKS).tickFormat(d3.time.format(DATE_FORMAT)).orient('bottom')
 
@@ -316,13 +326,19 @@ class DashboardController
           d.close
         )
       ]
+
+      if data_files[i].tr_name not in ['customers','unic_users']
+        currencyValue = vm.filter('dynCurrency')(data_files[i].value)
+      else
+        currencyValue = data_files[i].value
+
       svg.append('path').datum(data).attr('class', 'area area_v1').attr('id', 'family_area_' + i).attr('d', area).style('fill', (d) ->
         color = data_files[i].color
         legendItem = $('<li class="legend_item" />')
           .append($('<div class="legend_name" />')
           .css('color', color)
           .append($('<span/>').text(vm.T.t(data_files[i].tr_name)))
-        ).append($('<div class="legend_val" />').append($('<span class="val" />').text(data_files[i].value))
+        ).append($('<div class="legend_val" />').append($('<span class="val" />').text(currencyValue))
           .append($('<sup class="graph-dynamica" />')
             .addClass(if /-/g.test(data_files[i].diff) then 'dynamica_down' else 'dynamica_up')
             .text(data_files[i].diff)))
@@ -472,5 +488,5 @@ class DashboardController
   state_is: (name) -> @rootScope.state_is(name)
   parse_diff: (diff_str) -> parseInt(diff_str)
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
-@application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', DashboardController]
+@application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', '$filter', DashboardController]
 

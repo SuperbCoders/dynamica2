@@ -21,7 +21,6 @@ class ProductsRevenueController
     @rootScope.$state.go('projects.list') if not vm.range.from or not vm.range.to
 
     @scope.$watch('vm.products_view', (old) ->
-      console.log 'Watch vm.products_view '+old
       vm.products = []
       vm.sales = 0
       vm.gross_revenue = 0
@@ -86,6 +85,7 @@ class ProductsRevenueController
 
     @Projects.search({slug: vm.slug}).$promise.then( (project) ->
       vm.project = project
+      vm.rootScope.currency = vm.project.currency
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_product_data)
       vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
       vm.fetch()

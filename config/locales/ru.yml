@@ -54,6 +54,8 @@ ru:
       change_type: Сменить подписку
       confirm_charge: Подтвердить оплату
     products_revenue:
+      total: Всего
+      products: товаров
       product_search: Поиск по названию
       table:
         product: Товар
@@ -62,7 +64,7 @@ ru:
         price: Цена
         views: Просмотров
         category: Категория
-        date_added: Дата
+        date: Дата
       all_products: Все товары
       best_sellers: Лучшие товары
       80_20_rule: Правило 80/20
