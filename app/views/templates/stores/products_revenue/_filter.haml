@@ -1,0 +1,20 @@
+.graph-filter-block
+  .pull-left
+    %ul.filter-btn-list
+      %li
+        %label.btn-filter-check
+          %input.hidden_input(checked="" value="all_products" type="radio" ng-model="vm.products_view")
+            %span.btn.btn_v1.check_text= t('projects.products_revenue.all_products')
+      %li
+        %label.btn-filter-check
+          %input.hidden_input(value="best_sellers" type="radio" ng-model="vm.products_view")
+            %span.btn.btn_v1.check_text= t('projects.products_revenue.best_sellers')
+      %li
+        %label.btn-filter-check
+          %input.hidden_input(value="rule_80_20" type="radio" ng-model="vm.products_view")
+            %span.btn.btn_v1.check_text= t('projects.products_revenue.80_20_rule')
+  .pull-right
+    .filter-search_block
+      %input.form-control(placeholder="#{t('projects.products_revenue.product_search')}" ng-model="vm.filters.title")
+        %button.filter-search-btn
+          %i.fa.fa-search

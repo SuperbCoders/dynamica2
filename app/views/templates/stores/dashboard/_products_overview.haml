@@ -56,4 +56,4 @@
               .seller_name {{ p.title }}
             %td.col_2 {{ p.sales }}
             %td.col_3
-              .seller_val.best_seller {{ p.revenue }}
+              .seller_val.best_seller {{ p.revenue | dynCurrency }}

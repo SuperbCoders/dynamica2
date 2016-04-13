@@ -29,6 +29,7 @@ class ChartController
 
     @Projects.search({slug: vm.slug}).$promise.then( (project) ->
       vm.project = project
+      vm.rootScope.currency = vm.project.currency
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_project_data)
       vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
       vm.fetch()
