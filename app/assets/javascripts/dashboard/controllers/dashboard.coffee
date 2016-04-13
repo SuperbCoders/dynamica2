@@ -81,9 +81,8 @@ class DashboardController
 
     @charts_fetch('big_chart_data').success((response) ->
       vm.big_chart = response
-      $('.areaChartFamily_1').each (ind) ->
-        vm.init_area_family_chart($(this), response)
-
+      vm.top_5_products = info['top'] for info in vm.big_chart when info['tr_name'] == 'products_sell'
+      $('.areaChartFamily_1').each (ind) -> vm.init_area_family_chart($(this), response)
     )
 
     @charts_fetch('other_chart_data').success((response) ->

@@ -51,6 +51,32 @@ class Project < ActiveRecord::Base
 
   scope :actives, -> { where.not(user_id: nil) }
 
+  # @return [Array] of top 5 seller products
+  def top_5_products
+    @top = {}
+    @products = {}
+    @ids = []
+
+    # Retrieve grouped by product_id chars with summed gross_revenue
+    p_chars = product_characteristics.group(:id, :product_id).sum(:gross_revenue)
+    p_chars.keys.each do |pkey|
+      @top[pkey[1]] ||= 0
+      @top[pkey[1]] += p_chars[pkey]
+    end
+
+    # Sort by gross_revenue and reversed
+    @top.sort_by(&:last).reverse[0..3].map { |p_info|
+      p = products.find_by(id: p_info[0])
+      if p
+        @products[p.id] ||= { revenue: 0, title: 0, sales: 0 }
+        @products[p.id][:revenue] = p_info[1]
+        @products[p.id][:title] = p.title
+        @products[p.id][:sales] = product_characteristics.where(product: p).sum(:sold_quantity)
+      end
+    }
+    @products
+  end
+
   def sub_type
     subscription.sub_type
   end

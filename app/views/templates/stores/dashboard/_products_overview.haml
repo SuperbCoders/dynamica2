@@ -48,29 +48,12 @@
 
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
+        %a.graph-u-link{:href => "", 'ui-sref' => "projects.products_revenue({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug})"}
         %h5.graph-name= t('projects.show.percentage_of_stock_sold')
         %table.best_sellers
-          %tr
+          %tr(ng-repeat="p in vm.top_5_products")
             %td.col_1
-              .seller_name BUNN BXB Velocity Brew 10-Cup Home...
-            %td.col_2 590
+              .seller_name {{ p.title }}
+            %td.col_2 {{ p.sales }}
             %td.col_3
-              .seller_val.best_seller $73,490
-          %tr
-            %td.col_1
-              .seller_name Kitchen forks
-            %td.col_2 9,389
-            %td.col_3
-              .seller_val.best_seller $43,490
-          %tr
-            %td.col_1
-              .seller_name BUNN BXB Velocity Brew 10-Cup Home...
-            %td.col_2 590
-            %td.col_3
-              .seller_val.best_seller $73,490
-          %tr
-            %td.col_1
-              .seller_name Kitchen forks
-            %td.col_2 9,389
-            %td.col_3
-              .seller_val.best_seller $43,490
+              .seller_val.best_seller {{ p.revenue }}

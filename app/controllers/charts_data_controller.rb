@@ -275,7 +275,8 @@ class ChartsDataController < ApplicationController
             "color": "#FF7045",
             "value": "#{current_data.sum :products_number}",
             "diff": diff_sum(:products_number, current_data, prev_data),
-            "data": current_data.send(scope).sum(:products_number)
+            "data": current_data.send(scope).sum(:products_number),
+            "top": @project.top_5_products
         },
         {
             "name": "Unic users",
