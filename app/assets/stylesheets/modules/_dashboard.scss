@@ -932,9 +932,12 @@ svg:not(:root) {
   .line {
     fill: none;
     stroke: #3e6cfe;
-    stroke-width: 4px;
-  }
+    stroke-width:2 px;
 
+    &.line_v2 {
+      stroke-width:4 px;
+    }
+  }
   .area {
     -webkit-transition: transform 0.3s, opacity .6s;
     -ms-transition: transform 0.3s, opacity .6s;

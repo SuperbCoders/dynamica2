@@ -151,36 +151,53 @@ class ChartController
       d.date = parseDate(d.date)
       d.close = +d.close
 
-#    data.forEach (d) ->
-#      d.date = parseDate(d.date)
-#      d.close = +d.close
-#      return
-    # Scale the range of the data
-
     x.domain d3.extent(data['data'], (d) ->
       d.date
     )
+
     y.domain [
       0
       d3.max(data['data'], (d) ->
         Math.max d.close
       )
     ]
+
     area_x.domain d3.extent(data['data'], (d) ->
       d.date
     )
+
     area_y.domain [
       0
       d3.max(data['data'], (d) ->
         d.close
       )
     ]
-    gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
-    gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
-    gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
+
+    gradient = svg.append('svg:defs')
+      .append('svg:linearGradient')
+      .attr('id', 'area_gradient_1')
+      .attr('x1', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '0%')
+      .attr('y2', '100%')
+      .attr('spreadMethod', 'pad')
+
+    gradient
+      .append('svg:stop')
+      .attr('offset', '0%')
+      .attr('stop-color', '#E0E8FF')
+      .attr('stop-opacity', .8)
+
+    gradient
+      .append('svg:stop')
+      .attr('offset', '100%')
+      .attr('stop-color', '#f6f6f6')
+      .attr 'stop-opacity', 0
+
+
     svg.append('path').attr('class', 'line').attr 'd', valueline(data['data'])
     svg.append('path').datum(data['data']).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
-    # Add the scatterplot
+
     svg.append('line').attr('id', 'line_for_dot').attr('class', 'line_for_dot').style('stroke', '#D0E3EE').style('stroke-width', '2').attr('x1', 0).attr('x2', 0).attr('y1', height).attr 'y2', 0
     line_for_dot = d3.select('#line_for_dot')
     svg.selectAll('dot').data(data['data']).enter().append('circle').attr('r', 0).attr('data-y-value', (d, i) ->
@@ -195,7 +212,14 @@ class ChartController
     ).attr 'cy', (d) ->
       `var i`
       y d.close
-    svg.append('circle').attr('r', 7).attr('id', 'big_dot').attr('class', 'big_dot mark_v2').attr('cx', 0).attr 'cy', 0
+
+    svg.append('circle')
+      .attr('r', 10)
+      .attr('id', 'big_dot')
+      .attr('class', 'big_dot mark_v2')
+      .attr('cx', 0)
+      .attr('cy', 0)
+
     tracing_anim_duration = 150
     distance = x(data['data'][0].date) - x(data['data'][1].date)
     big_dot = d3.select('#big_dot')
