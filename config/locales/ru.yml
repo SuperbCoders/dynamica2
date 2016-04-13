@@ -120,6 +120,7 @@ ru:
       percentage_of_stock_sold: Процент запаса на складе
       products_number: Количество товаров
       total_revenu: Общая выручка
+      products_revenue: Доходы по товарам
       controls:
         update_forecast: Обновить прогноз
         settings: Настройки

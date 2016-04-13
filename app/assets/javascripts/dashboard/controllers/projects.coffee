@@ -23,6 +23,8 @@ class ProjectsController
     vm = @
     project.$remove({id: project.id}).then( (response) ->
       vm.projects.splice(vm.projects.indexOf(project), 1)
+
+      vm.rootScope.update_user()
     )
 
   save: ->

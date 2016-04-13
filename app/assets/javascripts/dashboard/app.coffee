@@ -145,7 +145,9 @@
     $("[data-toggle='switch']").bootstrapSwitch({baseClass: 'switch'})
 
   # Load user profile
-  $http.get('/profile').success((response) -> $rootScope.user = response)
+  $rootScope.update_user = ->
+    $http.get('/profile').success((response) -> $rootScope.user = response)
+  $rootScope.update_user()
 
   # Open user dropdown menu
   $('.user-toggle.dropdown-toggle').on('click', (element) -> $('.user.dropdown').toggleClass('open'))
@@ -162,6 +164,27 @@
   )
 
 
+  # State checker for current class for menu
+  $rootScope.state_is = (name) ->
+    chart_name = $rootScope.$stateParams.chart
+    state = $rootScope.$state.current.name
+    total_states = ['total_gross_revenues', 'shipping_cost_as_a_percentage_of_total_revenue', 'average_order_value', 'average_order_size']
+    customer_states = ['customers_number','new_customers_number','repeat_customers_number','average_revenue_per_customer','sales_per_visitor','average_customer_lifetime_value','unique_users_number','visits']
+    products_states = ['products_in_stock_number','items_in_stock_number','percentage_of_inventory_sold','percentage_of_stock_sold','products_number','products_revenue']
+
+    return true if name is 'dashboard' and state is 'projects.view'
+    return true if name is 'products' and state is 'projects.products_revenue'
+
+    switch name
+      when 'total'
+        return true if chart_name in total_states
+      when 'customers'
+        return true if chart_name in customer_states
+      when 'products'
+        return true if chart_name in products_states
+
+    return false
+
   # Shared datepicker helpers
   $rootScope.set_date_range = (range, period, datepicker = $('.datePicker')) ->
     # range - object that will sended to backed
@@ -171,35 +194,38 @@
     switch period
       when 0
         # Current month
+        rangeName = 'Current month'
         rangeStart = moment(today).startOf('month')
         rangeEnd = moment(today).endOf('month')
-        console.log period+': Period is Current month from '+rangeStart.format('lll')+' to '+rangeEnd.format('lll')
 
       when 1
         # Previous month
+        rangeName = 'Previous month'
         rangeStart = moment(today).subtract(1, 'month').startOf('month')
         rangeEnd = moment(today).subtract(1, 'month').endOf('month')
-        console.log period+': Period is Previous month from '+rangeStart.format('lll')+' to '+rangeEnd.format('lll')
 
       when 2
         # Last 3 month
+        rangeName = 'Last 3 month'
         rangeStart = moment(today).subtract(3, 'month')
-        console.log period+': Period is Last 3 month from '+rangeStart.format('lll')+' to '+rangeEnd.format('lll')
 
       when 3
         # Last 6 month
+        rangeName = 'Last 6 month'
         rangeStart = moment(today).subtract(6, 'month')
-        console.log period+': Period is Last 6 month from '+rangeStart.format('lll')+' to '+rangeEnd.format('lll')
 
       when 4
         # Last year
+        rangeName = 'Last year'
         rangeStart = moment(today).subtract(12, 'month')
-        console.log period+': Period is Last year from '+rangeStart.format('lll')+' to '+rangeEnd.format('lll')
 
       when 5
         # All time
+        rangeName = 'All time'
         rangeStart = moment(datepicker.datepicker('getStartDate'))
-        console.log period+': Period is All time year from '+rangeStart.format('lll')+' to '+rangeEnd.format('lll')
+
+
+    # console.log period+': Period is '+rangeName+' from '+rangeStart.format('lll')+' to '+rangeEnd.format('lll')
 
     range.raw_start = rangeStart
     range.raw_end = rangeEnd
