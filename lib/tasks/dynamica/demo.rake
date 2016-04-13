@@ -135,7 +135,7 @@ namespace :dynamica do
         orders_stat[order_data['state'].to_sym] += 1
 
         # Пропускаем если заказ не delivered
-        next if not ['transit','new','delivered'].include? order_data['state']
+        # next if not ['transit','new','delivered'].include? order_data['state']
 
         # Структура заказа из BBS
         # {
@@ -192,8 +192,10 @@ namespace :dynamica do
 
           # Суммируем доход от заказов за эту дату
           pc.total_gross_revenues += local_order_items.sum {|l_i|
-            (l_i['quantity'].to_i * l_i['price'].to_f) + (order_data['shipping_price'].to_f || 0)
+            (l_i['quantity'].to_i * l_i['price'].to_f)
           }
+
+          # + (order_data['shipping_price'].to_f || 0)
 
           # Общая сумма прайсов ( нахера ?)
           pc.total_prices += local_order_items.sum {|l_i| l_i['quantity'].to_i * l_i['price'].to_f}
