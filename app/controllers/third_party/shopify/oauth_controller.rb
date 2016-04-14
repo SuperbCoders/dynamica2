@@ -9,6 +9,8 @@ module ThirdParty
 
         @project = Project.where(name: shop_name).first_or_initialize
         if @project.new_record?
+          @project.update_attributes(shop_url: params[:shop])
+
           @user = User.build_temporary_user
           if @user.save
 
@@ -21,6 +23,13 @@ module ThirdParty
             # Create integration
             @integration = @project.create_integration(type: 'ShopifyIntegration', code: params[:code], access_token: access_token)
 
+
+            # Save shop owner email/name/currency
+            session = @project.shopify_session
+            @user.email = session.shop.email
+            @user.name = session.shop.shop_owner
+            @project.update_attributes(currency: (session.shop.currency || 'USD'))
+            @user.save
             redirect_url = "#{dashboard_path}/#/setup"
           else
             @errors ||= @user.errors.full_messages

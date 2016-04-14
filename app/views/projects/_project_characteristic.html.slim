@@ -1,5 +1,0 @@
-.table-row
-  .table-cell.col_1 = project_characteristic['date']
-  - value = number_with_delimiter(project_characteristic['close'].to_f.round(1), delimiter: '&thinsp;'.html_safe)
-  - value += '&nbsp;'.html_safe + @result[:value][-1] if @chart.to_sym == :total_revenu
-  .table-cell.col_4 = value

@@ -84,6 +84,7 @@ class ChartsDataController < ApplicationController
 
   def set_chart_data
     @current_project_characteristics  = @project.project_characteristics.where(date: date_from..date_to)
+    # yaebal shto eto
     @previous_project_characteristics = @project.project_characteristics.where(date: (date_from - (date_to - date_from))...date_from)
   end
 
@@ -126,7 +127,7 @@ class ChartsDataController < ApplicationController
     define_method chart_type do |scope, current_data, prev_data|
       {
           diff: diff_sum(chart_type, current_data, prev_data),
-          value: "#{current_data.sum chart_type}$",
+          value: "#{current_data.sum chart_type}",
           data: current_data.send(scope).sum(chart_type)
       }
     end
@@ -137,7 +138,7 @@ class ChartsDataController < ApplicationController
     result = {
         total_revenu: {
             diff: diff_sum(:total_gross_revenues, current_data, prev_data),
-            value: "#{current_data.sum :total_gross_revenues}$",
+            value: "#{current_data.sum :total_gross_revenues}",
             data: current_data.send(scope).sum(:total_gross_revenues)
         },
         products_number: {
@@ -254,44 +255,45 @@ class ChartsDataController < ApplicationController
     result = [
         {
             "name": "Revenue",
-        "tr_name": "revenue",
-        "color": "#6AFFCB",
-        "value": "#{current_data.sum :total_gross_revenues}$",
-        "diff": diff_sum(:total_gross_revenues, current_data, prev_data),
-        "data": current_data.send(scope).sum(:total_gross_revenues)
-    },
+            "tr_name": "revenue",
+            "color": "#6AFFCB",
+            "value": "#{current_data.sum :total_gross_revenues}",
+            "diff": diff_sum(:total_gross_revenues, current_data, prev_data),
+            "data": current_data.send(scope).sum(:total_gross_revenues)
+        },
         {
             "name": "Orders",
-        "tr_name": "orders",
-        "color": "#FF1FA7",
-        "value": "#{current_data.sum :orders_number}",
-        "diff": diff_sum(:orders_number, current_data, prev_data),
-        "data": current_data.send(scope).sum(:orders_number)
-    },
+            "tr_name": "orders",
+            "color": "#FF1FA7",
+            "value": "#{current_data.sum :orders_number}",
+            "diff": diff_sum(:orders_number, current_data, prev_data),
+            "data": current_data.send(scope).sum(:orders_number)
+        },
         {
             "name": "Products sell",
-        "tr_name": "products_sell",
-        "color": "#FF7045",
-        "value": "#{current_data.sum :products_number}",
-        "diff": diff_sum(:products_number, current_data, prev_data),
-        "data": current_data.send(scope).sum(:products_number)
-    },
+            "tr_name": "products_sell",
+            "color": "#FF7045",
+            "value": "#{current_data.sum :products_number}",
+            "diff": diff_sum(:products_number, current_data, prev_data),
+            "data": current_data.send(scope).sum(:products_number),
+            "top": @project.top_5_products
+        },
         {
             "name": "Unic users",
-        "tr_name": "unic_users",
-        "color": "#3BD7FF",
-        "value": "#{current_data.sum :unique_users_number}",
-        "diff": diff_sum(:unique_users_number, current_data, prev_data),
-        "data": current_data.send(scope).sum(:unique_users_number)
-    },
+            "tr_name": "unic_users",
+            "color": "#3BD7FF",
+            "value": "#{current_data.sum :unique_users_number}",
+            "diff": diff_sum(:unique_users_number, current_data, prev_data),
+            "data": current_data.send(scope).sum(:unique_users_number)
+        },
         {
             "name": "Customers",
-        "tr_name": "customers",
-        "color": "#FFD865",
-        "value": "#{current_data.sum :customers_number}",
-        "diff": diff_sum(:customers_number, current_data, prev_data),
-        "data": current_data.send(scope).sum(:customers_number)
-    }
+            "tr_name": "customers",
+            "color": "#FFD865",
+            "value": "#{current_data.sum :customers_number}",
+            "diff": diff_sum(:customers_number, current_data, prev_data),
+            "data": current_data.send(scope).sum(:customers_number)
+        }
     ]
 
     result.each {|gr| gr[:data] = gr[:data].map {|k, v| {'date' => k, 'close' => v}}}

@@ -1,0 +1,14 @@
+#not_ready_popup.modal.fade(role = "dialog")
+  .modal-dialog.modal_v1{:style => "width: 728px;"}
+    / Modal content
+    .modal-content
+      .modal-header
+      .modal-body
+        .modal_dynamica_logo.text-center
+          %img{:src => "images/dynamica.svg"}/
+        %h3
+          Graphics are not ready yet,
+          %br we can remind you
+      .form_holder
+        .control-box.text-center.btn_holder
+          %a.btn.btn-lg.btn-danger{:href => "#"} Remind me, on email

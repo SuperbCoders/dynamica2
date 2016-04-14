@@ -1,19 +1,8 @@
-/ Customers overview
-/ customers_number
-/ new_customers_number
-/ repeat_customers_number
-/ average_revenue_per_customer
-/ sales_per_visitor
-/ average_customer_lifetime_value
-/ unique_users_number
-/ visits
-
 .dashboard-caption
   %h3.caption-text= t 'projects.show.customers'
   %i.icon.fa.fa-angle-right
 .graph-unit-holder.graph-unit-hover
   .row
-
 
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
@@ -23,7 +12,7 @@
           %span.val {{vm.other_charts_data.customers_number.value}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.customers_number.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.customers_number.diff) < 0}"} {{vm.other_charts_data.customers_number.diff}}
         .graph-block
-          #customers_number.graph_2.areaChart_1.d3graph.hide_x_axis
+          #customers_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
 
     .col-lg-3.col-md-4.col-sm-6
@@ -34,7 +23,7 @@
           %span.val {{vm.other_charts_data.new_customers_number.value}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.new_customers_number.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.new_customers_number.diff) < 0}"} {{vm.other_charts_data.new_customers_number.diff}}
         .graph-block
-          #new_customers_number.graph_2.areaChart_1.d3graph.hide_x_axis
+          #new_customers_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
 
     .col-lg-3.col-md-4.col-sm-6
@@ -45,7 +34,7 @@
           %span.val {{vm.other_charts_data.repeat_customers_number.value}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.repeat_customers_number.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.repeat_customers_number.diff) < 0}"} {{vm.other_charts_data.repeat_customers_number.diff}}
         .graph-block
-          #repeat_customers_number.graph_1.donutChart_1.d3graph.hide_x_axis
+          #repeat_customers_number.graph_1.lineAreaChart_1.d3graph.hide_x_axis
 
 
     .col-lg-3.col-md-4.col-sm-6
@@ -53,7 +42,7 @@
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'average_revenue_per_customer'})"}
         %h5.graph-name= t('projects.show.average_revenue_per_customer')
         .graph-value
-          %span.val {{vm.other_charts_data.average_revenue_per_customer.value}}
+          %span.val {{vm.other_charts_data.average_revenue_per_customer.value | dynCurrency}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.average_revenue_per_customer.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.average_revenue_per_customer.diff) < 0}"} {{vm.other_charts_data.average_revenue_per_customer.diff}}
         .graph-block
-          #average_revenue_per_customer.graph_2.areaChart_2.d3graph.hide_x_axis
+          #average_revenue_per_customer.graph_2.lineAreaChart_1.d3graph.hide_x_axis

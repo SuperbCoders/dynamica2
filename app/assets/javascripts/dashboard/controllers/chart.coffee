@@ -1,9 +1,11 @@
 class ChartController
   constructor: (@rootScope, @scope, @Projects, @http, @T) ->
+    console.log 'ChartController constructor'
     vm = @
     vm.slug = @rootScope.$stateParams.slug
     vm.chart = @rootScope.$stateParams.chart
     vm.project = @rootScope.$stateParams.project
+    vm.date_range = 0
     vm.range =
       chart: vm.chart
       from: @rootScope.$stateParams.from
@@ -14,40 +16,38 @@ class ChartController
     if not vm.range.from or not vm.range.to
       @rootScope.$state.go('projects.list')
 
+    @scope.$watch('vm.date_range', (old_val) -> vm.set_date_range(old_val) )
+
     @init_dashboard()
-    @set_default_range()
 
-    if not @project
-      @Projects.search({slug: vm.slug}).$promise.then( (project) ->
-        vm.project = project
-        vm.fetch()
-      )
-    else
-      @fetch()
+    # Set datepicker dates
+    console.log vm.range
+    vm.range.raw_start = rangeStart = moment(vm.range.from, 'MM.DD.YYYY')
+    vm.range.raw_end = rangeEnd = moment(vm.range.to, 'MM.DD.YYYY')
+    vm.range.from = rangeStart.format('MM.DD.YYYY')
+    vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
-  charts_fetch: (chart_type) ->
+    @Projects.search({slug: vm.slug}).$promise.then( (project) ->
+      vm.project = project
+      vm.rootScope.currency = vm.project.currency
+      vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_project_data)
+      vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
+      vm.fetch()
+    )
+
+  fetch: ->
     vm = @
 
-    chart_url = "/charts_data/#{chart_type}"
+    return if not vm.project
+
+    chart_url = "/charts_data/full_chart_data"
     chart_params =
       from: vm.range.from
       to: vm.range.to
       project_id: vm.project.id
       chart: vm.chart
 
-    vm.http.get chart_url, params: chart_params
-
-  fetch: ->
-    vm = @
-
-#    path = @rootScope.$location.absUrl().split('/')
-#    path[path.length - 1] = vm.range.to
-#    path[path.length - 2] = vm.range.from
-#
-#    console.log path
-#    window.history.pushState(window.location.pathname, 'Title', path.join('/'))
-
-    @charts_fetch('full_chart_data').success((response) ->
+    vm.http.get(chart_url, params: chart_params).success((response) ->
         vm.data = response['full']
         vm.check_points = response['check_points']
         vm.init_line_area3_chart($('.areaChartTotal_1'), vm.data)
@@ -60,16 +60,6 @@ class ChartController
       moment.max(start, date).startOf('day')._d
     else
       moment.min(end, date).startOf('day')._d
-
-  set_default_range: ->
-    vm = @
-    today = moment()
-    vm.range.raw_start = rangeStart = moment(today).startOf('month')
-    vm.range.raw_end = rangeEnd = moment(today).endOf('month')
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
-
-    vm.set_datepicker_date(rangeStart, rangeEnd)
 
   init_line_area3_chart: (el, data) ->
     return if data['data'].length < 1
@@ -145,7 +135,11 @@ class ChartController
     ).y((d) ->
       y d.close
     ).interpolate('monotone')
-    xAxis = d3.svg.axis().scale(x).ticks(data['data'].length - 1).tickFormat(d3.time.format('%b %d')).orient('bottom')
+
+    RANGE_TICKS = 6 if dates.length > 10
+    RANGE_TICKS = 12 if dates.length > 100
+    RANGE_TICKS = 18 if dates.length > 1000
+    xAxis = d3.svg.axis().scale(x).ticks(RANGE_TICKS).tickFormat(d3.time.format('%b %d')).orient('bottom')
     yAxis = d3.svg.axis().scale(y).ticks(5).tickFormat((d) ->
       if d == 0 then '' else currencyFormatter(d) + '$'
     ).orient('left')
@@ -158,36 +152,53 @@ class ChartController
       d.date = parseDate(d.date)
       d.close = +d.close
 
-#    data.forEach (d) ->
-#      d.date = parseDate(d.date)
-#      d.close = +d.close
-#      return
-    # Scale the range of the data
-
     x.domain d3.extent(data['data'], (d) ->
       d.date
     )
+
     y.domain [
       0
       d3.max(data['data'], (d) ->
         Math.max d.close
       )
     ]
+
     area_x.domain d3.extent(data['data'], (d) ->
       d.date
     )
+
     area_y.domain [
       0
       d3.max(data['data'], (d) ->
         d.close
       )
     ]
-    gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
-    gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
-    gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
+
+    gradient = svg.append('svg:defs')
+      .append('svg:linearGradient')
+      .attr('id', 'area_gradient_1')
+      .attr('x1', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '0%')
+      .attr('y2', '100%')
+      .attr('spreadMethod', 'pad')
+
+    gradient
+      .append('svg:stop')
+      .attr('offset', '0%')
+      .attr('stop-color', '#E0E8FF')
+      .attr('stop-opacity', .8)
+
+    gradient
+      .append('svg:stop')
+      .attr('offset', '100%')
+      .attr('stop-color', '#f6f6f6')
+      .attr 'stop-opacity', 0
+
+
     svg.append('path').attr('class', 'line').attr 'd', valueline(data['data'])
     svg.append('path').datum(data['data']).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
-    # Add the scatterplot
+
     svg.append('line').attr('id', 'line_for_dot').attr('class', 'line_for_dot').style('stroke', '#D0E3EE').style('stroke-width', '2').attr('x1', 0).attr('x2', 0).attr('y1', height).attr 'y2', 0
     line_for_dot = d3.select('#line_for_dot')
     svg.selectAll('dot').data(data['data']).enter().append('circle').attr('r', 0).attr('data-y-value', (d, i) ->
@@ -202,7 +213,14 @@ class ChartController
     ).attr 'cy', (d) ->
       `var i`
       y d.close
-    svg.append('circle').attr('r', 7).attr('id', 'big_dot').attr('class', 'big_dot mark_v2').attr('cx', 0).attr 'cy', 0
+
+    svg.append('circle')
+      .attr('r', 10)
+      .attr('id', 'big_dot')
+      .attr('class', 'big_dot mark_v2')
+      .attr('cx', 0)
+      .attr('cy', 0)
+
     tracing_anim_duration = 150
     distance = x(data['data'][0].date) - x(data['data'][1].date)
     big_dot = d3.select('#big_dot')
@@ -233,45 +251,23 @@ class ChartController
       i++
     return
 
+  datepicker_changed: ->
+    vm = @
+    dates = vm.datepicker_date.split(' – ')
+    if dates.length == 2
+      vm.range.raw_start = moment(dates[0])
+      vm.range.raw_end = moment(dates[1])
+      vm.range.from = vm.range.raw_start.format('MM.DD.YYYY')
+      vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
+      vm.fetch()
+
   set_date_range: (range_type) ->
     vm = @
-    return if range_type not in ["0","1","2","3","4","5"]
+    return if range_type not in ["0","1","2","3","4","5","6"]
     return if not vm.datepicker
 
-    period = parseInt(range_type)
-    today = moment()
-
-    if period == 0
-      #  Current month
-      rangeStart = moment(today).startOf('month')
-      rangeEnd = moment(today).endOf('month')
-    else if period == 1
-      #  Previous month
-      rangeStart = moment(today).subtract(1, 'month').startOf('month')
-      rangeEnd = moment(today).subtract(1, 'month').endOf('month')
-    else if period == 2
-      #  Last 3 month
-      rangeStart = moment(today).subtract(3, 'month')
-      rangeEnd = moment(today)
-    else if period == 3
-      #  Last 6 month
-      rangeStart = moment(today).subtract(6, 'month')
-      rangeEnd = moment(today)
-    else if period == 4
-      #  Last year
-      rangeStart = moment(today).subtract(12, 'month')
-      rangeEnd = moment(today)
-    else if period == 5
-      #  All time
-      rangeStart = moment(vm.datepicker.datepicker('getStartDate'))
-      rangeEnd = moment(vm.datepicker.datepicker('getEndDate'))
-
-    vm.range.raw_start = rangeStart
-    vm.range.raw_end = rangeEnd
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
-
-    vm.set_datepicker_date(rangeStart, rangeEnd)
+    vm.rootScope.set_date_range(vm.range, parseInt(range_type))
+    vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
     vm.fetch()
     return
 
@@ -370,14 +366,13 @@ class ChartController
 
     vm.datepicker.datepicker(
       multidate: 2
-      startDate: '-477d'
-      endDate: '0'
       toggleActive: true
       orientation: 'bottom left'
       format: 'M dd, yyyy'
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
 
+  state_is: (name) -> @rootScope.state_is(name)
   parse_diff: (diff_str) -> parseInt(diff_str)
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true

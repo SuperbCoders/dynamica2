@@ -28,6 +28,10 @@ svg:not(:root) {
 
 }
 
+.page.article_page {
+  background: #fff;
+}
+
 .dashboard-body {
   padding: 18px 0;
 }
@@ -225,7 +229,6 @@ svg:not(:root) {
   .selectpicker.btn {
     opacity: 0;
   }
-
 }
 
 .hover-select-item {
@@ -379,16 +382,31 @@ svg:not(:root) {
     color: #9ca1af;
   }
 
-  .graph-unit-legend .legend_item {
-    border-color: #4f576c;
+  .legend_val {
+    color: #1a1a1a;
   }
 
-  .legend_val {
-    color: #fff;
+  .legend_name_v2 {
+    color: #9ca1af;
+  }
+
+  .graph-unit-legend {
+
+    .legend_item {
+      border-color: #d2d2d2;
+    }
   }
 
   &.dark_mod {
     background: #333648;
+
+    .graph-unit-legend .legend_item {
+      border-color: #4f576c;
+    }
+
+    .legend_val {
+      color: #fff;
+    }
 
     .graph-value {
       .val {
@@ -470,7 +488,6 @@ svg:not(:root) {
     right: 0;
     z-index: 1;
   }
-
 }
 
 .graph-unit-large {
@@ -481,6 +498,8 @@ svg:not(:root) {
   position: relative;
   background: #323847;
   line-height: 34px;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
 
   .graph-name {
     float: left;
@@ -913,9 +932,12 @@ svg:not(:root) {
   .line {
     fill: none;
     stroke: #3e6cfe;
-    stroke-width: 1.5px;
-  }
+    stroke-width:2 px;
 
+    &.line_v2 {
+      stroke-width:4 px;
+    }
+  }
   .area {
     -webkit-transition: transform 0.3s, opacity .6s;
     -ms-transition: transform 0.3s, opacity .6s;
@@ -944,9 +966,9 @@ svg:not(:root) {
   .mark_v2 {
     position: relative;
     z-index: 1;
-    fill: #fff;
-    stroke: #3e6cfe;
-    stroke-width: 2;
+    fill: #3e6cfe;
+    stroke: #fff;
+    stroke-width: 4;
     opacity: 0;
     -webkit-transition: r .3s, opacity .3s;
     -ms-transition: r .3s, opacity .3s;
@@ -1012,18 +1034,18 @@ svg:not(:root) {
   -webkit-transition: top .3s;
   -ms-transition: top .3s;
   transition: top .3s;
-  
+
   .tooltip-title {
     font-weight: 400;
     font-size: 12px;
     color: #6a6a6a;
   }
-  
+
   .tooltip-value {
     font-size: 20px;
     color: #668aff;
   }
-  
+
 }
 
 .tooltip-dot {
@@ -1363,6 +1385,10 @@ svg:not(:root) {
       font-size: 16px;
       border: none;
       cursor: pointer;
+
+      a {
+        color: inherit;
+      }
     }
 
     &.no_pointer {
@@ -1504,6 +1530,7 @@ svg:not(:root) {
   }
 
   tr {
+    cursor: pointer;
 
     &:first-child {
       td {
@@ -1517,7 +1544,7 @@ svg:not(:root) {
       }
     }
   }
-  
+
   .col_1 {
     width: 54%;
   }
@@ -1545,7 +1572,7 @@ svg:not(:root) {
   padding: 0 5px;
   color: #fff;
   background-color: #909090;
-
+  font-size: 5px;
   &.best_seller {
     background-color: #5ec65d;
     font-weight: 700;
@@ -1870,6 +1897,7 @@ $blue: rgb(0, 155, 255);
     .table-cell {
       display: table-cell;
       float: none;
+      line-height: normal;
     }
 
     .table-footer,

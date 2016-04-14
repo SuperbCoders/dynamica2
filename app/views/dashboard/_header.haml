@@ -5,17 +5,19 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
+
       .navbar-project-switch
-        %a.navbar-brand
-          DYNAMICA
-          -#%span
-          -#  of
-          -#  .single_project_link{'ng-show' => "vm.projects.length == 1"}
-          -#    {{vm.projects[0].name}}
-          -#  .hover-select-box.front-select-btn{'ng-show' => "vm.projects.length > 1"}
-          -#    %select.selectpicker
-          -#      %option{'ng-repeat' => "project in vm.projects"}
-          -#        {{vm.project.name}}
+        %a.navbar-brand{:href => "#"} Dynamica
+
+        / Если проектов больше 1 , то показать селект
+        / Если проект 1 то только название
+        -#.projects_switcher(ng-show="$state.current.name != 'projects.list'")
+        -#  %span
+        -#    of
+        -#  .hover-select-box.front-select-btn(ng-show="user.projects.length > 1")
+        -#    %select.selectpicker
+        -#      %option(ng-repeat="project in user.projects") {{ project.name }}
+        -#  %p(ng-show="user.projects.length == 1") {{user.projects[0].name}}
 
     %nav.collapse.navbar-collapse.bs-navbar-collapse
       %ul.nav.navbar-nav
@@ -31,7 +33,7 @@
                 %img.img-circle{'ng-src' => "https://placeholdit.imgix.net/~text?txtsize=33&txt=AVAT&w=40&h=40",width: '40px', height: '40px'}
               %span.user-name{id: 'user_dropdown'}
                 {{user.display_name}}
-                %i.icon.fa.fa-angle-down
+                %i.icon.fa.fa-angle-down{id: 'user_dropdown'}
             .user-menu.dropdown-menu.right
               %ul
                 %li

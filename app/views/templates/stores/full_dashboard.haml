@@ -1,0 +1,225 @@
+%section.dashboard-body
+  .container-fluid.globalwidth
+    %section.dashboard.projects-dashboard
+      = render 'templates/stores/shared/menu'
+      = render 'templates/stores/shared/datepicker'
+      = render 'templates/stores/shared/debug'
+
+      .graph-unit-holder
+        .graph-unit.dark_mod
+          .graph-value
+            %span.val {{vm.data['value'] | dynCurrency}}
+            %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.data['diff']) > 0, dynamica_down: vm.parse_diff(vm.data['diff']) < 0}"} {{vm.data['diff']}}
+          .graph-unit-large-v2
+            .graph-block
+              .areaChartTotal_1.hide_y_axis.hide_x_axis.d3graph.graph_3
+                #tooltip.graph-tooltip-holder.transp-mod
+                  #tooltip_content.graph-tooltip-top
+
+      .graph-unit-holder
+        .legend-standalone.dark_mod
+          %ul.legend_v2.graph-unit-legend.no_pointer
+
+            %li.legend_item{"data-graph" => "#family_area_0"}
+              .legend_name_v2
+                %span= t('projects.full_chart.check_points.current')
+              .legend_val
+                %span.val {{vm.data['value'] | dynCurrency}}
+                %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.data['diff']) > 0, dynamica_down: vm.parse_diff(vm.data['diff']) < 0}"} {{vm.data['diff']}}
+
+            %li.legend_item{"data-graph" => "#family_area_1"}
+              .legend_name_v2
+                %span= t('projects.full_chart.check_points.year_ago')
+              .legend_val
+                %span.val {{vm.check_points.year_ago['value'] | dynCurrency}}
+                %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.year_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.year_ago['diff']) < 0}"} {{vm.check_points.year_ago['diff']}}
+
+            %li.legend_item{"data-graph" => "#family_area_2"}
+              .legend_name_v2
+                %span= t('projects.full_chart.check_points.half_a_year_ago')
+              .legend_val
+                %span.val {{vm.check_points.half_a_year_ago['value'] | dynCurrency}}
+                %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.half_a_year_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.half_a_year_ago['diff']) < 0}"} {{vm.check_points.half_a_year_ago['diff']}}
+
+            %li.legend_item{"data-graph" => "#family_area_3"}
+              .legend_name_v2
+                %span= t('projects.full_chart.check_points.three_month_ago')
+              .legend_val
+                %span.val {{vm.check_points.three_month_ago['value'] | dynCurrency}}
+                %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.three_month_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.three_month_ago['diff']) < 0}"} {{vm.check_points.three_month_ago['diff']}}
+
+            %li.legend_item{"data-graph" => "#family_area_4"}
+              .legend_name_v2
+                %span= t('projects.full_chart.check_points.month_ago')
+              .legend_val
+                %span.val {{vm.check_points.month_ago['value'] | dynCurrency}}
+                %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.month_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.month_ago['diff']) < 0}"} {{vm.check_points.month_ago['diff']}}
+
+        .graph-unit-filter
+          %form{:action => "#"}
+
+            / Filter
+            .graph-filter-block
+              .pull-left
+                %ul.filter-btn-list
+                  %li
+                    %label.btn-filter-check
+                      %input.hidden_input{:checked => "", :name => "product_filter", :type => "radio"}
+                        %span.btn.btn_v1.check_text All products
+                  %li
+                    %label.btn-filter-check
+                      %input.hidden_input{:name => "product_filter", :type => "radio"}
+                        %span.btn.btn_v1.check_text Hot sales
+                  %li
+                    %label.btn-filter-check
+                      %input.hidden_input{:name => "product_filter", :type => "radio"}
+                        %span.btn.btn_v1.check_text Last sales
+                  %li
+                    %label.btn-filter-check
+                      %input.hidden_input{:name => "product_filter", :type => "radio"}
+                        %span.btn.btn_v1.check_text Bestsellers
+              .pull-right
+                .filter-search_block
+                  %input.form-control{:placeholder => "Product search"}
+                    %button.filter-search-btn
+                      %i.fa.fa-search
+
+            / Table
+            .graph-unit-info
+              .graph-unit-info-table.scrollParent
+                .table-header.no_pointer
+                  .table-cell.col_1
+                    %span Product
+                  .table-cell.col_5.col_right
+                    %span Sales
+                  .table-cell.col_6.col_right
+                    %span Revenu
+                  .table-cell.col_7.col_right
+                    %span Price
+                  .table-cell.col_8.col_right
+                    %span Views
+                  .table-cell.col_9
+                    %span Category
+                  .table-cell.col_4
+                    %span Date added
+                .table-footer.scrollBottomFixed
+                  .table-cell.col_1 Total 49 products
+                  .table-cell.col_5.col_right 658
+                  .table-cell.col_6.col_right $3,998
+                  .table-cell.col_7 &nbsp;
+                  .table-cell.col_8 &nbsp;
+                  .table-cell.col_9 &nbsp;
+                  .table-cell.col_4 &nbsp;
+                .table-content
+                  .table-row
+                    .table-cell.col_1 Wide Table Serif
+                    .table-cell.col_5.col_right 38
+                    .table-cell.col_6.col_right
+                      .seller_val $3,490
+                    .table-cell.col_7.col_right $9
+                    .table-cell.col_8.col_right 5,490
+                    .table-cell.col_9 Kitchen
+                    .table-cell.col_4 130$
+                  .table-row
+                    .table-cell.col_1 Wide Table Serif
+                    .table-cell.col_5.col_right 38
+                    .table-cell.col_6.col_right
+                      .seller_val.best_seller $939
+                    .table-cell.col_7.col_right $9
+                    .table-cell.col_8.col_right 5,490
+                    .table-cell.col_9 Kitchen
+                    .table-cell.col_4 130$
+                  .table-row
+                    .table-cell.col_1 Wide Table Serif
+                    .table-cell.col_5.col_right 38
+                    .table-cell.col_6.col_right
+                      .seller_val $3,490
+                    .table-cell.col_7.col_right $9
+                    .table-cell.col_8.col_right 5,490
+                    .table-cell.col_9 Kitchen
+                    .table-cell.col_4 130$
+                  .table-row
+                    .table-cell.col_1 Wide Table Serif
+                    .table-cell.col_5.col_right 38
+                    .table-cell.col_6.col_right
+                      .seller_val.best_seller $939
+                    .table-cell.col_7.col_right $9
+                    .table-cell.col_8.col_right 5,490
+                    .table-cell.col_9 Kitchen
+                    .table-cell.col_4 130$
+                  .table-row
+                    .table-cell.col_1 Wide Table Serif
+                    .table-cell.col_5.col_right 38
+                    .table-cell.col_6.col_right
+                      .seller_val $3,490
+                    .table-cell.col_7.col_right $9
+                    .table-cell.col_8.col_right 5,490
+                    .table-cell.col_9 Kitchen
+                    .table-cell.col_4 130$
+                  .table-row
+                    .table-cell.col_1 Wide Table Serif
+                    .table-cell.col_5.col_right 38
+                    .table-cell.col_6.col_right
+                      .seller_val.best_seller $939
+                    .table-cell.col_7.col_right $9
+                    .table-cell.col_8.col_right 5,490
+                    .table-cell.col_9 Kitchen
+                    .table-cell.col_4 130$
+                  .table-row
+                    .table-cell.col_1 Wide Table Serif
+                    .table-cell.col_5.col_right 38
+                    .table-cell.col_6.col_right
+                      .seller_val $3,490
+                    .table-cell.col_7.col_right $9
+                    .table-cell.col_8.col_right 5,490
+                    .table-cell.col_9 Kitchen
+                    .table-cell.col_4 130$
+                  .table-row
+                    .table-cell.col_1 Wide Table Serif
+                    .table-cell.col_5.col_right 38
+                    .table-cell.col_6.col_right
+                      .seller_val.best_seller $939
+                    .table-cell.col_7.col_right $9
+                    .table-cell.col_8.col_right 5,490
+                    .table-cell.col_9 Kitchen
+                    .table-cell.col_4 130$
+                  .table-row.no_hover
+                    .table-cell.col_1
+                      %a.btn.btn_v3.check_text.graph-info-reload-btn{:href => "#"}
+                        %i.fa.fa-refresh
+                        %span Show 50 more products
+                    .table-cell.col_5.col_right &nbsp;
+                    .table-cell.col_6.col_right &nbsp;
+                    .table-cell.col_7.col_right &nbsp;
+                    .table-cell.col_8.col_right &nbsp;
+                    .table-cell.col_9 &nbsp;
+                    .table-cell.col_4 &nbsp;
+
+            / Pagination
+            .graph-filter-block
+              .pull-left
+                %ul.filter-btn-list
+                  %li
+                    %a.btn.btn_v1.check_text{:href => "#"}
+                      %span.arr_span ←
+                      %span &nbsp;Back
+                  %li
+                    %a.btn.btn_v1.check_text{:href => "#"}
+                      %span Next&nbsp;
+                      %span.arr_span →
+                  %li.active
+                    %a.btn.btn_v2.pagination_btn{:href => "#"} 1
+                  %li
+                    %a.btn.btn_v2.pagination_btn{:href => "#"} 2
+                  %li
+                    %a.btn.btn_v2.pagination_btn{:href => "#"} 3
+                  %li
+                    %a.btn.btn_v2.pagination_btn{:href => "#"} 4
+                  %li
+                    %a.btn.btn_v2.pagination_btn{:href => "#"} ...
+                  %li
+                    %a.btn.btn_v2.pagination_btn{:href => "#"} 48
+                  %li
+                    %a.btn.btn_v2.pagination_btn{:href => "#"} 49
+                  %li
+                    %a.btn.btn_v2.pagination_btn{:href => "#"} 50

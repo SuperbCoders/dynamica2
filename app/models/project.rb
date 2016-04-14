@@ -41,12 +41,49 @@ class Project < ActiveRecord::Base
   has_one :shopify_integration, dependent: :destroy, class_name: 'ThirdParty::Shopify::Integration'
   has_one :integration, dependent: :destroy
 
+  has_one :subscription, dependent: :destroy
+
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[-_A-Za-z0-9]+\z/ }
 
   before_validation :set_default_values
+  after_create :set_trial_subscription
 
   scope :actives, -> { where.not(user_id: nil) }
+
+  # @return [Array] of top 5 seller products
+  def top_5_products
+    @top = {}
+    @products = {}
+    @ids = []
+
+    # Retrieve grouped by product_id chars with summed gross_revenue
+    p_chars = product_characteristics.group(:id, :product_id).sum(:gross_revenue)
+    p_chars.keys.each do |pkey|
+      @top[pkey[1]] ||= 0
+      @top[pkey[1]] += p_chars[pkey]
+    end
+
+    # Sort by gross_revenue and reversed
+    @top.sort_by(&:last).reverse[0..3].map { |p_info|
+      p = products.find_by(id: p_info[0])
+      if p
+        @products[p.id] ||= { revenue: 0, title: 0, sales: 0 }
+        @products[p.id][:revenue] = p_info[1]
+        @products[p.id][:title] = p.title
+        @products[p.id][:sales] = product_characteristics.where(product: p).sum(:sold_quantity)
+      end
+    }
+    @products
+  end
+
+  def sub_type
+    subscription.sub_type
+  end
+
+  def expired?
+    subscription ? subscription.expired? : !set_trial_subscription
+  end
 
   # Marks project as a project that uses API
   def api_used!
@@ -57,9 +94,21 @@ class Project < ActiveRecord::Base
     forecasts.order(created_at: :asc, finished_at: :asc).last
   end
 
+  def shopify_session
+    nil if not shopify?
+    ShopifyAPI::Session.setup({:api_key => ENV['shopify_api_key'], :secret => ENV['shopify_secret']})
+    session = ShopifyAPI::Session.new(self.shop_url, self.integration.access_token)
+    ShopifyAPI::Base.activate_session(session)
+    session
+  end
+
   # @return [Boolean] whether this project is integrated with Shopify
   def shopify?
-    shopify_integration.present?
+    integration.present?
+  end
+
+  def shopify_shop_name
+    shop_url.split('.myshopify.com')[0]
   end
 
   def set_project_owner!(user, session = {})
@@ -78,7 +127,31 @@ class Project < ActiveRecord::Base
     CharacteristicsFetcherWorker.perform_async self.id, Time.now - time_period, Time.now
   end
 
+  def parse_google_site_id
+    unless google_site_id
+      google_site_id = Dynamica::Google.parse_site_id("https://#{shop_url}")
+      save
+    end
+  end
+
+  # @return [DateTime] date of first project data for calendar filter
+  # at frontend
+  def first_project_data
+    (project_characteristics.minimum('date').try(:to_datetime) || created_at.to_datetime)
+  end
+
+  # @return [DateTime] date of first product data for calendar filter
+  # at frontend
+  def first_product_data
+    (product_characteristics.minimum('date').try(:to_datetime) || created_at.to_datetime)
+  end
+
   private
+
+    def set_trial_subscription
+      subscription = Subscription.create_for(user, self)
+      save
+    end
 
     def self.generate_unique_slug
       loop do

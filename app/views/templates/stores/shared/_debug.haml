@@ -1,0 +1,10 @@
+- if Rails.env.development?
+  .dashboard-caption(ng-init = "vm.debug = false" ng-show = "vm.debug")
+    %pre
+      {{vm.date_range}}
+    %pre
+      {{vm.range | json}}
+    %p Data
+    %pre
+      {{vm.data | json}}
+

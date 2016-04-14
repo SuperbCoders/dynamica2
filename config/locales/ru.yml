@@ -22,8 +22,40 @@ ru:
         pending_permission:
           <<: *permission
 
+
+  landing:
+    password_sended:
+      check_email: Мы отправили вам ссылку на почту. Проверьте почту.
+      ok:  Хорошо, спасибо!
+    start_trial: Начните бесплатную 30-дневную пробную версию
+    text:
+      promo_1: Тщательно сделанные аналитика для вашего магазина Shopify
+    menu:
+      live_demo: Демо
+      pricing: Цены
+      log_in: Войти
+    auth_popup:
+      enter_mail_manually: ИЛИ ВВЕДИТЕ ПАРОЛЬ ВРУЧНУЮ
+      email: Электронный адрес
+      password: Пароль
+      go: Поехали
+      i_forgot_password: Я забыл пароль
+
+    restore_pass:
+      password_recovery: Восстановление пароля
+      helper_text: 'Введите ваш Email и мы отправим <br> вам пароль'
+      email: Электронный адрес
+      restore: Восстановить
+      back: Назад
+
   projects:
+    subscription:
+      title: Подписка
+      change_type: Сменить подписку
+      confirm_charge: Подтвердить оплату
     products_revenue:
+      total: Всего
+      products: товаров
       product_search: Поиск по названию
       table:
         product: Товар
@@ -32,11 +64,10 @@ ru:
         price: Цена
         views: Просмотров
         category: Категория
-        date_added: Date added
-      all_products: 'Все товары'
-      hot_sales: 'Горячие товары'
-      last_sales: 'Последние товары'
-      bestsellers: 'Лучшие товары'
+        date: Дата
+      all_products: Все товары
+      best_sellers: Лучшие товары
+      80_20_rule: Правило 80/20
     full_chart:
       check_points:
         current: 'Текущий'
@@ -58,6 +89,8 @@ ru:
         unique_users: 'Уникальные посетители'
         customers: 'Клиенты'
     project:
+      subscription: Подписка
+      settings: Настройки
       edit: Редактировать
       delete: Удалить
       destroy-confirmation: "Вы правда хотите удалить этот проект? Его нельзя будет восстановить."
@@ -89,6 +122,7 @@ ru:
       percentage_of_stock_sold: Процент запаса на складе
       products_number: Количество товаров
       total_revenu: Общая выручка
+      products_revenue: Доходы по товарам
       controls:
         update_forecast: Обновить прогноз
         settings: Настройки

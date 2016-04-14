@@ -1,0 +1,49 @@
+.row
+  .col-sm-12
+    %ul.dashboard-panel
+      - if Rails.env.development?
+        %li
+          %a.dashboard-panel-link{'ng-click' => "vm.toggle_debug()"}
+            Debug
+
+      %li(ng-class="{current: vm.state_is('dashboard')}")
+        %a.dashboard-panel-link(href='' ui-sref="projects.view({slug: vm.project.slug, id: vm.project.id })")= t('projects.show.overview')
+
+      / Базовые
+      %li.filter-holder(ng-class="{current: vm.state_is('total')}")
+        .hover-select-box.filter-mod
+          %select.selectpicker.filterSelect{'ng-model' => "vm.range.general_charts", 'ng-change' => "vm.chart_changed('general_charts')"}
+            %option{value: ''}
+            %option{value: "total_gross_revenues"}= t 'projects.show.total_revenu'
+            %option{value: "shipping_cost_as_a_percentage_of_total_revenue"}= t 'projects.show.shipping_cost_as_a_percentage_of_total_revenue'
+            %option{value: "average_order_value"}= t 'projects.show.average_order_value'
+            %option{value: "average_order_size"}= t 'projects.show.average_order_size'
+        %a.dashboard-panel-link{href: ""}= t 'projects.show.general'
+
+      / Customers
+      %li.filter-holder(ng-class="{current: vm.state_is('customers')}")
+        .hover-select-box.filter-mod
+          %select.selectpicker.filterSelect{'ng-model' => "vm.range.customer_charts", 'ng-change' => "vm.chart_changed('customer_charts')"}
+            %option{value: ''}
+            %option{value: "customers_number"}= t 'projects.show.customers_number'
+            %option{value: "new_customers_number"}= t 'projects.show.new_customers_number'
+            %option{value: "repeat_customers_number"}= t 'projects.show.repeat_customers_number'
+            %option{value: "average_revenue_per_customer"}= t 'projects.show.average_revenue_per_customer'
+            %option{value: "sales_per_visitor"}= t 'projects.show.sales_per_visitor'
+            %option{value: "average_customer_lifetime_value"}= t 'projects.show.average_customer_lifetime_value'
+            %option{value: "unique_users_number"}= t 'projects.show.unique_users_number'
+            %option{value: "visits"}= t 'projects.show.visits'
+        %a.dashboard-panel-link{href: ""}= t 'projects.show.customers'
+
+      / Products
+      %li.filter-holder(ng-class="{current: vm.state_is('products')}")
+        .hover-select-box.filter-mod
+          %select.selectpicker.filterSelect{'ng-model' => "vm.range.product_charts", 'ng-change' => "vm.chart_changed('product_charts')"}
+            %option{value: ''}
+            %option{value: "products_in_stock_number"}= t 'projects.show.products_in_stock_number'
+            %option{value: "items_in_stock_number"}= t 'projects.show.items_in_stock_number'
+            %option{value: "percentage_of_inventory_sold"}= t 'projects.show.percentage_of_inventory_sold'
+            %option{value: "percentage_of_stock_sold"}= t 'projects.show.percentage_of_stock_sold'
+            %option{value: "products_number"}= t 'projects.show.products_number'
+            %option{value: "products_revenue"}= t 'projects.show.products_revenue'
+        %a.dashboard-panel-link{href: ""}= t 'projects.show.inventory'

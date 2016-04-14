@@ -23,7 +23,7 @@
         .legend_name{:style => "color: rgb(106, 255, 203);"}
           %span= t('projects.dashboard.legend.revenue')
         .legend_val
-          %span.val {{vm.big_chart[0]['value']}}
+          %span.val {{vm.big_chart[0]['value'] | dynCurrency}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.big_chart[0]['diff']) > 0, dynamica_down: vm.parse_diff(vm.big_chart[0]['diff']) < 0}"} {{vm.big_chart[0]['diff']}}
 
       / Orders
@@ -31,7 +31,7 @@
         .legend_name{:style => "color: rgb(255, 31, 167);"}
           %span= t('projects.dashboard.legend.orders')
         .legend_val
-          %span.val {{vm.big_chart[1]['value']}}
+          %span.val {{vm.big_chart[1]['value'] | dynCurrency}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.big_chart[1]['diff']) > 0, dynamica_down: vm.parse_diff(vm.big_chart[1]['diff']) < 0}"} {{vm.big_chart[1]['diff']}}
 
       / Products sell
@@ -39,7 +39,7 @@
         .legend_name{:style => "color: rgb(255, 112, 69);"}
           %span= t('projects.dashboard.legend.products_sell')
         .legend_val
-          %span.val {{vm.big_chart[2]['value']}}
+          %span.val {{vm.big_chart[2]['value'] | dynCurrency}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.big_chart[2]['diff']) > 0, dynamica_down: vm.parse_diff(vm.big_chart[2]['diff']) < 0}"} {{vm.big_chart[2]['diff']}}
 
       / Unique users
@@ -47,7 +47,7 @@
         .legend_name{:style => "color: rgb(59, 215, 255);"}
           %span= t('projects.dashboard.legend.unic users')
         .legend_val
-          %span.val {{vm.big_chart[3]['value']}}
+          %span.val {{vm.big_chart[3]['value'] | dynCurrency}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.big_chart[3]['diff']) > 0, dynamica_down: vm.parse_diff(vm.big_chart[3]['diff']) < 0}"} {{vm.big_chart[3]['diff']}}
 
       / Customers
@@ -55,5 +55,5 @@
         .legend_name{:style => "color: rgb(255, 216, 101);"}
           %span= t('projects.dashboard.legend.customers')
         .legend_val
-          %span.val {{vm.big_chart[4]['value']}}
+          %span.val {{vm.big_chart[4]['value'] | dynCurrency}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.big_chart[4]['diff']) > 0, dynamica_down: vm.parse_diff(vm.big_chart[4]['diff']) < 0}"} {{vm.big_chart[4]['diff']}}

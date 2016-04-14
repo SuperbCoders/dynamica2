@@ -39,7 +39,7 @@ gem 'spring',        group: :development
 gem 'unicorn'
 gem 'figaro'
 gem 'groupdate'
-
+gem 'redis'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
@@ -69,6 +69,8 @@ group :development, :test do
   gem 'guard'
   gem 'guard-bundler', require: false
   gem 'guard-rspec', require: false
+  gem 'shoulda'
+  gem 'test-unit'
   gem 'shoulda-matchers', github: 'thoughtbot/shoulda-matchers'
   gem 'terminal-notifier-guard'
   gem 'rspec-rails'

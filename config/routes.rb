@@ -27,6 +27,12 @@ Rails.application.routes.draw do
       match 'users/avatar' => 'customized_devise/registrations#avatar', via: [:put, :patch]
     end
 
+    scope :subscriptions do
+      get 'callback' => 'subscriptions#callback', as: :subscription_callback
+      get ':id' => 'subscriptions#show', as: :show_subscription
+      post 'change' => 'subscriptions#change', as: :change_subscription
+    end
+
     scope :profile do
       post 'email_uniqueness' => 'profile#email_uniqueness'
       get  '/' => 'profile#index', as: :profile
