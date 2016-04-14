@@ -60,58 +60,29 @@
                   .table-cell.col_4
                     %span= t('projects.products_revenue.table.date added')
 
-                .table-footer.scrollBottomFixed(ng-show="vm.products_view != 'rule_80_20'")
-                  .table-cell.col_1 Total {{ vm.products.length }} products
+                .table-footer.scrollBottomFixed
+                  .table-cell.col_1 Total {{ vm.products_count }} products
                   .table-cell.col_5.col_right {{ vm.sales }}
                   .table-cell.col_6.col_right ₽ {{ vm.gross_revenue }}
                   .table-cell.col_7 &nbsp;
                   .table-cell.col_4 &nbsp;
 
-                / Rule 80 20 table
-                .table-content(ng-show="vm.products_view == 'rule_80_20'")
-
-                  .table-row
-                    .table-cell.col_1 80% made of revenue
-                    .table-cell.col_5 &nbsp;
-                    .table-cell.col_6 &nbsp;
-                    .table-cell.col_7 &nbsp;
-                    .table-cell.col_4 &nbsp;
-
-
-                  .table-row{'dir-paginate' => "product in vm.products_80 | itemsPerPage: 100"}
-                    .table-cell.col_1 {{ product.title }}
-                    .table-cell.col_5.col_right {{ product.sales }}
-                    .table-cell.col_6.col_right
-                      .seller_val ₽ {{ product.gross_revenue }}
-                    .table-cell.col_7.col_right ₽ {{ product.price }}
-                    .table-cell.col_4 {{ product.created_at }}
-
-
-                  .table-row
-                    .table-cell.col_1 20% made of revenue
-                    .table-cell.col_5 &nbsp;
-                    .table-cell.col_6 &nbsp;
-                    .table-cell.col_7 &nbsp;
-                    .table-cell.col_4 &nbsp;
-
-                  .table-row{'dir-paginate' => "product in vm.products_20 | itemsPerPage: 100"}
-                    .table-cell.col_1 {{ product.title }}
-                    .table-cell.col_5.col_right {{ product.sales }}
-                    .table-cell.col_6.col_right
-                      .seller_val ₽ {{ product.gross_revenue }}
-                    .table-cell.col_7.col_right $ {{ product.price }}
-                    .table-cell.col_4 {{ product.created_at }}
-
 
                 / Table content
-                .table-content(ng-show="vm.products_view != 'rule_80_20'")
+                .table-content
                   .table-row{'dir-paginate' => "product in vm.products | filter:vm.filters | orderBy:vm.sortType:vm.sortReverse | itemsPerPage: vm.itemsPerPage"}
-                    .table-cell.col_1 {{ product.title }}
-                    .table-cell.col_5.col_right {{ product.sales }}
-                    .table-cell.col_6.col_right
-                      .seller_val ₽ {{ product.gross_revenue }}
-                    .table-cell.col_7.col_right $ {{ product.price }}
-                    .table-cell.col_4 {{ product.created_at }}
+                    .table-cell.col_1(ng-show='product.divider') {{ product.divider_title }}
+                    .table-cell.col_5(ng-show='product.divider') &nbsp;
+                    .table-cell.col_6(ng-show='product.divider') &nbsp;
+                    .table-cell.col_7(ng-show='product.divider') &nbsp;
+                    .table-cell.col_4(ng-show='product.divider') &nbsp;
+
+                    .table-cell.col_1(ng-show='!product.divider') {{ product.title }}
+                    .table-cell.col_5.col_right(ng-show='!product.divider') {{ product.sales }}
+                    .table-cell.col_6.col_right(ng-show='!product.divider')
+                      .seller_val(ng-show='!product.divider') ₽ {{ product.gross_revenue }}
+                    .table-cell.col_7.col_right(ng-show='!product.divider') $ {{ product.price }}
+                    .table-cell.col_4(ng-show='!product.divider') {{ product.created_at }}
 
                   .table-row.no_hover
                     .table-cell.col_1

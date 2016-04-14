@@ -149,6 +149,15 @@
     $http.get('/profile').success((response) -> $rootScope.user = response)
   $rootScope.update_user()
 
+  $rootScope.overlay = (action) ->
+    switch action
+      when 'show'
+        $('.pageOverlay').addClass('show_overlay')
+      when 'hide'
+        $('.pageOverlay').removeClass('show_overlay')
+    return
+
+
   # Open user dropdown menu
   $('.user-toggle.dropdown-toggle').on('click', (element) -> $('.user.dropdown').toggleClass('open'))
 
