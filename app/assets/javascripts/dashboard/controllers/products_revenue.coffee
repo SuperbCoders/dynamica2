@@ -105,7 +105,6 @@ class ProductsRevenueController
     @init_dashboard()
 
     # Set datepicker dates
-    console.log vm.range
     vm.range.raw_start = rangeStart = moment(vm.range.from, 'MM.DD.YYYY')
     vm.range.raw_end = rangeEnd = moment(vm.range.to, 'MM.DD.YYYY')
     vm.range.from = rangeStart.format('MM.DD.YYYY')
@@ -186,7 +185,7 @@ class ProductsRevenueController
     doc = $(document)
     scrollBottomFixed = $('.scrollBottomFixed')
 
-    $(window).scrollTop(12)
+    $(window).scrollTop(100)
     $(window).scroll ->
       if scrollParent.offset().top - doc.scrollTop() + scrollBottomFixed.height() + scrollBottomFixed.css('marginTop').replace('px', '') * 1 <= wnd.height()
         scrollBottomFixed.addClass('table-footer-fixed').removeClass 'table-footer-bottom'
