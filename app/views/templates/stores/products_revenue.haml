@@ -38,16 +38,19 @@
                     .table-cell.col_7(ng-show='product.divider') &nbsp;
                     .table-cell.col_4(ng-show='product.divider') &nbsp;
 
-                    .table-cell.col_1(ng-show='!product.divider') {{ product.title }}
-                    .table-cell.col_5.col_right(ng-show='!product.divider') {{ product.sales }}
+                    .table-cell.col_1(ng-show='!product.divider')
+                      {{ product.title }}
+                    .table-cell.col_5.col_right(ng-show='!product.divider')
+                      {{ product.sales }}
                     .table-cell.col_6.col_right(ng-show='!product.divider')
                       .seller_val(ng-show='!product.divider') ₽ {{ product.gross_revenue }}
                     .table-cell.col_7.col_right(ng-show='!product.divider') $ {{ product.price }}
-                    .table-cell.col_4(ng-show='!product.divider') {{ product.created_at }}
+                    .table-cell.col_4(ng-show='!product.divider')
+                      {{ product.created_at }}
 
                   .table-row.no_hover
                     .table-cell.col_1
-                      %a.btn.btn_v3.check_text.graph-info-reload-btn(ng-click="setCurrent(pagination.current + 1)" ng-show="vm.products_view == 'all_products'")
+                      %a.btn.btn_v3.check_text.graph-info-reload-btn(ng-click="vm.itemsPerPage = vm.itemsPerPage + 50")
                         %i.fa.fa-refresh
                         %span Show 50 more products
                     .table-cell.col_5.col_right &nbsp;
@@ -57,4 +60,4 @@
 
             / Pagination
             .graph-filter-block
-              %dir-pagination-controls{"template-url" => "/templates/dirPagination"}
+              %dir-pagination-controls(template-url = "/templates/stores/shared/dirPagination")

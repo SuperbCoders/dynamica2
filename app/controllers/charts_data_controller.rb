@@ -41,6 +41,12 @@ class ChartsDataController < ApplicationController
     @result[:full] = send(params[:chart], period, @current_project_characteristics, @previous_project_characteristics)
     @result[:full][:data] = @result[:full][:data].map {|k, v| {'date' => k, 'close' => v}}
     @result[:check_points] = full_chart_check_points
+    @result[:table_data] = {}
+
+    chart_type(params[:chart]).map { |chart_type|
+      next if chart_type == 'products_revenue'
+      @result[:table_data][chart_type] = send(chart_type, period, @current_project_characteristics, @previous_project_characteristics)
+    }
     render json: @result
   end
 
@@ -127,7 +133,7 @@ class ChartsDataController < ApplicationController
     define_method chart_type do |scope, current_data, prev_data|
       {
           diff: diff_sum(chart_type, current_data, prev_data),
-          value: "#{current_data.sum chart_type}",
+          value: current_data.sum(chart_type),
           data: current_data.send(scope).sum(chart_type)
       }
     end
@@ -243,6 +249,14 @@ class ChartsDataController < ApplicationController
             ]
         }
     })
+  end
+
+
+  def chart_type(chart_name)
+    return Dynamica::GENERAL_CHARTS if Dynamica::GENERAL_CHARTS.include? chart_name
+    return Dynamica::CUSTOMERS_CHARTS if Dynamica::CUSTOMERS_CHARTS.include? chart_name
+    return Dynamica::PRODUCTS_CHARTS if Dynamica::PRODUCTS_CHARTS.include? chart_name
+    []
   end
 
   def ration

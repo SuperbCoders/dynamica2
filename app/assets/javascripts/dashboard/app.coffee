@@ -147,7 +147,14 @@
 
   # Load user profile
   $rootScope.update_user = ->
-    $http.get('/profile').success((response) -> $rootScope.user = response)
+    $http.get('/profile').success((response) ->
+      $rootScope.user = response
+
+
+      if $rootScope.user.projects.length == 1 and $state.current.name is not 'projects.list'
+        project = $rootScope.user.projects[0]
+        $state.go('projects.view', {id: project.id, slug: project.slug})
+    )
   $rootScope.update_user()
 
   $rootScope.overlay = (action) ->

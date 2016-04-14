@@ -26,6 +26,5 @@
       when '$'
         result = symbol+' '+result
 
-    console.log input+' -> '+result
     result
 ]
