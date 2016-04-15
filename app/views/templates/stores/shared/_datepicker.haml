@@ -7,10 +7,26 @@
       .pull-left.datepicker-parent
         %input.form-control.datePicker.form-control-small(ng-change="vm.datepicker_changed()" ng-model="vm.datepicker_date" data-date-end-date="+30d")
       .pull-left
-        %select(ng-model="vm.date_range" ng-change="vm.set_date_range(vm.date_range)")
-          %option(value = 0) Current month
-          %option(value = 1) Previous month
-          %option(value = 2) Last 3 month
-          %option(value = 3) Last 6 month
-          %option(value = 4) Last year
-          %option(value = 5) All time
+        .dropdown.filterSelect
+          %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+            %span.caret
+          %ul.dropdown-menu.dropdown-menu_bordered.dropdown-menu-right.graphFilterDropDown
+            %li
+              %a(ng-click = "vm.set_date_range('0')" href = "")= t('projects.dashboard.date_range.current_month')
+            %li
+              %a(ng-click = "vm.set_date_range('1')" href = "")= t('projects.dashboard.date_range.previous_month')
+            %li
+              %a(ng-click = "vm.set_date_range('2')" href = "")= t('projects.dashboard.date_range.last_3_month')
+            %li
+              %a(ng-click = "vm.set_date_range('3')" href = "")= t('projects.dashboard.date_range.last_6_month')
+            %li
+              %a(ng-click = "vm.set_date_range('4')" href = "")= t('projects.dashboard.date_range.last_year')
+            %li
+              %a(ng-click = "vm.set_date_range('5')" href = "")= t('projects.dashboard.date_range.all_time')
+        -#%select(ng-model="vm.date_range" ng-change="vm.set_date_range(vm.date_range)")
+        -#  %option(value = 0) Current month
+        -#  %option(value = 1) Previous month
+        -#  %option(value = 2) Last 3 month
+        -#  %option(value = 3) Last 6 month
+        -#  %option(value = 4) Last year
+        -#  %option(value = 5) All time

@@ -734,6 +734,57 @@ svg:not(:root) {
     }
   }
 
+  .dropdown {
+    position: static;
+
+    .dropdown-menu {
+      width: auto;
+      min-width: 100%;
+      margin: 0;
+      padding: 6px 0;
+
+      li {
+        padding: 0;
+        outline: none !important;
+
+        a {
+          padding: 8px 20px;
+          outline: none !important;
+        }
+      }
+    }
+
+    .btn {
+      overflow: hidden;
+      padding: 4px 0;
+      width: 42px !important;
+      position: relative;
+      z-index: 1;
+      //margin-left: -1px;
+      border-radius: 0 4px 4px 0;
+      border: 1px solid #e3e3e3;
+
+      .caret {
+        @extend .fa;
+        @extend .fa-angle-down;
+        @extend .hover-select-icon;
+        border: none !important;
+        font-size: 26px;
+        color: #979797;
+        display: inline;
+      }
+
+      &:hover {
+        border-color: #adadad;
+        background-color: #e6e6e6;
+
+        .caret {
+          color: #333;
+        }
+      }
+    }
+  }
+
   .bootstrap-select {
     position: static;
 
@@ -754,7 +805,7 @@ svg:not(:root) {
     .btn {
       padding: 6px 0;
       width: 42px !important;
-      margin-left: -1px;
+      //margin-left: -1px;
       border-radius: 0 4px 4px 0;
 
       .caret {
@@ -782,6 +833,7 @@ svg:not(:root) {
 
   .datepicker-parent {
     width: 232px;
+    margin-right: -1px;
 
     .form-control {
       border-radius: 4px 0 0 4px;
