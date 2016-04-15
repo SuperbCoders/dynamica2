@@ -8,7 +8,8 @@
           .item
             / Project cart
             .title
-              %a{href: '', 'ui-sref' => "projects.view({slug: project.slug, id: project.id })"} {{project.name}} # {{project.id}}
+              %a(href = '' ui-sref = "projects.view({slug: project.slug, id: project.id })")
+                {{ project.name }} # {{project.id}}
             .descript
               .demo{'ng-show' => "project.demo"}
                 #{t('projects.project.no_forecasts_demo')}

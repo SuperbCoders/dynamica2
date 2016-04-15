@@ -46,6 +46,7 @@ svg:not(:root) {
   height: 40px;
   position: relative;
   z-index: 1;
+  float: left;
 
   &.opened {
     z-index: 2;
@@ -96,6 +97,8 @@ svg:not(:root) {
   }
 
   .dropdown-menu {
+    width: auto;
+    min-width: 100%;
     margin: -6px -14px 0 -14px;
     border-radius: 10px;
     padding-top: 45px;
@@ -103,9 +106,12 @@ svg:not(:root) {
 
     li {
       font-size: 14px;
+      padding: 0;
 
       a {
-        padding-right: 45px;
+        padding: 8px 20px;
+        outline: none !important;
+        //padding-right: 45px;
 
         &:focus,
         &:hover {
@@ -122,13 +128,23 @@ svg:not(:root) {
 
       }
     }
+
+    &.dropdown_item_wide {
+      li {
+        a {
+          padding-right: 45px;
+        }
+      }
+    }
   }
 
+  .dropdown,
   .bootstrap-select {
     width: auto !important;
     z-index: 1;
 
     > .btn {
+      position: relative;
       border: none;
       padding: 7px 15px 7px 5px;
       font-size: 15px;
@@ -143,17 +159,40 @@ svg:not(:root) {
         right: 11px;
         margin-top: -8px;
       }
-
     }
 
     &.open {
       z-index: 10;
-    }
 
+      > .btn {
+        z-index: 1001;
+      }
+    }
   }
 
   .dropdown-menu {
     top: 0;
+
+    &.dropdown-menu_bordered {
+      padding-top: 55px;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 48px;
+        right: 20px;
+        left: 20px;
+        border-top: 1px solid #d9d9d9;
+      }
+
+      li:not(.selected) {
+        a {
+          padding-right: 30px;
+          line-height: 1;
+        }
+      }
+    }
+
   }
 
   &.filter-mod {
@@ -274,9 +313,7 @@ svg:not(:root) {
       font-size: 15px;
       line-height: 18px;
     }
-
   }
-
 }
 
 .dashboard-title-row {
@@ -288,6 +325,8 @@ svg:not(:root) {
   line-height: 40px;
   margin-left: -5px;
   margin-bottom: 25px;
+  position: relative;
+  z-index: 5;
 
   > li {
     float: left;
@@ -932,12 +971,13 @@ svg:not(:root) {
   .line {
     fill: none;
     stroke: #3e6cfe;
-    stroke-width:2 px;
+    stroke-width: 2px;
 
     &.line_v2 {
-      stroke-width:4 px;
+      stroke-width: 4px;
     }
   }
+
   .area {
     -webkit-transition: transform 0.3s, opacity .6s;
     -ms-transition: transform 0.3s, opacity .6s;
@@ -1572,7 +1612,7 @@ svg:not(:root) {
   padding: 0 5px;
   color: #fff;
   background-color: #909090;
-  font-size: 5px;
+
   &.best_seller {
     background-color: #5ec65d;
     font-weight: 700;

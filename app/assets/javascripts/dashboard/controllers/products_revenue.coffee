@@ -21,8 +21,6 @@ class ProductsRevenueController
 
     # Watch products view switcher for products table
     @scope.$watch('vm.products_view', (products_view) ->
-      console.log 'Product view switched to '+products_view
-
       # Clear products lists and counters
       vm.products = []
       vm.sales = 0

@@ -30,6 +30,7 @@ class DashboardController
 
     @Projects.search({slug: vm.params.slug}).$promise.then( (project) ->
       vm.project = project
+      vm.rootScope.current_project(vm.project)
       vm.rootScope.currency = vm.project.currency
       vm.rootScope.$state.go('projects.subscription', {slug: vm.project.slug}) if vm.project.expired
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_project_data)
@@ -141,11 +142,11 @@ class DashboardController
     currency_elements = ['total_revenu', 'average_order_value', 'average_revenue_per_customer']
 
     if element_id in currency_elements
-      console.log 'converting '+element_id+' ['+value+'] converted to ['+vm.filter('dynCurrency')(value)+']'
+#      console.log 'converting '+element_id+' ['+value+'] converted to ['+vm.filter('dynCurrency')(value)+']'
       value = vm.filter('dynCurrency')(value)
     else
       value = 0 if value is 'NaN'
-      console.log element_id
+#      console.log element_id
 
     el.parent().parent().children('.graph-value').children('.val').html value
     el.parent().parent().children('.graph-value').children('.graph-dynamica').removeClass('dynamica_up dynamica_down').addClass if /-/g.test(data['diff']) then 'dynamica_down' else 'dynamica_up'

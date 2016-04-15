@@ -181,6 +181,11 @@
   )
 
 
+  # Set current project
+  $rootScope.current_project = (project) ->
+    console.log 'Set current project '+project.name
+    $rootScope.project = project
+
   # State checker for current class for menu
   $rootScope.state_is = (name) ->
     chart_name = $rootScope.$stateParams.chart
@@ -261,7 +266,7 @@
   $rootScope.set_datepicker_date = (datepicker, rangeStart, rangeEnd) ->
     rangeStart = rangeStart.toDate()
     rangeEnd = rangeEnd.toDate()
-    console.log 'Setting datepicker with from ['+rangeStart+'] to ['+rangeEnd+']'
+#    console.log 'Setting datepicker with from ['+rangeStart+'] to ['+rangeEnd+']'
 
     datepicker.datepicker('setDates', [rangeStart, rangeEnd]).datepicker 'update'
 
