@@ -1,9 +1,3 @@
-@import "select2";
-
-svg:not(:root) {
-  overflow: visible;
-}
-
 %clearfix {
   &:after {
     position: static;
@@ -777,7 +771,7 @@ svg:not(:root) {
       &:hover {
         border-color: #adadad;
         background-color: #e6e6e6;
-
+        
         .caret {
           color: #333;
         }

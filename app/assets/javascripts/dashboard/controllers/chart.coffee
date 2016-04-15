@@ -258,15 +258,13 @@ class ChartController
 
     console.log data
     while i < data.length
-      console.log i
-      console.log 'rect '+((parseInt(data.length) - i) - 1)
-
       svg.append('rect')
         .attr('class', 'graph-tracing-catcher tracingCatcher')
         .attr('data-dot', '#dot_' + ((parseInt(data.length) - i) - 1))
         .style('opacity', 0)
         .attr('x', ->
-        width - x(data[i].date)
+          console.log width - x(data[i].date)
+          width - x(data[i].date)
       ).attr('y', 0)
         .attr('width', width)
         .attr('height', height)
