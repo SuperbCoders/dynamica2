@@ -223,7 +223,7 @@ class ChartController
     # Get the data
     for d in data
       d.date = parseDate(d.date)
-      d.close = +d.close
+      d.close = Math.round(+d.close)
 
     # Scale the range of the data
     x.domain d3.extent(data, (d) -> d.date)
@@ -256,10 +256,14 @@ class ChartController
     i = 0
     prevTracingDot = undefined
 
+    console.log data
     while i < data.length
+      console.log i
+      console.log 'rect '+((parseInt(data.length) - i) - 1)
+
       svg.append('rect')
         .attr('class', 'graph-tracing-catcher tracingCatcher')
-        .attr('data-dot', '#dot_' + data.length - i - 1)
+        .attr('data-dot', '#dot_' + ((parseInt(data.length) - i) - 1))
         .style('opacity', 0)
         .attr('x', ->
         width - x(data[i].date)
