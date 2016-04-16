@@ -6,12 +6,18 @@ RSpec.describe ProfileController, :type => :controller, format: :json do
   user = FactoryGirl.create(:user, name: 'Talipov Corehook')
   other_user = FactoryGirl.create(:user, email: 'other_user@gmail.com')
 
+
   before(:each) do
     @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in user
   end
 
   describe 'GET #index' do
+    it 'should not return api key' do
+      get :index
+      expect_json(api_token: nil)
+    end
+
     it 'should return signed user serialized profile' do
       get :index
       expect(response).to be_success

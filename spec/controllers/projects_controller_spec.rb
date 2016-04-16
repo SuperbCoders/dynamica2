@@ -17,6 +17,30 @@ RSpec.describe ProjectsController, :type => :controller, format: :json do
   end
 
 
+  describe 'GET #show' do
+    context 'with new project' do
+      before { get :show, format: :json, id: project.id }
+
+      it 'should return not expired trial project' do
+        expect_json('subscription', sub_type: 'trial')
+        expect_json('subscription', expired?: false)
+      end
+
+      it 'should return permissions with owner id' do
+        expect_json 'permissions.0', user_id: user.id
+        expect_json 'permissions.0', manage: true
+        expect_json 'permissions.0', forecasting: true
+        expect_json 'permissions.0', read: true
+        expect_json 'permissions.0', api: true
+      end
+
+      it 'should return currency' do
+        expect_json(currency: 'USD')
+      end
+    end
+
+  end
+
   describe 'POST #search' do
     it 'should return error with invalid slug' do
       post :search, slug: 'no-exist-slug'
