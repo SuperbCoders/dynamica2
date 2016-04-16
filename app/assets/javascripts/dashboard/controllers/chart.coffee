@@ -257,6 +257,7 @@ class ChartController
     prevTracingDot = undefined
 
     console.log data
+
     while i < data.length
       svg.append('rect')
         .attr('class', 'graph-tracing-catcher tracingCatcher')
@@ -266,7 +267,7 @@ class ChartController
           console.log width - x(data[i].date)
           width - x(data[i].date)
       ).attr('y', 0)
-        .attr('width', width)
+        .attr("width", width / data.length)
         .attr('height', height)
         .style('transform', 'translate(' + distance / -2 + 'px)')
       .on('mouseenter', (e) ->
