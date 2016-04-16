@@ -1,3 +1,4 @@
 class SubscriptionSerializer < BaseSerializer
-  attributes :sub_type, :expire_at, :project_id
+  attributes :sub_type, :expire_at, :project_id, :expired?
+
 end

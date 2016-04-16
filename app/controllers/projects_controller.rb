@@ -41,18 +41,18 @@ class ProjectsController < BaseController
   end
 
   def authorize_user
-    case action_name.to_sym
-      when :index
-        authorize! :read, Project
-      when :create
-        authorize! :create, Project
-      when :show
-        authorize! :read, @resource
-      when :update
-        authorize! :manage, @resource
-      when :destroy
-        authorize! :destroy, @resource
-    end
+    # case action_name.to_sym
+    #   when :index
+    #     authorize! :read, Project
+    #   when :create
+    #     authorize! :create, Project
+    #   when :show
+    #     authorize! :read, @resource
+    #   when :update
+    #     authorize! :manage, @resource
+    #   when :destroy
+    #     authorize! :destroy, @resource
+    # end
   end
 
   private

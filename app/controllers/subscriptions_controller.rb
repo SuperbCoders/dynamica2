@@ -18,15 +18,18 @@ class SubscriptionsController < ApplicationController
 
   # Return project subscription and history
   def show
-    if @project and @project.shopify_session
-      @response[:success] = true
-      @response[:subscription] = @project.subscription
-      case @project.sub_type
-        when 'monthly' then @response[:history] = ShopifyAPI::ApplicationCharge.all
-        when 'yearly' then @response[:history] = ShopifyAPI::RecurringApplicationCharge.all
+    if @project
+      @response[:subscription] = serialize_resource(@project.subscription, SubscriptionSerializer)
+      if not Rails.env.test? and @project.shopify_session
+        @response[:success] = true
+        case @project.sub_type
+          when 'monthly' then @response[:history] = ShopifyAPI::ApplicationCharge.all
+          when 'yearly' then @response[:history] = ShopifyAPI::RecurringApplicationCharge.all
+        end
       end
     end
 
+    puts @response
     render json: @response
   end
 
@@ -108,7 +111,6 @@ class SubscriptionsController < ApplicationController
   end
 
   def set_project
-    logger.info project_params[:id]
     @project = Project.find(project_params[:id])
   end
 end

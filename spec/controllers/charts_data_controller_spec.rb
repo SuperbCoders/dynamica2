@@ -3,19 +3,13 @@ require 'rails_helper'
 RSpec.describe ChartsDataController, :type => :controller do
   clean_database
 
-  DAYS = rand(5..15)
-  START_DATE = DateTime.now - DAYS.days
-  END_DATE = DateTime.now
-  start_date_str = START_DATE.strftime("%m.%d.%Y")
-  end_date_str = END_DATE.strftime("%m.%d.%Y")
-
   # Generate user, project and grant permissions
   user = FactoryGirl.create(:user)
-  project =  FactoryGirl.create(:project, user: user)
+  @project = project =  FactoryGirl.create(:project, user: user)
   user.permissions.create(project: project, all: true)
 
   # Generate test data
-  total_statistic, statistic, products_statistic = generate_test_demo_data(project, START_DATE, END_DATE)
+  total_statistic, statistic, products_statistic = generate_test_demo_data(project)
 
   before(:each) do
     @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -23,14 +17,23 @@ RSpec.describe ChartsDataController, :type => :controller do
   end
 
   describe 'GET #products_characteristics' do
+    before {
+      start_date = project.project_characteristics.first.date.strftime("%m.%d.%Y")
+      end_date = project.project_characteristics.last.date.strftime("%m.%d.%Y")
+      get :products_characteristics, format: :json, chart: 'products_revenue', from: start_date, to: end_date, project_id: project.id
+    }
+
     it 'should calculate products revenue' do
-      get :products_characteristics, format: :json, chart: 'products_revenue', from: start_date_str, to: end_date_str, project_id: project.id
       expect(json_body[0][:gross_revenue]).to eq total_gross_revenue(json_body[0][:product_id], products_statistic)
     end
   end
 
   describe 'GET #big_chart_data' do
-    before { get :big_chart_data, format: :json, from: start_date_str, to: end_date_str, project_id: project.id }
+    before {
+      start_date = project.project_characteristics.first.date.strftime("%m.%d.%Y")
+      end_date = project.project_characteristics.last.date.strftime("%m.%d.%Y")
+      get :big_chart_data, format: :json, from: start_date, to: end_date, project_id: project.id
+    }
 
     it 'should calculate total revenue' do
       compare_total_values('revenue', :total_gross_revenues, total_statistic, statistic)
@@ -50,7 +53,11 @@ RSpec.describe ChartsDataController, :type => :controller do
   end
 
   describe 'GET #other_chart_data' do
-    before { get :other_chart_data, format: :json, from: start_date_str, to: end_date_str, project_id: project.id }
+    before {
+      start_date = project.project_characteristics.first.date.strftime("%m.%d.%Y")
+      end_date = project.project_characteristics.last.date.strftime("%m.%d.%Y")
+      get :other_chart_data, format: :json, from: start_date, to: end_date, project_id: project.id
+    }
 
     it 'should calculate total_revenu' do
       compare_other_chart_values(:total_revenu, :total_gross_revenues, total_statistic, statistic)
@@ -69,19 +76,19 @@ RSpec.describe ChartsDataController, :type => :controller do
       compare_other_chart_values(:new_customers_number, :new_customers_number, total_statistic, statistic)
     end
 
-    pending 'should calculate average_order_value'
-    pending 'should calculate average_order_size'
-    pending 'should calculate repeat_customers_number'
-    pending 'should calculate average_revenue_per_customer'
-    pending 'should calculate products_in_stock_number'
-    pending 'should calculate sales_per_visitor'
-    pending 'should calculate average_customer_lifetime_value'
-    pending 'should calculate unique_users_number'
-    pending 'should calculate visits'
-    pending 'should calculate items_in_stock_number'
-    pending 'should calculate percentage_of_inventory_sold'
-    pending 'should calculate percentage_of_stock_sold'
-    pending 'should calculate shipping_cost_as_a_percentage_of_total_revenue'
+    # pending 'should calculate average_order_value'
+    # pending 'should calculate average_order_size'
+    # pending 'should calculate repeat_customers_number'
+    # pending 'should calculate average_revenue_per_customer'
+    # pending 'should calculate products_in_stock_number'
+    # pending 'should calculate sales_per_visitor'
+    # pending 'should calculate average_customer_lifetime_value'
+    # pending 'should calculate unique_users_number'
+    # pending 'should calculate visits'
+    # pending 'should calculate items_in_stock_number'
+    # pending 'should calculate percentage_of_inventory_sold'
+    # pending 'should calculate percentage_of_stock_sold'
+    # pending 'should calculate shipping_cost_as_a_percentage_of_total_revenue'
   end
 
   describe 'GET #full_chart_data' do
@@ -90,6 +97,14 @@ RSpec.describe ChartsDataController, :type => :controller do
 
   describe 'GET #full_chart_check_points' do
 
+  end
+
+  def start_date
+    @project.project_characteristics.first.date.strftime("%m.%d.%Y")
+  end
+
+  def end_date
+    @project.project_characteristics.last.date.strftime("%m.%d.%Y")
   end
 
   def compare_other_chart_values(value_type, value_field, total_statistic, statistic)

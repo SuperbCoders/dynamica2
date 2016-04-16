@@ -44,7 +44,6 @@ namespace :dynamica do
       puts "Created #{products_count} products for #{project.name}"
     end
 
-
     desc 'Seed products for project'
     task :product_characteristics, [:project_id] => :environment do |t, args|
       items_processed = 0

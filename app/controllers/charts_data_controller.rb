@@ -251,7 +251,6 @@ class ChartsDataController < ApplicationController
     })
   end
 
-
   def chart_type(chart_name)
     return Dynamica::GENERAL_CHARTS if Dynamica::GENERAL_CHARTS.include? chart_name
     return Dynamica::CUSTOMERS_CHARTS if Dynamica::CUSTOMERS_CHARTS.include? chart_name
