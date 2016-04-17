@@ -49,20 +49,6 @@ class DashboardController
       vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
       vm.fetch()
 
-  chart_changed: (chart) ->
-    if @range[chart] == 'products_revenue'
-      state = 'projects.products_revenue'
-    else
-      state = 'projects.chart'
-
-    @rootScope.$state.go(state, {
-      project: @project
-      slug: @project.slug
-      chart: @range[chart]
-      from: @range.from
-      to: @range.to
-    })
-
   charts_fetch: (chart_type) ->
     vm = @
 
@@ -83,7 +69,7 @@ class DashboardController
     @charts_fetch('big_chart_data').success((response) ->
       vm.big_chart = response
       vm.top_5_products = info['top'] for info in vm.big_chart when info['tr_name'] == 'products_sell'
-      $('.areaChartFamily_1').each (ind) -> vm.init_area_family_chart($(this), response)
+      $('.areaChartFamily_1').each (ind) -> vm.draw_main_graph($(this), response)
     )
 
     @charts_fetch('other_chart_data').success((response) ->
@@ -95,12 +81,12 @@ class DashboardController
 
       $('.lineAreaChart_1').each (index) ->
         el_id = $(this).context.id
-        vm.init_line_area_chart($(this), vm.other_charts_data[el_id])
+        vm.draw_block_charts($(this), vm.other_charts_data[el_id])
     )
 
   # Draw block line area chart
   # график с точками
-  init_line_area_chart: (el, data) ->
+  draw_block_charts: (el, data) ->
     return if not data
     vm = @
     el.empty()
@@ -129,7 +115,13 @@ class DashboardController
       y d.close
     )
     #.interpolate("cardinal");
-    svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
+    svg = d3.select(el[0])
+      .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
     t = $.extend(true, [], $('.dashboard').data('other_charts'))
     value = parseFloat(data['value']).number_with_delimiter('&thinsp;')
     diff = parseFloat(data['diff']).number_with_delimiter('&thinsp;')
@@ -142,11 +134,9 @@ class DashboardController
     currency_elements = ['total_revenu', 'average_order_value', 'average_revenue_per_customer']
 
     if element_id in currency_elements
-#      console.log 'converting '+element_id+' ['+value+'] converted to ['+vm.filter('dynCurrency')(value)+']'
       value = vm.filter('dynCurrency')(value)
     else
       value = 0 if value is 'NaN'
-#      console.log element_id
 
     el.parent().parent().children('.graph-value').children('.val').html value
     el.parent().parent().children('.graph-value').children('.graph-dynamica').removeClass('dynamica_up dynamica_down').addClass if /-/g.test(data['diff']) then 'dynamica_down' else 'dynamica_up'
@@ -192,11 +182,35 @@ class DashboardController
       for d, index in data['data']
         d.close = 8
 
-    gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
-    gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
-    gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
-    svg.append('path').attr('class', 'line').attr 'd', valueline(data['data'])
-    svg.append('path').datum(data['data']).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
+    gradient = svg
+      .append('svg:defs')
+      .append('svg:linearGradient')
+      .attr('id', 'area_gradient_1')
+      .attr('x1', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '0%')
+      .attr('y2', '100%')
+      .attr('spreadMethod', 'pad')
+
+    gradient.append('svg:stop')
+      .attr('offset', '0%')
+      .attr('stop-color', '#dfe7ff')
+      .attr('stop-opacity', 1)
+
+    gradient.append('svg:stop')
+      .attr('offset', '100%')
+      .attr('stop-color', '#f6f6f6')
+      .attr('stop-opacity', 0)
+
+    svg.append('path')
+      .attr('class', 'line')
+      .attr('d', valueline(data['data']))
+
+    svg.append('path')
+      .datum(data['data'])
+      .attr('class', 'area area_v1')
+      .attr('d', area).style 'fill', 'url(#area_gradient_1)'
+
     # Add the scatterplot
     svg.selectAll('dot').data(data['data']).enter().append('circle').attr('r', 5.5).attr('class', (d, i) ->
       cls = undefined
@@ -211,7 +225,7 @@ class DashboardController
     return
 
   # Draw global chart
-  init_area_family_chart: (el, data_files) ->
+  draw_main_graph: (el, data_files) ->
     vm = @
     el.find('svg').remove()
     legendBlock = el.parents('.graph-unit').find('.legend_v2')
@@ -396,7 +410,12 @@ class DashboardController
     ).y0(height).y1((d) ->
       area_y d.close
     )
-    svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    svg = d3.select(el[0])
+      .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
     for d in data
       d.date = parseDate(d.date)
@@ -411,11 +430,40 @@ class DashboardController
         d.close
       )
     ]
-    gradient = svg.append('svg:defs').append('svg:linearGradient').attr('id', 'area_gradient_1').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%').attr('spreadMethod', 'pad')
-    gradient.append('svg:stop').attr('offset', '0%').attr('stop-color', '#dfe7ff').attr 'stop-opacity', 1
-    gradient.append('svg:stop').attr('offset', '100%').attr('stop-color', '#f6f6f6').attr 'stop-opacity', 0
-    svg.append('path').datum(data).attr('class', 'area area_v1').attr('d', area).style 'fill', 'url(#area_gradient_1)'
+    gradient = svg.append('svg:defs')
+      .append('svg:linearGradient')
+      .attr('id', 'area_gradient_1')
+      .attr('x1', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '0%')
+      .attr('y2', '100%')
+      .attr('spreadMethod', 'pad')
 
+    gradient.append('svg:stop')
+      .attr('offset', '0%')
+      .attr('stop-color', '#dfe7ff')
+      .attr('stop-opacity', 1)
+
+    gradient.append('svg:stop')
+      .attr('offset', '100%')
+      .attr('stop-color', '#f6f6f6')
+      .attr('stop-opacity', 0)
+
+    svg.append('path')
+      .datum(data)
+      .attr('class', 'area area_v1')
+      .attr('d', area)
+      .style('fill', 'url(#area_gradient_1)')
+
+    svg.selectAll('dot').data(data).enter().append('circle').attr('r', 5.5).attr('class', (d, i) ->
+      cls = undefined
+      if i == 0 or i == data.length - 1
+        cls = 'hidden'
+      'mark ' + cls
+    ).attr('cx', (d) ->
+      x d.date
+    ).attr 'cy', (d) ->
+      y d.close
     return
 
   getFormatOfDate: ->
