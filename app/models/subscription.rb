@@ -4,8 +4,9 @@ class Subscription < ActiveRecord::Base
 
   enum sub_type: Dynamica::Billing::SUBSCRIPTION_TYPES
 
-  before_create :set_trial_end_date
-  validates :project, uniqueness: { scope: :user }
+  before_create :set_default_values
+  validates :user, presence: true
+  validates :project, presence: true, uniqueness: { scope: :user }
 
   scope :expired, -> { where('expire_at < ?', DateTime.now) }
 
@@ -32,7 +33,8 @@ class Subscription < ActiveRecord::Base
 
   private
 
-  def set_trial_end_date
-    self.expire_at = DateTime.now + Dynamica::Billing::TRIAL_DAYS until self.expire_at
+  def set_default_values
+    self.expire_at = DateTime.now + Dynamica::Billing::TRIAL_DAYS
+    self.sub_type = :trial
   end
 end
