@@ -198,7 +198,7 @@
     return true if name is 'products' and state is 'projects.products_revenue'
 
     switch name
-      when 'total'
+      when 'general'
         return true if chart_name in total_states
       when 'customers'
         return true if chart_name in customer_states

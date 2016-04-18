@@ -9,7 +9,7 @@
       %li(ng-class="{current: vm.state_is('dashboard')}")
         %a.dashboard-panel-link(href='' ui-sref="projects.view({slug: vm.project.slug, id: vm.project.id })")= t('projects.show.overview')
 
-      %li.filter-holder
+      %li.filter-holder(ng-class="{current: vm.state_is('general')}")
         .hover-select-box
           .dropdown.filterSelect
             %button.btn.btn-default.dropdown-toggle(data-toggle = "dropdown" type = "button")
@@ -25,7 +25,7 @@
               %li
                 %a(ui-sref="projects.chart({chart: 'average_order_size', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.average_order_size'
 
-      %li.filter-holder
+      %li.filter-holder(ng-class="{current: vm.state_is('customers')}")
         .hover-select-box
           .dropdown.filterSelect
             %button.btn.btn-default.dropdown-toggle(data-toggle = "dropdown" type = "button")
@@ -49,7 +49,7 @@
               %li
                 %a(ui-sref="projects.chart({chart: 'visits', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.visits'
 
-      %li.filter-holder
+      %li.filter-holder(ng-class="{current: vm.state_is('products')}")
         .hover-select-box
           .dropdown.filterSelect
             %button.btn.btn-default.dropdown-toggle(data-toggle = "dropdown" type = "button")
