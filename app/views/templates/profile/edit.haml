@@ -1,6 +1,8 @@
 %section.case.case-profile
   .case-cnt.wrap-b
     %form.form-horizontal.form
+
+      / General
       .form-group
         %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.personal')
         .col-md-7.col-sm-9
@@ -15,6 +17,20 @@
             %input.form-control{placeholder: t('devise.registrations.edit.form.name'), 'ng-model' => "user.name"}
           .control-box{'ng-class' => "{haserror: user.errors.length > 0}"}
             %input.form-control{type: 'email', placeholder: t('devise.registrations.edit.form.email'), 'ng-model' => "user.email"}
+
+      / Social networks
+      .form-group
+        %label.control-label.col-md-3.col-sm-3= t('profile.import_data_from_social')
+        .col-md-7.col-sm-9
+          .control-box
+            %a.btn-social.btn-facebook(href="#{user_omniauth_authorize_url(:facebook)}")
+              %i.icon.fa.fa-facebook>
+              Facebook
+            %a.btn-social.btn-twitter(href="#{user_omniauth_authorize_url(:google_oauth2)}")
+              %i.icon.fa.fa-google>
+              Google
+
+      / Password
       .form-group
         %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.password')
         .col-md-7.col-sm-9
@@ -24,6 +40,7 @@
             %input.form-control{type: 'password', 'ng-model' => "user.password_confirmation", placeholder: t('devise.registrations.edit.form.confirm_new_password')}
           .control-box{'ng-class' => "{'has-error': vm.password.current_password}"}
             %input.form-control{type: 'password', 'ng-model' => "user.current_password", placeholder: t('devise.registrations.edit.form.current_password')}
+
       .form-group
         .col-md-offset-3.col-md-7.col-sm-offset-3.col-sm-9
           %a.btn.btn-lg.btn-danger{'ng-click' => "vm.save()"}= t('devise.registrations.edit.form.submit')

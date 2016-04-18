@@ -45,6 +45,15 @@ class User < ActiveRecord::Base
   before_validation :set_default_values
   before_create :set_api_token
 
+  # @return [Boolean] true if facebook omniauth exist
+  def facebook?
+    user_omnis.where('fb_id is not NULL').any?
+  end
+
+  def google?
+    user_omnis.where('google_id is not NULL').any?
+  end
+
   # @return [String] user name to use in views
   def display_name
     [name, email, id].select(&:present?).first
