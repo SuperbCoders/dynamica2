@@ -68,8 +68,14 @@ class DashboardController
 
     @charts_fetch('big_chart_data').success((response) ->
       vm.big_chart = response
+
+      console.log vm.big_chart
+
+      # Retrieve top 5 products
       vm.top_5_products = info['top'] for info in vm.big_chart when info['tr_name'] == 'products_sell'
-      $('.areaChartFamily_1').each (ind) -> vm.draw_main_graph($(this), response)
+
+      # Draw general graph
+      $('.areaChartFamily_1').each (ind) -> vm.draw_general_graph($(this), response)
     )
 
     @charts_fetch('other_chart_data').success((response) ->
@@ -123,13 +129,8 @@ class DashboardController
       .append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
     t = $.extend(true, [], $('.dashboard').data('other_charts'))
-    value = parseFloat(data['value']).number_with_delimiter('&thinsp;')
-    diff = parseFloat(data['diff']).number_with_delimiter('&thinsp;')
-    diff += '&nbsp;%'
-    value = if data['value'] == '' then '' else value
-    diff = if data['diff'] == '' then '' else diff
-
-
+    value = parseFloat(data['value'])
+    diff = parseFloat(data['diff'])
 
     currency_elements = ['total_revenu', 'average_order_value', 'average_revenue_per_customer']
 
@@ -208,7 +209,7 @@ class DashboardController
 
     svg.append('path')
       .datum(data['data'])
-      .attr('class', 'area area_v1')
+      .attr('class', 'area area_v2')
       .attr('d', area).style 'fill', 'url(#area_gradient_1)'
 
     # Add the scatterplot
@@ -224,14 +225,16 @@ class DashboardController
 
     return
 
-  # Draw global chart
-  draw_main_graph: (el, data_files) ->
+  draw_general_graph: (el, data_files) ->
     vm = @
+    `var i`
+    `var i`
+
+    # Clear dashbord from svg
     el.find('svg').remove()
+
     legendBlock = el.parents('.graph-unit').find('.legend_v2')
-    if !legendBlock.length
-      legendBlock = $('<ul class="legend_v2 graph-unit-legend" />')
-      el.parents('.graph-unit').append legendBlock
+    legendBlock.empty()
 
     dates = []
     values = []
@@ -239,23 +242,24 @@ class DashboardController
     i = 0
     while i < data_files[0].data.length
       obj = data_files[0].data[i]
-      dates.push moment(obj.date, vm.getFormatOfDateForMoment())
+      dates.push moment(obj.date)
       values.push obj.close
       i++
 
-    legendBlock.empty()
-
     tooltip = $('<table class="graph-tooltip-table" />')
-
     margin =
       top: 80
       right: 0
       bottom: 30
       left: 0
+
     width = el.width() - (margin.left) - (margin.right)
     height = el.height() - (margin.top) - (margin.bottom)
+    bisectDate = d3.bisector((d) ->
+      #console.log(d);
+      d.date
+    ).left
     parseDate = d3.time.format('%d-%b-%y').parse
-
     area_x = d3.time.scale().domain([
       moment.min(dates)
       moment.max(dates)
@@ -263,7 +267,6 @@ class DashboardController
       0
       width
     ])
-
     area_y = d3.scale.linear().domain([
       0
       1000 * Math.floor(Math.max.apply(null, values) / 1000 + 1)
@@ -271,20 +274,11 @@ class DashboardController
       height
       0
     ])
-
     area = d3.svg.area().x((d) ->
       area_x d.date
     ).y0(height).y1((d) ->
       area_y d.close
     ).interpolate('monotone')
-
-
-    svg = d3.select(el[0])
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
 
     start_date = moment(dates[0])
@@ -305,27 +299,77 @@ class DashboardController
         if DATA_GROUP is 'day' and DATA_DAYS > 365
           DATE_FORMAT = '%b %d %y'
 
-        if DATA_GROUP is 'week' and DATA_DAYS > 52
+        if DATA_GROUP is 'week' and DATA_DAYS > 15
           DATE_FORMAT = '%b %d %y'
+          TICKS = 12
 
       when 'month'
         TICKS = 10
         DATE_FORMAT = '%b %d %y'
 
-    # TICKS = DATA_LENGTH if DATA_LENGTH in [10..17]
-
-#    console.log DATA_GROUP+' : '+DATA_DAYS
-#    console.log start_date.format('lll')+' <-> '+end_date.format('lll')+' : Data length '+DATA_LENGTH+' with '+TICKS+' ticks'
-
+    console.log 'Ticks '+TICKS+' with '+DATA_LENGTH
     xAxis = d3.svg.axis().scale(area_x).ticks(TICKS).tickFormat(d3.time.format(DATE_FORMAT)).orient('bottom')
+    #var xScale = d3.scale.ordinal()
+    #    .domain(d3.range(dataset.length))
+    #    .rangeRoundBands([0, w], 0.05);
 
-    svg.append('g')
-      .attr('class', 'x axis family_x_axis')
-      .style('font-size', '12px')
-      .style('fill', '#fff')
-      .attr('transform', 'translate(0,' + height + ')').call xAxis
+    svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').on('mousemove', (d) ->
+      `var tooltip`
+      #console.log(d3.mouse(this));
+      tooltip = d3.select('#tooltip')
+      tooltip_content = $('#tooltip_content')
+      tooltip_dot = $('#tooltip_dot')
+      tool_table = $('<table class="graph-tooltip-table" />')
 
+      if data_files[vm.activeFamilyGraph].data.length > 0
+        distance = area_x(data_files[vm.activeFamilyGraph].data[0].date) - area_x(data_files[vm.activeFamilyGraph].data[1].date) or 0
+      else
+        distance = 0
+      x = d3.mouse(this)[0] + distance / 2
+      x0 = area_x.invert(x)
+      ind = undefined
+      k = 0
+
+      while k < dates.length
+        obj1 = dates[k]
+        if moment(x0).startOf('day').isSame(obj1, 'day')
+          ind = k
+          break
+        k++
+      j = 0
+
+      while j < data_files.length
+        color = data_files[j].color
+        data = data_files[j].data
+
+        tooltip_item = $('<tr class="tooltip_row" />')
+          .attr('data-graph', 'family_area_' + j)
+          .addClass(if j == vm.activeFamilyGraph then 'active_row' else '')
+          .addClass(if $('.graph-unit-legend .legend_item[data-graph=#family_area_' + j + ']').hasClass('disabled') then 'disabled' else '')
+          .append($('<td class="tooltip_name" />')
+          .append($('<div class="legend_name" />')
+          .css('color', color)
+          .append($('<span/>')
+          .text(data_files[j].name))))
+          .append($('<td class="tooltip_val" />').append($('<b class="" />').text(if data_files[j].data[ind] then data_files[j].data[ind].close else 0)))
+
+        tool_table.append tooltip_item
+        j++
+
+      tooltip_content.empty()
+        .append($('<div class="tooltip-title" />')
+        .text(moment(x0).format('dddd, D MMMM YYYY')))
+        .append(tool_table)
+
+      tooltip.classed('flipped_left', x < tooltip_content.outerWidth() + 25)
+        .style('left', area_x(data_files[vm.activeFamilyGraph].data[ind].date) + 'px')
+
+      tooltip_dot.css 'top', margin.top + area_y(data_files[vm.activeFamilyGraph].data[ind].close) - 11
+      return
+    )
+    svg.append('g').attr('class', 'x axis family_x_axis').style('font-size', '14px').style('fill', '#fff').attr('transform', 'translate(0,' + height + ')').call xAxis
     i = 0
+
     while i < data_files.length
       data = data_files[i].data
       data.forEach (d) ->
@@ -341,23 +385,9 @@ class DashboardController
           d.close
         )
       ]
-
-      if data_files[i].tr_name not in ['customers','unic_users']
-        currencyValue = vm.filter('dynCurrency')(data_files[i].value)
-      else
-        currencyValue = data_files[i].value
-
       svg.append('path').datum(data).attr('class', 'area area_v1').attr('id', 'family_area_' + i).attr('d', area).style('fill', (d) ->
         color = data_files[i].color
-        legendItem = $('<li class="legend_item" />')
-          .append($('<div class="legend_name" />')
-          .css('color', color)
-          .append($('<span/>').text(vm.T.t(data_files[i].tr_name)))
-        ).append($('<div class="legend_val" />').append($('<span class="val" />').text(currencyValue))
-          .append($('<sup class="graph-dynamica" />')
-            .addClass(if /-/g.test(data_files[i].diff) then 'dynamica_down' else 'dynamica_up')
-            .text(data_files[i].diff)))
-
+        legendItem = $('<li class="legend_item" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[i].name))).append($('<div class="legend_val" />').append($('<span class="val" />').text(data_files[i].value)).append($('<sup class="graph-dynamica" />').addClass(if /-/g.test(data_files[i].diff) then 'dynamica_down' else 'dynamica_up').text(data_files[i].diff)))
         tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'family_area_' + i).append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data_files[i].name)))).append($('<td class="tooltip_val" />').append($('<b class="" />').text(data_files[i].value)))
         legendItem.attr('data-graph', '#family_area_' + i).on 'click', ->
           firedEl = $(this)
@@ -377,7 +407,6 @@ class DashboardController
         legendBlock.append legendItem
         color
       ).style('opacity', .5).on 'mouseenter', ->
-
       i++
     i = 0
     while i < data_files.length
@@ -533,6 +562,16 @@ class DashboardController
       format: 'M dd, yyyy'
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
+
+    $('body').delegate('.hoverCatcher', 'mouseenter', ->
+        firedEl = $($(this).attr('data-area'))
+        vm.activeFamilyGraph = $(this).attr('data-area').replace(/\D/g, '') * 1
+        firedEl.css('opacity', 1).siblings('.area').css 'opacity', .15
+        return
+      ).delegate '.hoverCatcher', 'mouseleave', ->
+        firedEl = $($(this).attr('data-area'))
+        firedEl.css('opacity', .5).siblings('.area').css 'opacity', .5
+        return
 
   state_is: (name) -> @rootScope.state_is(name)
   parse_diff: (diff_str) -> parseInt(diff_str)

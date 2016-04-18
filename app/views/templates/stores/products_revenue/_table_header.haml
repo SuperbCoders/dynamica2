@@ -1,23 +1,32 @@
 .table-header.no_pointer
   .table-cell.col_1
-    %a(ng-click="vm.sortType = 'title'; vm.sortReverse = !vm.sortReverse")
+    %span(ng-show="vm.products_view == 'rule_80_20'")= t('projects.products_revenue.table.product')
+    %a(ng-click="vm.sortType = 'title'; vm.sortReverse = !vm.sortReverse" ng-show="vm.products_view != 'rule_80_20'")
       %span= t('projects.products_revenue.table.product')
       %span.fa.fa-caret-down{"ng-show" => "vm.sortType == 'title' && !sortReverse"}
       %span.fa.fa-caret-up{"ng-show" => "vm.sortType == 'title' && sortReverse"}
+
   .table-cell.col_5.col_right
-    %a(ng-click="vm.sortType = 'sales'; vm.sortReverse = !vm.sortReverse")
+    %span(ng-show="vm.products_view == 'rule_80_20'")= t('projects.products_revenue.table.sales')
+    %a(ng-click="vm.sortType = 'sales'; vm.sortReverse = !vm.sortReverse" ng-show="vm.products_view != 'rule_80_20'")
       %span= t('projects.products_revenue.table.sales')
       %span.fa.fa-caret-down{"ng-show" => "vm.sortType == 'sales' && !sortReverse"}
       %span.fa.fa-caret-up{"ng-show" => "vm.sortType == 'sales' && sortReverse"}
+
   .table-cell.col_6.col_right
-    %a(ng-click="vm.sortType = 'gross_revenue'; vm.sortReverse = !vm.sortReverse")
+    %span(ng-show="vm.products_view == 'rule_80_20'")= t('projects.products_revenue.table.revenu')
+    %a(ng-click="vm.sortType = 'gross_revenue'; vm.sortReverse = !vm.sortReverse" ng-show="vm.products_view != 'rule_80_20'")
+      %span= t('projects.products_revenue.table.revenu')
       %span.fa.fa-caret-down{"ng-show" => "vm.sortType == 'gross_revenue' && !sortReverse"}
       %span.fa.fa-caret-up{"ng-show" => "vm.sortType == 'gross_revenue' && sortReverse"}
-      %span= t('projects.products_revenue.table.revenu')
+
   .table-cell.col_7.col_right
-    %a(ng-click="vm.sortType = 'price'; vm.sortReverse = !vm.sortReverse")
+    %span(ng-show="vm.products_view == 'rule_80_20'")= t('projects.products_revenue.table.price')
+    %a(ng-click="vm.sortType = 'price'; vm.sortReverse = !vm.sortReverse" ng-show="vm.products_view != 'rule_80_20'")
       %span= t('projects.products_revenue.table.price')
       %span.fa.fa-caret-down{"ng-show" => "vm.sortType == 'price' && !sortReverse"}
       %span.fa.fa-caret-up{"ng-show" => "vm.sortType == 'price' && sortReverse"}
+
+
   .table-cell.col_4
     %span= t('projects.products_revenue.table.date')

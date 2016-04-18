@@ -15,9 +15,9 @@
               {{ project.name }}
               %span.caret
             %ul.dropdown-menu.dropdown_item_wide
-              %li(ng-repeat="project in user.projects")
-                %a(href = '' ui-sref = "projects.view({slug: project.slug, id: project.id })")
-                  {{ project.name }}
+              %li(ng-repeat="p in user.projects" ng-show="p.id != project.id")
+                %a(href = '' ui-sref = "projects.view({slug: p.slug, id: p.id })")
+                  {{ p.name }}
 
 
     %nav.collapse.navbar-collapse.bs-navbar-collapse
