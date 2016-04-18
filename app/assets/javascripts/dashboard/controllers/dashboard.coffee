@@ -204,7 +204,7 @@ class DashboardController
       .attr('stop-opacity', 0)
 
     svg.append('path')
-      .attr('class', 'line')
+      .attr('class', 'line line_v2')
       .attr('d', valueline(data['data']))
 
     svg.append('path')
