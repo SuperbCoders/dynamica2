@@ -1,5 +1,5 @@
 class ChartController
-  constructor: (@rootScope, @scope, @Projects, @http, @T) ->
+  constructor: (@rootScope, @scope, @Projects, @http, @T, @filter) ->
     console.log 'ChartController constructor'
     vm = @
     vm.slug = @rootScope.$stateParams.slug
@@ -296,7 +296,7 @@ class ChartController
             .css('top', cur_dot.attr('data-y-value') * 1 + margin.top - 15 + 'px')
             .append($('<div class="tooltip-title" />')
             .text(moment(x0).format('dddd, D MMMM YYYY')))
-            .append($('<div class="tooltip-value" />').text(currencyFormatter(y0) + '$'))
+            .append($('<div class="tooltip-value" />').text(vm.filter('dynCurrency')(currencyFormatter(y0))))
 
           tooltip.css 'left', $this.attr('x') * 1 + margin.left + 'px'
 
@@ -387,4 +387,4 @@ class ChartController
   parse_diff: (diff_str) -> parseInt(diff_str)
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
-@application.controller 'ChartController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', ChartController]
+@application.controller 'ChartController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', '$filter', ChartController]
