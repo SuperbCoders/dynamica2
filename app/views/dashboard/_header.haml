@@ -38,6 +38,6 @@
             .user-menu.dropdown-menu.right
               %ul
                 %li
-                  %a{href: '', 'ui-sref' => "profile"}= t('layouts.application.profile')
+                  %a(href = '' ui-sref = "profile")= t('layouts.application.profile')
                 %li.clear
-                  %a{href: '/users/sign_out'}= t('layouts.application.logout')
+                  %a(href = '/users/sign_out')= t('layouts.application.logout')

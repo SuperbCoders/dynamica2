@@ -1,4 +1,13 @@
-.section.case.case-projects
+%section.case.case-projects-empty(ng-show='vm.projects.length == 0')
+  .case-cnt.text-center
+    .title
+      Hello, {{user.display_name}}!
+      %br>/
+      You haven’t any project yet.
+    %div
+      %a.btn.btn-lg.btn-danger(href = '' ui-sref = "projects.new" ng-click = "vm.project = {}")= t('projects.start_ﬁrst_project')
+
+.section.case.case-projects(ng-show='vm.projects.length > 0')
   .case-capt
     %a{href: '', 'ui-sref' => "projects.new", "ng-click" => "vm.project = {}"} #{t('projects.index.new')}
   .case-cnt
