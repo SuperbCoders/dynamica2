@@ -30,6 +30,7 @@ class ChartController
 
     @Projects.search({slug: vm.slug}).$promise.then( (project) ->
       vm.project = project
+      vm.rootScope.current_project(vm.project)
       vm.rootScope.currency = vm.project.currency
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_project_data)
       vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
@@ -232,7 +233,7 @@ class ChartController
     y.domain [ 0,d3.max(data, (d) -> Math.max d.close) ]
     area_y.domain [ 0, d3.max(data, (d) -> d.close)]
 
-    svg.append('path').attr('class', 'line').attr 'd', valueline(data)
+    svg.append('path').attr('class', 'line line_v2').attr 'd', valueline(data)
 
     # Add the scatterplot
     svg.append('line').attr('id', 'line_for_dot').attr('class', 'line_for_dot').style('stroke', '#D0E3EE').style('stroke-width', '2').attr('x1', 0).attr('x2', 0).attr('y1', height).attr 'y2', 0
