@@ -60,7 +60,7 @@ RSpec.describe ChartsDataController, :type => :controller do
     }
 
     it 'should calculate total_revenu' do
-      compare_other_chart_values(:total_revenu, :total_gross_revenues, total_statistic, statistic)
+      compare_other_chart_values(:total_gross_revenues, :total_gross_revenues, total_statistic, statistic)
     end
 
     it 'should calculate products_number' do
@@ -76,19 +76,30 @@ RSpec.describe ChartsDataController, :type => :controller do
       compare_other_chart_values(:new_customers_number, :new_customers_number, total_statistic, statistic)
     end
 
-    # pending 'should calculate average_order_value'
-    # pending 'should calculate average_order_size'
-    # pending 'should calculate repeat_customers_number'
-    # pending 'should calculate average_revenue_per_customer'
+    it 'should calculate average_order_value ( средний чек )' do
+      expect(json_body[:average_order_value][:value]).to eq total_statistic[:average_order_value]
+    end
+
+    it 'should calculate average_order_size ( Среднее число товаров в заказе )' do
+      expect(json_body[:average_order_size][:value]).to eq total_statistic[:average_order_size]
+    end
+
+    it 'should calculate total_gross_delivery' do
+      expect(json_body[:total_gross_delivery][:value]).to eq total_statistic[:total_gross_delivery]
+    end
+
+    # pending 'should calculate repeat_customers_number ( Число повторных покупателей )'
+    # pending 'should calculate average_revenue_per_customer ( Средняя выручка на покупателя )'
     # pending 'should calculate products_in_stock_number'
     # pending 'should calculate sales_per_visitor'
     # pending 'should calculate average_customer_lifetime_value'
-    # pending 'should calculate unique_users_number'
+    # pending 'should calculate unique_users_number ( Число уникальных посетителей )'
     # pending 'should calculate visits'
     # pending 'should calculate items_in_stock_number'
     # pending 'should calculate percentage_of_inventory_sold'
     # pending 'should calculate percentage_of_stock_sold'
     # pending 'should calculate shipping_cost_as_a_percentage_of_total_revenue'
+
   end
 
   describe 'GET #full_chart_data' do
@@ -113,7 +124,7 @@ RSpec.describe ChartsDataController, :type => :controller do
     # p value_field
 
     data = json_body[value_type]
-    # p data
+    # p json_body
     expect(data[:value].to_f).to eq total_statistic[value_field]
     data[:data].map { |date_values|
       date = date_values[:date].to_datetime.strftime('%D').gsub('/','-')

@@ -9,13 +9,6 @@ GIT
       rails-observers (~> 0.1.2)
 
 GIT
-  remote: git://github.com/thoughtbot/shoulda-matchers.git
-  revision: b58f0a1807a4346399aa3b9bb5b88923ab9aa2e5
-  specs:
-    shoulda-matchers (3.1.1)
-      activesupport (>= 4.0.0)
-
-GIT
   remote: git@bitbucket.org:ImmaculatePine/first_admin_panel.git
   revision: c806d5884c0a4f3a960a957b6b687d5f89bf52c6
   specs:
@@ -326,7 +319,7 @@ GEM
       railties (= 4.1.8)
       sprockets-rails (~> 2.0)
     rails-assets-d3 (3.5.16)
-    rails-assets-moment (2.12.0)
+    rails-assets-moment (2.13.0)
     rails-assets-select2 (4.0.2)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
@@ -395,6 +388,8 @@ GEM
       activeresource (>= 3.0.0)
       thor (>= 0.14.4)
     shoulda (2.11.3)
+    shoulda-matchers (3.1.1)
+      activesupport (>= 4.0.0)
     sidekiq (3.3.3)
       celluloid (>= 0.16.0)
       connection_pool (>= 2.1.1)
@@ -540,7 +535,7 @@ DEPENDENCIES
   settingslogic
   shopify_api (>= 3.2.1)
   shoulda
-  shoulda-matchers!
+  shoulda-matchers (~> 3.1)
   sidekiq
   sidetiq (~> 0.6.3)
   simple_form

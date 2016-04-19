@@ -8,15 +8,13 @@
       .graph-unit-holder
         .graph-unit
           .graph-value
-            %span.val {{vm.data['value']}}
+            %span.val {{ vm.data['value'] }}
             %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.data['diff']) > 0, dynamica_down: vm.parse_diff(vm.data['diff']) < 0}"} {{vm.data['diff']}}
           .graph-unit-large-v2
             .graph-block
               .areaChartTotal_1.hide_y_axis.hide_x_axis.d3graph.graph_3
                 #tooltip.graph-tooltip-holder.transp-mod
                   #tooltip_content.graph-tooltip-top
-
-      .graph-unit-holder
 
         / Under global chart
         .legend-standalone
@@ -26,47 +24,46 @@
               .legend_name_v2
                 %span= t('projects.full_chart.check_points.current')
               .legend_val
-                %span.val {{ vm.period_value(vm.data['value']) }}
+                %span.val {{vm.data['value']}}
                 %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.data['diff']) > 0, dynamica_down: vm.parse_diff(vm.data['diff']) < 0}"} {{vm.data['diff']}}
 
             %li.legend_item{"data-graph" => "#family_area_1"}
               .legend_name_v2
                 %span= t('projects.full_chart.check_points.year_ago')
               .legend_val
-                %span.val {{ vm.period_value(vm.check_points.year_ago['value']) }}
+                %span.val {{vm.check_points.year_ago['value']}}
                 %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.year_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.year_ago['diff']) < 0}"} {{vm.check_points.year_ago['diff']}}
 
             %li.legend_item{"data-graph" => "#family_area_2"}
               .legend_name_v2
                 %span= t('projects.full_chart.check_points.half_a_year_ago')
               .legend_val
-                %span.val {{ vm.period_value(vm.check_points.half_a_year_ago['value']) }}
+                %span.val {{vm.check_points.half_a_year_ago['value']}}
                 %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.half_a_year_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.half_a_year_ago['diff']) < 0}"} {{vm.check_points.half_a_year_ago['diff']}}
 
             %li.legend_item{"data-graph" => "#family_area_3"}
               .legend_name_v2
                 %span= t('projects.full_chart.check_points.three_month_ago')
               .legend_val
-                %span.val {{ vm.period_value(vm.check_points.three_month_ago['value']) }}
+                %span.val {{vm.check_points.three_month_ago['value']}}
                 %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.three_month_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.three_month_ago['diff']) < 0}"} {{vm.check_points.three_month_ago['diff']}}
 
             %li.legend_item{"data-graph" => "#family_area_4"}
               .legend_name_v2
                 %span= t('projects.full_chart.check_points.month_ago')
               .legend_val
-                %span.val {{ vm.period_value(vm.check_points.month_ago['value']) }}
+                %span.val {{vm.check_points.month_ago['value']}}
                 %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.check_points.month_ago['diff']) > 0, dynamica_down: vm.parse_diff(vm.check_points.month_ago['diff']) < 0}"} {{vm.check_points.month_ago['diff']}}
+
 
         .graph-unit-filter
           %form
 
             .graph-unit-info
               .graph-unit-info-table.scrollParent
-
-                / Table header
                 .table-header.no_pointer
-                  .table-cell.col_1= t('projects.full_chart.date')
-                  .table-cell(ng-repeat="chart_type in vm.table_keys")
+                  .table-cell.colx_1= t('projects.full_chart.date')
+                  .table-cell.col_1(ng-repeat="chart_type in vm.table_keys")
                     %a(ng-click="vm.sortType = chart_type; vm.sortReverse = !vm.sortReverse")
                       %span {{ vm.T.t(chart_type) }}
                       %span.sort_catcher(ng-show = "vm.sortType == chart_type && !vm.sortReverse")
@@ -75,7 +72,6 @@
                       %span.sort_catcher(ng-show = "vm.sortType == chart_type && vm.sortReverse")
                         %span.sort_btn.sortBtn
 
-                / Data
                 .table-content
                   .table-row(dir-paginate="data in vm.table_data_array() | orderBy:vm.sortType:vm.sortReverse | itemsPerPage: vm.itemsPerPage")
                     .table-cell {{data.date}}

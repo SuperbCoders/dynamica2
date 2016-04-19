@@ -16,5 +16,14 @@
 require 'rails_helper'
 
 RSpec.describe Project, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  # # Attributes
+  # it { is_expected.to respond_to(:slug, :name, :api_user, :demo, :guest_token)}
+  # it { is_expected.to belong_to(:user) }
+  #
+  # # Associations
+  # it { is_expected.to have_many(:order_statuses).dependent(:destroy) }
+  # it { is_expected.to have_many(:financial_statuses).dependent(:destroy) }
+  # it { is_expected.to have_many(:project_characteristics).dependent(:destroy) }
+
 end

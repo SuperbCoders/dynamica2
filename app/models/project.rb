@@ -34,9 +34,11 @@ class Project < ActiveRecord::Base
   has_many :logs, dependent: :destroy
 
   has_many :project_characteristics, dependent: :destroy
+  has_many :project_order_statuses, dependent: :destroy
 
   has_many :product_characteristics, dependent: :destroy
   has_many :products, dependent: :destroy
+
 
   has_one :shopify_integration, dependent: :destroy, class_name: 'ThirdParty::Shopify::Integration'
   has_one :integration, dependent: :destroy
@@ -50,6 +52,155 @@ class Project < ActiveRecord::Base
   after_create :set_trial_subscription
 
   scope :actives, -> { where.not(user_id: nil) }
+
+  Dynamica::CHART_TYPES.each do |chart_type|
+    define_method chart_type do |scope, current_data, prev_data|
+      {
+          diff: diff_sum(chart_type, current_data, prev_data),
+          value: current_data.sum(chart_type),
+          data: current_data.send(scope).sum(chart_type)
+      }
+    end
+  end
+
+  # Число позиций в продаже | Number of Products in Stock
+  # – линейная диаграмма
+  # – число товаров, у которых >=1 единицы в наличии на складе
+  def products_in_stock_number(from, to)
+    result = { diff: 0, value: 0, data: {}, products: [] }
+
+    # current_products_data = product_characteristics.where('date >= ? AND date <= ?', from, to)
+    # prev_products_data = product_characteristics.where('date >= ? AND date <= ?', (from - (to - from)), from)
+
+    # result[:value] = current_products_data.sum(:sold_quantity)
+    # result[:diff] = diff_values(current_products_data.count, prev_products_data.count)
+
+
+    # Get products
+    # current_products_data.pluck(:product_id, :sold_quantity).each do |product_info|
+    #   result[:products] << {
+    #       product: products.find(product_info[0]),
+    #       sold_quantity: product_info[1]
+    #   }
+    # end
+
+    # Get data for table
+    # current_products_data.each do |product_char|
+    #   date = product_char.date.strftime("%d-%b-%y")
+    #
+    #   result[:data][date] ||= 0
+    #   result[:data][date] = product_char.sold_quantity
+    # end
+
+    result
+  end
+
+  # Средняя выручка на покупателя | Average Revenue per Customer (ARPC) – линейная диаграмма
+  def average_revenue_per_customer(_scope, current, prev)
+    result = { diff: 0, value: 0, data: {} }
+
+    current_value = (current.sum(:total_gross_revenues) / current.sum(:customers_number)).round(2)
+    prev_value = (prev.sum(:total_gross_revenues) / prev.sum(:customers_number)).round(2)
+
+    result[:value] = current_value
+    result[:diff] = diff_values(current_value, prev_value)
+
+    current.each do |pc|
+      date = pc.date.strftime("%d-%b-%y")
+      result[:data][date] ||= 0
+      result[:data][date] = (pc.customers_number == 0) ? 0 : pc.total_gross_revenues / pc.customers_number
+    end
+    result
+  end
+
+  # / Соотношение старых и новых покупателей | Repeat Customer Rate (RCR) – круговая диаграмма
+  def new_and_repeat_customers_number(scope, current_data, prev_data)
+    {
+        diff: 0,
+        value: current_data.sum(:new_customers_number),
+        data: [
+            {
+                color: "#91E873",
+                name: "New",
+                value: current_data.sum(:new_customers_number)
+            },
+            {
+                color: "#889FCC",
+                name: "Repeat",
+                value: current_data.sum(:repeat_customers_number)
+            }
+        ]
+    }
+  end
+
+  # Общая стоимость доставки | Gross Delivery Cost – линейная диаграмма
+  def total_gross_delivery(_scope, current, prev)
+    result = { diff: 0, value: 0, data: {} }
+
+    result[:value] = current.sum(:total_gross_delivery)
+    result[:diff] = diff_values(current.sum(:total_gross_delivery), prev.sum(:total_gross_delivery))
+
+    current.each do |pc|
+      date = pc.date.strftime("%d-%b-%y")
+      result[:data][date] ||= 0
+      result[:data][date] =  pc.total_gross_delivery
+    end
+    result
+  end
+
+  # Среднее число товаров в заказе | Average Quantity of Items per Order – линейная диаграмма
+  def average_order_size(_scope, current, prev)
+    result = { diff: 0, value: 0, data: {}}
+
+    current_data_value = current.sum(:orders_number).zero? ? 0 : (current.sum(:products_number).to_f / current.sum(:orders_number).to_f ).round(2)
+    prev_data_value = prev.sum(:orders_number).zero? ? 0 : (prev.sum(:products_number) / prev.sum(:orders_number)).round(2)
+
+    result[:value] = current_data_value
+    result[:diff] = diff_values(current_data_value, prev_data_value)
+
+    current.each do |pc|
+      date = pc.date.strftime("%d-%b-%y")
+      result[:data][date] ||= 0
+      result[:data][date] =  (pc.orders_number == 0) ? 0 : pc.products_number / pc.orders_number
+    end
+    result
+  end
+
+  # Calculate / Средний чек | Average Order Value (AOV) – линейная диаграмма
+  def average_order_value(_scope, current, prev)
+    result = { diff: 0, value: 0, data: {} }
+
+    # Current data value
+    current_data_value = current.sum(:orders_number) == 0 ? 0 : (current.sum(:total_gross_revenues) / current.sum(:orders_number)).round(2)
+    prev_data_value = prev.sum(:orders_number) == 0 ? 0 : (prev.sum(:total_gross_revenues) / prev.sum(:orders_number)).round(2)
+
+    result[:value] = current_data_value
+
+    # Different between current and prev data
+    result[:diff] = diff_values(current_data_value, prev_data_value)
+
+    current.each do |pc|
+      date = pc.date.strftime("%d-%b-%y")
+
+      result[:data][date] ||= 0
+      result[:data][date] = (pc.orders_number == 0) ? 0 : pc.average_order_value / pc.orders_number
+    end
+    result
+  end
+
+  # @return [Hash] of statuses between from and to
+  def order_statuses(from ,to)
+    result = { data: [] }
+    statuses_hash = project_order_statuses.where('date > ? and date < ?', from, to).group(:status).sum(:count)
+    statuses_hash.keys.map { |k|
+      result[:data] << {
+          color: "#%06x" % (rand * 0xffffff),
+          name: k,
+          value: statuses_hash[k]
+      }
+    }
+    result
+  end
 
   # @return [Array] of top 5 seller products
   def top_5_products
@@ -92,6 +243,56 @@ class Project < ActiveRecord::Base
 
   def recent_forecast
     forecasts.order(created_at: :asc, finished_at: :asc).last
+  end
+
+  def big_charts_data(scope, current_data, prev_data)
+    result = [
+        {
+            "name": "Revenue",
+        "tr_name": "revenue",
+        "color": "#6AFFCB",
+        "value": "#{current_data.sum :total_gross_revenues}",
+        "diff": diff_sum(:total_gross_revenues, current_data, prev_data),
+        "data": current_data.send(scope).sum(:total_gross_revenues)
+    },
+        {
+            "name": "Orders",
+        "tr_name": "orders",
+        "color": "#FF1FA7",
+        "value": "#{current_data.sum :orders_number}",
+        "diff": diff_sum(:orders_number, current_data, prev_data),
+        "data": current_data.send(scope).sum(:orders_number)
+    },
+        {
+            "name": "Products sell",
+        "tr_name": "products_sell",
+        "color": "#FF7045",
+        "value": "#{current_data.sum :products_number}",
+        "diff": diff_sum(:products_number, current_data, prev_data),
+        "data": current_data.send(scope).sum(:products_number),
+        "top": top_5_products
+    },
+        {
+            "name": "Unic users",
+        "tr_name": "unic_users",
+        "color": "#3BD7FF",
+        "value": "#{current_data.sum :unique_users_number}",
+        "diff": diff_sum(:unique_users_number, current_data, prev_data),
+        "data": current_data.send(scope).sum(:unique_users_number)
+    },
+        {
+            "name": "Customers",
+        "tr_name": "customers",
+        "color": "#FFD865",
+        "value": "#{current_data.sum :customers_number}",
+        "diff": diff_sum(:customers_number, current_data, prev_data),
+        "data": current_data.send(scope).sum(:customers_number)
+    }
+    ]
+
+    result.each {|gr| gr[:data] = gr[:data].map {|k, v| {'date' => k, 'close' => v}}}
+
+    result
   end
 
   def shopify_session
@@ -148,7 +349,27 @@ class Project < ActiveRecord::Base
 
   private
 
-    def set_trial_subscription
+    def diff_values(current_value, previous_value)
+      result = (current_value * 100.0 / previous_value - 100)
+      result = (result.nan? || result.infinite?) ? 0 : result.round
+      return '' if result.zero?
+      result > 0 ? "+#{result}%" : "#{result}%"
+    end
+
+    def average_sum(relation, field)
+      (relation.sum(field) / relation.count).round 1
+    end
+
+    def diff_sum(field, current_data, prev_data)
+      diff_values current_data.sum(field), prev_data.sum(field)
+    end
+
+    def diff_average_sum(field, current_data, prev_data)
+      diff_values(average_sum(current_data, field), average_sum(prev_data, field))
+    end
+
+
+  def set_trial_subscription
       subscription = Subscription.create_for(user, self)
       save
     end

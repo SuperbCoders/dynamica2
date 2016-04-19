@@ -3,7 +3,7 @@
   %i.icon.fa.fa-angle-right
 .graph-unit-holder.graph-unit-hover
   .row
-
+    / Число покупателей | Number of Customers – линейная диаграмма
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'customers_number'})"}
@@ -14,7 +14,19 @@
         .graph-block
           #customers_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
+    / Соотношение старых и новых покупателей | Repeat Customer Rate (RCR) – круговая диаграмма
+    / – на отдельной странице график выглядит вот так http://dl.dropbox.com/u/4476496/Screenshots/0r7.png
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link(href = "" ui-sref = "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'new_and_repeat_customers_number'})")
+        %h5.graph-name= t('projects.show.new_and_repeat_customers_number')
+        .graph-value
+          -#%span.val 3.2
+          -#%sup.graph-dynamica.dynamica_up +8%
+        .graph-block
+          #new_and_repeat_customers_number.graph_1.donutChart_1.d3graph.hide_x_axis
 
+    / Число новых покупателей | Number of New Customers – линейная диаграмма
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'new_customers_number'})"}
@@ -25,7 +37,7 @@
         .graph-block
           #new_customers_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
-
+    / Число повторных покупателей | Number of Repeat Customers – линейная диаграмма
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'repeat_customers_number'})"}
@@ -36,7 +48,7 @@
         .graph-block
           #repeat_customers_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
-
+    / Средняя выручка на покупателя | Average Revenue per Customer (ARPC) – линейная диаграмма
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'average_revenue_per_customer'})"}
@@ -46,3 +58,25 @@
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.average_revenue_per_customer.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.average_revenue_per_customer.diff) < 0}"} {{vm.other_charts_data.average_revenue_per_customer.diff}}
         .graph-block
           #average_revenue_per_customer.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+
+    / Средняя выручка на посетителя | Average Revenue per Visitor – линейная диаграмма ( NOT DONE )
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'average_revenue_per_visitor'})"}
+        %h5.graph-name= t('projects.show.average_revenue_per_visitor')
+        .graph-value
+          %span.val {{vm.other_charts_data.average_revenue_per_visitor.value}}
+          %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.new_customers_number.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.average_revenue_per_visitor.diff) < 0}"} {{vm.other_charts_data.average_revenue_per_visitor.diff}}
+        .graph-block
+          #average_revenue_per_visitor.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+
+    / Число уникальных посетителей | Number of Unique Visitors  – линейная диаграмма
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'unique_users_number'})"}
+        %h5.graph-name= t('projects.show.unique_users_number')
+        .graph-value
+          %span.val {{vm.other_charts_data.unique_users_number.value | dynCurrency}}
+          %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.unique_users_number.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.unique_users_number.diff) < 0}"} {{vm.other_charts_data.unique_users_number.diff}}
+        .graph-block
+          #unique_users_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis

@@ -35,8 +35,6 @@ class DashboardController
       vm.rootScope.$state.go('projects.subscription', {slug: vm.project.slug}) if vm.project.expired
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_project_data)
       vm.rootScope.set_datepicker_date(vm.datepicker,moment().startOf('month'),moment().endOf('month'))
-
-      vm.fetch()
     )
 
   datepicker_changed: ->
@@ -69,8 +67,6 @@ class DashboardController
     @charts_fetch('big_chart_data').success((response) ->
       vm.big_chart = response
 
-      console.log vm.big_chart
-
       # Retrieve top 5 products
       vm.top_5_products = info['top'] for info in vm.big_chart when info['tr_name'] == 'products_sell'
 
@@ -88,6 +84,11 @@ class DashboardController
       $('.lineAreaChart_1').each (index) ->
         el_id = $(this).context.id
         vm.draw_block_charts($(this), vm.other_charts_data[el_id])
+
+      $('.donutChart_1').each (index) ->
+        el_id = $(this).context.id
+        if el_id in ['new_and_repeat_customers_number', 'order_statuses']
+          vm.init_donut_chart($(this), vm.other_charts_data[el_id])
     )
 
   # Draw block line area chart
@@ -96,7 +97,8 @@ class DashboardController
     return if not data
     vm = @
     el.empty()
-    element_id = el.attr('id')
+    chart_name = element_id = el.attr('id')
+
     margin =
       top: 0
       right: 0
@@ -132,7 +134,7 @@ class DashboardController
     value = parseFloat(data['value'])
     diff = parseFloat(data['diff'])
 
-    currency_elements = ['total_revenu', 'average_order_value', 'average_revenue_per_customer']
+    currency_elements = ['total_gross_revenues', 'average_order_value', 'average_revenue_per_customer', 'total_gross_delivery']
 
     if element_id in currency_elements
       value = vm.filter('dynCurrency')(value)
@@ -148,15 +150,13 @@ class DashboardController
     not_null = false
     for d in data['data']
       not_null = true if d.close > 0
-      d.date = parseDate(d.date) if d.date
+      # Parse 16-Feb-16
+      if d.date and d.date.length == 9
+        d.date = parseDate(d.date)
       d.close = +d.close
 
-    x.domain d3.extent(data['data'], (d) ->
-      d.date
-    )
-    area_x.domain d3.extent(data['data'], (d) ->
-      d.date
-    )
+    x.domain d3.extent(data['data'], (d) -> d.date )
+    area_x.domain d3.extent(data['data'], (d) -> d.date)
 
     if not_null
       y.domain [
@@ -256,7 +256,6 @@ class DashboardController
     width = el.width() - (margin.left) - (margin.right)
     height = el.height() - (margin.top) - (margin.bottom)
     bisectDate = d3.bisector((d) ->
-      #console.log(d);
       d.date
     ).left
     parseDate = d3.time.format('%d-%b-%y').parse
@@ -307,7 +306,6 @@ class DashboardController
         TICKS = 10
         DATE_FORMAT = '%b %d %y'
 
-    console.log 'Ticks '+TICKS+' with '+DATA_LENGTH
     xAxis = d3.svg.axis().scale(area_x).ticks(TICKS).tickFormat(d3.time.format(DATE_FORMAT)).orient('bottom')
     #var xScale = d3.scale.ordinal()
     #    .domain(d3.range(dataset.length))
@@ -315,7 +313,6 @@ class DashboardController
 
     svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').on('mousemove', (d) ->
       `var tooltip`
-      #console.log(d3.mouse(this));
       tooltip = d3.select('#tooltip')
       tooltip_content = $('#tooltip_content')
       tooltip_dot = $('#tooltip_dot')
@@ -413,6 +410,44 @@ class DashboardController
       svg.append('rect').attr('class', 'graph-hover-catcher hoverCatcher').attr('data-area', '#family_area_' + i).style('opacity', 0).attr('transform', 'translate(0,-' + margin.top + ')').attr('x', 0).attr('y', i * 100 / data_files.length + '%').attr('width', '100%').attr 'height', 100 / data_files.length + '%'
       i++
     return
+
+  init_donut_chart: (el, data) ->
+
+    chart_name = element_id = el.attr('id')
+
+    type = (d) ->
+      d.value = +d.value
+      d
+
+    el.empty()
+    legendBlock = el.parent().find('.legend_v1')
+    if !legendBlock.length
+      legendBlock = $('<ul class="legend_v1" />')
+      el.after legendBlock
+    legendBlock.empty()
+    width = el.width()
+    height = el.height()
+    radius = Math.min(width, height) / 2
+    arc = d3.svg.arc().outerRadius(radius).innerRadius(radius - 10)
+    pie = d3.layout.pie().sort(null).value((d) ->
+      d.value
+    )
+    svg = d3.select(el[0]).append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
+
+    g = svg.selectAll('.arc').data(pie(data['data'])).enter().append('g').attr('class', 'arc')
+    g.append('path').attr('d', arc).style 'fill', (d) ->
+      color = d.data.color
+      legendItem = $('<li class="legend_item" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(d.data.name))).append($('<div class="legend_val" />').text(d.data.value))
+      el.next().append legendItem
+      color
+    return
+
+    # ---
+    # generated by js2coffee 2.2.0
 
   # Draw block chart #1
   init_area_chart: (el, data) ->

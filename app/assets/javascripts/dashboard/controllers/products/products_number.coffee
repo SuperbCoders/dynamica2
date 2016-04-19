@@ -1,12 +1,14 @@
-class ChartController
-  constructor: (@rootScope, @scope, @Projects, @http, @T, @filter) ->
-    console.log 'ChartController constructor'
+class ProductsNumberController
+  constructor: (@rootScope, @scope, @Projects, @http, @filter, @T) ->
     vm = @
     vm.slug = @rootScope.$stateParams.slug
-    vm.chart = @rootScope.$stateParams.chart
+    vm.chart = @rootScope.$stateParams.chart = 'products_number'
+    vm.products_view = 'none'
     vm.project = @rootScope.$stateParams.project
-    vm.itemsPerPage = 50
+    vm.sortType = ''
+    vm.sortReverse = false
     vm.date_range = 0
+    vm.itemsPerPage = 50
     vm.range =
       chart: vm.chart
       from: @rootScope.$stateParams.from
@@ -14,10 +16,14 @@ class ChartController
 
     vm.datepicker = $('.datePicker')
 
-    if not vm.range.from or not vm.range.to
-      @rootScope.$state.go('projects.list')
+    # return to projets list if date range not present in URL
+    @rootScope.$state.go('projects.list') if not vm.range.from or not vm.range.to
 
-    @scope.$watch('vm.date_range', (old_val) -> vm.set_date_range(old_val) )
+    console.log 'ProductsNumberController'
+
+    @Projects.query({}).$promise.then( (projects) ->
+      console.log projects
+    )
 
     @init_dashboard()
 
@@ -42,7 +48,6 @@ class ChartController
       value['date'] = key
       result.push value
     result
-
   fetch: ->
     vm = @
 
@@ -56,37 +61,35 @@ class ChartController
       chart: vm.chart
 
     vm.http.get(chart_url, params: chart_params).success((response) ->
-        vm.data = response['full']
-        vm.check_points = response['check_points']
-        vm.table_data = {}
-        vm.table_keys = []
+      vm.data = response['full']
+      vm.check_points = response['check_points']
+      vm.table_data = {}
+      vm.table_keys = []
 
-        _.forEach(response['table_data'], (value, chart_name) ->
+      _.forEach(response['table_data'], (value, chart_name) ->
 
-          if chart_name == vm.chart
+        # Save chart name
+        vm.table_keys.push chart_name if chart_name not in vm.table_keys
 
-            # Save chart name
-            vm.table_keys.push chart_name if chart_name not in vm.table_keys
+        # forEach chart data
+        _.forEach(value['data'], (close, date) ->
 
-            # forEach chart data
-            _.forEach(value['data'], (close, date) ->
+          vm.table_data[date] = {} if not vm.table_data[date]
 
-              vm.table_data[date] = {} if not vm.table_data[date]
+          table = vm.table_data[date]
 
-              table = vm.table_data[date]
+          table[chart_name] = 0 if not table[chart_name]
 
-              table[chart_name] = 0 if not table[chart_name]
-
-              table[chart_name] += close
-
-            )
+          table[chart_name] += close
 
         )
 
-
-        console.log vm.table_keys
-        vm.init_line_area3_chart($('.areaChartTotal_1'), vm.data)
       )
+
+      console.log vm.table_keys
+      console.log vm.table_data
+      vm.init_line_area3_chart($('.areaChartTotal_1'), vm.data)
+    )
 
   fit2Limits: (pckr, date, max) ->
     start = moment(pckr.datepicker('getStartDate'))
@@ -98,9 +101,6 @@ class ChartController
 
   init_line_area3_chart: (el, data) ->
     return if data['data'].length < 1
-
-    chart_name = element_id = el.attr('id')
-
     vm = @
     dates = []
     values = []
@@ -134,6 +134,9 @@ class ChartController
       d.date
     ).left
     parseDate = d3.time.format('%d-%b-%y').parse
+
+    currencyFormatter = (e) ->
+      e.toString().replace /(\d)(?=(\d{3})+(?!\d))/g, '$1 '
 
     x = d3.time.scale().domain([
       moment.min(dates)
@@ -190,38 +193,38 @@ class ChartController
 
 
     xAxis = d3.svg.axis()
-      .scale(x)
-      .ticks(TICKS)
-      .tickFormat(DATE_FORMAT)
-      .orient('bottom')
+    .scale(x)
+    .ticks(TICKS)
+    .tickFormat(DATE_FORMAT)
+    .orient('bottom')
 
     yAxis = d3.svg.axis().scale(y).ticks(5).tickFormat((d) ->
-      if d == 0 then '' else d
+      if d == 0 then '' else currencyFormatter(d) + '$'
     ).orient('left')
 
     svg = d3.select(el[0])
-      .append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .append('g')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
 
     svg.append('g')
-      .attr('class', 'x axis')
-      .style('font-size', '14px')
-      .style('fill', '#A5ADB3')
-      .attr('transform', 'translate(0,' + height + ')').call xAxis
+    .attr('class', 'x axis')
+    .style('font-size', '14px')
+    .style('fill', '#A5ADB3')
+    .attr('transform', 'translate(0,' + height + ')').call xAxis
 
     svg.append('g')
-      .attr('class', 'y axis')
-      .attr('transform', 'translate(' + -25 + ', 0)')
-      .style('font-size', '14px')
-      .style('fill', '#A5ADB3').attr('class', 'grid').call yAxis
+    .attr('class', 'y axis')
+    .attr('transform', 'translate(' + -25 + ', 0)')
+    .style('font-size', '14px')
+    .style('fill', '#A5ADB3').attr('class', 'grid').call yAxis
 
     svg.append('g')
-      .attr('class', 'gray_grid')
-      .call make_y_axis().tickSize(-width, 0, 0).tickFormat('')
+    .attr('class', 'gray_grid')
+    .call make_y_axis().tickSize(-width, 0, 0).tickFormat('')
 
 
     # Get the data
@@ -239,41 +242,41 @@ class ChartController
     svg.append('path').attr('class', 'line line_v2').attr 'd', valueline(data)
 
     gradient = svg.append("svg:defs")
-      .append("svg:linearGradient")
-      .attr("id", "area_gradient_1")
-      .attr("x1", "0%")
-      .attr("y1", "0%")
-      .attr("x2", "0%")
-      .attr("y2", "100%")
-      .attr("spreadMethod", "pad")
+    .append("svg:linearGradient")
+    .attr("id", "area_gradient_1")
+    .attr("x1", "0%")
+    .attr("y1", "0%")
+    .attr("x2", "0%")
+    .attr("y2", "100%")
+    .attr("spreadMethod", "pad")
 
     gradient.append("svg:stop")
-      .attr("offset", "0%")
-      .attr("stop-color", "#dfe7ff")
-      .attr("stop-opacity", 1)
+    .attr("offset", "0%")
+    .attr("stop-color", "#dfe7ff")
+    .attr("stop-opacity", 1)
 
     gradient.append("svg:stop")
-      .attr("offset", "100%")
-      .attr("stop-color", "#f6f6f6")
-      .attr("stop-opacity", 0)
+    .attr("offset", "100%")
+    .attr("stop-color", "#f6f6f6")
+    .attr("stop-opacity", 0)
 
     svg.append("path")
-      .datum(data)
-      .attr("class", "area area_v1")
-      .attr("d", area)
-      .style("fill", 'url(#area_gradient_1)')
+    .datum(data)
+    .attr("class", "area area_v1")
+    .attr("d", area)
+    .style("fill", 'url(#area_gradient_1)')
 
     svg.append("path")
-      .attr("class", "line")
-      .attr("d", valueline(data))
+    .attr("class", "line")
+    .attr("d", valueline(data))
 
     # Add the scatterplot
     svg.append('line')
-      .attr('id', 'line_for_dot')
-      .attr('class', 'line_for_dot')
-      .style('stroke', '#D0E3EE')
-      .style('stroke-width', '2')
-      .attr('x1', 0).attr('x2', 0).attr('y1', height).attr 'y2', 0
+    .attr('id', 'line_for_dot')
+    .attr('class', 'line_for_dot')
+    .style('stroke', '#D0E3EE')
+    .style('stroke-width', '2')
+    .attr('x1', 0).attr('x2', 0).attr('y1', height).attr 'y2', 0
 
     line_for_dot = d3.select('#line_for_dot')
     svg.selectAll('dot').data(data).enter().append('circle').attr('r', 0).attr('data-y-value', (d, i) ->
@@ -289,10 +292,10 @@ class ChartController
       y d.close
 
     svg.append('circle')
-      .attr('r', 10)
-      .attr('id', 'big_dot')
-      .attr('class', 'big_dot mark_v2')
-      .attr('cx', 0).attr 'cy', 0
+    .attr('r', 10)
+    .attr('id', 'big_dot')
+    .attr('class', 'big_dot mark_v2')
+    .attr('cx', 0).attr 'cy', 0
 
     tracing_anim_duration = 150
     distance = x(data[0].date) - x(data[1].date)
@@ -303,15 +306,15 @@ class ChartController
 
     while i < data.length
       svg.append('rect')
-        .attr('class', 'graph-tracing-catcher tracingCatcher')
-        .attr('data-dot', '#dot_' + ((parseInt(data.length) - i) - 1))
-        .style('opacity', 0)
-        .attr('x', ->
-          width - x(data[i].date)
+      .attr('class', 'graph-tracing-catcher tracingCatcher')
+      .attr('data-dot', '#dot_' + ((parseInt(data.length) - i) - 1))
+      .style('opacity', 0)
+      .attr('x', ->
+        width - x(data[i].date)
       ).attr('y', 0)
-        .attr("width", width / data.length)
-        .attr('height', height)
-        .style('transform', 'translate(' + distance / -2 + 'px)')
+      .attr("width", width / data.length)
+      .attr('height', height)
+      .style('transform', 'translate(' + distance / -2 + 'px)')
       .on('mouseenter', (e) ->
         $this = $(this)
         dot_id = d3.select(this).attr('data-dot')
@@ -321,26 +324,24 @@ class ChartController
         y0 = area_y.invert(cur_dot.attr('cy')).toFixed(0)
         if prevTracingDot != undefined
           big_dot
-            .transition()
-            .duration(tracing_anim_duration)
-            .attr('cx', $this.attr('x'))
-            .attr('cy', cur_dot.attr('data-y-value'))
+          .transition()
+          .duration(tracing_anim_duration)
+          .attr('cx', $this.attr('x'))
+          .attr('cy', cur_dot.attr('data-y-value'))
 
           line_for_dot
-            .transition()
-            .duration(tracing_anim_duration)
-            .attr('x1', $this.attr('x'))
-            .attr('x2', $this.attr('x'))
-            .attr('y2', cur_dot.attr('data-y-value'))
-
-          value = vm.rootScope.period_value(y0, vm.chart)
+          .transition()
+          .duration(tracing_anim_duration)
+          .attr('x1', $this.attr('x'))
+          .attr('x2', $this.attr('x'))
+          .attr('y2', cur_dot.attr('data-y-value'))
 
           tooltip_content
-            .empty()
-            .css('top', cur_dot.attr('data-y-value') * 1 + margin.top - 15 + 'px')
-            .append($('<div class="tooltip-title" />')
+          .empty()
+          .css('top', cur_dot.attr('data-y-value') * 1 + margin.top - 15 + 'px')
+          .append($('<div class="tooltip-title" />')
             .text(moment(x0).format('dddd, D MMMM YYYY')))
-            .append($('<div class="tooltip-value" />').text(value))
+          .append($('<div class="tooltip-value" />').text(currencyFormatter(y0)))
 
           tooltip.css 'left', $this.attr('x') * 1 + margin.left + 'px'
 
@@ -419,12 +420,23 @@ class ChartController
       container: $('.datePicker').parent()
       multidateSeparator: ' – ')
 
+    wnd = $(window)
+    scrollParent = $('.scrollParent')
+    doc = $(document)
+    scrollBottomFixed = $('.scrollBottomFixed')
 
-
-  period_value: (value) -> @rootScope.period_value(value, @chart)
+    $(window).scrollTop(100)
+    $(window).scroll ->
+      if scrollParent.offset().top - doc.scrollTop() + scrollBottomFixed.height() + scrollBottomFixed.css('marginTop').replace('px', '') * 1 <= wnd.height()
+        scrollBottomFixed.addClass('table-footer-fixed').removeClass 'table-footer-bottom'
+      if scrollParent.offset().top - doc.scrollTop() > wnd.height() - (scrollBottomFixed.height() * 2)
+        scrollBottomFixed.removeClass('table-footer-fixed').removeClass 'table-footer-bottom'
+      if doc.scrollTop() + wnd.height() - scrollBottomFixed.height() >= scrollParent.offset().top + scrollParent.height()
+        scrollBottomFixed.removeClass('table-footer-fixed').addClass 'table-footer-bottom'
 
   state_is: (name) -> @rootScope.state_is(name)
   parse_diff: (diff_str) -> parseInt(diff_str)
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
-@application.controller 'ChartController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', '$filter', ChartController]
+
+@application.controller 'ProductsNumberController', ['$rootScope', '$scope', 'Projects', '$http', '$filter', 'Translate', ProductsNumberController]

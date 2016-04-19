@@ -71,7 +71,7 @@ group :development, :test do
   gem 'guard-rspec', require: false
   gem 'shoulda'
   gem 'test-unit'
-  gem 'shoulda-matchers', github: 'thoughtbot/shoulda-matchers'
+  gem 'shoulda-matchers', '~> 3.1'
   gem 'terminal-notifier-guard'
   gem 'rspec-rails'
   gem 'factory_girl_rails'

@@ -9,6 +9,7 @@
       %li(ng-class="{current: vm.state_is('dashboard')}")
         %a.dashboard-panel-link(href='' ui-sref="projects.view({slug: vm.project.slug, id: vm.project.id })")= t('projects.show.overview')
 
+      / General
       %li.filter-holder(ng-class="{current: vm.state_is('general')}")
         .hover-select-box
           .dropdown.filterSelect
@@ -16,15 +17,34 @@
               = t 'projects.show.general'
               %span.caret
             %ul.dropdown-menu.dropdown-menu_bordered
+
+              / Выручка | Gross Sales – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'total_gross_revenues', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.total_revenu'
+
+              / Число заказов | Number of orders – линейная диаграмма
+              %li
+                %a(ui-sref="projects.chart({chart: 'orders_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.orders_number'
+
+              / Заказы по статусам | Order Statuses
+              / – круговая диаграмма
+              / – на отдельной странице график выглядит вот так
+              %li
+                %a(ui-sref="projects.chart({chart: 'order_statuses', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.order_statuses'
+
+              / Общая стоимость доставки | Gross Delivery Cost – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'shipping_cost_as_a_percentage_of_total_revenue', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.shipping_cost_as_a_percentage_of_total_revenue'
+
+              / Средний чек | Average Order Value (AOV) – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'average_order_value', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.average_order_value'
+
+              / Среднее число товаров в корзине | Average Quantity of Items per Order – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'average_order_size', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.average_order_size'
 
+      / Customers
       %li.filter-holder(ng-class="{current: vm.state_is('customers')}")
         .hover-select-box
           .dropdown.filterSelect
@@ -32,23 +52,38 @@
               = t 'projects.show.customers'
               %span.caret
             %ul.dropdown-menu.dropdown-menu_bordered
+
+              / Число покупателей | Number of Customers – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'customers_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.customers_number'
+
+              / Соотношение старых и новых покупателей | Repeat Customer Rate (RCR)
+              / – круговая диаграмма
+              / – на отдельной странице график выглядит вот так
+              %li
+                %a(ui-sref="projects.chart({chart: 'new_and_repeat_customers_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.new_and_repeat_customers_number'
+
+              / Число новых покупателей | Number of New Customers – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'new_customers_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.new_customers_number'
+
+              / Число повторных покупателей | Number of Repeat Customers – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'repeat_customers_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.repeat_customers_number'
+
+              / Средняя выручка на покупателя | Average Revenue per Customer (ARPC) – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'average_revenue_per_customer', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.average_revenue_per_customer'
+
+              / Средняя выручка на посетителя| Average Revenue per Visitor – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'sales_per_visitor', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.sales_per_visitor'
-              %li
-                %a(ui-sref="projects.chart({chart: 'average_customer_lifetime_value', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.average_customer_lifetime_value'
+
+              / Число уникальных посетителей | Number of Unique Visitors – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'unique_users_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.unique_users_number'
-              %li
-                %a(ui-sref="projects.chart({chart: 'visits', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.visits'
 
+      / Products
       %li.filter-holder(ng-class="{current: vm.state_is('products')}")
         .hover-select-box
           .dropdown.filterSelect
@@ -56,16 +91,38 @@
               = t 'projects.show.inventory'
               %span.caret
             %ul.dropdown-menu.dropdown-menu_bordered
-              %li
-                %a(ui-sref="projects.chart({chart: 'products_in_stock_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.products_in_stock_number'
-              %li
-                %a(ui-sref="projects.chart({chart: 'items_in_stock_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.items_in_stock_number'
-              %li
-                %a(ui-sref="projects.chart({chart: 'percentage_of_inventory_sold', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.percentage_of_inventory_sold'
-              %li
-                %a(ui-sref="projects.chart({chart: 'percentage_of_stock_sold', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.percentage_of_stock_sold'
+
+              / Товаров продано | Items Sold – линейная диаграмма
               %li
                 %a(ui-sref="projects.chart({chart: 'products_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.products_number'
+
+              / Число позиций в продаже | Number of Products in Stock
+              / – линейная диаграмма
+              / – число товаров, у которых >=1 единицы в наличии на складе
+              %li
+                %a(ui-sref="projects.chart({chart: 'products_in_stock_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.products_in_stock_number'
+
+              / Число товаров в продаже | Items in Stock
+              / – линейная диаграмма
+              / – сумма единиц всех продуктов на складе
+              %li
+                %a(ui-sref="projects.chart({chart: 'items_in_stock_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.items_in_stock_number'
+
+              / Какой % товаров продается | Share of Inventory Sold
+              / – круговая диаграмма
+              / – доля тех продуктов, у которых были продажи
+              / – на отдельной странице график выглядит вот так
+              %li
+                %a(ui-sref="projects.chart({chart: 'percentage_of_inventory_sold', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.percentage_of_inventory_sold'
+
+              / Какой % запасов на складе продается | Share of Stock Sold
+              / – круговая диаграмма
+              / – суммируем все запасы на складе, выделяем долю проданных товаров за этот период
+              / – на отдельной странице график выглядит вот так
+              %li
+                %a(ui-sref="projects.chart({chart: 'percentage_of_stock_sold', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.percentage_of_stock_sold'
+
+              / Таблица епта
               %li
                 %a(ui-sref="projects.chart({chart: 'products_revenue', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.products_revenue'
 

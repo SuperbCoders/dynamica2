@@ -1,7 +1,7 @@
 module ControllerMacros
 
-  TEST_ORDERS_COUNT_FROM = 3
-  TEST_ORDERS_COUNT_TO = 10
+  TEST_ORDERS_COUNT_FROM = 2
+  TEST_ORDERS_COUNT_TO = 5
 
   def generate_products_characteristics(project, orders)
     products_statistic = {}
@@ -64,7 +64,10 @@ module ControllerMacros
         total_gross_revenues: 0,
         customers_number: 0,
         new_customers_number: 0,
-        shipping_price: 0
+        shipping_price: 0,
+        total_gross_delivery: 0,
+        average_order_value: 0,
+        average_order_size: 0
     }
 
     # Выбрать из CSV некоторое количество заказов
@@ -95,7 +98,10 @@ module ControllerMacros
           total_gross_revenues: 0,
           customers_number: 0,
           new_customers_number: 0,
-          shipping_price: 0
+          shipping_price: 0,
+          total_gross_delivery: 0,
+          average_order_value: 0,
+          average_order_size: 0
       }
 
       total_statistic[:orders_number] += 1
@@ -103,13 +109,22 @@ module ControllerMacros
       total_statistic[:total_gross_revenues] += line_items.sum {|l_i| l_i['quantity'].to_i * l_i['price'].to_f}
       total_statistic[:customers_number] += 1
       total_statistic[:new_customers_number] += previous_orders.count { |order| order['email'] == order_data['email'] }
+      total_statistic[:total_gross_delivery] += (order_data['shipping_price'].to_f || 0)
+      total_statistic[:average_order_value] += line_items.sum {|l_i| l_i['quantity'].to_i * l_i['price'].to_f}
+      total_statistic[:average_order_size] += line_items.sum {|l_i| l_i['quantity'].to_i }
 
       stat[:orders_number]    += 1
       stat[:products_number]  += line_items.sum {|l_i| l_i['quantity'].to_i }
       stat[:total_gross_revenues] += line_items.sum {|l_i| l_i['quantity'].to_i * l_i['price'].to_f}
       stat[:customers_number] += 1
       stat[:new_customers_number] += previous_orders.count { |order| order['email'] == order_data['email'] }
+      stat[:total_gross_delivery] += (order_data['shipping_price'].to_f || 0)
+      stat[:average_order_value] += line_items.sum {|l_i| l_i['quantity'].to_i * l_i['price'].to_f}
+      stat[:average_order_size] += line_items.sum {|l_i| l_i['quantity'].to_i }
 
+      project_characteristic.average_order_value = line_items.sum {|l_i| l_i['quantity'].to_i * l_i['price'].to_f}
+      project_characteristic.average_order_size = line_items.sum {|l_i| l_i['quantity'].to_i }
+      project_characteristic.total_gross_delivery = (order_data['shipping_price'].to_f || 0)
       project_characteristic.orders_number = 1
       project_characteristic.products_number = line_items.sum {|l_i| l_i['quantity'].to_i }
       project_characteristic.total_gross_revenues = line_items.sum {|l_i| l_i['quantity'].to_i * l_i['price'].to_f}
@@ -124,6 +139,9 @@ module ControllerMacros
     puts "Total Products sold #{total_statistic[:products_number]}"
     puts "Total gross revenue #{total_statistic[:total_gross_revenues]}"
     puts "Customers #{total_statistic[:customers_number]}"
+
+    total_statistic[:average_order_size] = (total_statistic[:average_order_size].to_f / total_statistic[:orders_number].to_f).round(2)
+    total_statistic[:average_order_value] = (total_statistic[:average_order_value].to_f / total_statistic[:orders_number].to_f).round(2)
 
     return total_statistic, statistic, generate_products_characteristics(project, csv_orders)
   end

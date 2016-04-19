@@ -1,38 +1,43 @@
-/ Finance overview
-/ total_revenu
-/ shipping_cost_as_a_percentage_of_total_revenue
-/ average_order_value
-/ average_order_size
-
 .dashboard-caption
   %h3.caption-text= t 'projects.show.general'
   %i.icon.fa.fa-angle-right
 .graph-unit-holder.graph-unit-hover
   .row
 
-
+    / Выручка | Gross Sales – линейная диаграмма
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'total_gross_revenues'})"}
-        %h5.graph-name= t('projects.show.total_revenu')
+        %h5.graph-name= t('projects.show.total_gross_revenues')
         .graph-value
           %span.val {{vm.other_charts_data.total_gross_revenues.value}}
           %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.total_gross_revenues.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.total_gross_revenues.diff) < 0}"} {{vm.other_charts_data.total_gross_revenues.diff}}
         .graph-block
-          #total_revenu.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          #total_gross_revenues.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
-
+    / Число заказов | Number of orders – линейная диаграмма
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
-        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'shipping_cost_as_a_percentage_of_total_revenue'})"}
-        %h5.graph-name= t('projects.show.shipping_cost_as_a_percentage_of_total_revenue')
+        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'orders_number'})"}
+        %h5.graph-name= t('projects.show.orders_number')
         .graph-value
-          %span.val {{vm.other_charts_data.shipping_cost_as_a_percentage_of_total_revenue.value}}
-          %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.shipping_cost_as_a_percentage_of_total_revenue.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.shipping_cost_as_a_percentage_of_total_revenue.diff) < 0}"} {{vm.other_charts_data.shipping_cost_as_a_percentage_of_total_revenue.diff}}
+          %span.val {{vm.other_charts_data.orders_number.value}}
+          %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.orders_number.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.orders_number.diff) < 0}"} {{vm.other_charts_data.orders_number.diff}}
         .graph-block
-          #shipping_cost_as_a_percentage_of_total_revenue.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          #orders_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
+    / Заказы по статусам | Order Statuses – круговая диаграмма
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link(href = "" ui-sref = "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'order_statuses'})")
+        %h5.graph-name= t('projects.show.order_statuses')
+        .graph-value
+          -#%span.val 3.2
+          -#%sup.graph-dynamica.dynamica_up +8%
+        .graph-block
+          #order_statuses.graph_1.donutChart_1.d3graph.hide_x_axis
 
+    / Средний чек | Average Order Value (AOV) – линейная диаграмма
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'average_order_value'})"}
@@ -43,18 +48,25 @@
         .graph-block
           #average_order_value.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
-
+    / Среднее число товаров в заказе | Average Quantity of Items per Order – линейная диаграмма
     .col-lg-3.col-md-4.col-sm-6
-      .graph-unit.disabled
-        / a.graph-u-link(href='total_revenu.html')
+      .graph-unit
+        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'average_order_size'})"}
         %h5.graph-name= t('projects.show.average_order_size')
         .graph-value
           %span.val {{vm.other_charts_data.average_order_size.value}}
-          -#%span.val
-          -#  Google analytics is not available,
-          -#  %br
-          -#    %a{:href => "#"} set up
-          -#    it now
+          %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.average_order_size.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.average_order_size.diff) < 0}"} {{vm.other_charts_data.average_order_size.diff}}
         .graph-block
-          .graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          #average_order_size.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+
+    / Общая стоимость доставки | Gross Delivery Cost – линейная диаграмма
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'total_gross_delivery'})"}
+        %h5.graph-name= t('projects.show.total_gross_delivery')
+        .graph-value
+          %span.val {{vm.other_charts_data.total_gross_delivery.value}}
+          %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.total_gross_delivery.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.total_gross_delivery.diff) < 0}"} {{vm.other_charts_data.total_gross_delivery.diff}}
+        .graph-block
+          #total_gross_delivery.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 

@@ -8,9 +8,14 @@ namespace :dynamica do
 
     desc 'Seed all data for project'
     task :project, [:project_id] => :environment do |t, args|
-      Rake::Task['dynamica:seed:products'].invoke(args.project_id)
-      Rake::Task['dynamica:seed:product_characteristics'].invoke(args.project_id)
-      Rake::Task['dynamica:seed:orders'].invoke(args.project_id)
+      project = Project.find(args.project_id)
+      if project
+        Rake::Task['dynamica:seed:products'].invoke(args.project_id)
+        Rake::Task['dynamica:seed:product_characteristics'].invoke(args.project_id)
+        Rake::Task['dynamica:seed:orders'].invoke(args.project_id)
+        Rake::Task['dynamica:seed:order_statuses'].invoke(args.project_id)
+      end
+
     end
 
     desc 'Seed products from demo CSV for project by id'
@@ -136,30 +141,6 @@ namespace :dynamica do
         # Пропускаем если заказ не delivered
         # next if not ['transit','new','delivered'].include? order_data['state']
 
-        # Структура заказа из BBS
-        # {
-        #     "id"=>"1",
-        #     "state"=>"canceled",
-        #     "name"=>"yy",
-        #     "address"=>"yy",
-        #     "city"=>"Москва",
-        #     "zipcode"=>"111111",
-        #     "phone"=>"+7 (444) 444-44-43",
-        #     "email"=>"peee@pooo.ru",
-        #     "is_paid"=>"false",
-        #     "created_at"=>"2012-10-06 16:07:22 +0400",
-        #     "updated_at"=>"2013-12-17 11:26:32 +0400",
-        #     "comment"=>nil,
-        #     "lat"=>nil,
-        #     "lng"=>nil,
-        #     "total_discount"=>"0",
-        #     "store_id"=>"1",
-        #     "shipping_method_id"=>"3",
-        #     "shipping_price"=>"0",
-        #     "user_id"=>nil,
-        #     "payment_method_id"=>"1"
-        # }
-
         # Дата заказа
         order_created_at = order_data['created_at'][0..9]
         order_date = Date.parse(order_created_at)
@@ -203,6 +184,9 @@ namespace :dynamica do
           pc.customers_number += 1
           # pc.new_customers_number +=
           # и далее нули
+          pc.average_order_value = local_order_items.sum {|l_i| l_i['quantity'].to_i * l_i['price'].to_f}
+          pc.average_order_size = local_order_items.count
+          pc.total_gross_delivery = (order_data['shipping_price'].to_f || 0)
           pc.abandoned_shopping_cart_sessions_number = 0
           pc.unique_users_number = 0
           pc.visits = 0
@@ -211,10 +195,28 @@ namespace :dynamica do
           pc.items_in_stock_number = 0
           pc.save
         end
-
         puts "#{order_date} : Has #{local_order_items.count} order items. Revenue #{local_order_items.inject(0) {|acc, l_i| acc + l_i['quantity'].to_i * l_i['price'].to_f}}"
       end
-      puts orders_stat
+
+
+    end
+
+    desc 'Seed order statuses'
+    task :order_statuses, [:project_id] => :environment  do |t, args|
+      project = Project.find(args.project_id)
+
+      project.project_order_statuses.destroy_all
+
+      orders = CSV.new(File.open(ORDERS_CSV).read, headers: true).to_a.map {|row| row.to_hash}
+
+      orders.map { |order_data|
+        os = project.project_order_statuses.find_or_create_by(date: Date.parse(order_data['created_at']), status: order_data['state'])
+        os.count += 1
+        os.save
+        puts "Order #{order_data['id']} has #{order_data['state']}"
+      }
+
+      puts "#{project.project_order_statuses.count} OrderStatuses processed for #{project.name}"
     end
 
   end

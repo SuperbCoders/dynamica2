@@ -196,4 +196,5 @@ class ProductsRevenueController
   parse_diff: (diff_str) -> parseInt(diff_str)
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
+
 @application.controller 'ProductsRevenueController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', '$filter', ProductsRevenueController]

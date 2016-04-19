@@ -104,12 +104,17 @@ ru:
       general: Базовые
       customers: Покупатели
       inventory: Товары
-      shipping_cost_as_a_percentage_of_total_revenue: Доля доставки от общей стоимости
+      average_revenue_per_visitor: Средняя выручка на посетителя
+      shipping_cost_as_a_percentage_of_total_gross_revenuese: Доля доставки от общей стоимости
       average_order_value: Средния стоимость заказа
       average_order_size: Средняя размер заказа
       customers_number: Число покупателей
       new_customers_number: Число новых покупателей
-      repeat_customers_number: Чилсо повторных покупателей
+      new_and_repeat_customers_number: Соотношение старых и новых покупателей
+      orders_number: Число заказов
+      order_statuses: Заказы по статусам
+      total_gross_delivery: Общая стоимость доставки
+      repeat_customers_number: Число повторных покупателей
       ratio_of_new_customers_to_repeat_customers: Отшение новых покупателей к повторным
       average_revenue_per_customer: Средняя сумма на покупателя
       sales_per_visitor: Покупок на посетителей
@@ -121,7 +126,7 @@ ru:
       percentage_of_inventory_sold: Процент проданных товаров
       percentage_of_stock_sold: Процент запаса на складе
       products_number: Количество товаров
-      total_revenu: Общая выручка
+      total_gross_revenues: Общая выручка
       products_revenue: Доходы по товарам
       controls:
         update_forecast: Обновить прогноз
@@ -208,6 +213,8 @@ ru:
       moment: "еще чуть-чуть"
 
   devise:
+    sign_out: Выйти
+    sign_in: Войти
     registrations:
       edit:
         profile: Профиль

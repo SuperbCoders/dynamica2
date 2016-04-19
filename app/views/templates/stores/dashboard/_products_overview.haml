@@ -1,18 +1,23 @@
-
-/ Products overview
-/ products_in_stock_number
-/ items_in_stock_number
-/ percentage_of_inventory_sold
-/ percentage_of_stock_sold
-/ products_number
-
 .dashboard-caption
   %h3.caption-text= t 'projects.show.inventory'
   %i.icon.fa.fa-angle-right
 .graph-unit-holder.graph-unit-hover
   .row
 
+    / Товаров продано | Items Sold – линейная диаграмма
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'products_number'})"}
+        %h5.graph-name= t('projects.show.products_number')
+        .graph-value
+          %span.val {{ vm.other_chars_data.products_number.value}}
+          %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.products_number.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.products_number.diff) < 0}"} {{vm.other_charts_data.products_number.diff}}
+        .graph-block
+          #products_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
+    / Число позиций в продаже | Number of Products in Stock
+    / – линейная диаграмма
+    / – число товаров, у которых >=1 единицы в наличии на складе
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'products_in_stock_number'})"}
@@ -23,7 +28,9 @@
         .graph-block
           #products_in_stock_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
-
+    / Число товаров в продаже | Items in Stock
+    / – линейная диаграмма
+    / – сумма единиц всех продуктов на складе
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
         %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'items_in_stock_number'})"}
@@ -34,17 +41,43 @@
         .graph-block
           #items_in_stock_number.graph_2.lineAreaChart_1.d3graph.hide_x_axis
 
-
+    / Какой % товаров продается | Share of Inventory Sold
+    / – круговая диаграмма
+    / – доля тех продуктов, у которых были продажи
+    / – на отдельной странице график выглядит вот так http://dl.dropbox.com/u/4476496/Screenshots/0r7.png
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
-        %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'percentage_of_inventory_sold'})"}
+        %a.graph-u-link(href = "" ui-sref = "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'percentage_of_inventory_sold'})")
         %h5.graph-name= t('projects.show.percentage_of_inventory_sold')
         .graph-value
-          %span.val {{ vm.other_chars_data.percentage_of_inventory_sold.value}}
-          %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.percentage_of_inventory_sold.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.percentage_of_inventory_sold.diff) < 0}"} {{vm.other_charts_data.percentage_of_inventory_sold.diff}}
+          -#%span.val 3.2
+          -#%sup.graph-dynamica.dynamica_up +8%
         .graph-block
-          #percentage_of_inventory_sold.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+          #percentage_of_inventory_sold.graph_1.donutChart_1.d3graph.hide_x_axis
 
+    -#.col-lg-3.col-md-4.col-sm-6
+    -#  .graph-unit
+    -#    %a.graph-u-link{:href => "", 'ui-sref' => "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'percentage_of_inventory_sold'})"}
+    -#    %h5.graph-name= t('projects.show.percentage_of_inventory_sold')
+    -#    .graph-value
+    -#      %span.val {{ vm.other_chars_data.percentage_of_inventory_sold.value}}
+    -#      %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.other_charts_data.percentage_of_inventory_sold.diff) > 0, dynamica_down: vm.parse_diff(vm.other_charts_data.percentage_of_inventory_sold.diff) < 0}"} {{vm.other_charts_data.percentage_of_inventory_sold.diff}}
+    -#    .graph-block
+    -#      #percentage_of_inventory_sold.graph_2.lineAreaChart_1.d3graph.hide_x_axis
+
+    / Какой % запасов на складе продается | Share of Stock Sold
+    / – круговая диаграмма
+    / – суммируем все запасы на складе, выделяем долю проданных товаров за этот период
+    / – на отдельной странице график выглядит вот так http://dl.dropbox.com/u/4476496/Screenshots/0r7.png
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link(href = "" ui-sref = "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'percentage_of_inventory_sold'})")
+        %h5.graph-name= t('projects.show.percentage_of_inventory_sold')
+        .graph-value
+          -#%span.val 3.2
+          -#%sup.graph-dynamica.dynamica_up +8%
+        .graph-block
+          #percentage_of_inventory_sold.graph_1.donutChart_1.d3graph.hide_x_axis
 
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit

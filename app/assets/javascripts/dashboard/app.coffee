@@ -103,19 +103,18 @@
         ]
       ]
 
+#  .state 'projects.products_number',
+#    url: '/:slug/products_number/:from/:to'
+#    templateUrl: '/templates/stores/products/products_number'
+#    controller: 'ProductsNumberController'
+#    controllerAs: 'vm'
+
   .state 'projects.products_revenue',
     url: '/:slug/products_revenue/:from/:to',
-    templateUrl: '/templates/stores/products_revenue'
+    templateUrl: '/templates/stores/products/products_revenue'
     controller: 'ProductsRevenueController'
     controllerAs: 'vm'
     params: {project: null}
-    resolve:
-      Projects: ['Resources', (Resources) ->
-        Resources '/projects/:id', {id: @id}, [
-          {method: 'GET', isArray: false},
-          {name: 'search', method: 'POST', isArray: false}
-        ]
-      ]
 
   .state 'projects.chart',
     url: '/:slug/:chart/:from/:to',
@@ -135,7 +134,7 @@
   return
 ]
 
-@application.run ['$rootScope', '$state', '$stateParams', '$http', '$location', ($rootScope, $state, $stateParams, $http, $location) ->
+@application.run ['$rootScope', '$state', '$stateParams', '$http', '$location', '$filter', ($rootScope, $state, $stateParams, $http, $location, $filter) ->
   $rootScope.currency = '$'
   $rootScope.$state = $state
   $rootScope.$stateParams = $stateParams
@@ -180,10 +179,18 @@
     $('.setting.open').removeClass('open') if element_id != 'setting_menu'
   )
 
+  # В зависимости от вида графика показывать валюту или нет в разных частях дашборда
+  # param value - значение(цифра)
+  # param chart_name - название графика
+  $rootScope.period_value = (value, chart_name) ->
+    if chart_name in ['items_in_stock_number', 'products_number', 'orders_number', 'customers_number', 'products_in_stock_number']
+      value
+    else
+      value = $filter('dynCurrency')(value)
+
 
   # Set current project
   $rootScope.current_project = (project) ->
-    console.log 'Set current project '+project.name
     $rootScope.project = project
 
   # State checker for current class for menu
@@ -192,10 +199,11 @@
     state = $rootScope.$state.current.name
     total_states = ['total_gross_revenues', 'shipping_cost_as_a_percentage_of_total_revenue', 'average_order_value', 'average_order_size']
     customer_states = ['customers_number','new_customers_number','repeat_customers_number','average_revenue_per_customer','sales_per_visitor','average_customer_lifetime_value','unique_users_number','visits']
-    products_states = ['products_in_stock_number','items_in_stock_number','percentage_of_inventory_sold','percentage_of_stock_sold','products_number','products_revenue']
+    products_states = ['products_in_stock_number','items_in_stock_number','percentage_of_inventory_sold','percentage_of_stock_sold','products_number','products_revenue', 'products_number']
 
     return true if name is 'dashboard' and state is 'projects.view'
     return true if name is 'products' and state is 'projects.products_revenue'
+    return true if name is 'products_number' and state is 'projects.products_number'
 
     switch name
       when 'general'
