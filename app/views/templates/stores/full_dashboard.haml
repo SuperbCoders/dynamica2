@@ -6,7 +6,7 @@
       = render 'templates/stores/shared/debug'
 
       .graph-unit-holder
-        .graph-unit.dark_mod_
+        .graph-unit.dark_mod
           .graph-value
             %span.val {{vm.data['value'] | dynCurrency}}
             %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.data['diff']) > 0, dynamica_down: vm.parse_diff(vm.data['diff']) < 0}"} {{vm.data['diff']}}
@@ -19,7 +19,7 @@
       .graph-unit-holder
 
         / Under global chart
-        .legend-standalone.dark_mod_
+        .legend-standalone.dark_mod
           %ul.legend_v2.graph-unit-legend.no_pointer
 
             %li.legend_item{"data-graph" => "#family_area_0"}
