@@ -7,7 +7,7 @@
     %div
       %a.btn.btn-lg.btn-danger(href = '' ui-sref = "projects.new" ng-click = "vm.project = {}")= t('projects.start_ﬁrst_project')
 
-.section.case.case-projects(ng-show='vm.projects.length > 0')
+.section.case.case-projects(ng-show='vm.projects.length > 0 && vm.projects[0].id != null')
   .case-capt
     %a{href: '', 'ui-sref' => "projects.new", "ng-click" => "vm.project = {}"} #{t('projects.index.new')}
   .case-cnt
@@ -39,10 +39,6 @@
                   %i.icon.fa.fa-cog{id: "setting_menu"}
                 .setting-menu.dropdown-menu.right
                   %ul
-                    %li
-                      %a(href='' ui-sref="projects.subscription({slug: project.slug})")= t('projects.project.subscription')
-                    -#%li
-                      -#%a(href='' ui-sref="projects.settings({slug: project.slug})")= t('projects.project.settings')
                     %li
                       %a(href='' ui-sref="projects.edit({slug: project.slug})")= t('projects.project.edit')
                     %li

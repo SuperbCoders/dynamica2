@@ -38,6 +38,8 @@
             .user-menu.dropdown-menu.right
               %ul
                 %li
+                  %a(href='' ui-sref="profile.subscription")= t('layouts.application.subscription')
+                %li
                   %a(href = '' ui-sref = "profile")= t('layouts.application.profile')
                 %li.clear
-                  %a(href = '/users/sign_out')= t('devise.sign_out')
+                  %a(href = '/users/sign_out')= t('layouts.application.log_out')

@@ -1,6 +1,7 @@
 ru:
   layouts:
     application:
+      subscription: Подписка
       projects: Проекты
       team: Команда
       profile: Профиль

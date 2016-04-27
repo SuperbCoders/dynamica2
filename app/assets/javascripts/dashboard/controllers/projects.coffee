@@ -3,7 +3,7 @@ class ProjectsController
     vm = @
     vm.params = @rootScope.$stateParams
     vm.project = {}
-    vm.projects = []
+    vm.projects = [{id: null}]
 
     if vm.params.slug
       @Projects.search({slug: vm.params.slug}).$promise.then( (project) ->
