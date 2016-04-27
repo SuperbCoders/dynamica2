@@ -27,7 +27,7 @@ class ProfileController
     vm = @
 
     $("#avatar_input").val('')
-    
+
     vm.http.post(vm.Routes.destroy_avatar_path(), {}).then((response) ->
       vm.rootScope.user = response.data
     )
