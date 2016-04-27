@@ -1,5 +1,5 @@
 class ChartController
-  constructor: (@rootScope, @scope, @Projects, @http, @T, @filter) ->
+  constructor: (@rootScope, @scope, @Projects, @http, @filter) ->
     console.log 'ChartController constructor'
     vm = @
     vm.slug = @rootScope.$stateParams.slug
@@ -427,4 +427,4 @@ class ChartController
   parse_diff: (diff_str) -> parseInt(diff_str)
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
-@application.controller 'ChartController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', '$filter', ChartController]
+@application.controller 'ChartController', ['$rootScope', '$scope', 'Projects', '$http', '$filter', ChartController]

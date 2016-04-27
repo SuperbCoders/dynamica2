@@ -28,6 +28,15 @@ set :linked_dirs, fetch(:linked_dirs, []).push('bin', 'log', 'tmp/pids', 'tmp/ca
 # set :keep_releases, 5
 
 namespace :deploy do
+  task :clear_assets do
+    on roles(:web) do
+      within release_path do
+        execute :rake, "assets:clean"
+        execute :rake, "assets:clobber"
+      end
+    end
+  end
+
   task :restart do
     invoke 'unicorn:restart'
   end

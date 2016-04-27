@@ -1,5 +1,5 @@
 class SetupController
-  constructor: (@rootScope, @scope, @Alerts, @T, @http, @R) ->
+  constructor: (@rootScope, @scope, @Alerts, @http, @R) ->
     vm = @
     vm.profile =
       email: undefined
@@ -42,4 +42,4 @@ class SetupController
       return @Alerts.error(@T.t('password_mismatch'))
     return true
 
-@application.controller 'SetupController', ['$rootScope', '$scope', 'Alerts', 'Translate', '$http', 'Routes', SetupController]
+@application.controller 'SetupController', ['$rootScope', '$scope', 'Alerts', '$http', 'Routes', SetupController]

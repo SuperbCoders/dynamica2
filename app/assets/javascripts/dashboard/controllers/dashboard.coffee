@@ -1,5 +1,5 @@
 class DashboardController
-  constructor: (@rootScope, @scope, @Projects, @http, @T, @filter) ->
+  constructor: (@rootScope, @scope, @Projects, @http, @filter) ->
     vm = @
     vm.params = @rootScope.$stateParams
     vm.project = {}
@@ -41,8 +41,8 @@ class DashboardController
     vm = @
     dates = vm.datepicker_date.split(' – ')
     if dates.length == 2
-      vm.range.raw_start = moment(dates[0])
-      vm.range.raw_end = moment(dates[1])
+      vm.range.raw_start = moment(dates[0], "MMM D, YYYY")
+      vm.range.raw_end = moment(dates[1], "MMM D, YYYY")
       vm.range.from = vm.range.raw_start.format('MM.DD.YYYY')
       vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
       vm.fetch()
@@ -242,7 +242,7 @@ class DashboardController
     i = 0
     while i < data_files[0].data.length
       obj = data_files[0].data[i]
-      dates.push moment(obj.date)
+      dates.push moment(obj.date, "DD-MMM-YY")
       values.push obj.close
       i++
 
@@ -611,5 +611,6 @@ class DashboardController
   state_is: (name) -> @rootScope.state_is(name)
   parse_diff: (diff_str) -> parseInt(diff_str)
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
-@application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', '$filter', DashboardController]
+
+@application.controller 'DashboardController', ['$rootScope', '$scope', 'Projects', '$http', '$filter', DashboardController]
 

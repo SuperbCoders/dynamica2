@@ -70,6 +70,13 @@
     templateUrl: '/templates/stores/dashboard'
     controller: 'DashboardController',
     controllerAs: 'vm'
+    resolve:
+      Projects: ['Resources', (Resources) ->
+        Resources '/projects/:id', {id: @id}, [
+          {method: 'GET', isArray: false},
+          {name: 'search', method: 'POST', isArray: false}
+        ]
+      ]
 
   .state 'projects.settings',
     url: '/:slug/settings'
@@ -103,7 +110,14 @@
     controller: 'ProductsRevenueController'
     controllerAs: 'vm'
     params: {project: null}
-
+    resolve:
+      Projects: ['Resource', (Resource) ->
+        Resource '/projects/:id', {id: @id}, [
+          {method: 'GET', isArray: false},
+          {name: 'search', method: 'POST', isArray: false}
+        ]
+      ]
+      
   .state 'projects.chart',
     url: '/:slug/:chart/:from/:to',
     templateUrl: '/templates/stores/full_dashboard'

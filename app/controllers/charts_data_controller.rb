@@ -39,6 +39,8 @@ class ChartsDataController < ApplicationController
     @result = {}
 
     case params[:chart]
+      when 'order_statuses'
+        @result[:full] = @project.order_statuses(date_from, date_to)
       when 'products_in_stock_number'
         @result[:full] = @project.send(params[:chart], date_from, date_to)
       else

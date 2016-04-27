@@ -1,5 +1,5 @@
 class ProductsRevenueController
-  constructor: (@rootScope, @scope, @Projects, @http, @Translate, @filter) ->
+  constructor: (@rootScope, @scope, @Projects, @http, @filter) ->
     console.log 'ProductsRevenueController'
     vm = @
     vm.slug = @rootScope.$stateParams.slug
@@ -199,4 +199,4 @@ class ProductsRevenueController
   chart_changed: (chart) -> @rootScope.$state.go('projects.chart', {project: @project,slug: @project.slug,chart: @range[chart],from: @range.from,to: @range.to})
   toggle_debug: -> if @debug is true then @debug = false else @debug = true
 
-@application.controller 'ProductsRevenueController', ['$rootScope', '$scope', 'Projects', '$http', 'Translate', '$filter', ProductsRevenueController]
+@application.controller 'ProductsRevenueController', ['$rootScope', '$scope', 'Projects', '$http', '$filter', ProductsRevenueController]
