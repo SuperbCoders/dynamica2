@@ -1,5 +1,6 @@
 class ProductsRevenueController
   constructor: (@rootScope, @scope, @Projects, @http, @Translate, @filter) ->
+    console.log 'ProductsRevenueController'
     vm = @
     vm.slug = @rootScope.$stateParams.slug
     vm.chart = 'products_revenue'
@@ -149,8 +150,9 @@ class ProductsRevenueController
     dates = vm.datepicker_date.split(' – ')
 
     if dates.length == 2
-      vm.range.raw_start = moment(dates[0])
-      vm.range.raw_end = moment(dates[1])
+
+      vm.range.raw_start = moment(dates[0], "MMM D, YYYY")
+      vm.range.raw_end = moment(dates[1], "MMM D, YYYY")
       vm.range.from = vm.range.raw_start.format('MM.DD.YYYY')
       vm.range.to = vm.range.raw_end.format('MM.DD.YYYY')
       vm.fetch()
