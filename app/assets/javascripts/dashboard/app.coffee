@@ -1,7 +1,8 @@
 @application = angular.module('dynamica.dashboard',
   [ 'ui.router',
     'ngResource',
-    'angularUtils.directives.dirPagination'])
+    'angularUtils.directives.dirPagination',
+    'ngDroplet'])
 
 @application.config ['$httpProvider', '$stateProvider', '$urlRouterProvider', ($httpProvider, $stateProvider, $urlRouterProvider) ->
   $httpProvider.defaults.useXDomain = true

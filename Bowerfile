@@ -19,6 +19,7 @@ asset 'bootstrap-switch'
 asset 'bootstrap-select'
 asset 'bootstrap-datepicker'
 
+asset 'ng-droplet'
 asset 'angular'
 asset 'angular-cookies'
 asset 'angular-sanitize'

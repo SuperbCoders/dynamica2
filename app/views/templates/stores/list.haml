@@ -22,10 +22,10 @@
             .descript
               .demo{'ng-show' => "project.demo"}
                 #{t('projects.project.no_forecasts_demo')}
-              .forecast{'ng-show' => "project.last_forecast"}
-                {{project.last_forecast}}
-              .no_forecast{'ng-show' => "!project.last_forecast"}
-                #{t('projects.project.no_forecasts')}
+              -#.forecast{'ng-show' => "project.last_forecast"}
+              -#  {{project.last_forecast}}
+              -#.no_forecast{'ng-show' => "!project.last_forecast"}
+              -#  #{t('projects.project.no_forecasts')}
               %p(ng-show="project.expired") subscription expired
             .users
               %ul

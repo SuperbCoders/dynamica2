@@ -37,6 +37,12 @@ Rails.application.routes.draw do
       post 'email_uniqueness' => 'profile#email_uniqueness'
       get  '/' => 'profile#index', as: :profile
       post '/' => 'profile#update', as: :update
+
+      scope :avatar do
+        post 'destroy' => 'profile#avatar_destroy', as: :destroy_avatar
+        post 'upload' => 'profile#avatar_upload', as: :upload_avatar
+      end
+
     end
 
     resources :projects, defaults: { format: :json } do

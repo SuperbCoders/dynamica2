@@ -5,6 +5,24 @@ class ProfileController < ApplicationController
     render json: serialize_resource(current_user, UserSerializer)
   end
 
+  def avatar_destroy
+    if current_user.update_attributes(avatar: nil)
+      current_user.remove_avatar!
+      current_user.save
+      render json: serialize_resource(current_user, UserSerializer)
+    else
+      render json: current_user.errors.messages, status: :unprocessable_entity
+    end
+  end
+
+  def avatar_upload
+    if current_user.update_attributes(avatar: params[:file])
+      render json: serialize_resource(current_user, UserSerializer)
+    else
+      render json: current_user.errors.messages, status: :unprocessable_entity
+    end
+  end
+
   def update
     logger.info "Profile #{profile_params.to_json}"
     @response[:password] = {}

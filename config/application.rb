@@ -35,6 +35,7 @@ module Dynamica
     config.assets.paths << Rails.root.join("vendor", "assets", "fonts")
     config.assets.paths << Rails.root.join("vendor", "assets", "bower_components", "bootstrap", "assets", "fonts")
 
+    config.upload_path = Rails.root.join('public','uploads')
   end
 end
 
