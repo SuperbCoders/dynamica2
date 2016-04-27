@@ -1,5 +1,5 @@
 class ProductsRevenueController
-  constructor: (@rootScope, @scope, @Projects, @http, @T, @filter) ->
+  constructor: (@rootScope, @scope, @Projects, @http, @Translate, @filter) ->
     vm = @
     vm.slug = @rootScope.$stateParams.slug
     vm.chart = 'products_revenue'
