@@ -70,13 +70,6 @@
     templateUrl: '/templates/stores/dashboard'
     controller: 'DashboardController',
     controllerAs: 'vm'
-    resolve:
-      Projects: ['Resource', (Resource) ->
-        Resource '/projects/:id', {id: @id}, [
-          {method: 'GET', isArray: false},
-          {name: 'search', method: 'POST', isArray: false}
-        ]
-      ]
 
   .state 'projects.settings',
     url: '/:slug/settings'
@@ -103,12 +96,6 @@
           {name: 'search', method: 'POST', isArray: false}
         ]
       ]
-
-#  .state 'projects.products_number',
-#    url: '/:slug/products_number/:from/:to'
-#    templateUrl: '/templates/stores/products/products_number'
-#    controller: 'ProductsNumberController'
-#    controllerAs: 'vm'
 
   .state 'projects.products_revenue',
     url: '/:slug/products_revenue/:from/:to',

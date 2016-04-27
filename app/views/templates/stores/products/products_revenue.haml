@@ -44,8 +44,8 @@
                     .table-cell.col_5.col_right(ng-show='!product.divider')
                       {{ product.sales }}
                     .table-cell.col_6.col_right(ng-show='!product.divider')
-                      .seller_val(ng-show='!product.divider') ₽ {{ product.gross_revenue }}
-                    .table-cell.col_7.col_right(ng-show='!product.divider') $ {{ product.price }}
+                      .seller_val(ng-show='!product.divider') {{ product.gross_revenue | dynCurrency}}
+                    .table-cell.col_7.col_right(ng-show='!product.divider') {{ product.price | dynCurrency}}
                     .table-cell.col_4(ng-show='!product.divider')
                       {{ product.created_at }}
 
