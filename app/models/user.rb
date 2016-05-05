@@ -39,11 +39,19 @@ class User < ActiveRecord::Base
   # @return [Array<Project>] project that were created by the user
   has_many :own_projects, class_name: 'Project', dependent: :restrict_with_error
 
+  # Subscription
+  has_one :subscription
+  has_many :subscription_logs
   validates :api_token, uniqueness: true, if: :api_token
   validates :role, presence: true, inclusion: { in: ROLES }
 
+
+  # Callbacks
   before_validation :set_default_values
   before_create :set_api_token
+
+  after_create :create_subscription
+
 
   # @return [Boolean] true if facebook omniauth exist
   def facebook?
@@ -80,7 +88,17 @@ class User < ActiveRecord::Base
     exists?(email: auth.info.email) ? User.find_by_email(auth.info.email) : new(email: auth.info.email, password: generate_random_password, name: auth.info.name)
   end
 
+  if Rails.env.development?
+    def self.demo_user
+      new(email: Faker::Internet.safe_email, password: SecureRandom.hex.to_s)
+    end
+  end
   private
+
+    # Create trail subscription for new user
+    def create_subscription
+      Subscription.create(user: self)
+    end
 
     # Generates random email for temporary user
     # @return [String] random unique email that not exist in db

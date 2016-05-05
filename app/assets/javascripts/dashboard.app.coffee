@@ -13,6 +13,7 @@
 #= require angular-ui-router
 #= require angular-resource
 #= require angular-utils-pagination
+#= require angular-local-storage
 #= require ng-droplet
 
 #= require d3

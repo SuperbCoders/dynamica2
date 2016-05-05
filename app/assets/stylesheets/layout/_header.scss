@@ -58,8 +58,10 @@
   }
   .user {
     float: left;
-    position: relative;
+    //position: relative;
     .user-toggle {
+      position: relative;
+      z-index: 16;
       color: #777;
       background: transparent !important;
       &:hover {
@@ -69,11 +71,12 @@
         display: inline-block;
         width: 40px;
         height: 40px;
-        margin-right: 20px;
+        margin-right: 10px;
         vertical-align: middle;
       }
       .user-name {
         display: inline-block;
+        letter-spacing: -.2px;
         //font-size: 18px;
         //font-weight: 700;
       }
@@ -85,6 +88,25 @@
     }
     .user-menu {
       @extend .dropdown-arrow;
+      top: -20px;
+      padding-top: 90px;
+      z-index: 15;
+      right: -20px;
+      left: -20px;
+      margin: 0;
+      width: auto;
+
+      &:after,
+      &:before {
+        display: none;
+      }
+
+      .dropdown-menu {
+        li {
+          padding: 8px 20px;
+        }
+      }
+
       .term {
         position: absolute;
         top: 12px;

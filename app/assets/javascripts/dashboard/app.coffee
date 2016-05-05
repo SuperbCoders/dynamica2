@@ -2,14 +2,17 @@
   [ 'ui.router',
     'ngResource',
     'angularUtils.directives.dirPagination',
-    'ngDroplet'])
+    'ngDroplet',
+    'LocalStorageModule'])
 
-@application.config ['$httpProvider', '$stateProvider', '$urlRouterProvider', ($httpProvider, $stateProvider, $urlRouterProvider) ->
+@application.config ['$httpProvider', '$stateProvider', '$urlRouterProvider', 'localStorageServiceProvider', ($httpProvider, $stateProvider, $urlRouterProvider, localStorageServiceProvider) ->
   $httpProvider.defaults.useXDomain = true
   $httpProvider.defaults.headers.post['Content-Type']= 'application/json'
   $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
   $httpProvider.interceptors.push 'requestOverlay'
   delete $httpProvider.defaults.headers.common['X-Requested-With']
+
+  localStorageServiceProvider.setPrefix('dynamica.dashboard')
 
   $stateProvider
   .state 'setup',
@@ -18,8 +21,10 @@
     controller: 'SetupController'
     controllerAs: 'vm'
     
-  .state 'profile',
-    url: '/profile',
+  .state 'profile', url: '/profile', templateUrl: '/templates/profile/index'
+
+  .state 'profile.edit',
+    url: '/edit',
     templateUrl: '/templates/profile/edit'
     controller: 'ProfileController',
     controllerAs: 'vm'
@@ -91,19 +96,6 @@
         ]
       ]
 
-  .state 'projects.subscription',
-    url: '/:slug/subscription',
-    templateUrl: '/templates/stores/subscription'
-    controller: 'SubscriptionController'
-    controllerAs: 'vm'
-    resolve:
-      Projects: ['Resource', (Resource) ->
-        Resource '/projects/:id', {id: @id}, [
-          {method: 'GET', isArray: false},
-          {name: 'search', method: 'POST', isArray: false}
-        ]
-      ]
-
   .state 'projects.products_revenue',
     url: '/:slug/products_revenue/:from/:to',
     templateUrl: '/templates/stores/products/products_revenue'
@@ -136,12 +128,22 @@
   return
 ]
 
-@application.run ['$rootScope', '$state', '$stateParams', '$http', '$location', '$filter', ($rootScope, $state, $stateParams, $http, $location, $filter) ->
+@application.run ['$rootScope', '$state', '$stateParams', '$http', '$location', '$filter', 'Alerts', 'Translate', 'localStorageService', ($rootScope, $state, $stateParams, $http, $location, $filter, Alerts, Translate, localStorageService) ->
   $rootScope.currency = '$'
   $rootScope.$state = $state
   $rootScope.$stateParams = $stateParams
   $rootScope.$location = $location
+  $rootScope.alerts = Alerts
   $rootScope.locale = $("meta[name=locale]").attr('content')
+  $rootScope.T = Translate
+  # Subscription check
+  $rootScope.$on("$locationChangeStart", (event, next, current) ->
+    if $rootScope.user and $rootScope.user.subscription.expired
+      $rootScope.subscription()
+  )
+
+  $rootScope.subscription = -> $state.go 'profile.edit'
+
 
   if $('.switcher').length
     $("[data-toggle='switch']").bootstrapSwitch({baseClass: 'switch'})
@@ -152,8 +154,12 @@
       $rootScope.user = response
 
 
+      if $rootScope.user.subscription.expired
+        $rootScope.subscription()
+
       if $rootScope.user.projects.length == 1 and $state.current.name is not 'projects.list'
         project = $rootScope.user.projects[0]
+
         $state.go('projects.view', {id: project.id, slug: project.slug})
     )
   $rootScope.update_user()
@@ -263,6 +269,10 @@
     range.raw_end = rangeEnd
     range.from = rangeStart.format('MM.DD.YYYY')
     range.to = rangeEnd.format('MM.DD.YYYY')
+
+    # Save period in localStorage
+    $rootScope.save_dates_to_ls(rangeStart, rangeEnd)
+
     return
 
   $rootScope.fit2Limits = (pckr, date, max) ->
@@ -276,12 +286,31 @@
   $rootScope.set_datepicker_date = (datepicker, rangeStart, rangeEnd) ->
     rangeStart = rangeStart.toDate()
     rangeEnd = rangeEnd.toDate()
-#    console.log 'Setting datepicker with from ['+rangeStart+'] to ['+rangeEnd+']'
-
     datepicker.datepicker('setDates', [rangeStart, rangeEnd]).datepicker 'update'
 
-
+  # Set datepicker start date. Different projects has different data with different start days
   $rootScope.set_datepicker_start_date = (datepicker, date) -> datepicker.datepicker('setStartDate', new Date(date))
 
+
+  # Localstorage funcs
+  $rootScope.load_dates_from_ls = (scope) ->
+    if localStorageService.isSupported
+      from = localStorageService.get('from')
+      to = localStorageService.get('to')
+
+      if from
+        console.log 'localStorage date from : '+from
+        scope.range.from = moment(from).format('MM.DD.YYY')
+        scope.range.raw_start = moment(from)
+
+      if to
+        console.log 'localStorage date to : '+to
+        scope.range.to = moment(to).format('MM.DD.YYYY')
+        scope.range.raw_end = moment(to)
+
+  $rootScope.save_dates_to_ls = (rangeStart, rangeEnd) ->
+    if localStorageService.isSupported
+      localStorageService.set('from', rangeStart )
+      localStorageService.set('to', rangeEnd )
 
 ]

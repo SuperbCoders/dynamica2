@@ -44,6 +44,11 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
+gem 'factory_girl_rails'
+gem 'faker'
+gem 'airborne'
+gem 'capybara'
+
 
 # Use Capistrano for deployment
 group :development do
@@ -69,22 +74,12 @@ group :development, :test do
   gem 'guard'
   gem 'guard-bundler', require: false
   gem 'guard-rspec', require: false
-  gem 'shoulda'
-  gem 'test-unit'
   gem 'shoulda-matchers', '~> 3.1'
-  gem 'terminal-notifier-guard'
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
-  gem 'faker'
-  gem 'airborne'
-  gem 'capybara'
-
-  # Uncomment to use Poltergeist
+  gem 'terminal-notifier-guard'
   gem 'poltergeist'
   gem 'database_cleaner'
 
-  # Uncomment to use Selenium
-  # gem 'selenium-webdriver'
 end
 
 # Use letter opener for test emails

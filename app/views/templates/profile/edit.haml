@@ -2,6 +2,27 @@
   .case-cnt.wrap-b
     %form.form-horizontal.form
 
+      / Subscription
+      .form-group
+        %label.control-label.col-md-3.col-sm-3= t('profile.subscription')
+        .col-md-7.col-sm-9
+          .row(ng-show="!user.subscription.expired")
+            .col-xs-12
+            Подписка {{ user.subscription.sub_type }} до {{ user.subscription.expire_at | date}}
+
+          .row(ng-show="user.subscription.expired")
+            .subscription-group
+              .form-group
+                %select.form-control(ng-model = "vm.subscription.project_id")
+                  %option(ng-repeat="project in user.projects" value = "{{project.id}}") {{ project.name }}
+
+                %input.form-control(ng-checked="user.subscription.sub_type == 'yearly'" type='radio' ng-model='vm.subscription.sub_type' value='yearly') 1 year 4$
+                %input.form-control(ng-checked="user.subscription.sub_type == 'monthly'" type='radio' ng-model='vm.subscription.sub_type' value='monthly') 1 month 5$
+
+              .form-group
+                %button.btn.btn-default(ng-click='vm.change_subscription(vm.new_sub_type)' ng-disabled='vm.requested')= t('subscription.change_type')
+
+
       / General
       .form-group
         %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.personal')

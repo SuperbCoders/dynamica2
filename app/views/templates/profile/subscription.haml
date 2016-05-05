@@ -1,0 +1,23 @@
+%section.case.case-project-add
+  .case-capt
+    %h1= t('subscription.title')
+  .case-cnt
+    .row(ng-show="!user.subscription.expired")
+      .col-xs-12
+      Подписка {{ user.subscription.sub_type }} до {{ user.subscription.expire_at | date}}
+
+    .row(ng-show="user.subscription.expired")
+      .subscription-group
+        .form-group
+          %input.form-control(ng-checked="user.subscription.sub_type == 'yearly'" type='radio' ng-model='vm.new_sub_type' value='yearly') 1 year 4$
+          %input.form-control(ng-checked="user.subscription.sub_type == 'monthly'" type='radio' ng-model='vm.new_sub_type' value='monthly') 1 month 5$
+
+
+        .form-group
+          %button.btn.btn-default(ng-click='vm.change(vm.new_sub_type)' ng-disabled='vm.requested')= t('subscription.change_type')
+
+    - if Rails.env.development?
+      .row
+        %pre
+          {{ user | json }}
+          {{ vm.new_sub_type }}

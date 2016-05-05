@@ -1,14 +1,12 @@
 class Subscription < ActiveRecord::Base
-  belongs_to :project
   belongs_to :user
 
   enum sub_type: Dynamica::Billing::SUBSCRIPTION_TYPES
 
-  before_create :set_default_values
-  validates :user, presence: true
-  validates :project, presence: true, uniqueness: { scope: :user }
-
   scope :expired, -> { where('expire_at < ?', DateTime.now) }
+
+  before_create :set_default_values
+  validates :user, presence: true, uniqueness: true
 
   def renew!
     case sub_type
@@ -25,10 +23,6 @@ class Subscription < ActiveRecord::Base
 
   def expired?
     expire_at < DateTime.now
-  end
-
-  def self.create_for(user, project)
-    create(user: user, project: project)
   end
 
   private

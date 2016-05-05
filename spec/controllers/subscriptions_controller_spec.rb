@@ -1,9 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe SubscriptionsController, :type => :controller do
-  user = FactoryGirl.create(:user)
-  @project = project =  FactoryGirl.create(:project, user: user)
-  user.permissions.create(project: project, all: true)
+  let(:user) { FactoryGirl.create(:user) }
 
   before(:each) do
     @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -12,7 +10,7 @@ RSpec.describe SubscriptionsController, :type => :controller do
 
   describe 'GET #show' do
     context 'with not expired project' do
-      before { get :show, format: :json, id: project.id }
+      before { get :show, format: :json }
 
       it 'should return not expired trial subscription' do
         expect_json('subscription', sub_type: 'trial')
@@ -21,14 +19,13 @@ RSpec.describe SubscriptionsController, :type => :controller do
     end
 
     context 'with expired trial subscription' do
-      before { project.subscription.update_attributes(expire_at: 1.year.ago) }
+      before { user.subscription.update_attributes(expire_at: 1.year.ago) }
       it 'should return expired subscription' do
-        get :show, format: :json, id: project.id
+        get :show, format: :json
 
         expect_json('subscription', sub_type: 'trial')
         expect_json('subscription', expired?: true)
       end
-
     end
   end
 end

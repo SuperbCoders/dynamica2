@@ -48,11 +48,9 @@ ru:
       restore: Восстановить
       back: Назад
 
+  #~
+
   projects:
-    subscription:
-      title: Подписка
-      change_type: Сменить подписку
-      confirm_charge: Подтвердить оплату
     products_revenue:
       total: Всего
       products: товаров
@@ -270,3 +268,7 @@ ru:
   permission_mailer:
     invite_user:
       subject: "Приглашение в проект на Dynamica"
+  subscription:
+    title: Подписка
+    change_type: Сменить подписку
+    confirm_charge: Подтвердить оплату

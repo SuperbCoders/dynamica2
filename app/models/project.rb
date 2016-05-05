@@ -39,17 +39,13 @@ class Project < ActiveRecord::Base
   has_many :product_characteristics, dependent: :destroy
   has_many :products, dependent: :destroy
 
-
   has_one :shopify_integration, dependent: :destroy, class_name: 'ThirdParty::Shopify::Integration'
   has_one :integration, dependent: :destroy
-
-  has_one :subscription, dependent: :destroy
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[-_A-Za-z0-9]+\z/ }
 
   before_validation :set_default_values
-  after_create :set_trial_subscription
 
   scope :actives, -> { where.not(user_id: nil) }
 
@@ -228,14 +224,6 @@ class Project < ActiveRecord::Base
     @products
   end
 
-  def sub_type
-    subscription.sub_type
-  end
-
-  def expired?
-    subscription ? subscription.expired? : !set_trial_subscription
-  end
-
   # Marks project as a project that uses API
   def api_used!
     update_column(:api_used, true) unless api_used?
@@ -366,12 +354,6 @@ class Project < ActiveRecord::Base
 
     def diff_average_sum(field, current_data, prev_data)
       diff_values(average_sum(current_data, field), average_sum(prev_data, field))
-    end
-
-
-  def set_trial_subscription
-      subscription = Subscription.create_for(user, self)
-      save
     end
 
     def self.generate_unique_slug

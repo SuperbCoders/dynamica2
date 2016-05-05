@@ -22,10 +22,13 @@ class ChartController
     @init_dashboard()
 
     # Set datepicker dates
-    vm.range.raw_start = rangeStart = moment(vm.range.from, 'MM.DD.YYYY')
-    vm.range.raw_end = rangeEnd = moment(vm.range.to, 'MM.DD.YYYY')
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
+    @rootScope.load_dates_from_ls(vm)
+
+    if not vm.range.from and not vm.range.to
+      vm.range.raw_start = rangeStart = moment(vm.range.from, 'MM.DD.YYYY')
+      vm.range.raw_end = rangeEnd = moment(vm.range.to, 'MM.DD.YYYY')
+      vm.range.from = rangeStart.format('MM.DD.YYYY')
+      vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
     @Projects.search({slug: vm.slug}).$promise.then( (project) ->
       vm.project = project

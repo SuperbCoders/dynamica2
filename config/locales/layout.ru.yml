@@ -3,6 +3,7 @@ ru:
     application:
       subscription: Подписка
       projects: Проекты
+      project_settings: Настройки проекта
       team: Команда
       profile: Профиль
       log_out: Выйти

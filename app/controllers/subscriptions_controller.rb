@@ -1,15 +1,22 @@
 class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_project, only: [:show, :change]
+  before_action :set_project, only: [:change]
   before_action :get_project_by_charge_id, only: [:callback]
   before_action :find_charge_by_id, only: [:callback]
 
   respond_to :json
 
   def callback
-    if @project and @charge
+    if @charge
       if @charge.status == 'accepted' and @charge.activate
-        @project.subscription.renew!
+        current_user.subscription.renew!
+      end
+
+      current_user.subscription_logs.where(charge_id: @charge.id).each do |charge_log|
+
+        charge_log.status = @charge.status
+
+        charge_log.save
       end
     end
 
@@ -18,57 +25,45 @@ class SubscriptionsController < ApplicationController
 
   # Return project subscription and history
   def show
-    if @project
-      @response[:subscription] = serialize_resource(@project.subscription, SubscriptionSerializer)
-      if not Rails.env.test? and @project.shopify_session
-        @response[:success] = true
-        case @project.sub_type
-          when 'monthly' then @response[:history] = ShopifyAPI::ApplicationCharge.all
-          when 'yearly' then @response[:history] = ShopifyAPI::RecurringApplicationCharge.all
-        end
-      end
-    end
-
-    puts @response
+    @response[:subscription] = serialize_resource(current_user.subscription, SubscriptionSerializer)
+    @response[:success] = true
     render json: @response
   end
+
 
   # Make charge
   def change
     if @project and @project.shopify_session
 
-      logger.info "Subscription type #{project_params[:sub_type]}"
-
-      case project_params[:sub_type]
+      case subscription_params[:sub_type]
         when 'monthly'
           charge = ShopifyAPI::ApplicationCharge.new(
               price: Dynamica::Billing::MONTHLY_PRICE,
               name: "Monthly billing $ #{Dynamica::Billing::MONTHLY_PRICE} for ##{@project.id}",
               charge_type: 'monthly')
+
+          current_user.subscription.monthly!
         when 'yearly'
           charge = ShopifyAPI::RecurringApplicationCharge.new(
               price: Dynamica::Billing::YEARLY_PRICE,
               name: "Yearly billing $ #{Dynamica::Billing::YEARLY_PRICE} for ##{@project.id}",
               charge_type: 'yearly')
+
+          current_user.subscription.yearly!
       end
 
 
       if charge
-        case project_params[:sub_type]
-          when 'monthly'
-            @project.subscription.monthly!
-            @response[:history] = ShopifyAPI::ApplicationCharge.all
-          when 'yearly'
-            @project.subscription.yearly!
-            @response[:history] = ShopifyAPI::RecurringApplicationCharge.all
-        end
-
         charge.return_url = subscription_callback_url
         charge.test = true if Rails.env.development? or Rails.env.staging?
         charge.save
         set_project_by_charge_id(charge.id, @project.id)
         @response[:charge] = charge
         @response[:success] = true
+
+        current_user.subscription_logs.create(
+            charge_id: charge.id,
+            description: "Change subscription to #{subscription_params[:sub_type]}. Charge_id #{charge.id}")
       end
 
     else
@@ -86,7 +81,7 @@ class SubscriptionsController < ApplicationController
   # Find charge from shopify api by charge_id and project subscription type
   def find_charge_by_id
     if @project and @project.shopify_session
-      case @project.sub_type
+      case current_user.subscription.sub_type
         when 'monthly'
           @charge = ShopifyAPI::ApplicationCharge.find(params[:charge_id])
         when 'yearly'
@@ -106,11 +101,11 @@ class SubscriptionsController < ApplicationController
     $redis.mapped_hmset "charges:#{charge_id}", {project_id: project_id}
   end
 
-  def project_params
-    params.permit(:id, :sub_type)
+  def subscription_params
+    params.permit(:id, :sub_type, :project_id)
   end
 
   def set_project
-    @project = Project.find(project_params[:id])
+    @project = Project.find(subscription_params[:project_id])
   end
 end

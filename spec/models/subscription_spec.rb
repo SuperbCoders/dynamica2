@@ -1,41 +1,48 @@
 require 'rails_helper'
 
 RSpec.describe Subscription, :type => :model do
+
+  # Attributes
   it { is_expected.to respond_to(:sub_type, :expire_at) }
+
+
+  # Relations
+  it { is_expected.to belong_to(:user) }
+
+  # Validations
   it { is_expected.to validate_presence_of(:user) }
-  it { is_expected.to validate_presence_of(:project) }
 
 
-  user = FactoryGirl.create(:user)
-  project =  FactoryGirl.create(:project, user: user)
-  user.permissions.create(project: project, all: true)
+  let(:subscription) { FactoryGirl.create(:user).subscription }
 
   describe '#type' do
-    it 'should return trial for new project' do
-      expect(project.subscription.type).to eq 'trial'
+    it 'should be trial for new project' do
+      expect(subscription.type).to eq 'trial'
     end
+  end
 
-    it 'should return monthly for monthly subscription' do
-      project.subscription.monthly!
-      expect(project.subscription.type).to eq 'monthly'
+  describe '#monthly!' do
+    it 'should be monthly for monthly subscription' do
+      subscription.monthly!
+      expect(subscription.type).to eq 'monthly'
     end
+  end
 
-    it 'should return yearly for monthly subscription' do
-      project.subscription.yearly!
-      expect(project.subscription.type).to eq 'yearly'
+  describe '#yearly!' do
+    it 'should be yearly for yearly subscription' do
+      subscription.yearly!
+      expect(subscription.type).to eq 'yearly'
     end
   end
 
   describe '#expired?' do
-    before { project =  FactoryGirl.create(:project, user: user) }
-
-    it 'should return false for new project' do
-      expect(project.subscription.expired?).to be_falsey
+    it 'should return false for expired subscription' do
+      expect(subscription.expired?).to be_falsey
     end
 
-    it 'should return true for expired project' do
-      project.subscription.update_attributes(expire_at: 1.year.ago)
-      expect(project.subscription.expired?).to be_truthy
+    it 'should return true for expired subscription' do
+      subscription.update_attributes(expire_at: 1.year.ago)
+      expect(subscription.expired?).to be_truthy
     end
   end
 

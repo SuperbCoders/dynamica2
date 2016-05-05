@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
     scope :subscriptions do
       get 'callback' => 'subscriptions#callback', as: :subscription_callback
-      get ':id' => 'subscriptions#show', as: :show_subscription
+      get 'show' => 'subscriptions#show', as: :show_subscription
       post 'change' => 'subscriptions#change', as: :change_subscription
     end
 

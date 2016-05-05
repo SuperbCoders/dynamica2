@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160420152159) do
+ActiveRecord::Schema.define(version: 20160506114108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -249,8 +249,20 @@ ActiveRecord::Schema.define(version: 20160420152159) do
   add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree
   add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
 
+  create_table "subscription_logs", force: true do |t|
+    t.integer  "user_id"
+    t.datetime "date"
+    t.integer  "charge_id"
+    t.text     "description"
+    t.string   "amount"
+    t.string   "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subscription_logs", ["user_id"], name: "index_subscription_logs_on_user_id", using: :btree
+
   create_table "subscriptions", force: true do |t|
-    t.integer  "project_id"
     t.integer  "user_id"
     t.integer  "sub_type",         default: 0
     t.datetime "expire_at"
@@ -261,7 +273,6 @@ ActiveRecord::Schema.define(version: 20160420152159) do
     t.datetime "updated_at"
   end
 
-  add_index "subscriptions", ["project_id"], name: "index_subscriptions_on_project_id", using: :btree
   add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id", using: :btree
 
   create_table "third_party_shopify_integrations", force: true do |t|

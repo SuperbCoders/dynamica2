@@ -68,7 +68,7 @@
                   .table-cell.col_1= t('projects.full_chart.date')
                   .table-cell(ng-repeat="chart_type in vm.table_keys")
                     %a(ng-click="vm.sortType = chart_type; vm.sortReverse = !vm.sortReverse")
-                      %span {{ vm.T.t(chart_type) }}
+                      %span {{ T.t(chart_type) }}
                       %span.sort_catcher(ng-show = "vm.sortType == chart_type && !vm.sortReverse")
                         %span.sort_btn.sortBtn.sort_desc
 
@@ -79,7 +79,7 @@
                 .table-content
                   .table-row(dir-paginate="data in vm.table_data_array() | orderBy:vm.sortType:vm.sortReverse | itemsPerPage: vm.itemsPerPage")
                     .table-cell {{data.date}}
-                    .table-cell.col_5(ng-repeat="chart_type in vm.table_keys")
+                    .table-cell.col_1(ng-repeat="chart_type in vm.table_keys")
                       {{ data[chart_type] }}
 
                   .table-row.no_hover
@@ -88,9 +88,7 @@
                         %i.fa.fa-refresh
                         %span Show 50 more dates
                     .table-cell.col_5.col_right &nbsp;
-                    .table-cell.col_6.col_right &nbsp;
-                    .table-cell.col_7.col_right &nbsp;
-                    .table-cell.col_8.col_right &nbsp;
+
 
             .graph-filter-block
               %dir-pagination-controls(template-url = "/templates/stores/shared/dirPagination")

@@ -9,21 +9,14 @@
       .navbar-project-switch
         %a.navbar-brand{:href => "#"} Dynamica
 
-        .hover-select-box(ng-show="$state.current.name != 'projects.list'")
-          .dropdown
-            %button.btn.btn-default.dropdown-toggle(data-toggle = "dropdown" type = "button")
-              {{ project.name }}
-              %span.caret
-            %ul.dropdown-menu.dropdown_item_wide
-              %li(ng-repeat="p in user.projects" ng-show="p.id != project.id")
-                %a(href = '' ui-sref = "projects.view({slug: p.slug, id: p.id })")
-                  {{ p.name }}
-
 
     %nav.collapse.navbar-collapse.bs-navbar-collapse
       %ul.nav.navbar-nav
-        %li{'ui-sref-active' => "active"}
+        %li(ui-sref-active = "active")
           %a{'ui-sref' => "projects.list"}= t('layouts.application.projects')
+
+        %li(ui-sref-active = 'active' ng-show="project")
+          %a(ui-sref = "projects.settings({slug: project.slug})")= t('layouts.application.project_settings')
 
       %ul.nav.navbar-right.hidden-xs{id: 'user_dropdown'}
         %li
@@ -35,11 +28,9 @@
               %span.user-name{id: 'user_dropdown'}
                 {{user.display_name}}
                 %i.icon.fa.fa-angle-down{id: 'user_dropdown'}
-            .user-menu.dropdown-menu.right
+            .user-menu.dropdown-menu
               %ul
                 %li
-                  %a(href='' ui-sref="profile.subscription")= t('layouts.application.subscription')
-                %li
-                  %a(href = '' ui-sref = "profile")= t('layouts.application.profile')
+                  %a(href = '' ui-sref = "profile.edit")= t('layouts.application.profile')
                 %li.clear
                   %a(href = '/users/sign_out')= t('layouts.application.log_out')
