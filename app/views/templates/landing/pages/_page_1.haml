@@ -27,7 +27,7 @@
                   Carefully made analytics
                   %br for your Shopify store
                 .text-center
-                  %a.btn.btn-lg.btn-danger.start_trial_btn(href="https://myshopify.com/admin/oauth/authorize?client_id=#{Dynamica::Settings::Shopify.api_key}&scope=read_orders,read_customers,read_products&redirect_uri=#{Dynamica::Settings::Shopify.redirect_url}&state=#{SecureRandom.hex}")= t('landing.start_trial')
+                  %a.btn.btn-lg.btn-danger.start_trial_btn(href="https://myshopify.com/admin/oauth/authorize?client_id=#{Dynamica::Settings::Shopify.api_key}&scope=#{ENV['shopify_scope']}&redirect_uri=#{Dynamica::Settings::Shopify.redirect_url}&state=#{SecureRandom.hex}")= t('landing.start_trial')
     .hero_graph_block.heroGraph{"data-0" => "transform: translate(0%,100%);", "data-1000" => "transform: translate(0%,0%);", "data-2000" => "transform: translate(0%,-50%);", "data-300" => "transform: translate(0%,0%);", "data-4000" => "transform: translate(0%,-500%);"}
       .graph_3.areaChart_2.d3graph.hide_x_axis(style = "opacity: .2;")
       .graph_3.areaChart_2.d3graph.hide_x_axis(style = "opacity: .4;")
