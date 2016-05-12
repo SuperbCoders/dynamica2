@@ -153,8 +153,10 @@ class DashboardController
     data['data'] = vm.avgBuilder(data['data'], 10)
 
     not_null = false
+    TOP_VALUE = 0
     for d in data['data']
       not_null = true if d.close > 0
+      TOP_VALUE = d.close if d.close > TOP_VALUE
       # Parse 16-Feb-16
       if d.date and d.date.length == 9
         d.date = parseDate(d.date)
@@ -164,6 +166,25 @@ class DashboardController
     area_x.domain d3.extent(data['data'], (d) -> d.date)
 
     if not_null
+#      y.domain [
+#        0
+#        d3.max(data['data'], (d) ->
+#          if d.close == 0
+#            (TOP_VALUE / 100) * 10
+#          else
+#            Math.max d.close
+#        )
+#      ]
+#      area_y.domain [
+#        0
+#        d3.max(data['data'], (d) ->
+#          if d.close == 0
+#            (TOP_VALUE / 100) * 10
+#          else
+#            d.close
+#        )
+#      ]
+
       y.domain [
         0
         d3.max(data['data'], (d) ->
@@ -187,6 +208,10 @@ class DashboardController
     if !not_null
       for d, index in data['data']
         d.close = 8
+    else
+      for d, index in data['data']
+        if d.close == 0
+          d.close = (TOP_VALUE/100) * 10
 
     gradient = svg
       .append('svg:defs')
