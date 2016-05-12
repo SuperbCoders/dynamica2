@@ -270,6 +270,15 @@
     range.from = rangeStart.format('MM.DD.YYYY')
     range.to = rangeEnd.format('MM.DD.YYYY')
 
+    if $state.current.name == 'projects.chart'
+      console.log 'reload'
+      $stateParams.from = range.from
+      $stateParams.to = range.to
+      $state.transitionTo($state.current, $stateParams, {
+        reload: true, inherit: false, notify: false
+      })
+
+
     # Save period in localStorage
     $rootScope.save_dates_to_ls(rangeStart, rangeEnd)
 
@@ -299,12 +308,10 @@
       to = localStorageService.get('to')
 
       if from
-        console.log 'localStorage date from : '+from
         scope.range.from = moment(from).format('MM.DD.YYY')
         scope.range.raw_start = moment(from)
 
       if to
-        console.log 'localStorage date to : '+to
         scope.range.to = moment(to).format('MM.DD.YYYY')
         scope.range.raw_end = moment(to)
 

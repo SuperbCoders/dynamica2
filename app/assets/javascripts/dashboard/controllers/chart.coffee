@@ -86,8 +86,6 @@ class ChartController
 
         )
 
-
-        console.log vm.table_keys
         vm.init_line_area3_chart($('.areaChartTotal_1'), vm.data)
       )
 
