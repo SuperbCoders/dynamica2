@@ -100,6 +100,21 @@ class DashboardController
   # график с точками
   draw_block_charts: (el, data) ->
     return if not data
+    if data['data'].length <= 0
+      console.log data['data']
+      # Иногда бывает что бэкенд не возвращает данные, поэтому некоторые
+      # графики на дашборде могут пустовать. Для этого мы добавляем 10 дат с
+      # 0-ыми данными
+      a = moment('2013-01-01')
+      b = moment('2013-01-11')
+      m = moment(a)
+      while m.isBefore(b)
+        # 12-Feb-16
+        data['data'].push {date: m.format('DD-MMM-YY'), close: 0}
+        console.log m.format('DD-MMM-YY')
+        m.add 'days',1
+
+
     vm = @
     el.empty()
     chart_name = element_id = el.attr('id')
