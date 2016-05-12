@@ -270,19 +270,21 @@
     range.from = rangeStart.format('MM.DD.YYYY')
     range.to = rangeEnd.format('MM.DD.YYYY')
 
-    if $state.current.name == 'projects.chart'
-      console.log 'reload'
-      $stateParams.from = range.from
-      $stateParams.to = range.to
-      $state.transitionTo($state.current, $stateParams, {
-        reload: true, inherit: false, notify: false
-      })
+    if $state.current.name in ['projects.chart', 'projects.products_revenue']
+      $rootScope.reload_state_params(range)
 
 
     # Save period in localStorage
     $rootScope.save_dates_to_ls(rangeStart, rangeEnd)
 
     return
+
+  $rootScope.reload_state_params = (range) ->
+    $stateParams.from = range.from
+    $stateParams.to = range.to
+    $state.transitionTo($state.current, $stateParams, {
+      reload: true, inherit: false, notify: false
+    })
 
   $rootScope.fit2Limits = (pckr, date, max) ->
     start = moment(pckr.datepicker('getStartDate'))

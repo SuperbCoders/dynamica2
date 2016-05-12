@@ -58,7 +58,13 @@ class ChartController
       project_id: vm.project.id
       chart: vm.chart
 
+    vm.rootScope.save_dates_to_ls(vm.range.raw_start, vm.range.raw_end)
+
     vm.http.get(chart_url, params: chart_params).success((response) ->
+
+        # Update URL
+        vm.rootScope.reload_state_params(vm.range)
+
         vm.data = response['full']
         vm.check_points = response['check_points']
         vm.table_data = {}
@@ -413,13 +419,46 @@ class ChartController
     $('.page').addClass('dashboard_page')
 
     vm.datepicker.datepicker(
-      multidate: 2
+      multidate: 3
       toggleActive: true
       orientation: 'bottom left'
       format: 'M dd, yyyy'
       container: $('.datePicker').parent()
-      multidateSeparator: ' – ')
+      multidateSeparator: ' – '
+      beforeShowDay: (date, e) ->
+        dataPicker = $(e.picker)
+        dPickerElement = $(e.element)
+        dates = e.dates
+        curDate = moment(date)
+        rangeStart = moment(dates[0])
+        rangeEnd = moment(dates[1])
+        if rangeStart.isAfter(rangeEnd)
+          dPickerElement.datepicker('setDates', [
+            e.dates[1]
+            e.dates[0]
+          ]).datepicker 'update'
 
+        if dates.length == 1
+          if curDate.isSame(rangeStart, 'day')
+            return 'start-range'
+
+        if dates.length == 2
+          if rangeStart.isAfter(rangeEnd, 'day')
+            rangeStart = [
+              rangeEnd
+              rangeEnd = rangeStart
+            ][0]
+          if curDate.isSame(rangeStart, 'day')
+            return 'start-range'
+          if curDate.isSame(rangeEnd, 'day')
+            return 'end-range'
+          if curDate.isBetween(rangeStart, rangeEnd)
+            return 'in-range'
+
+        if dates.length == 3
+          dPickerElement.datepicker('setDates', [ dates[2] ]).datepicker 'update'
+        return
+    )
 
 
   period_value: (value) -> @rootScope.period_value(value, @chart)
