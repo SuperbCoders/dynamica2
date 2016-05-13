@@ -1,3 +1,5 @@
+@import "select2";
+
 svg:not(:root) {
   overflow: visible;
 }
@@ -23,7 +25,6 @@ svg:not(:root) {
   &.full_h_mod {
 
   }
-
 }
 
 .page.article_page {
@@ -640,8 +641,14 @@ svg:not(:root) {
 }
 
 .graph-settings {
+  position: relative;
+  z-index: 2;
   font-size: 15px;
   color: #2f2f2f;
+
+  &:hover {
+    color: #ff6140;
+  }
 }
 
 .graph-value {
@@ -677,10 +684,10 @@ svg:not(:root) {
 
 .graph_1 {
   position: absolute;
-  bottom: 20px;
+  bottom: 30px;
   left: 20px;
-  width: 160px;
-  height: 160px;
+  width: 150px;
+  height: 150px;
 }
 
 .graph_2 {
@@ -702,8 +709,8 @@ svg:not(:root) {
 
 .legend_v1 {
   position: absolute;
-  bottom: 10px;
-  right: 20px;
+  bottom: 24px;
+  right: 22px;
   width: 70px;
 }
 
@@ -975,6 +982,23 @@ svg:not(:root) {
   .no_pointer & {
     cursor: default;
   }
+
+  .legend_v1 & {
+    margin-top: 9px;
+
+    .legend_val,
+    .legend_name {
+      color: #696969;
+      font-size: 14px;
+    }
+
+    .legend_name {
+      &:after {
+        left: -15px;
+        font-size: 50px;
+      }
+    }
+  }
 }
 
 .legend_name {
@@ -1148,7 +1172,11 @@ svg:not(:root) {
 
   &.transp-mod {
     background-color: transparent;
+  }
 
+  &.black-mod {
+    background-color: #000;
+    width: 2px;
   }
 
   //.d3graph:hover + &,

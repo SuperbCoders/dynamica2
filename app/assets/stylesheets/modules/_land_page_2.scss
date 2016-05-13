@@ -1,0 +1,71 @@
+.page_inner {
+  position: relative;
+  min-height: 100vh;
+
+  .full_h_page & {
+    height: 100%;
+  }
+}
+
+.land_v2 {
+  .hero_graph_block {
+    position: absolute !important;
+  }
+
+  .gl_table {
+    min-height: 100vh;
+  }
+
+  .overview_holder {
+    position: relative;
+    padding-left: 400px;
+  }
+  
+  .overview_tip_v2 {
+    position: relative;
+    color: #fff;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: left;
+
+    p {
+      margin-bottom: 22px;
+    }
+  }
+
+  .overview_box {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    max-width: 360px;
+    -webkit-transform: translate(0%, -50%);
+    -ms-transform: translate(0%, -50%);
+    transform: translate(0%, -50%);
+    
+    h2 {
+      text-align: left;
+    }
+  }
+
+  .overview_block {
+    padding: 0 50px;
+  }
+  
+  .graph_tip {
+    -webkit-transform: translate(0%, -100%);
+    -ms-transform: translate(0%, -100%);
+    transform: translate(0%, -100%);
+  }
+
+  .skrollable {
+    position: relative;
+  }
+
+  .pricing_form {
+    float: none;
+    margin: 0 auto;
+  }
+}
+
+
+

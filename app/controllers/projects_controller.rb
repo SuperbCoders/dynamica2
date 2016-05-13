@@ -37,7 +37,7 @@ class ProjectsController < BaseController
   end
 
   def permitted_params
-    [ :id,:name ]
+    [ :id,:name, :google_site_id ]
   end
 
   def authorize_user

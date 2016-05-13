@@ -1,0 +1,110 @@
+
+.subscribe_page {
+  .globalwidth {
+    max-width: 1290px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+}
+
+.subscribe_case {
+  max-width: 940px;
+  margin: 0 auto;
+  font-weight: 300;
+
+  .form-group {
+    .control-label {
+      color: #474747;
+      font-weight: 300;
+    }
+  }
+
+  .wrap-b {
+    padding-top: 35px;
+  }
+
+}
+
+.color_green {
+  color: #21aa52;
+}
+
+.radio_control {
+  font-size: 14px;
+  font-weight: 300;
+
+  input {
+    margin-right: 10px;
+  }
+}
+
+.subscribe_info {
+
+  p {
+    font-size: 16px;
+    line-height: 20px;
+    margin-top: 16px;
+  }
+}
+
+.subscribe_link {
+  -webkit-transition: color .3s, border-color .3s;
+  -ms-transition: color .3s, border-color .3s;
+  transition: color .3s, border-color .3s;
+  font-size: 14px;
+  color: #7b7b7b;
+}
+
+.subscribe_switcher_w {
+  line-height: 31px;
+  font-size: 14px;
+}
+
+.subscribe_switcher {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 18px;
+  width: 196px;
+
+  .btn {
+    border-radius: 4px;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+
+    .fa {
+      float: right;
+      font-size: 22px;
+      margin-left: 5px;
+    }
+  }
+
+  .dropdown-menu {
+    margin: 0;
+
+    li {
+      padding: 0;
+    }
+  }
+}
+
+.subscribe_control {
+  margin-top: -3px;
+}
+
+.fw_400 {
+  font-weight: 400;
+}
+
+.project_rm_link {
+  -webkit-transition: color .3s, border-color .3s;
+  -ms-transition: color .3s, border-color .3s;
+  transition: color .3s, border-color .3s;
+  font-weight: 600;
+  color: #474747;
+  font-size: 14px;
+  margin-top: 15px;
+  display: inline-block;
+  vertical-align: top;
+}

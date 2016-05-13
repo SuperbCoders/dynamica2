@@ -1,15 +1,41 @@
-%section.case.case-project-add.case-project-settings
+%section.subscribe_case.case
   .case-capt
-    %h1= t('projects.project.settings')
-  .case-cnt
-    %form.form-horizontal
-      .form-group
-        %label.string.required.col-md-3.col-sm-3.control-label
-          Google site ID
-        .col-md-6.col-sm-9
-          .control-box
-            %input.string.required.form-control{type: "text", 'ng-model' => "vm.project.google_site_id"}
+    %ul.nav.nav-pills
+      %li
+        %a(href = '') Back
 
-      .form-group
-        .col-md-offset-3.col-md-6.col-sm-offset-3.col-sm-9
-          %a.btn.btn-lg.btn-danger{'ng-click' => "vm.save()"}= t('projects.new.form.submit')
+  .case-cnt.wrap-b
+    .form.form-horizontal
+      %form
+        .form-group
+          %label.control-label.col-md-3(for = 'project_name')= t('projects.project.settings.project_name')
+          .col-md-7.col-sm-9
+            .control-box
+              %input#project_name.form-control(placeholder = "Project name" ng-model = 'vm.project.name')
+
+        -#.form-group
+        -#  %label.control-label.col-md-3.col-sm-3= t('projects.project.settings.login_with')
+        -#  .col-md-7.col-sm-9
+        -#    .control-box
+        -#      .btn-social.btn-connected.btn-connected-lg
+        -#        .user-pic
+        -#        .soc-btn-connect= t('projects.project.settings.shopify')
+        -#        %a.subscribe_link(href = '')= t('projects.project.settings.disconnect')
+
+        .form-group
+          %label.control-label.col-md-3(for = 'ga_id')= t('projects.project.settings.google_analytics')
+          .col-md-7.col-sm-9
+            .control-box
+              %input#ga_id.form-control(placeholder = 'ID' ng-model = 'vm.project.google_site_id')
+        .form-group
+          %label.control-label.col-md-3.col-sm-3= t('projects.project.settings.data_updating')
+          .col-md-7.col-sm-9
+            .control-box
+              %b Last update 4 hours ago
+              %a.btn.data_update_btn.btn-danger-w(href = '' ng-click = 'vm.update_data()')= t('projects.project.settings.update_data_imidiatelly')
+
+        .form-group
+          .col-md-offset-3.col-md-7.col-sm-offset-3.col-sm-9
+            %button.btn.btn-lg.btn-danger(ng-click = 'vm.save()')= t('projects.project.settings.save')
+            .pull-right
+              %a.project_rm_link(href = '' ng-click = 'vm.delete()')= t('projects.project.settings.delete_this_project')
