@@ -1,0 +1,16 @@
+!!!
+%html(lang = "ru")
+  %head
+    %meta{content: "width=device-width, initial-scale=1", name: "viewport" }
+    %meta{charset: "utf-8" }
+    %meta{content: "", name: "keywords" }
+    %meta{content: "", name: "description" }
+    %title DYNAMICA
+
+    = stylesheet_link_tag 'style', media: 'all'
+    = javascript_include_tag 'draw.app'
+
+  %body
+    = yield
+    %chart-data(value = "#{@result.to_json}")
+    %chart-type(value = "#{params[:action]}")

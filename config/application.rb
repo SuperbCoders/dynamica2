@@ -13,6 +13,7 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+
 module Dynamica
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -20,6 +21,7 @@ module Dynamica
     # -- all .rb files in that directory are automatically loaded.
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths += Dir["#{config.root}/app/**/"]
+    config.autoload_paths << Rails.root.join('app', 'services')
 
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.

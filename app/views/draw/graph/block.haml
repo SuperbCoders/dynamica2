@@ -1,0 +1,11 @@
+.graph-unit-holder.graph-unit-hover(style='margin: 5px 0px;')
+  .row(style='margin: 0px')
+    .col-lg-3.col-md-4.col-sm-6
+      .graph-unit
+        %a.graph-u-link
+        %h5.graph-name= t("projects.show.#{params[:chart]}")
+        .graph-value
+          %span.val
+          %sup.graph-dynamica
+        .graph-block
+          #total_gross_revenues.graph_2.lineAreaChart_1.d3graph.hide_x_axis

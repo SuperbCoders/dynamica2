@@ -3,7 +3,7 @@ class BaseWorker
 
   attr_accessor :logger
 
-  def self.logger
-    @logger ||= ::Logger.new("#{Rails.root}/log/worker_#{self.name}.log")
+  def logger
+    @logger ||= ::Logger.new("#{Rails.root}/log/worker_#{self.class.name}.log")
   end
 end

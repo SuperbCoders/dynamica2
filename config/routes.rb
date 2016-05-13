@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   get 'charts_data/full_chart_data'
   get 'charts_data/full_chart_check_points'
   get 'charts_data/big_chart_data'
@@ -10,6 +13,12 @@ Rails.application.routes.draw do
 
   devise_for :users, skip: [:session, :password, :registration, :confirmation],
       controllers: { omniauth_callbacks: 'customized_devise/omniauth_callbacks' }
+
+  namespace :draw do
+    get 'block' => 'graph#block'
+    get 'big' => 'graph#big'
+    get 'donut' => 'graph#donut'
+  end
 
   scope "(:locale)", locale: /en|ru/ do
     root 'welcome#index'

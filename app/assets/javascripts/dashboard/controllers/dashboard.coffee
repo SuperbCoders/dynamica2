@@ -122,25 +122,32 @@ class DashboardController
       right: 0
       bottom: 0
       left: 0
+
+    # Calculate width/height of svg
     width = el.width() - (margin.left) - (margin.right)
     height = el.height() - (margin.top) - (margin.bottom)
+
+    # Parse date function
     parseDate = d3.time.format(vm.getFormatOfDate()).parse
+
+    #
     x = d3.time.scale().range([0,width])
     y = d3.scale.linear().range([height,0])
 
     area_x = d3.time.scale().range([0,width])
     area_y = d3.scale.linear().range([height,0])
+
     area = d3.svg.area().x((d) ->
       area_x d.date
     ).y0(height).y1((d) ->
       area_y d.close
     )
+
     valueline = d3.svg.line().x((d) ->
       x d.date
     ).y((d) ->
       y d.close
     )
-    #.interpolate("cardinal");
 
     svg = d3.select(el[0])
       .append('svg')
@@ -152,12 +159,15 @@ class DashboardController
     value = parseFloat(data['value'])
     diff = parseFloat(data['diff'])
 
+    # На некоторых блоках нужно показывать валюту, поэтому
+    # ниже идет проверка на тип данных
     currency_elements = ['total_gross_revenues', 'average_order_value', 'average_revenue_per_customer', 'total_gross_delivery']
 
     if element_id in currency_elements
       value = vm.filter('dynCurrency')(value)
     else
       value = 0 if value is 'NaN'
+
 
     el.parent().parent().children('.graph-value').children('.val').html value
     el.parent().parent().children('.graph-value').children('.graph-dynamica').removeClass('dynamica_up dynamica_down').addClass if /-/g.test(data['diff']) then 'dynamica_down' else 'dynamica_up'
@@ -179,25 +189,6 @@ class DashboardController
     area_x.domain d3.extent(data['data'], (d) -> d.date)
 
     if not_null
-#      y.domain [
-#        0
-#        d3.max(data['data'], (d) ->
-#          if d.close == 0
-#            (TOP_VALUE / 100) * 10
-#          else
-#            Math.max d.close
-#        )
-#      ]
-#      area_y.domain [
-#        0
-#        d3.max(data['data'], (d) ->
-#          if d.close == 0
-#            (TOP_VALUE / 100) * 10
-#          else
-#            d.close
-#        )
-#      ]
-
       y.domain [
         0
         d3.max(data['data'], (d) ->

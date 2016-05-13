@@ -48,7 +48,13 @@ gem 'factory_girl_rails'
 gem 'faker'
 gem 'airborne'
 gem 'capybara'
+gem 'sinatra'
+gem 'clockwork'
 
+# Draw svg and convert to png
+gem 'rasem'
+gem 'rmagick'
+gem 'phantomjs.rb'
 
 # Use Capistrano for deployment
 group :development do

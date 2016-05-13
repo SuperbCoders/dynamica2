@@ -48,6 +48,7 @@ class Project < ActiveRecord::Base
   before_validation :set_default_values
 
   scope :actives, -> { where.not(user_id: nil) }
+  scope :not_expired, -> { all.select { |p| !p.expired? } }
 
   Dynamica::CHART_TYPES.each do |chart_type|
     define_method chart_type do |scope, current_data, prev_data|
@@ -335,7 +336,12 @@ class Project < ActiveRecord::Base
     (product_characteristics.minimum('date').try(:to_datetime) || created_at.to_datetime)
   end
 
+  def expired?
+    user.subscription.expired?
+  end
+
   private
+
 
     def diff_values(current_value, previous_value)
       result = (current_value * 100.0 / previous_value - 100)

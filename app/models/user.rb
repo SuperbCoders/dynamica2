@@ -93,11 +93,12 @@ class User < ActiveRecord::Base
       new(email: Faker::Internet.safe_email, password: SecureRandom.hex.to_s)
     end
   end
+
   private
 
     # Create trail subscription for new user
     def create_subscription
-      Subscription.create(user: self)
+      Subscription.create(user: self) unless subscription
     end
 
     # Generates random email for temporary user
