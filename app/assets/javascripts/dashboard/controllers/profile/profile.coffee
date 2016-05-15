@@ -10,6 +10,10 @@ class ProfileController
     if @rootScope.user.projects.length == 1
       vm.subscription.project_id = @rootScope.user.projects[0].id
 
+    @scope.$watch('vm.subscription.project', (project) ->
+      vm.subscription.project_id = project.id if project and project.id
+    )
+
     @scope.FILE_TYPES = { VALID: 1, INVALID: 2, DELETED: 4, UPLOADED: 8 }
     @scope.$on('$dropletReady', ->
       vm.avatar.allowedExtensions(['png', 'jpg', 'bmp', 'gif'])
@@ -40,7 +44,7 @@ class ProfileController
       vm.subscription.project_id = user.projects[0].id
 
     # Show error if subscription type not selected
-    if not vm.subscription.sub_type
+    if not vm.subscription.sub_type or vm.subscription.sub_type is 'trial'
       return @rootScope.alerts.error('You should select subscription type')
 
     vm.requested = true
