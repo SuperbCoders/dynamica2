@@ -10,6 +10,13 @@ class ProfileController
     if @rootScope.user.projects.length == 1
       vm.subscription.project_id = @rootScope.user.projects[0].id
 
+    if @rootScope.user.subscription.expired
+      $('.modal').modal('hide')
+      $('#subscription_expired').modal('show', {backdrop: 'static'})
+
+      if @rootScope.user.projects.length == 1
+        vm.subscription.project = @rootScope.user.projects[0]
+
     @scope.$watch('vm.subscription.project', (project) ->
       vm.subscription.project_id = project.id if project and project.id
     )

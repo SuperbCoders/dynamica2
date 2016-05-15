@@ -23,6 +23,6 @@ module Dynamica
     YEARLY_PRICE = 4
     YEARLY_PERIOD = 31.days
     MONTHLY_PERIOD = 31.days
-    SUBSCRIPTION_TYPES = [:trial, :monthly, :yearly]
+    SUBSCRIPTION_TYPES = [:trial, :monthly, :yearly, :inactive]
   end
 end

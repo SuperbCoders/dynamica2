@@ -7,7 +7,14 @@
         .col-md-9
           .row(ng-show="user.subscription.expired")
             .col-lg-12
+
+              / Subscription select
               .pull-left
+                .subscribe_period
+                  %label.radio_control
+                    %input(ng-checked="user.subscription.sub_type == 'inactive'" type='radio' ng-model='vm.subscription.sub_type' value='inactive')
+                      %span.check_text Inactive
+
                 .subscribe_period
                   %label.radio_control
                     %input(ng-checked="user.subscription.sub_type == 'monthly'" type='radio' ng-model='vm.subscription.sub_type' value='monthly')
@@ -20,6 +27,7 @@
                         $49 yearly,
                         %span.color_green Save 20%
 
+              / Charge from select
               .pull-right.subscribe_switcher_w
                 %span Charge from
                 .subscribe_switcher
@@ -32,11 +40,14 @@
                       %li(ng-repeat="project in user.projects")
                         %a(ng-click="vm.subscription.project = project") {{ project.name }}
 
+            .col-lg-12
+              %button.btn.btn-default(ng-click='vm.change_subscription(vm.new_sub_type)' ng-disabled='vm.requested')= t('subscription.change_type')
+
           .row.subscribe_info
             .col-lg-12
               %p.fw_400
                 $9.99/month including applicable taxes, billed monthly.
-                %br Your subscription will renew on April 30, 2016.
+                %br Your {{ user.subscription.sub_type }} subscription will renew on {{ user.subscription.expire_at | date}}.
 
               .subscribe_control
                 %a.subscribe_link(href = "")= t('profile.view_billing_history')
@@ -44,8 +55,7 @@
               .subscribe_control
                 %a.subscribe_link(href = "")= t('profile.cancel_subscription')
 
-            .col-lg-12
-              %button.btn.btn-default(ng-click='vm.change_subscription(vm.new_sub_type)' ng-disabled='vm.requested')= t('subscription.change_type')
+
 
       / Subscription
       -#.form-group
@@ -112,3 +122,5 @@
       .form-group
         .col-md-offset-3.col-md-7.col-sm-offset-3.col-sm-9
           %a.btn.btn-lg.btn-danger{'ng-click' => "vm.save()"}= t('devise.registrations.edit.form.submit')
+
+= render 'popups/subscription_expired'
