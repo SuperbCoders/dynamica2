@@ -2,6 +2,49 @@
   .case-cnt.wrap-b
     %form.form-horizontal.form
 
+      .form-group
+        %label.control-label.col-md-3= t('profile.payment')
+        .col-md-9
+          .row
+            .col-lg-12
+              .pull-left
+                .subscribe_period
+                  %label.radio_control
+                    %input{:name => "subscribe_period", :type => "radio"}
+                      %span.check_text $5 monthly
+
+                .subscribe_period
+                  %label.radio_control
+                    %input{:name => "subscribe_period", :type => "radio"}
+                      %span.check_text
+                        $49 yearly,
+                        %span.color_green Save 20%
+
+              .pull-right.subscribe_switcher_w
+                %span Charge from
+                .subscribe_switcher
+                  .dropdown
+                    %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+                      Bling-Blings account
+                      %span.fa.fa-angle-down
+                    %ul.dropdown-menu.dropdown-menu-right
+                      %li
+                        %a{:href => "#"} Bling-Blings account
+                      %li
+                        %a{:href => "#"} Apple Store
+                      %li
+                        %a{:href => "#"} Helvetica
+          .row.subscribe_info
+            .col-lg-12
+              %p.fw_400
+                $9.99/month including applicable taxes, billed monthly.
+                %br Your subscription will renew on April 30, 2016.
+
+              .subscribe_control
+                %a.subscribe_link(href = "")= t('profile.view_billing_history')
+              .subscribe_control
+                %a.subscribe_link(href = "")= t('profile.cancel_subscription')
+
       / Subscription
       .form-group
         %label.control-label.col-md-3.col-sm-3= t('profile.subscription')
