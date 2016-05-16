@@ -7,7 +7,14 @@
 
           date_from = moment(request.params.from, 'MM.DD.YYYY')
           date_to = moment(request.params.to, 'MM.DD.YYYY')
+
+          # Update URL
+          $rootScope.reload_state_params({from: request.params.from, to: request.params.to})
+
+          # Save to localstorage
           $rootScope.save_dates_to_ls(date_from, date_to)
+
+
       request
 
     response: (response) ->
