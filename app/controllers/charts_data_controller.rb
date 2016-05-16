@@ -27,7 +27,17 @@ class ChartsDataController < ApplicationController
   end
 
   def big_chart_data
-    render json: @project.big_charts_data(period, @current_project_characteristics, @previous_project_characteristics)
+    @result = @project.big_charts_data(period, @current_project_characteristics, @previous_project_characteristics)
+
+    @result.each do |result|
+      if result[:data].length < 1
+        # https://basecamp.com/2476170/projects/11656794/todos/248363964
+        ((date_to - date_from).round || 12).times { |i|
+          result[:data] << {date: (date_from + i).strftime("%d-%b-%y"), close: 0}
+        }
+      end
+    end
+    render json: @result
   end
 
   def other_chart_data
@@ -48,7 +58,17 @@ class ChartsDataController < ApplicationController
         @result[:check_points] = full_chart_check_points
     end
 
-    @result[:full][:data] = @result[:full][:data].map {|k, v| {'date' => k, 'close' => v}}
+    if @result[:full][:data].length > 0
+      @result[:full][:data] = @result[:full][:data].map {|k, v| {'date' => k, 'close' => v}}
+    else
+
+      # https://basecamp.com/2476170/projects/11656794/todos/248363964
+      @result[:full][:data] = []
+      ((date_to - date_from).round || 12).times { |i|
+        @result[:full][:data] << {date: (date_from + i).strftime("%d-%b-%y"), close: 0}
+      }
+    end
+
     @result[:table_data] = {}
 
     chart_type(params[:chart]).map { |chart_type|

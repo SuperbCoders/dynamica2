@@ -104,7 +104,7 @@ class ChartController
       moment.min(end, date).startOf('day')._d
 
   init_line_area3_chart: (el, data) ->
-    return if data['data'].length < 1
+#    return if data['data'].length < 1
 
     chart_name = element_id = el.attr('id')
 
@@ -302,7 +302,7 @@ class ChartController
       .attr('cx', 0).attr 'cy', 0
 
     tracing_anim_duration = 150
-    distance = x(data[0].date) - x(data[1].date)
+    distance = x(data[0].date) - x(data[1].date) if data.length > 2
 
     big_dot = d3.select('#big_dot')
     i = 0

@@ -1,6 +1,6 @@
 class ReportWorker < BaseWorker
 
-  CAPTURE_JS_PATH = Rails.root.join('app', 'assets', 'javascripts', 'draw', 'capture.js').to_s
+  CAPTURE_JS_PATH = Rails.root.join('app', 'services', 'draw', 'capture.js').to_s
   IMAGES_FOLDER_PATH = Rails.root.join('public','report_images').to_s
 
   def perform

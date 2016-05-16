@@ -283,7 +283,7 @@
     $stateParams.from = range.from
     $stateParams.to = range.to
     $state.transitionTo($state.current, $stateParams, {
-      reload: true, inherit: false, notify: false
+      reload: false, inherit: false, notify: false
     })
 
   $rootScope.fit2Limits = (pckr, date, max) ->
