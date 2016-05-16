@@ -10,6 +10,7 @@
   $httpProvider.defaults.headers.post['Content-Type']= 'application/json'
   $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
   $httpProvider.interceptors.push 'requestOverlay'
+  $httpProvider.interceptors.push 'httpFilter'
   delete $httpProvider.defaults.headers.common['X-Requested-With']
 
   localStorageServiceProvider.setPrefix('dynamica.dashboard')
@@ -136,6 +137,7 @@
   $rootScope.alerts = Alerts
   $rootScope.locale = $("meta[name=locale]").attr('content')
   $rootScope.T = Translate
+
   # Subscription check
   $rootScope.$on("$locationChangeStart", (event, next, current) ->
     if $rootScope.user and $rootScope.user.subscription.expired
@@ -195,7 +197,6 @@
       value
     else
       value = $filter('dynCurrency')(value)
-
 
   # Set current project
   $rootScope.current_project = (project) ->
@@ -270,8 +271,8 @@
     range.from = rangeStart.format('MM.DD.YYYY')
     range.to = rangeEnd.format('MM.DD.YYYY')
 
-    if $state.current.name in ['projects.chart', 'projects.products_revenue']
-      $rootScope.reload_state_params(range)
+#    if $state.current.name in ['projects.chart', 'projects.products_revenue']
+#      $rootScope.reload_state_params(range)
 
 
     # Save period in localStorage
@@ -295,30 +296,60 @@
       moment.min(end, date).startOf('day')._d
 
   $rootScope.set_datepicker_date = (datepicker, rangeStart, rangeEnd) ->
-    rangeStart = rangeStart.toDate()
-    rangeEnd = rangeEnd.toDate()
+    rangeStart = rangeStart.toDate() if rangeStart._isAMomentObject
+    rangeEnd = rangeEnd.toDate() if rangeEnd._isAMomentObject
     datepicker.datepicker('setDates', [rangeStart, rangeEnd]).datepicker 'update'
 
   # Set datepicker start date. Different projects has different data with different start days
-  $rootScope.set_datepicker_start_date = (datepicker, date) -> datepicker.datepicker('setStartDate', new Date(date))
+  $rootScope.set_datepicker_start_date = (datepicker, date) ->
+    console.log 'Project for data : '+date
+    datepicker.datepicker('setStartDate', new Date(date))
 
 
   # Localstorage funcs
   $rootScope.load_dates_from_ls = (scope) ->
     if localStorageService.isSupported
+
       from = localStorageService.get('from')
       to = localStorageService.get('to')
 
       if from
-        scope.range.from = moment(from).format('MM.DD.YYY')
+        scope.range.from = moment(from).format('MM.DD.YYYY')
         scope.range.raw_start = moment(from)
+      else
+        scope.range.from = moment().startOf('month').format('MM.DD.YYYY')
+        scope.range.raw_start = moment().startOf('month')
+
 
       if to
         scope.range.to = moment(to).format('MM.DD.YYYY')
         scope.range.raw_end = moment(to)
+      else
+        scope.range.to = moment().endOf('month').format('MM.DD.YYYY')
+        scope.range.raw_end = moment().endOf('month')
 
+      console.log 'Dates from LS loaded. From : '+scope.range.from+'. To : '+scope.range.to
+
+  # Save dates from $stateParams to LS
+  $rootScope.$on('$stateChangeSuccess', (event, toState, toParams, fromState, fromParams) ->
+    console.log event
+    if toState.name in ['projects.chart', 'projects.products_revenue']
+      $rootScope.save_dates_to_ls_from_params()
+  )
+
+  $rootScope.save_dates_to_ls_from_params = ->
+    if $stateParams.from and $stateParams.to
+      console.log 'Save dates from stateParams'
+      $rootScope.save_dates_to_ls(moment($stateParams.from, 'MM.DD.YYYY'), moment($stateParams.to, 'MM.DD.YYYY'))
+    else
+      console.log $stateParams
+
+  # Save dates to localStorage
+  # rangeStart - momentjs object
+  # rangeEnd - momentjs object
   $rootScope.save_dates_to_ls = (rangeStart, rangeEnd) ->
     if localStorageService.isSupported
+      console.log 'Save dates to localStorage. From : '+rangeStart.format('lll')+'. To '+rangeEnd.format('lll')
       localStorageService.set('from', rangeStart )
       localStorageService.set('to', rangeEnd )
 

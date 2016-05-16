@@ -1,6 +1,9 @@
 class ProductsRevenueController
   constructor: (@rootScope, @scope, @Projects, @http, @filter) ->
     console.log 'ProductsRevenueController'
+    console.log 'From : '+@rootScope.$stateParams.from
+    console.log 'To : '+@rootScope.$stateParams.to
+
     vm = @
     vm.slug = @rootScope.$stateParams.slug
     vm.chart = 'products_revenue'
@@ -104,13 +107,18 @@ class ProductsRevenueController
     @init_dashboard()
 
     # Set datepicker dates
-    vm.range.raw_start = rangeStart = moment(vm.range.from, 'MM.DD.YYYY')
-    vm.range.raw_end = rangeEnd = moment(vm.range.to, 'MM.DD.YYYY')
-    vm.range.from = rangeStart.format('MM.DD.YYYY')
-    vm.range.to = rangeEnd.format('MM.DD.YYYY')
+    @rootScope.load_dates_from_ls(vm)
+
+    # Set datepicker dates
+    if not vm.range.from and not vm.range.to
+      vm.range.raw_start = rangeStart = moment(vm.range.from, 'MM.DD.YYYY')
+      vm.range.raw_end = rangeEnd = moment(vm.range.to, 'MM.DD.YYYY')
+      vm.range.from = rangeStart.format('MM.DD.YYYY')
+      vm.range.to = rangeEnd.format('MM.DD.YYYY')
 
     @Projects.search({slug: vm.slug}).$promise.then( (project) ->
       vm.project = project
+      vm.rootScope.current_project(vm.project)
       vm.rootScope.currency = vm.project.currency
       vm.rootScope.set_datepicker_start_date(vm.datepicker, vm.project.first_product_data)
       vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
@@ -127,17 +135,10 @@ class ProductsRevenueController
       project_id: vm.project.id
       chart: vm.chart
 
-    vm.rootScope.overlay('show')
-
     vm.raw_products = []
     vm.products = []
 
-    vm.rootScope.save_dates_to_ls(vm.range.raw_start, vm.range.raw_end)
-
     vm.http.get(chart_url, params: chart_params).success((response) ->
-
-      # Update URL
-      vm.rootScope.reload_state_params(vm.range)
 
       vm.raw_products = response
       vm.products_count = vm.raw_products.length
@@ -149,7 +150,6 @@ class ProductsRevenueController
           vm.products_view = 'none'
           vm.products_view = temp_view
 
-      vm.rootScope.overlay('hide')
     )
 
   datepicker_changed: ->

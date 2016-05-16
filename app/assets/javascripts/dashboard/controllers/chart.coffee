@@ -1,6 +1,9 @@
 class ChartController
   constructor: (@rootScope, @scope, @Projects, @http, @filter) ->
-    console.log 'ChartController constructor'
+    console.log 'ChartController constructor.'
+    console.log 'From : '+@rootScope.$stateParams.from
+    console.log 'To : '+@rootScope.$stateParams.to
+
     vm = @
     vm.slug = @rootScope.$stateParams.slug
     vm.chart = @rootScope.$stateParams.chart
@@ -58,13 +61,7 @@ class ChartController
       project_id: vm.project.id
       chart: vm.chart
 
-    vm.rootScope.save_dates_to_ls(vm.range.raw_start, vm.range.raw_end)
-
     vm.http.get(chart_url, params: chart_params).success((response) ->
-
-        # Update URL
-        vm.rootScope.reload_state_params(vm.range)
-
         vm.data = response['full']
         vm.check_points = response['check_points']
         vm.table_data = {}
@@ -104,8 +101,6 @@ class ChartController
       moment.min(end, date).startOf('day')._d
 
   init_line_area3_chart: (el, data) ->
-#    return if data['data'].length < 1
-
     chart_name = element_id = el.attr('id')
 
     vm = @
@@ -124,7 +119,8 @@ class ChartController
     data = data['data']
 
     for d in data
-      dates.push moment(d.date)
+      # d.date == 18-Feb-16
+      dates.push moment(d.date, 'DD-MMM-YY')
       values.push d.close
 
     margin =

@@ -23,10 +23,3 @@
               %a(ng-click = "vm.set_date_range('4')" href = "")= t('projects.dashboard.date_range.last_year')
             %li
               %a(ng-click = "vm.set_date_range('5')" href = "")= t('projects.dashboard.date_range.all_time')
-        -#%select(ng-model="vm.date_range" ng-change="vm.set_date_range(vm.date_range)")
-        -#  %option(value = 0) Current month
-        -#  %option(value = 1) Previous month
-        -#  %option(value = 2) Last 3 month
-        -#  %option(value = 3) Last 6 month
-        -#  %option(value = 4) Last year
-        -#  %option(value = 5) All time
