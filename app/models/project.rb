@@ -112,7 +112,7 @@ class Project < ActiveRecord::Base
 
   # / Соотношение старых и новых покупателей | Repeat Customer Rate (RCR) – круговая диаграмма
   def new_and_repeat_customers_number(scope, current_data, prev_data)
-    {
+    @r = {
         diff: 0,
         value: current_data.sum(:new_customers_number),
         data: [
@@ -128,6 +128,14 @@ class Project < ActiveRecord::Base
             }
         ]
     }
+
+
+    # https://basecamp.com/2476170/projects/11656794/todos/251776993
+    if @r[:data][0][:value]== 0 and @r[:data][1][:value] == 0
+      @r[:data] << {color: '#889873', name: 'Other', value: 100}
+    end
+
+    @r
   end
 
   # Общая стоимость доставки | Gross Delivery Cost – линейная диаграмма
@@ -189,6 +197,8 @@ class Project < ActiveRecord::Base
   def order_statuses(from ,to)
     result = { data: [] }
     statuses_hash = project_order_statuses.where('date > ? and date < ?', from, to).group(:status).sum(:count)
+    logger.info "Statuses"
+    logger.info statuses_hash
     statuses_hash.keys.map { |k|
       result[:data] << {
           color: "#%06x" % (rand * 0xffffff),

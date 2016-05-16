@@ -93,7 +93,19 @@ class DashboardController
       $('.donutChart_1').each (index) ->
         el_id = $(this).context.id
         if el_id in ['new_and_repeat_customers_number', 'order_statuses']
-          vm.init_donut_chart($(this), vm.other_charts_data[el_id])
+
+          console.log vm.other_charts_data[el_id]
+
+
+          # https://basecamp.com/2476170/projects/11656794/todos/251776993
+          data = vm.other_charts_data[el_id]
+
+          if el_id is 'order_statuses' and data['data'].length == 0
+            data = vm.other_charts_data[el_id]
+            data = {data: [{color: "#6d7c74", name: "", value: 100}]}
+
+          console.log data
+          vm.init_donut_chart($(this), data)
     )
 
   # Draw block line area chart

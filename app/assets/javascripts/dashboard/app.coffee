@@ -308,6 +308,7 @@
 
   # Localstorage funcs
   $rootScope.load_dates_from_ls = (scope) ->
+    debug = false
     if localStorageService.isSupported
 
       from = localStorageService.get('from')
@@ -328,28 +329,30 @@
         scope.range.to = moment().endOf('month').format('MM.DD.YYYY')
         scope.range.raw_end = moment().endOf('month')
 
-      console.log 'Dates from LS loaded. From : '+scope.range.from+'. To : '+scope.range.to
+      console.log 'Dates from LS loaded. From : '+scope.range.from+'. To : '+scope.range.to if debug
 
   # Save dates from $stateParams to LS
   $rootScope.$on('$stateChangeSuccess', (event, toState, toParams, fromState, fromParams) ->
-    console.log event
     if toState.name in ['projects.chart', 'projects.products_revenue']
       $rootScope.save_dates_to_ls_from_params()
   )
 
   $rootScope.save_dates_to_ls_from_params = ->
+    debug = false
     if $stateParams.from and $stateParams.to
-      console.log 'Save dates from stateParams'
+      console.log 'Save dates from stateParams' if debug
       $rootScope.save_dates_to_ls(moment($stateParams.from, 'MM.DD.YYYY'), moment($stateParams.to, 'MM.DD.YYYY'))
     else
-      console.log $stateParams
+      console.log $stateParams if debug
 
   # Save dates to localStorage
   # rangeStart - momentjs object
   # rangeEnd - momentjs object
   $rootScope.save_dates_to_ls = (rangeStart, rangeEnd) ->
+    debug = false
     if localStorageService.isSupported
-      console.log 'Save dates to localStorage. From : '+rangeStart.format('lll')+'. To '+rangeEnd.format('lll')
+      if debug
+        console.log 'Save dates to localStorage. From : '+rangeStart.format('lll')+'. To '+rangeEnd.format('lll')
       localStorageService.set('from', rangeStart )
       localStorageService.set('to', rangeEnd )
 
