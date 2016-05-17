@@ -91,21 +91,25 @@ class DashboardController
         vm.draw_block_charts($(this), vm.other_charts_data[el_id])
 
       $('.donutChart_1').each (index) ->
+        # Iterate all donut charts
         el_id = $(this).context.id
+
+        # Add donut empty class
+        $(this).addClass('donut_empty')
+
+        # Clear legend
+        $(this).next().empty()
+
         if el_id in ['new_and_repeat_customers_number', 'order_statuses']
-
-          console.log vm.other_charts_data[el_id]
-
-
           # https://basecamp.com/2476170/projects/11656794/todos/251776993
           data = vm.other_charts_data[el_id]
 
-          if el_id is 'order_statuses' and data['data'].length == 0
-            data = vm.other_charts_data[el_id]
-            data = {data: [{color: "#6d7c74", name: "", value: 100}]}
+          if data['data'].length > 0
+            # remove donut_empty class If backend return data
+            $(this).removeClass('donut_empty')
 
-          console.log data
-          vm.init_donut_chart($(this), data)
+            # Init donut chart
+            vm.init_donut_chart($(this), vm.other_charts_data[el_id])
     )
 
   # Draw block line area chart

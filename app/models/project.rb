@@ -132,7 +132,7 @@ class Project < ActiveRecord::Base
 
     # https://basecamp.com/2476170/projects/11656794/todos/251776993
     if @r[:data][0][:value]== 0 and @r[:data][1][:value] == 0
-      @r[:data] << {color: '#889873', name: 'Other', value: 100}
+      @r[:data] = []
     end
 
     @r
