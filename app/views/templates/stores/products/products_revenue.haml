@@ -32,22 +32,19 @@
 
                 / Table content
                 .table-content
-                  .table-row{'dir-paginate' => "product in vm.products | filter:vm.filters | orderBy:vm.sortType:vm.sortReverse | itemsPerPage: vm.itemsPerPage"}
-                    .table-cell.col_1(ng-show='product.divider') {{ product.divider_title }}
-                    .table-cell.col_5(ng-show='product.divider') &nbsp;
-                    .table-cell.col_6(ng-show='product.divider') &nbsp;
-                    .table-cell.col_7(ng-show='product.divider') &nbsp;
-                    .table-cell.col_4(ng-show='product.divider') &nbsp;
+                  .table-row(ng-class="{col_wide: product.divider}" dir-paginate = "product in vm.products | filter:vm.filters | itemsPerPage: vm.itemsPerPage")
+                    .wide-cell-content(ng-show='product.divider')
+                      .table-section-title {{ product.divider_title }}
 
-                    .table-cell.col_1(ng-show='!product.divider')
+                    .table-cell.col_1(ng-show='!product.divider' ng-class="{'table-cell-best': product.s80}")
                       {{ product.title }}
                     .table-cell.col_5.col_right(ng-show='!product.divider')
                       {{ product.sales }}
                     .table-cell.col_6.col_right(ng-show='!product.divider')
-                      .seller_val(ng-show='!product.divider') {{ product.gross_revenue | dynCurrency}}
+                      .seller_val(ng-class="{best_seller: product.s80}" ng-show='!product.divider') {{ product.gross_revenue | dynCurrency}}
                     .table-cell.col_7.col_right(ng-show='!product.divider') {{ product.price | dynCurrency}}
                     .table-cell.col_4(ng-show='!product.divider')
-                      {{ product.created_at }}
+                      {{ product.created_at | date }}
 
                   .table-row.no_hover
                     .table-cell.col_1

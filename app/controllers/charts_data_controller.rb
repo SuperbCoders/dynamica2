@@ -19,6 +19,7 @@ class ChartsDataController < ApplicationController
         @products[pc.product_id][:title] = pc.try(:product).title
         @products[pc.product_id][:sales] += pc.sold_quantity
         @products[pc.product_id][:gross_revenue] += pc.gross_revenue
+        @products[pc.product_id][:created_at] = pc.created_at
       }
 
       @products.keys.map {|k| @result << @products[k] }

@@ -1,11 +1,8 @@
 .table-content(ng-show="vm.products_view == 'rule_80_20'")
 
-  .table-row
-    .table-cell.col_1 80% made of revenue
-    .table-cell.col_5 &nbsp;
-    .table-cell.col_6 &nbsp;
-    .table-cell.col_7 &nbsp;
-    .table-cell.col_4 &nbsp;
+  .table-row.col_wide
+    .wide-cell-content
+      .table-section-title 80% made of revenue
 
 
   .table-row{'dir-paginate' => "product in vm.products_80 | itemsPerPage: 300"}
@@ -17,12 +14,9 @@
     .table-cell.col_4 {{ product.created_at }}
 
 
-  .table-row
-    .table-cell.col_1 20% made of revenue
-    .table-cell.col_5 &nbsp;
-    .table-cell.col_6 &nbsp;
-    .table-cell.col_7 &nbsp;
-    .table-cell.col_4 &nbsp;
+  .table-row.col_wide
+    .wide-cell-content
+      .table-section-title 20% made of revenue
 
   .table-row{'dir-paginate' => "product in vm.products_20 | itemsPerPage: 300"}
     .table-cell.col_1 {{ product.title }}

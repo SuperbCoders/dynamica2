@@ -23,6 +23,12 @@ class ProductsRevenueController
     # return to projets list if date range not present in URL
     @rootScope.$state.go('projects.list') if not vm.range.from or not vm.range.to
 
+    # Watch sort types
+    @scope.$watch('vm.sortType', (sortType) ->
+      if vm.products_view != 'rule_80_20'
+        vm.products = vm.filter('orderBy')(vm.raw_products, sortType, vm.sortReverse)
+    )
+
     # Watch products view switcher for products table
     @scope.$watch('vm.products_view', (products_view) ->
       # Clear products lists and counters
@@ -90,6 +96,9 @@ class ProductsRevenueController
           # Slice to 80/20 arrays
           vm.products_80 = vm.sorted_products.slice(0, slice_index)
           vm.products_20 = vm.sorted_products.slice(slice_index, total_products)
+
+          p.s80 = true for p in vm.products_80
+          p.s20 = true for p in vm.products_20
 
           # Now need concat with divider
           vm.products = _.concat(
