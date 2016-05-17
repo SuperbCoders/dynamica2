@@ -32,14 +32,20 @@
     padding: 0;
     margin-left: 0 !important;
     margin-right: 80px;
-    font-size: 22px;
+    //font-size: 22px;
     font-weight: 800;
     line-height: 40px;
+    font-size: 27px;
+    color: #333;
+
+    &:hover {
+      color: #000;
+    }
 
     .dashboard_page & {
-      font-weight: 700;
+      //font-weight: 700;
       margin-right: 4px;
-      font-size: 20px;
+      //font-size: 20px;
     }
 
   }
@@ -105,7 +111,7 @@
           padding: 8px 20px;
         }
       }
-      
+
       .term {
         position: absolute;
         top: 12px;

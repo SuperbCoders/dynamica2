@@ -109,12 +109,25 @@
           {name: 'search', method: 'POST', isArray: false}
         ]
       ]
-      
+
+  .state 'projects.donut_chart',
+    url: '/:slug/donut/:chart/:from/:to',
+    templateUrl: '/templates/stores/donut_chart_dashboard'
+    controller: 'DonutChartController'
+    controllerAs: 'vm'
+    resolve:
+      Projects: ['Resources', (Resources) ->
+        Resources '/projects/:id', {id: @id}, [
+          {method: 'GET', isArray: false},
+          {name: 'search', method: 'POST', isArray: false}
+        ]
+      ]
+
   .state 'projects.chart',
     url: '/:slug/:chart/:from/:to',
     templateUrl: '/templates/stores/full_dashboard'
-    controller: 'ChartController',
-    controllerAs: 'vm',
+    controller: 'ChartController'
+    controllerAs: 'vm'
     params: {project: null}
     resolve:
       Projects: ['Resources', (Resources) ->

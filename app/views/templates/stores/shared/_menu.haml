@@ -30,7 +30,7 @@
               / – круговая диаграмма
               / – на отдельной странице график выглядит вот так
               %li
-                %a(ui-sref="projects.chart({chart: 'order_statuses', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.order_statuses'
+                %a(ui-sref="projects.donut_chart({chart: 'order_statuses', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.order_statuses'
 
               / Общая стоимость доставки | Gross Delivery Cost – линейная диаграмма
               %li
@@ -61,7 +61,7 @@
               / – круговая диаграмма
               / – на отдельной странице график выглядит вот так
               %li
-                %a(ui-sref="projects.chart({chart: 'new_and_repeat_customers_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.new_and_repeat_customers_number'
+                %a(ui-sref="projects.donut_chart({chart: 'new_and_repeat_customers_number', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.new_and_repeat_customers_number'
 
               / Число новых покупателей | Number of New Customers – линейная диаграмма
               %li
@@ -113,14 +113,14 @@
               / – доля тех продуктов, у которых были продажи
               / – на отдельной странице график выглядит вот так
               %li
-                %a(ui-sref="projects.chart({chart: 'percentage_of_inventory_sold', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.percentage_of_inventory_sold'
+                %a(ui-sref="projects.donut_chart({chart: 'percentage_of_inventory_sold', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.percentage_of_inventory_sold'
 
               / Какой % запасов на складе продается | Share of Stock Sold
               / – круговая диаграмма
               / – суммируем все запасы на складе, выделяем долю проданных товаров за этот период
               / – на отдельной странице график выглядит вот так
               %li
-                %a(ui-sref="projects.chart({chart: 'percentage_of_stock_sold', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.percentage_of_stock_sold'
+                %a(ui-sref="projects.donut_chart({chart: 'percentage_of_stock_sold', slug: project.slug, from: vm.range.from, to: vm.range.to})")= t 'projects.show.percentage_of_stock_sold'
 
               / Таблица епта
               %li

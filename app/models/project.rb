@@ -60,6 +60,71 @@ class Project < ActiveRecord::Base
     end
   end
 
+
+  def full_donut_chart_data(chart, date_from, date_to)
+    result = {
+        items: {},
+        data: []
+    }
+
+    case chart
+      when 'order_statuses'
+        project_order_statuses.where('date >= ? and date <= ?', date_from, date_to).each do |order_status|
+          finded = false
+          data_field = nil
+
+          # Назначим цвет статусу
+          result[:items][order_status.status] ||= rand_color
+
+          # Пройдемся по результату и найдем данные за дату
+          result[:data].map {|r_data|
+            if r_data[:date] == order_status.date.strftime("%d-%b-%y")
+              data_field = r_data
+              finded = true
+            end
+          }
+
+          # Если данные за эту дату есть, то увеличиваем на
+          if finded and data_field
+            data_field[order_status.status] = data_field[order_status.status] ? data_field[order_status.status] + order_status.count : 1
+          else
+            temp = {}
+            temp[:date] = order_status.date.strftime("%d-%b-%y")
+            temp[order_status.status] = order_status.count
+            result[:data] << temp
+          end
+
+          data_field = nil
+          finded = false
+        end
+
+        result[:data].map.with_index { |r_data, index|
+
+          # Добавим 0 статусы если их нет в хеше
+          result[:items].keys.map { |r_key|
+            r_data[r_key] = 0 if not r_data[r_key]
+          }
+
+          # Отсортируем
+          date = r_data[:date]
+          result[:data][index] = Hash[r_data.except(:date).sort]
+          result[:data][index][:date] = date
+
+          # Сумма количества всех статусов
+          data = result[:data][index]
+          @summ = 0
+          data.except(:date).keys.map { |k| @summ += data[k] }
+
+          # Высчитаем процентное соотношение
+          result[:items].keys.map { |r_key|
+            data[r_key] = (data[r_key] / @summ) * 100 if data[r_key] > 0
+          }
+        }
+    end
+
+    result
+  end
+
   # Число позиций в продаже | Number of Products in Stock
   # – линейная диаграмма
   # – число товаров, у которых >=1 единицы в наличии на складе
@@ -196,12 +261,12 @@ class Project < ActiveRecord::Base
   # @return [Hash] of statuses between from and to
   def order_statuses(from ,to)
     result = { data: [] }
-    statuses_hash = project_order_statuses.where('date > ? and date < ?', from, to).group(:status).sum(:count)
+    statuses_hash = project_order_statuses.where('date >= ? and date <= ?', from, to).group(:status).sum(:count)
     logger.info "Statuses"
     logger.info statuses_hash
     statuses_hash.keys.map { |k|
       result[:data] << {
-          color: "#%06x" % (rand * 0xffffff),
+          color: rand_color,
           name: k,
           value: statuses_hash[k]
       }
@@ -352,6 +417,9 @@ class Project < ActiveRecord::Base
 
   private
 
+    def rand_color
+      "#%06x" % (rand * 0xffffff)
+    end
 
     def diff_values(current_value, previous_value)
       result = (current_value * 100.0 / previous_value - 100)

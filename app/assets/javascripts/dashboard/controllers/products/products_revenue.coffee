@@ -29,6 +29,11 @@ class ProductsRevenueController
         vm.products = vm.filter('orderBy')(vm.raw_products, sortType, vm.sortReverse)
     )
 
+    @scope.$watch('vm.sortReverse', (sortReverse) ->
+      if vm.products_view != 'rule_80_20'
+        vm.products = vm.filter('orderBy')(vm.raw_products, vm.sortType, sortReverse)
+    )
+
     # Watch products view switcher for products table
     @scope.$watch('vm.products_view', (products_view) ->
       # Clear products lists and counters

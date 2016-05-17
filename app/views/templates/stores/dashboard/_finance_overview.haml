@@ -29,7 +29,7 @@
     / Заказы по статусам | Order Statuses – круговая диаграмма
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
-        %a.graph-u-link(href = "" ui-sref = "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'order_statuses'})")
+        %a.graph-u-link(href = "" ui-sref = "projects.donut_chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'order_statuses'})")
         %h5.graph-name= t('projects.show.order_statuses')
         .graph-value
           -#%span.val 3.2

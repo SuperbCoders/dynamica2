@@ -1,0 +1,17 @@
+%section.dashboard-body
+  .container-fluid.globalwidth
+    %section.dashboard.projects-dashboard
+      = render 'templates/stores/shared/menu'
+      = render 'templates/stores/shared/datepicker'
+      = render 'templates/stores/shared/debug'
+
+      .graph-unit-holder
+        .graph-unit.dark_mod_
+          .graph-value
+            -#%span.val 42,489$
+            -#%sup.graph-dynamica.dynamica_up
+          .graph-unit-large-v3
+            .graph-block
+              .areaChartTotal_1.hide_y_axis.hide_x_axis.d3graph.graph_3
+                #tooltip.graph-tooltip-holder.black-mod
+                  #tooltip_content.graph-tooltip-top

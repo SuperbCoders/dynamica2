@@ -1,7 +1,8 @@
 class ChartsDataController < ApplicationController
   before_action :set_project
   before_action :authenticate_user!
-  before_action :set_chart_data, only: [:big_chart_data, :other_chart_data, :full_chart_data, :sorted_chart_data, :full_chart_check_points]
+  before_action :set_chart_data, only: [:big_chart_data, :other_chart_data, :full_chart_data,
+      :sorted_chart_data, :full_chart_check_points]
 
   include ActionView::Helpers::NumberHelper
 
@@ -43,6 +44,14 @@ class ChartsDataController < ApplicationController
 
   def other_chart_data
     render json: other_charts_data(@current_project_characteristics, @previous_project_characteristics)
+  end
+
+  def full_donut_chart_data
+    @chart = params[:chart]
+
+    @result = @project.full_donut_chart_data(@chart, date_from, date_to)
+
+    render json: @result
   end
 
   def full_chart_data

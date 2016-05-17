@@ -6,7 +6,7 @@
       = render 'templates/stores/shared/debug'
 
       .graph-unit-holder
-        .graph-unit
+        .graph-unit.dark_mode_
           .graph-value
             %span.val {{vm.data['value']}}
             %sup.graph-dynamica{'ng-class' => "{dynamica_up: vm.parse_diff(vm.data['diff']) > 0, dynamica_down: vm.parse_diff(vm.data['diff']) < 0}"} {{vm.data['diff']}}

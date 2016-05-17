@@ -47,7 +47,7 @@
     / – на отдельной странице график выглядит вот так http://dl.dropbox.com/u/4476496/Screenshots/0r7.png
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
-        %a.graph-u-link(href = "" ui-sref = "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'percentage_of_inventory_sold'})")
+        %a.graph-u-link(href = "" ui-sref = "projects.donut_chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'percentage_of_inventory_sold'})")
         %h5.graph-name= t('projects.show.percentage_of_inventory_sold')
         .graph-value
           -#%span.val 3.2
@@ -71,7 +71,7 @@
     / – на отдельной странице график выглядит вот так http://dl.dropbox.com/u/4476496/Screenshots/0r7.png
     .col-lg-3.col-md-4.col-sm-6
       .graph-unit
-        %a.graph-u-link(href = "" ui-sref = "projects.chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'percentage_of_inventory_sold'})")
+        %a.graph-u-link(href = "" ui-sref = "projects.donut_chart({from: vm.range.from, to: vm.range.to, project: vm.project, slug: vm.project.slug, chart: 'percentage_of_inventory_sold'})")
         %h5.graph-name= t('projects.show.percentage_of_inventory_sold')
         .graph-value
           -#%span.val 3.2
