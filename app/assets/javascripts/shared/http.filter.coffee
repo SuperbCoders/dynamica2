@@ -3,6 +3,9 @@
     request: (request) ->
 
       if request.url
+        if request.url.indexOf('charts_data') >= 1 or request.url.indexOf('products_characteristics') > 1
+          $rootScope.overlay('show')
+
         if request.method is 'GET' and request.url.indexOf('charts_data') >= 1
 
           date_from = moment(request.params.from, 'MM.DD.YYYY')
@@ -18,12 +21,15 @@
       request
 
     response: (response) ->
+      $rootScope.overlay('hide')
       response
 
     requestError: (request) ->
+      $rootScope.overlay('hide')
       request
 
     responseError: (response) ->
+      $rootScope.overlay('hide')
       response
 
   overlay

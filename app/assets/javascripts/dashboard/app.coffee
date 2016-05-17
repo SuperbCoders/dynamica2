@@ -9,7 +9,6 @@
   $httpProvider.defaults.useXDomain = true
   $httpProvider.defaults.headers.post['Content-Type']= 'application/json'
   $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
-  $httpProvider.interceptors.push 'requestOverlay'
   $httpProvider.interceptors.push 'httpFilter'
   delete $httpProvider.defaults.headers.common['X-Requested-With']
 
