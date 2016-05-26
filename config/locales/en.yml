@@ -73,18 +73,22 @@ en:
       customers_number: Customers Number
       new_customers_number: New Customers Number
       repeat_customers_number: Repeat Customers Number
-      ratio_of_new_customers_to_repeat_customers: Ratio Of New Customers To Repeat Customers
+      orders_number: Orders number
+      order_statuses: Order statuses
+      total_gross_delivery: Total gross delivery
+      new_and_repeat_customers_number: Ratio Of New Customers To Repeat Customers
       average_revenue_per_customer: Average Revenue Per Customer
       sales_per_visitor: Sales Per Visitor
       average_customer_lifetime_value: Average Customer Lifetime Value
       unique_users_number: Unique Users Number
       visits: Visits
-      products_in_stock_number: Products_in_stock_number
+      products_in_stock_number: Products in stock number
       items_in_stock_number: Items In Stock Number
       percentage_of_inventory_sold: Percentage Of Inventory Sold
       percentage_of_stock_sold: Rercentage Of Stock Sold
       products_number: Products Number
       total_revenu: Gross Revenue
+      total_gross_revenues: Gross Revenue
       controls:
         update_forecast: Update forecast
         settings: Settings

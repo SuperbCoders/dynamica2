@@ -95,7 +95,7 @@
                     <td>
                   / Блок номер 1
                   %span{:style => "\npadding-left: 20px;\nfont-size: 20px;\ncolor: #000;\n  "}
-                    = chart_name
+                    = I18n.t("projects.show.#{chart_name}")
                   / Блок номер 1
                   /[if gte mso 9]
                     </td></tr></table>
@@ -124,7 +124,7 @@
                     <td>
                   / Блок номер 1
                   %a{:href => "#", :style => "\ndisplay: inline-block;\nvertical-align: top;\nmax-width: 100%;\ntext-align: center;\n  "}
-                    %img{:alt => "Weekly revenu", :src => "#{chart_image}", :style => "\n            display: inline-block;\n            vertical-align: top;\n            max-width: 100%;\n            "}/
+                    %img{:src => "#{chart_image}", :style => "\n            display: inline-block;\n            vertical-align: top;\n            max-width: 100%;\n            "}/
                   / Блок номер 1
                   /[if gte mso 9]
                     </td></tr></table>
