@@ -1,5 +1,5 @@
 class ReportMailer < ActionMailer::Base
-  default from: "from@example.com"
+  default from: "report@dynamica.cc"
 
   def weekly(params)
     @project = Project.find(params[:project_id])
