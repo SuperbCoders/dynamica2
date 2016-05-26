@@ -73,6 +73,7 @@ parse_args = ->
       when '--project_id' then options.project_id = arg_value
       when '--from' then options.from = arg_value
       when '--to' then options.to = arg_value
+      when '--env' then options.env = arg_value
 
     return
 
@@ -82,7 +83,13 @@ parse_args()
 check_options()
 
 # Request URL
-url = "http://localhost:3000/draw/#{options.chart_type}?project_id=#{options.project_id}&from=#{options.from}&to=#{options.to}&chart="+options.chart
+if options.env is 'staging'
+  host = 'http://dev-dyn2.onomnenado.ru/'
+else if options.env is 'development'
+  host = 'http://localhost:3000/'
+end
+
+url = "#{host}/draw/#{options.chart_type}?project_id=#{options.project_id}&from=#{options.from}&to=#{options.to}&chart="+options.chart
 
 page = wp.create({url: url})
 page.viewportSize = { width: 1280, height: 1024 };

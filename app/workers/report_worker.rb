@@ -78,6 +78,14 @@ class ReportWorker < BaseWorker
   end
 
   def capture(project, start_date, end_date, prefix, chart, chart_type)
+    if Rails.env.development?
+      _env = 'development'
+    elsif Rails.env.staging?
+      _env = 'staging'
+    else
+      _env = 'production'
+    end
+
     Phantomjs.run(
         CAPTURE_JS_PATH,
         "--folder=#{IMAGES_FOLDER_PATH}",
@@ -86,7 +94,8 @@ class ReportWorker < BaseWorker
         "--to=#{end_date.strftime("%d.%m.%Y")}",
         "--prefix=#{prefix}",
         "--chart=#{chart}",
-        "--chart_type=#{chart_type}"
+        "--chart_type=#{chart_type}",
+        "--env=#{_env}"
     )
   end
 
