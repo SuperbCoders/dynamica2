@@ -86,6 +86,53 @@ url = "http://localhost:3000/draw/#{options.chart_type}?project_id=#{options.pro
 
 page = wp.create({url: url})
 page.viewportSize = { width: 1280, height: 1024 };
+page.onResourceRequested = (request) ->
+  console.log '= onResourceRequested()'
+  console.log '  request: ' + JSON.stringify(request, undefined, 4)
+  return
+
+page.onResourceReceived = (response) ->
+  console.log '= onResourceReceived()'
+  console.log '  id: ' + response.id + ', stage: "' + response.stage + '", response: ' + JSON.stringify(response)
+  return
+
+page.onLoadStarted = ->
+  console.log '= onLoadStarted()'
+  currentUrl = page.evaluate(->
+    window.location.href
+  )
+  console.log '  leaving url: ' + currentUrl
+  return
+
+page.onLoadFinished = (status) ->
+  console.log '= onLoadFinished()'
+  console.log '  status: ' + status
+  return
+
+page.onNavigationRequested = (url, type, willNavigate, main) ->
+  console.log '= onNavigationRequested'
+  console.log '  destination_url: ' + url
+  console.log '  type (cause): ' + type
+  console.log '  will navigate: ' + willNavigate
+  console.log '  from page\'s main frame: ' + main
+  return
+
+page.onResourceError = (resourceError) ->
+  console.log '= onResourceError()'
+  console.log '  - unable to load url: "' + resourceError.url + '"'
+  console.log '  - error code: ' + resourceError.errorCode + ', description: ' + resourceError.errorString
+  return
+
+page.onError = (msg, trace) ->
+  console.log '= onError()'
+  msgStack = [ '  ERROR: ' + msg ]
+  if trace
+    msgStack.push '  TRACE:'
+    trace.forEach (t) ->
+      msgStack.push '    -> ' + t.file + ': ' + t.line + (if t.function then ' (in function "' + t.function + '")' else '')
+      return
+  console.log msgStack.join('\n')
+  return
 
 switch options.chart_type
   when 'big'

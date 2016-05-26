@@ -114,6 +114,57 @@
     height: 1024
   };
 
+  page.onResourceRequested = function(request) {
+    console.log('= onResourceRequested()');
+    console.log('  request: ' + JSON.stringify(request, void 0, 4));
+  };
+
+  page.onResourceReceived = function(response) {
+    console.log('= onResourceReceived()');
+    console.log('  id: ' + response.id + ', stage: "' + response.stage + '", response: ' + JSON.stringify(response));
+  };
+
+  page.onLoadStarted = function() {
+    var currentUrl;
+    console.log('= onLoadStarted()');
+    currentUrl = page.evaluate(function() {
+      return window.location.href;
+    });
+    console.log('  leaving url: ' + currentUrl);
+  };
+
+  page.onLoadFinished = function(status) {
+    console.log('= onLoadFinished()');
+    console.log('  status: ' + status);
+  };
+
+  page.onNavigationRequested = function(url, type, willNavigate, main) {
+    console.log('= onNavigationRequested');
+    console.log('  destination_url: ' + url);
+    console.log('  type (cause): ' + type);
+    console.log('  will navigate: ' + willNavigate);
+    console.log('  from page\'s main frame: ' + main);
+  };
+
+  page.onResourceError = function(resourceError) {
+    console.log('= onResourceError()');
+    console.log('  - unable to load url: "' + resourceError.url + '"');
+    console.log('  - error code: ' + resourceError.errorCode + ', description: ' + resourceError.errorString);
+  };
+
+  page.onError = function(msg, trace) {
+    var msgStack;
+    console.log('= onError()');
+    msgStack = ['  ERROR: ' + msg];
+    if (trace) {
+      msgStack.push('  TRACE:');
+      trace.forEach(function(t) {
+        msgStack.push('    -> ' + t.file + ': ' + t.line + (t["function"] ? ' (in function "' + t["function"] + '")' : ''));
+      });
+    }
+    console.log(msgStack.join('\n'));
+  };
+
   switch (options.chart_type) {
     case 'big':
       page.clipRect = {
