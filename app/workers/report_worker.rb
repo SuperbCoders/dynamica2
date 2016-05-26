@@ -9,7 +9,7 @@ class ReportWorker < BaseWorker
   IMAGES_FOLDER_PATH = Rails.root.join('public','report_images').to_s
 
   def perform
-    return if not Rails.env.development? and not DateTime.now.sunday?
+    return if Rails.env.production? and not DateTime.now.sunday?
 
     donut_charts = [
         'new_and_repeat_customers_number', 'order_statuses',
