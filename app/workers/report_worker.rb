@@ -6,7 +6,8 @@ class ReportWorker < BaseWorker
   end
 
   CAPTURE_JS_PATH = Rails.root.join('app', 'services', 'draw', 'capture.js').to_s
-  IMAGES_FOLDER_PATH = Rails.root.join('public','report_images').to_s
+  IMAGES_FOLDER_PATH = '/www/dev-dyn2.onomnenado.ru/shared/public/report_images'
+  # IMAGES_FOLDER_PATH = Rails.root.join('public','report_images').to_s
 
   def perform
     return if Rails.env.production? and not DateTime.now.sunday?

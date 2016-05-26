@@ -87,7 +87,6 @@ if options.env is 'staging'
   host = 'http://dev-dyn2.onomnenado.ru/'
 else if options.env is 'development'
   host = 'http://localhost:3000/'
-end
 
 url = "#{host}/draw/#{options.chart_type}?project_id=#{options.project_id}&from=#{options.from}&to=#{options.to}&chart="+options.chart
 
