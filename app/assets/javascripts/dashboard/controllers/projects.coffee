@@ -14,6 +14,14 @@ class ProjectsController
         vm.projects = projects
       )
 
+  modal: (name, action) ->
+    # Close all modals
+    $('.modal').modal('hide')
+
+    # Open modal
+    $('#'+name).modal(action, {backdrop: 'static'})
+    return
+
   open_setting_menu: (project) ->
     $('.setting.open').removeClass('open')
     $("#setting_menu_#{project.id}").toggleClass('open')
