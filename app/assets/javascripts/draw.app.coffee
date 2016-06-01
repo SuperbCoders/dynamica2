@@ -8,6 +8,8 @@
 #= require angular-ui-router
 #= require d3
 
+log = (message) -> console.log(message)
+
 getFormatOfDate = ->
   return '%d-%b-%y'
 
@@ -34,11 +36,31 @@ avgBuilder = (arr, step) ->
   ret
 
 draw_general_graph = (el, data) ->
-  return if data['data'].length < 1
+  log('draw_general_graph')
+  log(data)
+
+  if data['data'].length < 1
+    date_from = moment(data['from'])
+    date_to = moment(data['to'])
+
+    while not date_from.isSame(date_to)
+      day_data = {}
+      day_data['close'] = 0
+      day_data['date'] = new Date(date_from.format())
+
+      log day_data
+      data['data'].push(day_data)
+
+      date_from.add(1, 'd')
+
+    log(data)
+  vm = @
+
+
+
 
   chart_name = element_id = el.attr('id')
 
-  vm = @
   dates = []
   values = []
   i = 0
@@ -163,7 +185,7 @@ draw_general_graph = (el, data) ->
 
   # Get the data
   for d in data
-    d.date = parseDate(d.date)
+    d.date = parseDate(moment(d.date).format('DD-MMM-YY'))
     d.close = Math.round(+d.close)
 
   # Scale the range of the data

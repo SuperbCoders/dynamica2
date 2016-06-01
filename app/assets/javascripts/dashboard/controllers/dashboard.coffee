@@ -110,6 +110,8 @@ class DashboardController
 
             # Init donut chart
             vm.init_donut_chart($(this), vm.other_charts_data[el_id])
+          else
+            $(this).append("<div class='graph-info'><div class='graph-value_v2'>0</div></div>")
     )
 
   # Draw block line area chart

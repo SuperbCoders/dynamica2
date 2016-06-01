@@ -34,6 +34,8 @@ class Draw::GraphController < ActionController::Base
           @result = project.send(params[:chart], period, @data, @prev_data)
       end
 
+      @result[:from] = date_from
+      @result[:to] = date_to
     end
   end
 
