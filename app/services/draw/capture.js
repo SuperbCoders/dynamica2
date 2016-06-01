@@ -112,8 +112,6 @@
     host = 'http://localhost:3000/';
   }
 
-  end;
-
   url = (host + "/draw/" + options.chart_type + "?project_id=" + options.project_id + "&from=" + options.from + "&to=" + options.to + "&chart=") + options.chart;
 
   page = wp.create({
