@@ -1,7 +1,10 @@
 var s, resizeHndl, scrollBottomFixed, scrollParent, wnd, doc, activeFamilyGraph = 0, dataFixture = [], chart_colors = ['#FFA4C3', '#38AEE2', '#ECC75E'];
 
 $(function ($) {
+    init_page();
+});
 
+function init_page(){
     wnd = $(window);
     doc = $(document);
     scrollParent = $('.scrollParent');
@@ -29,8 +32,7 @@ $(function ($) {
 
             firedEl.css('opacity', .5).siblings('.area').css('opacity', .5);
         });
-});
-
+};
 function convertHex(hex, opacity) {
     hex = hex.replace('#', '');
     r = parseInt(hex.substring(0, 2), 16);
@@ -539,6 +541,9 @@ function init_charts() {
     });
 
 }
+
+$(window).init_charts = init_charts();
+$(window).init_page = init_page();
 
 $(window).resize(function () {
 

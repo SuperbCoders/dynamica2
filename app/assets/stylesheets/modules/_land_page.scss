@@ -57,7 +57,7 @@
     &:hover {
       background: #fff !important;
     }
-    
+
     + .abs_holder {
       padding-top: 112px;
       padding-bottom: 230px;
@@ -184,6 +184,19 @@
 
   h2 {
     color: #fff;
+  }
+
+  .graph-unit-holder {
+    margin: 0 -35px;
+  }
+}
+
+.major_data_section_2 {
+  background: #fff;
+
+  h2 {
+    color: #4b4b4b;
+    font-size: 36px;
   }
 
   .graph-unit-holder {
@@ -688,38 +701,38 @@
     float: left;
   }
 }
-
-.skrollable {
-  /*
-   * First-level skrollables are positioned relative to window
-   */
-  position: fixed;
-
-  /*
-   * Skrollables by default have a z-index of 100 in order to make it easy to position elements in front/back without changing each skrollable
-   */
-  z-index: 100;
-}
-
-.skrollr-mobile .skrollable {
-  /*
-      May cause issues on Android default browser (see #331 on GitHub).
-  */
-  position: absolute;
-}
-
-.skrollable .skrollable {
-  /*
-   * Second-level skrollables are positioned relative their parent skrollable
-   */
-  position: relative;
-}
-
-.skrollable .skrollable .skrollable {
-  /*
-   * Third-level (and below) skrollables are positioned static
-   */
-  position: static;
-}
-
-
+//
+//.skrollable {
+//  /*
+//   * First-level skrollables are positioned relative to window
+//   */
+//  position: fixed;
+//
+//  /*
+//   * Skrollables by default have a z-index of 100 in order to make it easy to position elements in front/back without changing each skrollable
+//   */
+//  z-index: 100;
+//}
+//
+//.skrollr-mobile .skrollable {
+//  /*
+//      May cause issues on Android default browser (see #331 on GitHub).
+//  */
+//  position: absolute;
+//}
+//
+//.skrollable .skrollable {
+//  /*
+//   * Second-level skrollables are positioned relative their parent skrollable
+//   */
+//  position: relative;
+//}
+//
+//.skrollable .skrollable .skrollable {
+//  /*
+//   * Third-level (and below) skrollables are positioned static
+//   */
+//  position: static;
+//}
+//
+//

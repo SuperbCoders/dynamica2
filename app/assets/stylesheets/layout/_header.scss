@@ -48,6 +48,11 @@
       //font-size: 20px;
     }
 
+    img {
+      display: inline-block;
+      vertical-align: middle;
+      margin-bottom: 3px;
+    }
   }
   .navbar-nav {
     li {
@@ -123,4 +128,16 @@
       }
     }
   }
+}
+
+@media (min-width: 768px) {
+
+  .page-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+  
 }

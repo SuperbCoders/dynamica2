@@ -1,11 +1,15 @@
 class LandingController
-  constructor: (@rootScope, @scope) ->
+  constructor: (@rootScope, @scope, @window) ->
     vm = @
     console.log 'Landing controller'
 
     $('#restore_pass_popup').on 'shown.bs.modal', ->
       vm.restore_pass_email = ''
       return
+
+    @window.init_charts()
+    skrollr.init()
+    @window.init_page()
 
   modal: (name, action) ->
     # Close all modals
@@ -56,4 +60,4 @@ class LandingController
 
 
 
-@application.controller 'LandingController', ['$rootScope', '$scope', LandingController]
+@application.controller 'LandingController', ['$rootScope', '$scope', '$window', LandingController]

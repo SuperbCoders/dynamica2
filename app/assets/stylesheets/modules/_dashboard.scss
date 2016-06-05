@@ -1,5 +1,11 @@
 @import "select2";
 
+@mixin transition_all($property...) {
+    -webkit-transition: $property;
+    -ms-transition: $property;
+    transition: $property;
+}
+
 %translate3d {
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
@@ -432,6 +438,19 @@ svg:not(:root) {
 
 .graph-unit-holder {
   margin: 0 -20px;
+  
+  &.graph-unit-setting {
+    text-align: center;
+    
+    .row {
+      width: 100%;
+      text-align: left;
+      display: inline-block;
+      vertical-align: top;
+      max-width: 960px;
+    }
+  }
+  
 }
 
 .graph-unit-legend-holder {
@@ -532,6 +551,11 @@ svg:not(:root) {
       }
     }
   }
+  
+  .graph-unit-setting & {
+    min-height: 300px;
+  }
+  
 }
 
 .dark_wrapper {
@@ -737,7 +761,7 @@ svg:not(:root) {
     left: 0;
     right: 0;
     border-radius: 100px;
-    border: 10px solid #3e6cfe;
+    border: 10px solid #000;
   }
 }
 
