@@ -15,7 +15,7 @@
           %li.active
             %a.menu_link(href = "")= t('landing.menu.live_demo')
           %li
-            %a.menu_link(href = "" ng-click="vm.test()")= t('landing.menu.pricing')
+            %a.menu_link(href = "" ng-click = "vm.gotoAnchor('price_page')")= t('landing.menu.pricing')
           %li
             %a.btn.login_btn(ng-click="vm.modal('auth_popup','show')")= t('landing.menu.log_in')
   .page_inner
@@ -57,7 +57,7 @@
                 .graph-unit-holder
                   .graph-unit
                     .graph-unit-large
-                      .graph-filters.graph-filter-v1
+                      -#.graph-filters.graph-filter-v1
                         .btn-group{:role => "group"}
                           %input#graph_filter_1{:checked => "checked", :hidden => "", :name => "graph_filter", :type => "radio"}/
                           %label.btn.btn-default.first{:for => "graph_filter_1"} Day
@@ -141,7 +141,7 @@
                 .review_author_name Konstantin Osintsev
                 .review_author_post Founder
 / page 8
-.page
+.page(id = 'price_page')
   .page_inner.price_section
     .gl_table
       .gl_table_cell
@@ -159,7 +159,9 @@
                   %span.color_red after
             .price_block_inner
               .text-center
-                %a.btn.btn-lg.btn-danger.start_trial_btn(href="" ng-click="vm.modal('auth_shops','show')")= t('landing.get_started_for_free')
+                %a.btn.btn-lg.btn-danger.start_trial_btn(href="" ng-click="vm.modal('auth_shops','show')")= t('landing.start_trial')
+                .price_b_text
+                  %p= t('landing.30_days')
               .price_b_text
                 %p
                   For annual payment

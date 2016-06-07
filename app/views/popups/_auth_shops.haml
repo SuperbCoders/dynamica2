@@ -12,6 +12,5 @@
           %a.btn.btn-lg.btn-danger.start_trial_btn(href="https://myshopify.com/admin/oauth/authorize?client_id=#{Dynamica::Settings::Shopify.api_key}&scope=#{ENV['shopify_scope']}&redirect_uri=#{Dynamica::Settings::Shopify.redirect_url}&state=#{SecureRandom.hex}")
             Shopify
         .control-box.text-center.btn_holder
-          %a.btn-social-auth.btn-google
-            %i.icon.fa.fa-google-plus
+          %a.btn.btn-lg.btn-danger.start_trial_btn
             Etsy ( soon )

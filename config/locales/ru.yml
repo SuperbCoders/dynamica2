@@ -24,10 +24,11 @@ ru:
 
 
   landing:
+    30_days: 30-дневную пробную версию
     password_sended:
       check_email: Мы отправили вам ссылку на почту. Проверьте почту.
       ok:  Хорошо, спасибо!
-    start_trial: Начните бесплатную 30-дневную пробную версию
+    start_trial: Начать бесплатно
     text:
       promo_1: Тщательно сделанные аналитика для вашего магазина Shopify
     menu:
@@ -35,6 +36,7 @@ ru:
       pricing: Цены
       log_in: Войти
     auth_popup:
+      sign_in_text_html: "To get started <br> Log in or Join"
       enter_mail_manually: ИЛИ ВВЕДИТЕ ПАРОЛЬ ВРУЧНУЮ
       email: Электронный адрес
       password: Пароль
@@ -43,7 +45,7 @@ ru:
 
     restore_pass:
       password_recovery: Восстановление пароля
-      helper_text: 'Введите ваш Email и мы отправим <br> вам пароль'
+      helper_text_html: "Введите ваш Email и мы отправим <br> вам пароль"
       email: Электронный адрес
       restore: Восстановить
       back: Назад

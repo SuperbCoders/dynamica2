@@ -1,5 +1,5 @@
 class LandingController
-  constructor: (@rootScope, @scope, @window) ->
+  constructor: (@rootScope, @scope, @window, @anchorScroll, @location) ->
     vm = @
     console.log 'Landing controller'
 
@@ -34,6 +34,19 @@ class LandingController
         console.log data.responseJSON
     )
 
+  gotoAnchor: (x) ->
+    vm = @
+    newHash = x
+    if vm.location.hash() != newHash
+      # set the $location.hash to `newHash` and
+      # $anchorScroll will automatically scroll to it
+      vm.location.hash x
+    else
+      # call $anchorScroll() explicitly,
+      # since $location.hash hasn't changed
+      vm.anchorScroll()
+    return
+
   restore_pass_send: (email) ->
     vm = @
     $.ajax(
@@ -60,4 +73,4 @@ class LandingController
 
 
 
-@application.controller 'LandingController', ['$rootScope', '$scope', '$window', LandingController]
+@application.controller 'LandingController', ['$rootScope', '$scope', '$window', '$anchorScroll', '$location', LandingController]

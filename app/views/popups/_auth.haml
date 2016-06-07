@@ -3,14 +3,10 @@
     .modal-content
       .modal-header
         .modal-title
-          %span.dynamica_loading
-          %span Dynamica importing data from your Shopify
+          -#%span.dynamica_loading
+          -#%span Dynamica importing data from your Shopify
       .modal-body
-        %h3
-          To see
-          = succeed "analytics" do
-            %span.fw_700 Bling-Blings
-          you need sign up
+        %h3.text-center= t('landing.auth_popup.sign_in_text_html')
       .modal-soc_auth
         .control-box
           %a.btn-social-auth.btn-facebook(href="#{user_omniauth_authorize_url(:facebook)}")
