@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160506114108) do
+ActiveRecord::Schema.define(version: 20160610104957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -244,6 +244,7 @@ ActiveRecord::Schema.define(version: 20160506114108) do
     t.integer  "shop_type"
     t.string   "shop_url"
     t.string   "currency",       limit: 4, default: "USD"
+    t.boolean  "deleted",                  default: false
   end
 
   add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree

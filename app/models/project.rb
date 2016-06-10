@@ -47,6 +47,7 @@ class Project < ActiveRecord::Base
 
   before_validation :set_default_values
 
+  default_scope { where(deleted: false) }
   scope :actives, -> { where.not(user_id: nil) }
   scope :not_expired, -> { all.select { |p| !p.expired? } }
 

@@ -9,14 +9,16 @@ class ReportWorker < BaseWorker
   IMAGES_FOLDER_PATH = '/www/dev-dyn2.onomnenado.ru/shared/public/report_images'
   # IMAGES_FOLDER_PATH = Rails.root.join('public','report_images').to_s
 
-  def perform
+  def perform(test = false)
     return if Rails.env.production? and not DateTime.now.sunday?
 
+    # Temporary we dont attach donut charts in mail
     donut_charts = [
         'new_and_repeat_customers_number', 'order_statuses',
         'percentage_of_inventory_sold', 'percentage_of_stock_sold'
     ]
 
+    # All charts that attach to mail
     all_charts = ['total_gross_revenues', 'total_gross_delivery', 'shipping_cost_as_a_percentage_of_total_revenue',
         'average_order_value', 'average_order_size', 'order_statuses', 'orders_number',
         'customers_number', 'new_customers_number', 'repeat_customers_number', 'average_revenue_per_customer',
@@ -24,12 +26,19 @@ class ReportWorker < BaseWorker
         'new_and_repeat_customers_number', 'products_in_stock_number', 'items_in_stock_number', 'products_number'
     ]
 
-    end_date = DateTime.now + 2.days
-    start_date = end_date - 6.days
+    #
+    if test
+      start_date = 1.year.ago
+      end_date = 1.year.ago + 1.month
+    else
+      end_date = DateTime.now + 2.days
+      start_date = end_date - 6.days
+    end
 
 
     logger.info "CaptureJS path : #{CAPTURE_JS_PATH}"
     logger.info "Images folder : #{IMAGES_FOLDER_PATH}"
+    logger.info "Start #{start_date.to_datetime} - End #{end_date.to_datetime}"
 
     # 1. Iterate all not expired projects
     # 2. Iterate and capture donut charts for last week
@@ -60,6 +69,7 @@ class ReportWorker < BaseWorker
       # end
 
       # Draw big all charts
+
       all_charts.each do |chart|
         logger.info "#{chart} file : #{prefix}_big_#{chart}.png"
 
