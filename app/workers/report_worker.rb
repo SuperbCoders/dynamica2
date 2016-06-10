@@ -83,7 +83,7 @@ class ReportWorker < BaseWorker
 
       logger.info @result.to_json
       params = {result: @result, project_id: project.id}
-      ReportMailer.weekly(params).delivery
+      ReportMailer.weekly(params).deliver_now
     end
 
   end
