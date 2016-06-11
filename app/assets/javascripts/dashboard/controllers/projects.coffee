@@ -33,6 +33,7 @@ class ProjectsController
       vm.projects.splice(vm.projects.indexOf(project), 1)
 
       vm.rootScope.update_user()
+      vm.rootScope.$state.go('projects.list')
     )
 
   save: ->
