@@ -142,7 +142,7 @@
   return
 ]
 
-@application.run ['$rootScope', '$state', '$stateParams', '$http', '$location', '$filter', 'Alerts', 'Translate', 'localStorageService', ($rootScope, $state, $stateParams, $http, $location, $filter, Alerts, Translate, localStorageService) ->
+@application.run ['$rootScope', '$state', '$stateParams', '$http', '$location', '$filter', 'Alerts', 'Translate', 'localStorageService', '$window', ($rootScope, $state, $stateParams, $http, $location, $filter, Alerts, Translate, localStorageService, $window) ->
   $rootScope.currency = '$'
   $rootScope.$state = $state
   $rootScope.$stateParams = $stateParams
@@ -150,6 +150,9 @@
   $rootScope.alerts = Alerts
   $rootScope.locale = $("meta[name=locale]").attr('content')
   $rootScope.T = Translate
+
+  # Back button
+  $rootScope.back = -> $window.history.back()
 
   # Subscription check
   $rootScope.$on("$locationChangeStart", (event, next, current) ->
