@@ -1,4 +1,7 @@
 class CustomizedDevise::SessionsController < Devise::SessionsController
+
+  respond_to :json
+
   # GET /resource/sign_in
   def new
     redirect_to root_url(anchor: 'login')

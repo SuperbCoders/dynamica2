@@ -1,5 +1,5 @@
 class LandingController
-  constructor: (@rootScope, @scope, @window, @anchorScroll, @location) ->
+  constructor: (@rootScope, @scope, @window, @anchorScroll, @location, @http) ->
     vm = @
     console.log 'Landing controller'
 
@@ -22,16 +22,16 @@ class LandingController
 
   sign_in: (email, password) ->
     vm = @
-    $.ajax(
-      url: '/users/sign_in'
-      type: 'POST'
-      data:
-        user:
-          email: email
-          password: password
-      complete: (data, status) ->
-        console.log status
-        console.log data.responseJSON
+
+    auth =
+      email: email
+      password: password
+
+    vm.http.post('/users/sign_in', {user: auth}).then((response) ->
+      if response.data.redirect_to
+        vm.window.location.href = response.data.redirect_to
+      else
+        console.log response
     )
 
   gotoAnchor: (x) ->
@@ -73,4 +73,4 @@ class LandingController
 
 
 
-@application.controller 'LandingController', ['$rootScope', '$scope', '$window', '$anchorScroll', '$location', LandingController]
+@application.controller 'LandingController', ['$rootScope', '$scope', '$window', '$anchorScroll', '$location', '$http', LandingController]
