@@ -1,4 +1,9 @@
 en:
+  landing:
+      auth_popup:
+        sign_in_text_html: "To get started <br> Log in or Join"
+        enter_mail_manually: WITH EMAIL
+        
   activerecord:
     attributes: &activerecord_attributes
       project:

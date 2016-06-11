@@ -37,7 +37,7 @@ ru:
       log_in: Войти
     auth_popup:
       sign_in_text_html: "To get started <br> Log in or Join"
-      enter_mail_manually: ИЛИ ВВЕДИТЕ ПАРОЛЬ ВРУЧНУЮ
+      enter_mail_manually: WITH EMAIL
       email: Электронный адрес
       password: Пароль
       go: Поехали
