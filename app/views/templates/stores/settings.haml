@@ -13,6 +13,7 @@
             .control-box
               %input#project_name.form-control(placeholder = "Project name" ng-model = 'vm.project.name')
 
+        -# https://basecamp.com/2476170/projects/11656794/todos/256905892
         -#.form-group
         -#  %label.control-label.col-md-3.col-sm-3= t('projects.project.settings.login_with')
         -#  .col-md-7.col-sm-9
@@ -22,11 +23,12 @@
         -#        .soc-btn-connect= t('projects.project.settings.shopify')
         -#        %a.subscribe_link(href = '')= t('projects.project.settings.disconnect')
 
-        .form-group
-          %label.control-label.col-md-3(for = 'ga_id')= t('projects.project.settings.google_analytics')
-          .col-md-7.col-sm-9
-            .control-box
-              %input#ga_id.form-control(placeholder = 'ID' ng-model = 'vm.project.google_site_id')
+        -#.form-group
+        -#  %label.control-label.col-md-3(for = 'ga_id')= t('projects.project.settings.google_analytics')
+        -#  .col-md-7.col-sm-9
+        -#    .control-box
+        -#      %input#ga_id.form-control(placeholder = 'ID' ng-model = 'vm.project.google_site_id')
+
         .form-group
           %label.control-label.col-md-3.col-sm-3= t('projects.project.settings.data_updating')
           .col-md-7.col-sm-9
