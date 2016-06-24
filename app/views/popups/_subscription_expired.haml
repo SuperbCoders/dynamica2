@@ -1,8 +1,42 @@
-#subscription_expired.modal.fade(role = "dialog")
-  .modal-dialog.modal_v1
+#subscription_expired.modal.fade.modal_vert_middle{:role => "dialog"}
+  .modal-dialog.modal_v1{:style => "width: 600px;"}
     / Modal content
     .modal-content
       .modal-header
+        %button.close.fa{"data-dismiss" => "modal", :type => "button"} ×
       .modal-body
-        чувак, тиал закончился, выбери подписку
-        %a.btn.btn-lg.btn-danger(data-dismiss="modal") Хорошо
+        %h3
+          Your Dynamica account
+          %br has expired
+        %p.text-center Want to Re-Start you account?
+      .form_holder
+        %form{:action => "#"}
+          .control-box.text-center
+            %a.btn.btn-lg.btn-danger{:type => "submit"} Re-Start Dynamica now!
+          .row.subscribe_block.mod_1
+            .col-lg-12
+              .pull-left
+                .subscribe_period
+                  %label.radio_control
+                    %input{:name => "subscribe_period", :type => "radio"}/
+                    %span.check_text $5 monthly
+                .subscribe_period
+                  %label.radio_control
+                    %input{:name => "subscribe_period", :type => "radio"}/
+                    %span.check_text
+                      $49 yearly,
+                      %span.color_green Save 20%
+              .pull-right.subscribe_switcher_w
+                %span Charge from
+                .subscribe_switcher
+                  .dropdown
+                    %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+                      Bling-Blings account
+                      %span.fa.fa-angle-down
+                    %ul.dropdown-menu.dropdown-menu-right
+                      %li
+                        %a{:href => "#"} Bling-Blings account
+                      %li
+                        %a{:href => "#"} Apple Store
+                      %li
+                        %a{:href => "#"} Helvetica
