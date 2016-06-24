@@ -32,6 +32,28 @@ function init_page(){
 
             firedEl.css('opacity', .5).siblings('.area').css('opacity', .5);
         });
+
+    $('.validateMe').validationEngine({
+        //binded                   : false,
+        scroll: false,
+        showPrompts: false,
+        showArrow: false,
+        inlineValidation: true,
+        addSuccessCssClassToField: 'success',
+        addFailureCssClassToField: 'error',
+        parentFieldClass: '.formCell',
+        parentFormClass: '.formHolder',
+        promptPosition: "centerRight",
+        //doNotShowAllErrosOnSubmit: true,
+        //focusFirstField          : false,
+        autoHidePrompt: true,
+        autoHideDelay: 2000,
+        autoPositionUpdate: true,
+        //prettySelect             : true,
+        //useSuffix                : "_VE_field",
+        addPromptClass: 'relative_mode only_1_msg',
+        showOneMessage: false
+    });
 };
 function convertHex(hex, opacity) {
     hex = hex.replace('#', '');

@@ -1,18 +1,19 @@
-#restore_pass_popup.modal.fade(role = "dialog")
+#restore_pass_popup.modal.fade.modal_vert_middle(role = "dialog")
   .modal-dialog.modal_v1
     / Modal content
     .modal-content
       .modal-header
+        %button.close.fa{"data-dismiss" => "modal", :type => "button"} ×
       .modal-body
         %h3= t('landing.restore_pass.password_recovery')
         %p.text-center= t('landing.restore_pass.helper_text_html')
-      .form_holder
-        %form(action = "")
+      .form_holder.formHolder.error
+        %form.validateMe(action = "")
           .control-box
-            %input.form-control(ng-model="vm.restore_pass_email" placeholder = "#{t('landing.restore_pass.email')}" type = "text")
+            %input(ng-model="vm.restore_pass_email" placeholder = "#{t('landing.restore_pass.email')}" type = "text" class="form-control validate[required, custom[email]]")
           .control-box
             {{vm.error_message}}
           .control-box.text-center.btn_holder
-            %button.btn.btn-lg.btn-danger(ng-click="vm.restore_pass_send(vm.restore_pass_email)")= t('landing.restore_pass.restore')
+            %button.btn.btn-lg.btn-danger.btn-disabled-if-error(ng-click="vm.restore_pass_send(vm.restore_pass_email)")= t('landing.restore_pass.restore')
           .control-box.text-center.btn_holder
             %a.btn-link.forgot_pass_link(href = "" ng-click = "vm.modal('auth_popup','show')")= t('landing.restore_pass.back')

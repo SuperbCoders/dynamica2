@@ -1,5 +1,7 @@
 #= require jquery.min.js
 #= require jquery.placeholder.min.js
+#= require jquery.validationEngine
+#= require jquery.validationEngine-en
 #= require bootstrap.min.js
 
 #= require d3

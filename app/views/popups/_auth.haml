@@ -1,7 +1,8 @@
-#auth_popup.modal.fade(role = "dialog")
+#auth_popup.modal_vert_middle.modal.fade(role = "dialog")
   .modal-dialog.modal_v1
     .modal-content
       .modal-header
+        %button.close.fa{"data-dismiss" => "modal", :type => "button"} ×
         .modal-title
           -#%span.dynamica_loading
           -#%span Dynamica importing data from your Shopify
@@ -16,15 +17,25 @@
           %a.btn-social-auth.btn-google(href="#{user_omniauth_authorize_url(:google_oauth2)}")
             %i.icon.fa.fa-google-plus>
             Google plus
-      .form_holder
-        %form
+      .form_holder.formHolder.error
+        %form.validateMe
           = hidden_field_tag :authenticity_token, form_authenticity_token
-          .alternal_auth= t('landing.auth_popup.enter_mail_manually')
-          .control-box
-            %input.form-control(placeholder = "#{t('landing.auth_popup.email')}" type = "text" ng-model='vm.sign_in_email')
-          .control-box
-            %input.form-control(placeholder = "#{t('landing.auth_popup.password')}" type = "password" ng-model='vm.sign_in_password')
+          .alternal_auth OR ENTER EMAIL MANUALY
+          .control-box.formCell
+            %input(placeholder = "Email" type = "text" ng-model='vm.sign_in_email' class="validate[required, custom[email]] form-control")
+          .control-box.formCell
+            %input(placeholder = "Password" type = "password" ng-model='vm.sign_in_password' class="form-control validate[required, minSize[3]]")
           .control-box.text-center.btn_holder
-            %button.btn.btn-lg.btn-danger(ng-click = "vm.sign_in(vm.sign_in_email, vm.sign_in_password)")= t('landing.auth_popup.go')
+            %button.btn.btn-lg.btn-danger.btn-disabled-if-error(ng-click = "vm.sign_in(vm.sign_in_email, vm.sign_in_password)")= t('landing.auth_popup.go')
           .control-box.text-center.btn_holder
             %a.btn-link.forgot_pass_link(href = "" ng-click="vm.modal('restore_pass_popup','show')")= t('landing.auth_popup.i_forgot_password')
+
+          -#.alternal_auth= t('landing.auth_popup.enter_mail_manually')
+          -#.control-box
+          -#  %input.form-control(placeholder = "#{t('landing.auth_popup.email')}" type = "text" ng-model='vm.sign_in_email')
+          -#.control-box
+          -#  %input.form-control(placeholder = "#{t('landing.auth_popup.password')}" type = "password" ng-model='vm.sign_in_password')
+          -#.control-box.text-center.btn_holder
+          -#  %button.btn.btn-lg.btn-danger(ng-click = "vm.sign_in(vm.sign_in_email, vm.sign_in_password)")= t('landing.auth_popup.go')
+          -#.control-box.text-center.btn_holder
+          -#  %a.btn-link.forgot_pass_link(href = "" ng-click="vm.modal('restore_pass_popup','show')")= t('landing.auth_popup.i_forgot_password')
