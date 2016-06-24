@@ -77,50 +77,56 @@ class Project < ActiveRecord::Base
           # Назначим цвет статусу
           result[:items][order_status.status] ||= rand_color
 
+          temp = {}
+          temp[:key] = order_status.status
+          temp[:date] = order_status.date.strftime("%m/%d/%y")
+          temp[:value] = order_status.count
+          result[:data] << temp
+
           # Пройдемся по результату и найдем данные за дату
-          result[:data].map {|r_data|
-            if r_data[:date] == order_status.date.strftime("%d-%b-%y")
-              data_field = r_data
-              finded = true
-            end
-          }
-
-          # Если данные за эту дату есть, то увеличиваем на
-          if finded and data_field
-            data_field[order_status.status] = data_field[order_status.status] ? data_field[order_status.status] + order_status.count : 1
-          else
-            temp = {}
-            temp[:date] = order_status.date.strftime("%d-%b-%y")
-            temp[order_status.status] = order_status.count
-            result[:data] << temp
-          end
-
-          data_field = nil
-          finded = false
+          # result[:data].map {|r_data|
+          #   if r_data[:date] == order_status.date.strftime("%d-%b-%y")
+          #     data_field = r_data
+          #     finded = true
+          #   end
+          # }
+          #
+          # # Если данные за эту дату есть, то увеличиваем на
+          # if finded and data_field
+          #   data_field[order_status.status] = data_field[order_status.status] ? data_field[order_status.status] + order_status.count : 1
+          # else
+          #   temp = {}
+          #   temp[:date] = order_status.date.strftime("%d-%b-%y")
+          #   temp[order_status.status] = order_status.count
+          #   result[:data] << temp
+          # end
+          #
+          # data_field = nil
+          # finded = false
         end
 
-        result[:data].map.with_index { |r_data, index|
-
-          # Добавим 0 статусы если их нет в хеше
-          result[:items].keys.map { |r_key|
-            r_data[r_key] = 0 if not r_data[r_key]
-          }
-
-          # Отсортируем
-          date = r_data[:date]
-          result[:data][index] = Hash[r_data.except(:date).sort]
-          result[:data][index][:date] = date
-
-          # Сумма количества всех статусов
-          data = result[:data][index]
-          @summ = 0
-          data.except(:date).keys.map { |k| @summ += data[k] }
-
-          # Высчитаем процентное соотношение
-          result[:items].keys.map { |r_key|
-            data[r_key] = (data[r_key] / @summ) * 100 if data[r_key] > 0
-          }
-        }
+        # result[:data].map.with_index { |r_data, index|
+        #
+        #   # Добавим 0 статусы если их нет в хеше
+        #   result[:items].keys.map { |r_key|
+        #     r_data[r_key] = 0 if not r_data[r_key]
+        #   }
+        #
+        #   # Отсортируем
+        #   date = r_data[:date]
+        #   result[:data][index] = Hash[r_data.except(:date).sort]
+        #   result[:data][index][:date] = date
+        #
+        #   # Сумма количества всех статусов
+        #   data = result[:data][index]
+        #   @summ = 0
+        #   data.except(:date).keys.map { |k| @summ += data[k] }
+        #
+        #   # Высчитаем процентное соотношение
+        #   result[:items].keys.map { |r_key|
+        #     data[r_key] = (data[r_key] / @summ) * 100 if data[r_key] > 0
+        #   }
+        # }
     end
 
     result

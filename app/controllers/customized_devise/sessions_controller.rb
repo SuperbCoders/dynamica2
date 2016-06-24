@@ -1,6 +1,6 @@
 class CustomizedDevise::SessionsController < Devise::SessionsController
-
   respond_to :json
+  clear_respond_to
 
   # GET /resource/sign_in
   def new

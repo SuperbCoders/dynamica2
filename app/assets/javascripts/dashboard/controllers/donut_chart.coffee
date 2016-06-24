@@ -62,7 +62,172 @@ class DonutChartController
       chart: vm.chart
 
     vm.http.get(chart_url, params: chart_params).success((response) ->
-        vm.draw_donut_graph($('.areaChartTotal_1'), response)
+        race = {
+          "items": {"delivered": "#975e16", "canceled": "#b92784", "transit": "#a0569a", "new": "#9043a9"},
+          "data": [
+            {"key": "AR", "value": "0.1", "date": "01/08/13"},
+            {"key": "AR", "value": "0.15", "date": "01/09/13"},
+            {"key": "AR", "value": "0.35", "date": "01/10/13"},
+            {"key": "AR", "value": "0.38", "date": "01/11/13"},
+            {"key": "AR", "value": "0.22", "date": "01/12/13"}, {
+              "key": "AR",
+              "value": "0.16",
+              "date": "01/13/13"
+            }, {"key": "AR", "value": "0.07", "date": "01/14/13"}, {
+              "key": "AR",
+              "value": "0.02",
+              "date": "01/15/13"
+            }, {"key": "AR", "value": "0.17", "date": "01/16/13"}, {
+              "key": "AR",
+              "value": "0.33",
+              "date": "01/17/13"
+            }, {"key": "AR", "value": "0.4", "date": "01/18/13"}, {
+              "key": "AR",
+              "value": "0.32",
+              "date": "01/19/13"
+            }, {"key": "AR", "value": "0.26", "date": "01/20/13"}, {
+              "key": "AR",
+              "value": "0.35",
+              "date": "01/21/13"
+            }, {"key": "AR", "value": "0.4", "date": "01/22/13"}, {
+              "key": "AR",
+              "value": "0.32",
+              "date": "01/23/13"
+            }, {"key": "AR", "value": "0.26", "date": "01/24/13"}, {
+              "key": "AR",
+              "value": "0.22",
+              "date": "01/25/13"
+            }, {"key": "AR", "value": "0.16", "date": "01/26/13"}, {
+              "key": "AR",
+              "value": "0.22",
+              "date": "01/27/13"
+            }, {"key": "AR", "value": "0.1", "date": "01/28/13"}, {
+              "key": "DJ",
+              "value": "0.35",
+              "date": "01/08/13"
+            }, {"key": "DJ", "value": "0.36", "date": "01/09/13"}, {
+              "key": "DJ",
+              "value": "0.37",
+              "date": "01/10/13"
+            }, {"key": "DJ", "value": "0.22", "date": "01/11/13"}, {
+              "key": "DJ",
+              "value": "0.24",
+              "date": "01/12/13"
+            }, {"key": "DJ", "value": "0.26", "date": "01/13/13"}, {
+              "key": "DJ",
+              "value": "0.34",
+              "date": "01/14/13"
+            }, {"key": "DJ", "value": "0.21", "date": "01/15/13"}, {
+              "key": "DJ",
+              "value": "0.18",
+              "date": "01/16/13"
+            }, {"key": "DJ", "value": "0.45", "date": "01/17/13"}, {
+              "key": "DJ",
+              "value": "0.32",
+              "date": "01/18/13"
+            }, {"key": "DJ", "value": "0.35", "date": "01/19/13"}, {
+              "key": "DJ",
+              "value": "0.3",
+              "date": "01/20/13"
+            }, {"key": "DJ", "value": "0.28", "date": "01/21/13"}, {
+              "key": "DJ",
+              "value": "0.27",
+              "date": "01/22/13"
+            }, {"key": "DJ", "value": "0.26", "date": "01/23/13"}, {
+              "key": "DJ",
+              "value": "0.15",
+              "date": "01/24/13"
+            }, {"key": "DJ", "value": "0.3", "date": "01/25/13"}, {
+              "key": "DJ",
+              "value": "0.35",
+              "date": "01/26/13"
+            }, {"key": "DJ", "value": "0.42", "date": "01/27/13"}, {
+              "key": "DJ",
+              "value": "0.42",
+              "date": "01/28/13"
+            }, {"key": "CG", "value": "0.1", "date": "01/08/13"}, {
+              "key": "CG",
+              "value": "0.15",
+              "date": "01/09/13"
+            }, {"key": "CG", "value": "0.35", "date": "01/10/13"}, {
+              "key": "CG",
+              "value": "0.38",
+              "date": "01/11/13"
+            }, {"key": "CG", "value": "0.22", "date": "01/12/13"}, {
+              "key": "CG",
+              "value": "0.16",
+              "date": "01/13/13"
+            }, {"key": "CG", "value": "0.07", "date": "01/14/13"}, {
+              "key": "CG",
+              "value": "0.02",
+              "date": "01/15/13"
+            }, {"key": "CG", "value": "0.17", "date": "01/16/13"}, {
+              "key": "CG",
+              "value": "0.33",
+              "date": "01/17/13"
+            }, {"key": "CG", "value": "0.4", "date": "01/18/13"}, {
+              "key": "CG",
+              "value": "0.32",
+              "date": "01/19/13"
+            }, {"key": "CG", "value": "0.26", "date": "01/20/13"}, {
+              "key": "CG",
+              "value": "0.35",
+              "date": "01/21/13"
+            }, {"key": "CG", "value": "0.4", "date": "01/22/13"}, {
+              "key": "CG",
+              "value": "0.32",
+              "date": "01/23/13"
+            }, {"key": "CG", "value": "0.26", "date": "01/24/13"}, {
+              "key": "CG",
+              "value": "0.22",
+              "date": "01/25/13"
+            }, {"key": "CG", "value": "0.16", "date": "01/26/13"}, {
+              "key": "CG",
+              "value": "0.22",
+              "date": "01/27/13"
+            }, {"key": "CG", "value": "0.1", "date": "01/28/13"}, {
+              "key": "RI",
+              "value": "0.1",
+              "date": "01/08/13"
+            }, {"key": "RI", "value": "0.15", "date": "01/09/13"}, {
+              "key": "RI",
+              "value": "0.35",
+              "date": "01/10/13"
+            }, {"key": "RI", "value": "0.38", "date": "01/11/13"}, {
+              "key": "RI",
+              "value": "0.22",
+              "date": "01/12/13"
+            }, {"key": "RI", "value": "0.16", "date": "01/13/13"}, {
+              "key": "RI",
+              "value": "0.07",
+              "date": "01/14/13"
+            }, {"key": "RI", "value": "0.02", "date": "01/15/13"}, {
+              "key": "RI",
+              "value": "0.17",
+              "date": "01/16/13"
+            }, {"key": "RI", "value": "0.33", "date": "01/17/13"}, {
+              "key": "RI",
+              "value": "0.4",
+              "date": "01/18/13"
+            }, {"key": "RI", "value": "0.32", "date": "01/19/13"}, {
+              "key": "RI",
+              "value": "0.26",
+              "date": "01/20/13"
+            }, {"key": "RI", "value": "0.35", "date": "01/21/13"}, {
+              "key": "RI",
+              "value": "0.4",
+              "date": "01/22/13"
+            }, {"key": "RI", "value": "0.32", "date": "01/23/13"}, {
+              "key": "RI",
+              "value": "0.26",
+              "date": "01/24/13"
+            }, {"key": "RI", "value": "0.22", "date": "01/25/13"}, {
+              "key": "RI",
+              "value": "0.16",
+              "date": "01/26/13"
+            }, {"key": "RI", "value": "0.22", "date": "01/27/13"}, {"key": "RI", "value": "0.1", "date": "01/28/13"}]
+        }
+        vm.draw_stream_graph($('.streamChartTotal'), response, false)
       )
 
   fit2Limits: (pckr, date, max) ->
@@ -72,6 +237,159 @@ class DonutChartController
       moment.max(start, date).startOf('day')._d
     else
       moment.min(end, date).startOf('day')._d
+
+  draw_stream_graph: (el, data_files, needMath) ->
+
+    mouseMoveCatcher = (that) ->
+      console.log 'mouseMoveCatcher'
+      #console.log(this);
+      distance = x(data_files.data[0].date) - x(data_files.data[1].date) or 0
+      mouse = d3.mouse(that)
+      x0 = mouse[0] - (distance / 2)
+      invertedx = x.invert(x0)
+      mousedate = datearray.indexOf(invertedx)
+      k = 0
+      while k < datearray[0].length
+        obj1 = datearray[0][k].date
+        if moment(invertedx).startOf('day').isSame(moment(obj1), 'day')
+          mousedate = k
+          break
+        k++
+      tooltip = d3.select('#tooltip')
+      tooltip_content = $('#tooltip_content')
+      tooltip_dot = $('#tooltip_dot')
+      tool_table = $('<table class="graph-tooltip-table" />')
+      j = 0
+      while j < datearray.length
+        color = colors[j]
+        data = datearray[j]
+        tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'stream_area_' + j).append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data[mousedate].key)))).append($('<td class="tooltip_val" />').append($('<b class="" />').text(data[mousedate].value)))
+        tool_table.prepend tooltip_item
+        j++
+      tooltip_content.empty().append($('<div class="tooltip-title" />').text(moment(invertedx).format('dddd, D MMMM YYYY'))).append tool_table
+      tooltip.classed('flipped_left', x0 < tooltip_content.outerWidth() + 35).style 'left', x(invertedx) + margin.left + distance / 2 + 'px'
+      return
+
+    # aa
+    el.find('svg').remove()
+    legendBlock = el.parents('.graph-unit-holder').find('.legend_v2')
+    if !legendBlock.length
+      legendBlock = $('<ul class="legend_v2 graph-unit-legend" />')
+      el.parents('.graph-unit').append legendBlock
+    datas = []
+    area_x = undefined
+    items = data_files.items
+    colors = []
+    names = []
+    if needMath
+      i = 0
+      while i < data.length
+        obj = data[i]
+        sum = undefined
+        sum = getSum(obj)
+        console.log sum
+        i++
+    item_data = []
+    for key of items
+      if items.hasOwnProperty(key)
+        names.push key
+        colors.push items[key]
+    tooltip = $('<table class="graph-tooltip-table" />')
+    margin =
+      top: 30
+      right: 35
+      bottom: 30
+      left: 75
+    width = el.width() - (margin.left) - (margin.right)
+    height = el.height() - (margin.top) - (margin.bottom)
+    datearray = []
+    colorrange = [
+      '#045A8D'
+      '#2B8CBE'
+      '#74A9CF'
+      '#A6BDDB'
+      '#D0D1E6'
+      '#F1EEF6'
+    ]
+    strokecolor = colorrange[0]
+    parseDate = d3.time.format('%m/%d/%y')
+    data = data_files.data
+    for day of data
+      if items.hasOwnProperty(key)
+        names.push key
+        colors.push items[key]
+    x = d3.time.scale().range([
+      0
+      width
+    ])
+    y = d3.scale.linear().range([
+        height - 10
+        0
+    ])
+    z = d3.scale.ordinal().range(colorrange)
+    xAxis = d3.svg.axis().scale(x).orient('bottom').ticks(d3.time.days)
+    yAxis = d3.svg.axis().scale(y)
+    yAxisr = d3.svg.axis().scale(y)
+    stack = d3.layout.stack().offset('silhouette').values((d) -> d.values).x((d) -> d.date).y((d) -> d.value)
+
+    nest = d3.nest().key((d) -> d.key)
+
+    area = d3.svg.area().interpolate('cardinal').x((d) ->
+        x d.date
+      ).y0((d) ->
+        y d.y0
+      ).y1((d) ->
+        y d.y0 + d.y
+      )
+    svg = d3.select(el[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    data.forEach (d) ->
+      d.date = parseDate.parse(d.date)
+      d.value = +d.value
+      return
+    console.log data
+    layers = stack(nest.entries(data))
+    x.domain d3.extent(data, (d) ->
+      d.date
+    )
+    y.domain [
+      0
+      d3.max(data, (d) ->
+        d.y0 + d.y
+      )
+    ]
+    svg.append('rect').attr('class', 'click-capture').style('opacity', '0').attr('x', 0).attr('y', 0).attr('width', width).attr('height', height).on 'mousemove', (d) ->
+      #console.log('rect');
+      mouseMoveCatcher this
+      return
+    svg.selectAll('.layer').data(layers).enter().append('path').attr('class', 'layer').attr('d', (d) ->
+      datearray.push d.values
+      area d.values
+    ).style 'fill', (d, i) ->
+      colors[i]
+    svg.append('g').attr('class', 'x axis ').attr('transform', 'translate(0,' + height + ')').call xAxis
+    #svg.append("g")
+    #    .attr("class", "y axis")
+    #    .attr("transform", "translate(" + width + ", 0)")
+    #    .call(yAxis.orient("right"));
+    svg.append('g').attr('class', 'y axis').call yAxis.orient('left')
+    svg.selectAll('.tick').attr('fill', '#a5adb3').attr 'font-size', '14px'
+    svg.selectAll('.layer').attr('opacity', 1).attr('data-graph', (d, i) ->
+      'stream_area_' + i
+    ).on('mouseover', (d, i) ->
+      svg.selectAll('.layer').transition().duration(250).attr 'opacity', (d, j) ->
+        if j != i then 0.6 else 1
+      return
+    ).on('mousemove', (d, i) ->
+      d3.select(this).classed 'hover', true
+      #console.log('layer');
+      mouseMoveCatcher this
+      return
+    ).on 'mouseout', (d, i) ->
+      svg.selectAll('.layer').transition().duration(250).attr 'opacity', '1'
+      d3.select(this).classed 'hover', false
+      return
+    return
+
 
   draw_donut_graph: (el, data_files) ->
     doc = $(document)

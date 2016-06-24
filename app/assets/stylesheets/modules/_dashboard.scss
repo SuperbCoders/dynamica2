@@ -1,9 +1,9 @@
 @import "select2";
 
 @mixin transition_all($property...) {
-    -webkit-transition: $property;
-    -ms-transition: $property;
-    transition: $property;
+  -webkit-transition: $property;
+  -ms-transition: $property;
+  transition: $property;
 }
 
 %translate3d {
@@ -438,10 +438,10 @@ svg:not(:root) {
 
 .graph-unit-holder {
   margin: 0 -20px;
-  
+
   &.graph-unit-setting {
     text-align: center;
-    
+
     .row {
       width: 100%;
       text-align: left;
@@ -450,7 +450,7 @@ svg:not(:root) {
       max-width: 960px;
     }
   }
-  
+
 }
 
 .graph-unit-legend-holder {
@@ -551,11 +551,11 @@ svg:not(:root) {
       }
     }
   }
-  
+
   .graph-unit-setting & {
     min-height: 300px;
   }
-  
+
 }
 
 .dark_wrapper {
@@ -1260,7 +1260,6 @@ svg:not(:root) {
   .graph-unit-large-v3 & {
     top: 30px;
     bottom: 30px;
-    margin-left: 12px;
 
     .graph-tooltip-top {
       top: 50%;
@@ -1281,6 +1280,7 @@ svg:not(:root) {
 
       .tooltip_val {
         color: #000;
+        text-align: right;
       }
 
       .legend_name {
@@ -2243,9 +2243,7 @@ $blue: rgb(0, 155, 255);
     .table-header {
 
     }
-
   }
-
 }
 
 .popup_icon {
@@ -2287,7 +2285,6 @@ $blue: rgb(0, 155, 255);
     left: 100%;
     margin-left: 22px;
   }
-
 }
 
 .popup_info {

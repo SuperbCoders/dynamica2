@@ -116,7 +116,7 @@ $HelveticaNeue: 'HelveticaNeue', sans-serif;
       opacity: 1;
       letter-spacing: -.5px;
     }
-    
+
     .menu_link {
       @include transition_all(color .3s, background .3s);
 
@@ -160,6 +160,18 @@ $HelveticaNeue: 'HelveticaNeue', sans-serif;
   .start_trial_btn,
   .pricing_btn {
     font-family: $HelveticaNeueCyrLight;
+  }
+}
+
+.page-footer {
+  &.footer_v2 {
+    padding-top: 52px;
+    z-index: 100;
+    background: #242424;
+
+    .footer_logo {
+      max-width: 200px;
+    }
   }
 }
 
