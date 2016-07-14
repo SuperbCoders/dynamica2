@@ -4,8 +4,8 @@ development:
   database: 'dynamica-development'
   pool: 5
   host: localhost
-  username:
-  password:
+  username: corehook
+  password: corehook
 
 test:
   adapter: postgresql
@@ -13,5 +13,5 @@ test:
   database: 'dynamica-test'
   pool: 5
   host: localhost
-  username:
-  password:
+  username: corehook
+  password: corehook
