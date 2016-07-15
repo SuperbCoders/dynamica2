@@ -9,5 +9,5 @@
           Please chose shop type
       .form_holder
         .control-box.text-center.btn_holder
-          %a.btn.btn-lg.btn-danger.start_trial_btn(href="https://myshopify.com/admin/oauth/authorize?client_id=#{Dynamica::Settings::Shopify.api_key}&scope=#{ENV['shopify_scope']}&redirect_uri=#{Dynamica::Settings::Shopify.redirect_url}&state=#{SecureRandom.hex}")
+          %a.btn.btn-lg.btn-danger.start_trial_btn(href="https://myshopify.com/admin/oauth/authorize?client_id=#{Dynamica::Settings::Shopify.api_key}&scope=read_orders,read_customers,read_products&redirect_uri=#{Dynamica::Settings::Shopify.redirect_url}&state=#{SecureRandom.hex}")
             Shopify
