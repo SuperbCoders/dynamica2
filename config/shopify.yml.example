@@ -1,7 +1,8 @@
 # dev-dynamica
 development: &default
-  api_key: xxx
-  secret: xxx
+  api_key: bc1d20c643bf2845c231eefabbdde69e
+  secret: 20c46808eaa7f0adc86bb5525d85dfdf
+  redirect_url: http://localhost:3000/third_party/shopify/oauth/callback
 
 # dev-dynamica
 test:
@@ -14,5 +15,6 @@ staging:
 
 # dynamica
 production:
-  api_key: xxx
-  secret: xxx
+  api_key: bc1d20c643bf2845c231eefabbdde69e
+  secret: 20c46808eaa7f0adc86bb5525d85dfdf
+  redirect_url: http://localhost:3000/third_party/shopify/oauth/callback
