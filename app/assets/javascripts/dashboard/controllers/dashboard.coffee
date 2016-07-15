@@ -423,16 +423,21 @@ class DashboardController
       data = data_files[i].data
       data.forEach (d) ->
         d.date = parseDate(d.date)
-        d.close = +d.close
+        if d.close? and d.close > 0
+          d.close = +d.close
+        else
+          d.close = 1
         return
       area_x.domain d3.extent(data, (d) ->
         d.date
       )
+      max_y = d3.max(data, (d) ->
+          d.close)
+      if max_y == 1 
+        max_y = 50
       area_y.domain [
         0
-        d3.max(data, (d) ->
-          d.close
-        )
+        max_y
       ]
       svg.append('path').datum(data).attr('class', 'area area_v1').attr('id', 'family_area_' + i).attr('d', area).style('fill', (d) ->
         color = data_files[i].color
