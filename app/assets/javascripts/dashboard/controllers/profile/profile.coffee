@@ -7,6 +7,8 @@ class ProfileController
       password_confirmation: false
       current_password: false
 
+    $('.project-select2').select2();
+
     if @rootScope.user.projects.length == 1
       vm.subscription.project_id = @rootScope.user.projects[0].id
 
@@ -44,7 +46,7 @@ class ProfileController
     vm = @
     console.log 'Change subscription to '+type
 
-    # Show error if user don't select shopify shop for process payment
+    # Show error if user do not select shopify shop for process payment
     if user.projects.length > 1 and not vm.subscription.project_id
       return @rootScope.alerts.success('You should select ')
     else if user.projects.length == 1

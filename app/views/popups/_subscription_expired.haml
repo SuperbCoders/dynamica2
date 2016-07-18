@@ -10,33 +10,31 @@
           %br has expired
         %p.text-center Want to Re-Start you account?
       .form_holder
-        %form{:action => "#"}
+        = form_tag '/subscriptions/change?redirect=true', remote: true, authenticity_token: true do
           .control-box.text-center
-            %a.btn.btn-lg.btn-danger{:type => "submit"} Re-Start Dynamica now!
-          .row.subscribe_block.mod_1
-            .col-lg-12
+            = submit_tag "Re-Start Dynamica now!", class: "btn btn-lg btn-danger"
+          %p
+          = hidden_field_tag :id, value: current_user.subscription.id
+          .row
+            .col-lg-4
               .pull-left
                 .subscribe_period
                   %label.radio_control
-                    %input{:name => "subscribe_period", :type => "radio"}/
+                    = radio_button_tag :sub_type, 'inactive'
+                    %span.check_text Inactive
+                .subscribe_period
+                  %label.radio_control
+                    = radio_button_tag :sub_type, 'monthly'
                     %span.check_text $5 monthly
                 .subscribe_period
                   %label.radio_control
-                    %input{:name => "subscribe_period", :type => "radio"}/
+                    = radio_button_tag :sub_type, 'yearly'
                     %span.check_text
                       $49 yearly,
                       %span.color_green Save 20%
-              .pull-right.subscribe_switcher_w
+            .col-lg-5
+              .pull-right
                 %span Charge from
-                .subscribe_switcher
-                  .dropdown
-                    %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
-                      Bling-Blings account
-                      %span.fa.fa-angle-down
-                    %ul.dropdown-menu.dropdown-menu-right
-                      %li
-                        %a{:href => "#"} Bling-Blings account
-                      %li
-                        %a{:href => "#"} Apple Store
-                      %li
-                        %a{:href => "#"} Helvetica
+            .col-lg-3
+              .pull-left
+                = select_tag :project_id, options_from_collection_for_select(current_user.projects, "id", "name"), class: "project-select2"

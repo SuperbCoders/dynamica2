@@ -426,15 +426,15 @@ class DashboardController
         if d.close? and d.close > 0
           d.close = +d.close
         else
-          d.close = 1
+          d.close = 0.001
         return
       area_x.domain d3.extent(data, (d) ->
         d.date
       )
       max_y = d3.max(data, (d) ->
           d.close)
-      if max_y == 1 
-        max_y = 50
+      if max_y <= 0.001 
+        max_y = 0.1
       area_y.domain [
         0
         max_y
