@@ -1,0 +1,25 @@
+#cancel_subscription.modal.fade.modal_vert_middle{:role => "dialog"}
+  .modal-dialog.modal_v1{:style => "width: 800px;"}
+    / Modal content
+    .modal-content
+      .modal-header
+        %button.close.fa{"data-dismiss" => "modal", :type => "button"} ×
+      .modal-body
+        %h3
+          Remember that after cancel subscription
+          %br you will not be able to see new data
+          from your Shopify Store
+          %p
+          = link_to "I want keep my account", "#", class: "btn btn-lg btn-danger"
+        = form_tag '/subscriptions/cancel', remote: true, authenticity_token: true do
+          .control-box.text-center
+            = submit_tag "I still want to cancel", class: "btn btn-lg btn-default"
+          %p
+          = hidden_field_tag :id, value: current_user.subscription.id
+          .row
+            .col-lg-10
+              .pull-right
+                %span Charge from
+            .col-lg-2
+              .pull-left
+                = select_tag :project_id, options_from_collection_for_select(current_user.projects, "id", "name"), class: "project-select2"

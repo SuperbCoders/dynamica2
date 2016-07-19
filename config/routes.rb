@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       get 'callback' => 'subscriptions#callback', as: :subscription_callback
       get 'show' => 'subscriptions#show', as: :show_subscription
       post 'change' => 'subscriptions#change', as: :change_subscription
+      post 'cancel' => 'subscriptions#cancel', as: :cancel_subscription
     end
 
     scope :profile do

@@ -1,6 +1,6 @@
 class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_project, only: [:change]
+  before_action :set_project, only: [:change,:cancel]
   before_action :get_project_by_charge_id, only: [:callback]
   before_action :find_charge_by_id, only: [:callback]
 
@@ -78,6 +78,15 @@ class SubscriptionsController < ApplicationController
     render json: @response ||= {}
   end
 
+  def cancel
+    if @project and @project.shopify_session
+      if ShopifyAPI::RecurringApplicationCharge.current
+        ShopifyAPI::RecurringApplicationCharge.current.cancel
+      end
+    end
+    redirect_to :back
+  end
+
   private
 
   # Find charge from shopify api by charge_id and project subscription type
@@ -105,6 +114,10 @@ class SubscriptionsController < ApplicationController
 
   def subscription_params
     params.permit(:id, :sub_type, :project_id)
+  end
+
+  def cancel_subscription_params
+    params.permit(:cancel)
   end
 
   def set_project

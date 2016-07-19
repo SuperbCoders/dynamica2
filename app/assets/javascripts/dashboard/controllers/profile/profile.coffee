@@ -40,6 +40,16 @@ class ProfileController
       vm.avatar.uploadFiles()
     )
 
+  # Show subscription logs
+  show_subscription_logs: ->
+    $('.modal').modal('hide')
+    $('#subscription_logs').modal('show', {backdrop: 'static'})
+
+  # Show cancel subscription
+  show_cancel_subscription: ->
+    $('.modal').modal('hide')
+    $('#cancel_subscription').modal('show', {backdrop: 'static'})
+
   # Change subscription type
   change_subscription: (type) ->
     user = @rootScope.user

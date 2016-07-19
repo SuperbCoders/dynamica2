@@ -7,7 +7,7 @@
         .col-md-9
           .row(ng-show="user.subscription.expired")
             .col-lg-12
-
+              
               / Subscription select
               .pull-left
                 .subscribe_period
@@ -50,10 +50,10 @@
                 %br Your {{ user.subscription.sub_type }} subscription will renew on {{ user.subscription.expire_at | date}}.
 
               .subscribe_control
-                %a.subscribe_link(href = "")= t('profile.view_billing_history')
+                %a.subscribe_link(href = "" ng-click="vm.show_subscription_logs()")= t('profile.view_billing_history')
 
               .subscribe_control
-                %a.subscribe_link(href = "")= t('profile.cancel_subscription')
+                %a.subscribe_link(href = "" ng-click="vm.show_cancel_subscription()")= t('profile.cancel_subscription')
 
 
 
@@ -124,3 +124,5 @@
           %a.btn.btn-lg.btn-danger{'ng-click' => "vm.save()"}= t('devise.registrations.edit.form.submit')
 
 = render 'popups/subscription_expired'
+= render 'popups/subscription_logs'
+= render 'popups/cancel_subscription'
