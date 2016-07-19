@@ -1,0 +1,2 @@
+module Admin::SubscriptionPricesHelper
+end

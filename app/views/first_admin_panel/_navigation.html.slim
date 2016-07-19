@@ -10,3 +10,7 @@ li class=('active' if params[:controller] == 'admin/projects')
   = link_to admin_projects_path do
     i.icon-bar-chart.icon-xlarge
     span Проекты
+li class=('active' if params[:controller] == 'admin/subscription_prices')
+  = link_to admin_subscription_prices_path do
+    i.icon-money.icon-xlarge
+    span Подписки

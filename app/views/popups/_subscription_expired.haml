@@ -25,13 +25,14 @@
                 .subscribe_period
                   %label.radio_control
                     = radio_button_tag :sub_type, 'monthly'
-                    %span.check_text $5 monthly
+                    %span.check_text
+                      = "$"+SubscriptionPrice.monthly.first.cost.to_i.to_s+" monthly"
                 .subscribe_period
                   %label.radio_control
                     = radio_button_tag :sub_type, 'yearly'
                     %span.check_text
-                      $49 yearly,
-                      %span.color_green Save 20%
+                      = "$"+SubscriptionPrice.yearly.first.cost.to_i.to_s+" yearly,"
+                      %span.color_green= "Save "+SubscriptionPrice.save_percentage+"%"
             .col-lg-5
               .pull-right
                 %span Charge from

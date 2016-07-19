@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160610104957) do
+ActiveRecord::Schema.define(version: 20160719110505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,6 +262,15 @@ ActiveRecord::Schema.define(version: 20160610104957) do
   end
 
   add_index "subscription_logs", ["user_id"], name: "index_subscription_logs_on_user_id", using: :btree
+
+  create_table "subscription_prices", force: true do |t|
+    t.integer  "sub_type",   default: 0
+    t.float    "cost"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subscription_prices", ["sub_type"], name: "index_subscription_prices_on_sub_type", using: :btree
 
   create_table "subscriptions", force: true do |t|
     t.integer  "user_id"

@@ -1,4 +1,4 @@
-= render 'popups/auth_shops'
+= render 'popups/welcome_auth_shops'
 %section.case.case-projects-empty(ng-show='vm.projects.length == 0')
   .case-cnt.text-center
     .title
@@ -6,7 +6,7 @@
       %br>/
       You haven’t any project yet.
     %div
-      %a.btn.btn-lg.btn-danger(href = '' ng-click="vm.modal('auth_shops','show')")= t('projects.start_ﬁrst_project')
+      %a.btn.btn-lg.btn-danger(href = '' ng-click="vm.modal('welcome_auth_shops','show')")= t('projects.start_ﬁrst_project')
 
 .section.case.case-projects(ng-show='vm.projects.length > 0 && vm.projects[0].id != null')
   .case-cnt

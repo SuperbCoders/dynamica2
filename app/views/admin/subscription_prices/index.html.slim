@@ -1,0 +1,24 @@
+section#content
+  section.main.padder
+    .clearfix
+      h4
+        i.icon-money
+        |  Цены на подписку
+    .row
+      section.panel
+        .table-responsive
+          table.table.table-striped.b-t.text-small
+            thead
+              tr
+                th Название
+                th Цена
+                th
+            tbody
+              - @sub_prices.each do |price|
+                tr
+                  td= price.title
+                  td= price.cost
+                  td 
+                    = link_to edit_admin_subscription_price_path(price) do
+                      i.icon-pencil
+                      =t 'shared.edit'

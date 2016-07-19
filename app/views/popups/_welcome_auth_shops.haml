@@ -1,0 +1,19 @@
+#welcome_auth_shops.modal.fade.modal_vert_middle{:role => "dialog"}
+  .modal-dialog.modal_v1{:style => "width: 600px;"}
+    / Modal content
+    .modal-content
+      .modal-header
+        %button.close.fa{"data-dismiss" => "modal", :type => "button"} ×
+      .modal-body
+        %h3
+          Welcome to Dynamica!
+        %br
+        %h4.text-center
+          We are happy to see you here, let's link up your shop
+          %br
+            to start to analize your shop
+        %p
+      .form_holder
+        .control-box.text-center.btn_holder
+          %a.btn.btn-lg.btn-danger.start_trial_btn(href="https://myshopify.com/admin/oauth/authorize?client_id=#{Dynamica::Settings::Shopify.api_key}&scope=read_orders,read_customers,read_products&redirect_uri=#{Dynamica::Settings::Shopify.redirect_url}&state=#{SecureRandom.hex}")
+            Link my store now

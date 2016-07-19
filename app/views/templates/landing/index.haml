@@ -160,13 +160,11 @@
             .price_block_inner
               .text-center
                 %a.btn.btn-lg.btn-danger.start_trial_btn(href="" ng-click="vm.modal('auth_shops','show')")= t('landing.start_trial')
-                .price_b_text
-                  %p= t('landing.30_days')
               .price_b_text
                 %p
                   For annual payment
-                  %br/
-                  48$ per year
+                  %nobr
+                    = " $"+SubscriptionPrice.yearly.first.cost.to_i.to_s
     .page-footer
       .container-fluid.wide_block
         .footer_logo

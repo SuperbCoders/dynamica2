@@ -37,16 +37,18 @@ class SubscriptionsController < ApplicationController
 
       case subscription_params[:sub_type]
         when 'monthly'
+          cost = SubscriptionPrice.monthly.first.cost 
           charge = ShopifyAPI::ApplicationCharge.new(
-              price: Dynamica::Billing::MONTHLY_PRICE,
-              name: "Monthly billing $ #{Dynamica::Billing::MONTHLY_PRICE} for ##{@project.id}",
+              price: cost,
+              name: "Monthly billing $ #{cost.to_i} for ##{@project.id}",
               charge_type: 'monthly')
 
           current_user.subscription.monthly!
         when 'yearly'
+          cost = SubscriptionPrice.yearly.first.cost
           charge = ShopifyAPI::RecurringApplicationCharge.new(
-              price: Dynamica::Billing::YEARLY_PRICE,
-              name: "Yearly billing $ #{Dynamica::Billing::YEARLY_PRICE} for ##{@project.id}",
+              price: cost,
+              name: "Yearly billing $ #{cost.to_i} for ##{@project.id}",
               charge_type: 'yearly')
 
           current_user.subscription.yearly!

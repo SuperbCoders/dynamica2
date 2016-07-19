@@ -18,14 +18,14 @@
                 .subscribe_period
                   %label.radio_control
                     %input(ng-checked="user.subscription.sub_type == 'monthly'" type='radio' ng-model='vm.subscription.sub_type' value='monthly')
-                      %span.check_text $5 monthly
+                      %span.check_text= "$"+SubscriptionPrice.monthly.first.cost.to_i.to_s+" monthly"
 
                 .subscribe_period
                   %label.radio_control
                     %input(ng-checked="user.subscription.sub_type == 'yearly'" type='radio' ng-model='vm.subscription.sub_type' value='yearly')
                       %span.check_text
-                        $49 yearly,
-                        %span.color_green Save 20%
+                        = "$"+SubscriptionPrice.yearly.first.cost.to_i.to_s+" yearly,"
+                        %span.color_green= "Save "+SubscriptionPrice.save_percentage+"%"
 
               / Charge from select
               .pull-right.subscribe_switcher_w
@@ -118,7 +118,16 @@
             %input.form-control{type: 'password', 'ng-model' => "user.password_confirmation", placeholder: t('devise.registrations.edit.form.confirm_new_password')}
           .control-box{'ng-class' => "{'has-error': vm.password.current_password}"}
             %input.form-control{type: 'password', 'ng-model' => "user.current_password", placeholder: t('devise.registrations.edit.form.current_password')}
-
+      .form-group
+        %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.notify_me_about')
+        .col-md-7.col-sm-9
+          %input{type: 'checkbox', 'ng-model' => "user.messages.news"} 
+          %nobr
+            News
+          %br
+          %input{type: 'checkbox', 'ng-model' => "user.messages.subscription"} 
+          %nobr
+            Subscription update
       .form-group
         .col-md-offset-3.col-md-7.col-sm-offset-3.col-sm-9
           %a.btn.btn-lg.btn-danger{'ng-click' => "vm.save()"}= t('devise.registrations.edit.form.submit')
