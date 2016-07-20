@@ -12,7 +12,7 @@ class SubscriptionLog < ActiveRecord::Base
   end
 
   def billed
-  	self.description[/(?<=to )\w+/] == "monthly" ? "$5" : "$49"
+  	"$"+(self.description[/(?<=to )\w+/] == "monthly" ? SubscriptionPrice.monthly.first.cost : SubscriptionPrice.yearly.first.cost).to_s
   end
 
   private

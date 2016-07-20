@@ -16,14 +16,12 @@ class SetupController
     # Check email uniqueness
     vm.http.post(vm.R.email_uniqueness_path(), {email: vm.profile.email}).success((result) ->
       if result.exist
-        vm.Alerts.error(vm.T.t('email_already_taken'))
       else
         vm.http.post(vm.R.update_profile_path(), vm.profile).then((response) ->
           vm.password = response.data.password
 
           if response.data.profile.valid
             vm.rootScope.user = response.data.profile
-            vm.Alerts.success(vm.T.t('profile_succefully_updated'))
             vm.rootScope.$state.go('projects.list')
         )
     )

@@ -2,6 +2,8 @@ class SubscriptionPrice < ActiveRecord::Base
 	enum sub_type: Dynamica::Billing::SUBSCRIPTION_TYPES
 
 	validates :sub_type, uniqueness: true
+	validates_presence_of     :cost
+	validates_numericality_of :cost
 
 	def title
 		case sub_type

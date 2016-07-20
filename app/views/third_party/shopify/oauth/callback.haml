@@ -13,6 +13,6 @@
           %input{type: 'hidden', name: 'state', value: params[:state]}
           %input{type: 'hidden', name: 'timestamp', value: params[:timestamp]}
           .control-box
-            %input.form-control{placeholder: t('.log_in.form.email')}
+            = text_field_tag :email, nil, placeholder: t('.log_in.form.email'), class: "form-control"
           .control-box
-            %input.btn.btn-lg.btn-danger{type: 'submit'}= t('.log_in.form.submit')
+            = submit_tag t('.log_in.form.submit'), class: "btn btn-lg btn-danger"
