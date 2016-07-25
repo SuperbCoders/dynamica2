@@ -471,7 +471,6 @@ class DashboardController
   init_donut_chart: (el, data) ->
 
     chart_name = element_id = el.attr('id')
-
     type = (d) ->
       d.value = +d.value
       d

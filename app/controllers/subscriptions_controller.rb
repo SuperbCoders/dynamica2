@@ -35,10 +35,12 @@ class SubscriptionsController < ApplicationController
   def change
     if @project and @project.shopify_session
 
+      cancel_current_recurring_charge
+
       case subscription_params[:sub_type]
         when 'monthly'
           cost = SubscriptionPrice.monthly.first.cost 
-          charge = ShopifyAPI::ApplicationCharge.new(
+          charge = ShopifyAPI::RecurringApplicationCharge.new(
               price: cost,
               name: "Monthly billing $ #{cost.to_i} for ##{@project.id}",
               charge_type: 'monthly')
@@ -46,7 +48,7 @@ class SubscriptionsController < ApplicationController
           current_user.subscription.monthly!
         when 'yearly'
           cost = SubscriptionPrice.yearly.first.cost
-          charge = ShopifyAPI::RecurringApplicationCharge.new(
+          charge = ShopifyAPI::ApplicationCharge.new(
               price: cost,
               name: "Yearly billing $ #{cost.to_i} for ##{@project.id}",
               charge_type: 'yearly')
@@ -82,9 +84,7 @@ class SubscriptionsController < ApplicationController
 
   def cancel
     if @project and @project.shopify_session
-      if ShopifyAPI::RecurringApplicationCharge.current
-        ShopifyAPI::RecurringApplicationCharge.current.cancel
-      end
+      cancel_current_recurring_charge
     end
     redirect_to :back
   end
@@ -96,10 +96,16 @@ class SubscriptionsController < ApplicationController
     if @project and @project.shopify_session
       case current_user.subscription.sub_type
         when 'monthly'
-          @charge = ShopifyAPI::ApplicationCharge.find(params[:charge_id])
-        when 'yearly'
           @charge = ShopifyAPI::RecurringApplicationCharge.find(params[:charge_id])
+        when 'yearly'
+          @charge = ShopifyAPI::ApplicationCharge.find(params[:charge_id])
       end
+    end
+  end
+
+  def cancel_current_recurring_charge
+    if ShopifyAPI::RecurringApplicationCharge.current
+      ShopifyAPI::RecurringApplicationCharge.current.cancel
     end
   end
 

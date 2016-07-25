@@ -30,7 +30,7 @@
                   %br/
                   for your Shopify store
                 .text-center
-                  %a.btn.btn-lg.btn-danger.start_trial_btn(href="" ng-click="vm.modal('auth_shops','show')")= t('landing.start_trial')
+                  %a.btn.btn-lg.btn-danger.start_trial_btn(href="" ng-click="vm.modal('welcome_auth_shops','show')")= t('landing.start_trial')
     .hero_graph_block.heroGraph
       .graph_3.areaChart_2.d3graph.hide_x_axis{:style => "opacity: .2;"}
       .graph_3.areaChart_2.d3graph.hide_x_axis{:style => "opacity: .4;"}
@@ -151,7 +151,8 @@
             .price_block_inner
               .price_b_caption Start free trial
             .price_lemon_box
-              .price_b_val $5
+              .price_b_val 
+                = "$"+SubscriptionPrice.monthly.first.cost.to_i.to_s
               .price_b_period
                 per month
                 %br/
@@ -183,10 +184,10 @@
 
 
 / Popups
-= render 'popups/auth'
+= render 'popups/welcome_auth_shops'
 = render 'popups/restore_pass'
 = render 'popups/no_access'
 = render 'popups/not_ready'
 = render 'popups/confirm_address'
 = render 'popups/password_sended'
-= render 'popups/auth_shops'
+= render 'popups/auth'
