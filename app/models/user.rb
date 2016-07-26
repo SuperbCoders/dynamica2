@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
   before_create :set_api_token
 
   after_create :create_subscription
-  after_create :send_welcome_mail
+  # after_create :send_welcome_mail
 
   # @return [Boolean] true if facebook omniauth exist
   def facebook?
