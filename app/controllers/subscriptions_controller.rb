@@ -54,6 +54,8 @@ class SubscriptionsController < ApplicationController
               charge_type: 'yearly')
 
           current_user.subscription.yearly!
+        when 'inactive'
+          current_user.subscription.inactive!
       end
 
 
