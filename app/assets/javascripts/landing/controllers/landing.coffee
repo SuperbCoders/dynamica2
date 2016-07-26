@@ -31,7 +31,12 @@ class LandingController
       if response.data.redirect_to
         vm.window.location.href = response.data.redirect_to
       else
-        console.log response
+        vm.http.post('/users', {user: auth}).then((response) ->
+          if response.data.redirect_to
+            vm.window.location.href = response.data.redirect_to
+          else
+            console.log response
+        )
     )
 
   gotoAnchor: (x) ->

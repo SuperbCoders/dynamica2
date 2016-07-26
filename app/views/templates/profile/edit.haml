@@ -46,15 +46,16 @@
           .row.subscribe_info
             .col-lg-12
               %p.fw_400
-                - if ([current_user.subscription.sub_type] & ['monthly','yearly']).present?
-                  = "$"+SubscriptionPrice.instance_eval(current_user.subscription.sub_type).first.try(:cost).try(:to_s)
-                  %nobr  
-                    = "including applicable taxes, billed "+current_user.subscription.sub_type + "."
-                    %br Your {{ user.subscription.sub_type }} subscription will renew on {{ user.subscription.expire_at | date}}.
-                - elsif current_user.subscription.sub_type == 'trial'
-                  Subscription is trial
-                - else
-                  Subscription is inactive
+                - if current_user.subscription.present?
+                  - if ([current_user.subscription.sub_type] & ['monthly','yearly']).present?
+                    = "$"+SubscriptionPrice.instance_eval(current_user.subscription.sub_type).first.try(:cost).try(:to_s)
+                    %nobr  
+                      = "including applicable taxes, billed "+current_user.subscription.sub_type + "."
+                      %br Your {{ user.subscription.sub_type }} subscription will renew on {{ user.subscription.expire_at | date}}.
+                  - elsif current_user.subscription.sub_type == 'trial'
+                    Subscription is trial
+                  - else
+                    Subscription is inactive
 
               .subscribe_control
                 %a.subscribe_link(href = "" ng-click="vm.show_subscription_logs()")= t('profile.view_billing_history')
