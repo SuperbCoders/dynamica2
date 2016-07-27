@@ -9,18 +9,33 @@
       %a.btn.btn-lg.btn-danger(href = '' ng-click="vm.modal('welcome_auth_shops','show')")= t('projects.start_ﬁrst_project')
 
 .section.case.case-projects(ng-show='vm.projects.length > 0 && vm.projects[0].id != null')
+  .case-capt
+    %a(href = '' ng-click="vm.modal('welcome_auth_shops','show')")
+      %span= t('projects.list.add_new_project')
   .case-cnt
     .items
       .row
         .col-sm-6(ng-repeat = "project in vm.projects")
-          .graph-unit
-            %a.graph-u-link(href = '' ui-sref = "projects.view({slug: project.slug, id: project.id })")
-            %h5.graph-name_v2 {{ project.name }} # {{ project.id }}
-            %a.graph-settings(ui-sref = "projects.settings({slug: project.slug})")= t('projects.list.project_settings')
-            .graph-block
-              .graph_2.areaChart_2.d3graph.hide_x_axis
+          .item
+            .title
+              %a(href = '' ui-sref = "projects.view({slug: project.slug, id: project.id })") {{ project.name }}
+            .descript Last forecast 2 days ago
+            .users
+              %ul
+                %li.user-pic
+                  %img.img-circle{'ng-src' => "{{user.avatar.avatar.url}}",width: '40px', height: '40px'}
+            .setting-wrap
+              .setting.dropdown
+                %a.setting-toggle.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+                  %i.icon.fa.fa-cog
+                .setting-menu.dropdown-menu.right
+                  %ul
+                    %li
+                      %a(ui-sref = "projects.settings({slug: project.slug})")= t('projects.list.project_settings')
+                    %li
+                      %a{:href => "#"} Delete
         .col-lg-3.col-md-4.col-sm-6
-          %a.graph-new-link(href = '' ng-click="vm.modal('auth_shops','show')")
+          %a.graph-new-link(href = '' ng-click="vm.modal('welcome_auth_shops','show')")
             %span= t('projects.list.add_new')
 
       -#.row

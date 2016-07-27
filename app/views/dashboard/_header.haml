@@ -7,13 +7,17 @@
         %span.icon-bar
 
       .navbar-project-switch
-        %a.navbar-brand(href = "") Dynamica
+        %a.navbar-brand{:href => "dashboard.html"}
+          %img{:src => image_url("logo.svg")}/
 
 
     %nav.collapse.navbar-collapse.bs-navbar-collapse
       %ul.nav.navbar-nav
         %li(ui-sref-active = "active")
           %a{'ui-sref' => "projects.list"}= t('layouts.application.projects')
+
+        %li(ui-sref-active = "active")
+          %a{'href' => "#"}= t('layouts.application.team')
 
         %li(ui-sref-active = 'active' ng-show="project")
           %a(ui-sref = "projects.settings({slug: project.slug})")= t('layouts.application.project_settings')

@@ -92,11 +92,13 @@
         .col-md-7.col-sm-9
           .control-box
             .upload-box(data-droplet ng-model="vm.avatar")
-              .user-pic
-                %img.img-circle{'ng-src' => "{{user.avatar.avatar.url}}", width: '80px', height: '80px'}
-                %a#js-delete-avatar.btn-delete(href = "" ng-show = "user.avatar.avatar.url" ng-click="vm.destroy_avatar()")
-                  %i.icon.fa.fa-trash
-              .descript(id='avatar_input' droplet-upload-single ng-model="vm.avatar")= t('devise.registrations.edit.avatar_select').html_safe
+              %nobr
+                .user-pic
+                  %img.img-circle{'ng-src' => "{{user.avatar.avatar.url}}", width: '100px', height: '100px'}
+                  %a#js-delete-avatar.btn-delete(href = "" ng-show = "user.avatar.avatar.url" ng-click="vm.destroy_avatar()")
+                    %i.icon.fa.fa-trash
+                .descript= t('devise.registrations.edit.avatar_select').html_safe
+                .div(id='avatar_input' droplet-upload-single ng-model="vm.avatar" style='display: none')
 
           .control-box
             %input.form-control{placeholder: t('devise.registrations.edit.form.name'), 'ng-model' => "user.name"}

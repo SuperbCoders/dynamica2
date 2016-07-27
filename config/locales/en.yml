@@ -28,6 +28,9 @@ en:
           <<: *permission
 
   projects:
+    list: 
+      add_new: Add new
+      add_new_project: Add new project
     products_revenue:
       product_search: Search by name
       table:
@@ -185,7 +188,7 @@ en:
         personal: Personal
         api_token: API token
         password: Password
-        avatar_select: 'Drag and drop new avatar <a id="js-choose-file" href="#">or choose</a>'
+        avatar_select: 'Drag and drop new avatar <br/><label style="color: #ff3d04" for="avatar_input">or choose</label>'
         form:
           name: Name
           email: Email

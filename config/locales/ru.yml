@@ -53,6 +53,9 @@ ru:
   #~
 
   projects:
+    list: 
+      add_new: Добавить
+      add_new_project: Добавить новый проект
     products_revenue:
       total: Всего
       products: товаров
@@ -221,7 +224,7 @@ ru:
         personal: Личные данные
         api_token: Токен для API
         password: Пароль
-        avatar_select: 'Перетащите сюда новую фотографию <a id="js-choose-file" href="#">или выберите на компьютере</a>'
+        avatar_select: 'Перетащите сюда новую фотографию <br/><label style="color: #ff3d04" for="avatar_input">или выберите на компьютере</label>'
         form:
           name: Имя
           email: Эл. почта
