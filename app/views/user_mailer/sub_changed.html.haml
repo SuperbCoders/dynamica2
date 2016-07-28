@@ -1,0 +1,12 @@
+%h4
+  Subscription has been changed. Current:
+  %br
+  - if ([@user.subscription.sub_type] & ['monthly','yearly']).present?
+    = "$"+SubscriptionPrice.instance_eval(@user.subscription.sub_type).first.try(:cost).try(:to_s)
+    %nobr  
+      = "including applicable taxes, billed "+@user.subscription.sub_type + "."
+      %br= "Your #{@user.subscription.sub_type} subscription will renew on #{@user.subscription.expire_at}"
+  - elsif @user.subscription.sub_type == 'trial'
+    Subscription is trial
+  - else
+    Subscription is inactive

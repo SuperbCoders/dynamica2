@@ -38,6 +38,9 @@ module ThirdParty
           end
         elsif @project.user
           sign_in(@project.user)
+          if !@project.integration.present?
+            @integration = @project.create_integration(type: 'ShopifyIntegration', code: params[:code], access_token: access_token)
+          end
           redirect_url = dashboard_path
         end
 

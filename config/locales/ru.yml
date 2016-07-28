@@ -1,4 +1,9 @@
 ru:
+  setup:
+    profile:
+      email: Адрес электронной почты
+      password: Пароль
+      password_confirmation: Подтвердите пароль
   activerecord:
     attributes: &activerecord_attributes
       project:
@@ -93,6 +98,7 @@ ru:
         customers: 'Клиенты'
     project:
       subscription: Подписка
+      sub_changed: Изменена подписка
       settings: Настройки
       edit: Редактировать
       delete: Удалить
@@ -219,6 +225,7 @@ ru:
     sign_out: Выйти
     sign_in: Войти
     registrations:
+      signed_up: Welcome to Dynamica
       edit:
         profile: Профиль
         personal: Личные данные

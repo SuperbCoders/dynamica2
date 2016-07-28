@@ -70,6 +70,10 @@ class SubscriptionsController < ApplicationController
         current_user.subscription_logs.create(
             charge_id: charge.id,
             description: "Change subscription to #{subscription_params[:sub_type]}. Charge_id #{charge.id}")
+        
+        if current_user.subscription_notification
+          current_user.send_sub_changed_mail
+        end
       end
 
     else

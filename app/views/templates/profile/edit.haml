@@ -131,11 +131,11 @@
       .form-group
         %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.notify_me_about')
         .col-md-7.col-sm-9
-          %input{type: 'checkbox', 'ng-model' => "user.messages.news"} 
+          %input{type: 'checkbox', 'ng-model' => "user.news_notification"} 
           %nobr
             News
           %br
-          %input{type: 'checkbox', 'ng-model' => "user.messages.subscription"} 
+          %input{type: 'checkbox', 'ng-model' => "user.subscription_notification"} 
           %nobr
             Subscription update
       .form-group

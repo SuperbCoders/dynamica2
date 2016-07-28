@@ -61,7 +61,7 @@ class ProfileController < ApplicationController
   end
 
   def profile_params
-    params.permit(:name, :email, :password)
+    params.permit(:name, :email, :password, :news_notification, :subscription_notification)
   end
 
 end

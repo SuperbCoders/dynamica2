@@ -14,4 +14,12 @@ class UserMailer < ActionMailer::Base
     end
 
   end
+
+  def sub_changed(user_id)
+    @user = User.find(user_id)
+
+    if @user
+      mail to: @user.email, subject: t('projects.project.sub_changed')
+    end
+  end
 end

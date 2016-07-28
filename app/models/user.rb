@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
   before_create :set_api_token
 
   after_create :create_subscription
-  # after_create :send_welcome_mail
+  after_create :send_welcome_mail
 
   # @return [Boolean] true if facebook omniauth exist
   def facebook?
@@ -94,11 +94,15 @@ class User < ActiveRecord::Base
     end
   end
 
+  def send_sub_changed_mail
+    UserMailer.sub_changed(self.id).deliver
+  end
+
   private
 
     # Create trail subscription for new user
     def send_welcome_mail
-      UserMailer.welcome(self.id).deliver_now
+      UserMailer.welcome(self.id).deliver
     end
 
     def create_subscription
