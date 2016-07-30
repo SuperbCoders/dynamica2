@@ -16,10 +16,8 @@
             = submit_tag "I still want to cancel", class: "btn btn-lg btn-default"
           %p
           = hidden_field_tag :id, value: current_user.subscription.id
-          .row
-            .col-lg-10
-              .pull-right
-                %span Charge from
-            .col-lg-2
-              .pull-left
+          .row.text-center
+            .col-lg-12
+              %span Charge from
+              %nobr
                 = select_tag :project_id, options_from_collection_for_select(current_user.projects, "id", "name"), class: "project-select2"

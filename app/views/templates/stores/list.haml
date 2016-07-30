@@ -1,4 +1,4 @@
-= render 'popups/welcome_auth_shops'
+= render 'popups/auth_shops'
 %section.case.case-projects-empty(ng-show='vm.projects.length == 0')
   .case-cnt.text-center
     .title
@@ -10,7 +10,7 @@
 
 .section.case.case-projects(ng-show='vm.projects.length > 0 && vm.projects[0].id != null')
   .case-capt
-    %a(href = '' ng-click="vm.modal('welcome_auth_shops','show')")
+    %a(href = '' ng-click="vm.modal('auth_shops','show')")
       %span= t('projects.list.add_new_project')
   .case-cnt
     .items
@@ -35,7 +35,7 @@
                     %li
                       %a{:href => "#"} Delete
         .col-lg-3.col-md-4.col-sm-6
-          %a.graph-new-link(href = '' ng-click="vm.modal('welcome_auth_shops','show')")
+          %a.graph-new-link(href = '' ng-click="vm.modal('auth_shops','show')")
             %span= t('projects.list.add_new')
 
       -#.row

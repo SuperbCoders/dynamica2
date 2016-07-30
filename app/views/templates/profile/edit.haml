@@ -131,13 +131,13 @@
       .form-group
         %label.control-label.col-md-3.col-sm-3= t('devise.registrations.edit.notify_me_about')
         .col-md-7.col-sm-9
-          %input{type: 'checkbox', 'ng-model' => "user.news_notification"} 
-          %nobr
-            News
+          %input{type: 'checkbox', 'ng-model' => "user.news_notification", id: "news_notify"} 
+          %label{"for": "news_notify"}
+            %span{"style": "position: absolute;"} News
           %br
-          %input{type: 'checkbox', 'ng-model' => "user.subscription_notification"} 
-          %nobr
-            Subscription update
+          %input{type: 'checkbox', 'ng-model' => "user.subscription_notification", id: "sub_notify"} 
+          %label{"for": "sub_notify"}
+            %span{"style": "position: absolute;"} Subscription update
       .form-group
         .col-md-offset-3.col-md-7.col-sm-offset-3.col-sm-9
           %a.btn.btn-lg.btn-danger{'ng-click' => "vm.save()"}= t('devise.registrations.edit.form.submit')
