@@ -36,6 +36,13 @@ class ProjectsController
       vm.rootScope.$state.go('projects.list')
     )
 
+  update_data: () ->
+    vm = @
+    if vm.project.id
+      vm.project.$save({id: vm.project.id}, (project, response) ->
+
+      )
+
   save: ->
     vm = @
     if vm.project.id

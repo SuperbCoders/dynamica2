@@ -29,18 +29,19 @@ class ShopifyIntegration < Integration
   private
 
   def get_data
-    @products  = ShopifyAPI::Product.find(:all, product_params)
-    @customers = ShopifyAPI::Customer.find(:all, customer_params)
-    @orders    = ShopifyAPI::Order.find(:all, order_params)
+    if self.project.shopify_session
+      @products  = ShopifyAPI::Product.find(:all)
+      @customers = ShopifyAPI::Customer.find(:all)
+      @orders    = ShopifyAPI::Order.find(:all)
 
-    @result = {
-      products: @products,
-      customers: @customers,
-      orders: @orders
-    }
+      @result = {
+        products: @products,
+        customers: @customers,
+        orders: @orders
+      }
 
-    dump_to_local_database @result
-
+      dump_to_local_database @result
+    end
     @result
   end
 

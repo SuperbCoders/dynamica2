@@ -107,7 +107,7 @@ class DashboardController
           if data['data'].length > 0
             # remove donut_empty class If backend return data
             $(this).removeClass('donut_empty')
-
+            
             # Init donut chart
             vm.init_donut_chart($(this), vm.other_charts_data[el_id])
           else

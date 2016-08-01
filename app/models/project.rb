@@ -422,6 +422,10 @@ class Project < ActiveRecord::Base
     user.subscription.expired?
   end
 
+  def last_update
+    ((DateTime.now.to_f - self.updated_at.to_f)/360).to_i
+  end
+
   private
 
     def rand_color

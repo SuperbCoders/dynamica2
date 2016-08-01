@@ -33,7 +33,7 @@
           %label.control-label.col-md-3.col-sm-3= t('projects.project.settings.data_updating')
           .col-md-7.col-sm-9
             .control-box
-              %b Last update 4 hours ago
+              %b Last update {{vm.project.last_update}} hours ago
               %a.btn.data_update_btn.btn-danger-w(href = '' ng-click = 'vm.update_data()')= t('projects.project.settings.update_data_imidiatelly')
 
         .form-group
