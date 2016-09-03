@@ -10,9 +10,9 @@
       %a.btn.btn-lg.btn-danger(href = '' ng-click="vm.modal('welcome_auth_shops','show')")= t('projects.start_ﬁrst_project')
 
 .section.case.case-projects(ng-show='vm.projects.length > 0 && vm.projects[0].id != null')
-  .case-capt
-    %a(href = '' ng-click="vm.modal('auth_shops','show')")
-      %span= t('projects.list.add_new_project')
+  -#.case-capt
+  -#  %a(href = '' ng-click="vm.modal('auth_shops','show')")
+  -#    %span= t('projects.list.add_new_project')
   .case-cnt
     .items
       .row
