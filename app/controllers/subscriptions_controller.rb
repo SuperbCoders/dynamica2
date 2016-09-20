@@ -82,7 +82,11 @@ class SubscriptionsController < ApplicationController
     end
 
     if params[:redirect] == 'true'
-      redirect_to charge.confirmation_url and return
+      if 
+        redirect_to charge.confirmation_url and return
+      else
+        redirect_to :back and return
+      end
     end
 
     render json: @response ||= {}
