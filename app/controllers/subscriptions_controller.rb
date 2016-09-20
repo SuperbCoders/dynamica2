@@ -33,60 +33,64 @@ class SubscriptionsController < ApplicationController
 
   # Make charge
   def change
-    if @project and @project.shopify_session
+    begin
+      if @project and @project.shopify_session
 
-      cancel_current_recurring_charge
+        cancel_current_recurring_charge
 
-      case subscription_params[:sub_type]
-        when 'monthly'
-          cost = SubscriptionPrice.monthly.first.cost 
-          charge = ShopifyAPI::RecurringApplicationCharge.new(
-              price: cost,
-              name: "Monthly billing $ #{cost.to_i} for ##{@project.id}",
-              charge_type: 'monthly')
+        case subscription_params[:sub_type]
+          when 'monthly'
+            cost = SubscriptionPrice.monthly.first.cost 
+            charge = ShopifyAPI::RecurringApplicationCharge.new(
+                price: cost,
+                name: "Monthly billing $ #{cost.to_i} for ##{@project.id}",
+                charge_type: 'monthly')
 
-          current_user.subscription.monthly!
-        when 'yearly'
-          cost = SubscriptionPrice.yearly.first.cost
-          charge = ShopifyAPI::ApplicationCharge.new(
-              price: cost,
-              name: "Yearly billing $ #{cost.to_i} for ##{@project.id}",
-              charge_type: 'yearly')
+            current_user.subscription.monthly!
+          when 'yearly'
+            cost = SubscriptionPrice.yearly.first.cost
+            charge = ShopifyAPI::ApplicationCharge.new(
+                price: cost,
+                name: "Yearly billing $ #{cost.to_i} for ##{@project.id}",
+                charge_type: 'yearly')
 
-          current_user.subscription.yearly!
-        when 'inactive'
-          current_user.subscription.inactive!
+            current_user.subscription.yearly!
+          when 'inactive'
+            current_user.subscription.inactive!
+        end
+
+
+        if charge
+          charge.return_url = subscription_callback_url
+          charge.test = true if Rails.env.development? or Rails.env.staging?
+          charge.save
+          set_project_by_charge_id(charge.id, @project.id)
+          @response[:charge] = charge
+          @response[:success] = true
+
+          current_user.subscription_logs.create(
+              charge_id: charge.id,
+              description: "Change subscription to #{subscription_params[:sub_type]}. Charge_id #{charge.id}")
+          
+          if current_user.subscription_notification
+            current_user.send_sub_changed_mail
+          end
+        end
+
+      else
+        @response[:errors] << t('projects.subscriptions.shopify_not_integrated') if not @project.shopify?
+
       end
 
-
-      if charge
-        charge.return_url = subscription_callback_url
-        charge.test = true if Rails.env.development? or Rails.env.staging?
-        charge.save
-        set_project_by_charge_id(charge.id, @project.id)
-        @response[:charge] = charge
-        @response[:success] = true
-
-        current_user.subscription_logs.create(
-            charge_id: charge.id,
-            description: "Change subscription to #{subscription_params[:sub_type]}. Charge_id #{charge.id}")
-        
-        if current_user.subscription_notification
-          current_user.send_sub_changed_mail
+      if params[:redirect] == 'true'
+        if 
+          redirect_to charge.confirmation_url and return
+        else
+          redirect_to :back and return
         end
       end
-
-    else
-      @response[:errors] << t('projects.subscriptions.shopify_not_integrated') if not @project.shopify?
-
-    end
-
-    if params[:redirect] == 'true'
-      if 
-        redirect_to charge.confirmation_url and return
-      else
-        redirect_to :back and return
-      end
+    rescue
+      redirect_to :back, alert: "Sop is inactive" and return
     end
 
     render json: @response ||= {}
