@@ -90,7 +90,11 @@ class SubscriptionsController < ApplicationController
         end
       end
     rescue
-      redirect_to :back, alert: "Sop is inactive" and return
+      if subscription_params[:sub_type] == 'inactive'
+        current_user.subscription.inactive!
+      end
+      
+      redirect_to :back, alert: "Shop is inactive" and return
     end
 
     render json: @response ||= {}

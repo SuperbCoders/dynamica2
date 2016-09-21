@@ -12,7 +12,7 @@ class ProfileController
     if @rootScope.user.projects.length == 1
       vm.subscription.project_id = @rootScope.user.projects[0].id
 
-    if @rootScope.user.subscription.expired
+    if @rootScope.user.subscription.expired && @rootScope.user.subscription.sub_type != 'inactive'
       $('.modal').modal('hide')
       $('#subscription_expired').modal('show', {backdrop: 'static'})
 
