@@ -4,12 +4,13 @@ class ProjectsController
     vm.params = @rootScope.$stateParams
     vm.project = {}
     vm.projects = [{id: null}]
-
+    
     if vm.params.slug
       @Projects.search({slug: vm.params.slug}).$promise.then( (project) ->
         vm.project = project
       )
     else
+      $('.project-settings-menu-item').hide();
       @Projects.query().$promise.then( (projects) ->
         vm.projects = projects
       )

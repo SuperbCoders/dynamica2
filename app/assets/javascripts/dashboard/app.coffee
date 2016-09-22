@@ -156,7 +156,7 @@
 
   # Subscription check
   $rootScope.$on("$locationChangeStart", (event, next, current) ->
-    if $rootScope.user and $rootScope.user.subscription.expired
+    if $rootScope.user and $rootScope.user.subscription.expired and $rootScope.user.subscription.sub_type != 'inactive' 
       $rootScope.subscription()
   )
 
@@ -172,7 +172,7 @@
       $rootScope.user = response
 
 
-      if $rootScope.user.subscription.expired
+      if $rootScope.user.subscription.expired and $rootScope.user.subscription.sub_type != 'inactive'
         $rootScope.subscription()
 
       if $rootScope.user.projects.length == 1 and $state.current.name is not 'projects.list'
