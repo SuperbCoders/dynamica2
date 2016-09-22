@@ -29,12 +29,13 @@ class ProjectsController
 
   destroy: (project) ->
     vm = @
-    project.$remove({id: project.id}).then( (response) ->
-      vm.projects.splice(vm.projects.indexOf(project), 1)
+    if confirm "You are about to delete " + project.name + " All data will be lost. Are you sure?"
+      project.$remove({id: project.id}).then( (response) ->
+        vm.projects.splice(vm.projects.indexOf(project), 1)
 
-      vm.rootScope.update_user()
-      vm.rootScope.$state.go('projects.list')
-    )
+        vm.rootScope.update_user()
+        vm.rootScope.$state.go('projects.list')
+      )
 
   update_data: () ->
     vm = @
