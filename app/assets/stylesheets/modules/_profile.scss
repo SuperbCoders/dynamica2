@@ -47,13 +47,22 @@ input[type="checkbox"] + label::before{
     height: 20px;
     width: 20px;
     margin: 0 5px 0 0;
-    background-image: image-url("checkbox-sprite.png");
     opacity: 0.5;
-    background-repeat: no-repeat;
+    background: image-url("checkbox-sprite.png") no-repeat;
 }
 input[type="checkbox"] + label::before {
     background-position: 0px 0px;    
 }
 input[type="checkbox"]:checked + label::before {
     background-position: 0px -21px;
+}
+
+input[type="checkbox"] + label {
+  position: relative;
+  min-width: 200px;
+  span {
+    position: absolute;
+    left: 26px;
+    top: 0;
+  }
 }
