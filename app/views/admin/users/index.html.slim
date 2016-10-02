@@ -3,40 +3,40 @@ section#content
     .clearfix
       h4
         i.icon-group
-        |  Пользователи
+        |  Users
     .row
       .col-lg-3
         .list-group.m-b-small
           = link_to admin_users_path(role: 'admin'), class: "list-group-item#{' bg-lighter' if params[:role] == 'admin'}" do
             i.icon-chevron-right
             i.icon-star
-            | Администраторы
+            | Admins
           = link_to admin_users_path(role: 'user'), class: "list-group-item#{' bg-lighter' if params[:role] == 'user'}" do
             i.icon-chevron-right
             i.icon-user
-            | Пользователи
+            | Users
           = link_to admin_users_path, class: "list-group-item#{' bg-lighter' unless params[:role].present?}" do
             i.icon-chevron-right
             i.icon-group
-            | Все
+            | All
       .col-lg-9
         section.panel
           header.panel-heading
-            | Найдено <b>#{@users.total_count}</b> #{Russian.p(@users.total_count, 'пользователь', 'пользователя', 'пользователей')}
+            | Find <b>#{@users.total_count}</b> users
           .panel-body
             - if can? :create, User
-              => link_to 'Добавить', new_admin_user_path, class: 'btn btn-primary btn-sm'
+              => link_to 'Add', new_admin_user_path, class: 'btn btn-primary btn-sm'
           .table-responsive
             table.table.table-striped.b-t.text-small
               thead
                 tr
-                  th Имя
+                  /th Имя
                   th Email
                   th
               tbody
                 - @users.each do |user|
                   tr
-                    td= user.name
+                    /td= user.name
                     td= user.email
                     td
                       .btn-group

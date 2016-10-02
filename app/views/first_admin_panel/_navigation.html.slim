@@ -5,12 +5,12 @@ li class=('active' if params[:controller] == 'admin/dashboard')
 li class=('active' if params[:controller] == 'admin/users')
   = link_to admin_users_path do
     i.icon-user.icon-xlarge
-    span Пользователи
+    span Users
 li class=('active' if params[:controller] == 'admin/projects')
   = link_to admin_projects_path do
     i.icon-bar-chart.icon-xlarge
-    span Проекты
+    span Stores
 li class=('active' if params[:controller] == 'admin/subscription_prices')
   = link_to admin_subscription_prices_path do
     i.icon-money.icon-xlarge
-    span Подписки
+    span Subscribe

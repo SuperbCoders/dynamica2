@@ -3,10 +3,35 @@
     section.panel
       .panel-body.text-muted.l-h-2x
         span.badge=> @users_count
-        span.m-r-small Пользователей
+        span.m-r-small Users
 
         span.badge.bg-success=> @projects_count
-        span.m-r-small Проектов
+        span.m-r-small Stores
 
-        span.badge=> @forecasts_count
-        span.m-r-small Прогнозов
+        /span.badge=> @forecasts_count
+        /span.m-r-small Forecasts
+
+.row
+  section.panel
+    .table-responsive
+      table.table.table-striped.b-t.text-small
+        thead
+          tr
+            th User
+            th Store
+            th Subscription
+        tbody
+          - @users.each do |user|
+            tr
+              td= link_to user.email, edit_admin_user_path(user)
+              td
+                - user.projects.each do |project|
+                  br
+                  =link_to(project.name, admin_project_path(project))
+
+              td= user.subscription.sub_type if !user.subscription.nil?
+
+                .btn-group
+                  a.dropdown-toggle data-toggle="dropdown" href="#"
+                    i.icon-pencil
+                  ul.dropdown-menu.pull-right
