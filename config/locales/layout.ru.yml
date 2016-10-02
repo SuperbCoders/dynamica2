@@ -2,8 +2,9 @@ ru:
   layouts:
     application:
       subscription: Подписка
-      projects: Проекты
-      project_settings: Настройки проекта
+      my_store: Мой магазин
+      my_stores: Мои магазины
+      settings: Настройки
       team: Команда
       profile: Профиль
       log_out: Выйти
