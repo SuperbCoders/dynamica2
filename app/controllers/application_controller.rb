@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_country_code
-    @current_city_name ||= request.headers['X-GEO-COUNTRYCODE'] || 'RU'
+    @current_city_name ||= request.headers['X-GEO-COUNTRYCODE'] || 'EN'
   end
 
   def locale_by_current_country_code
