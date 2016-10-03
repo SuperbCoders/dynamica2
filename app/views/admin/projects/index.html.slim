@@ -18,7 +18,7 @@ section#content
               - @projects.each do |project|
                 tr
                   td= link_to project.name, admin_project_path(project)
-                  td= link_to project.user.display_name, admin_users_path(project.user)
+                  td= link_to project.user.email, admin_users_path(project.user)
         footer.panel-footer
           .text-right.text-center-sm
             = paginate @projects, theme: 'twitter-bootstrap-3'
