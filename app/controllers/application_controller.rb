@@ -19,7 +19,8 @@ class ApplicationController < ActionController::Base
   end
 
   def locale_by_current_country_code
-    current_country_code == 'RU' ? 'ru' : 'en'
+    # current_country_code == 'RU' ? 'ru' : 'en'
+    current_country_code == 'en'
   end
 
   def after_sign_in_path_for(resource_or_scope)
