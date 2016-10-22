@@ -54,6 +54,8 @@ class DonutChartController
 
     return if not vm.project
 
+    console.log vm.chart
+
     chart_url = "/charts_data/full_donut_chart_data"
     chart_params =
       from: vm.range.from
@@ -225,10 +227,29 @@ class DonutChartController
               "key": "RI",
               "value": "0.16",
               "date": "01/26/13"
-            }, {"key": "RI", "value": "0.22", "date": "01/27/13"}, {"key": "RI", "value": "0.1", "date": "01/28/13"}]
+            }, {"key": "RI", "value": "0.22", "date": "01/27/13"},
+            {"key": "RI", "value": "0.1", "date": "01/28/13"}
+          ]
         }
-        vm.draw_stream_graph($('.streamChartTotal'), response, false)
+#        vm.draw_stream_graph($('.streamChartTotal'), race, false)
+#        vm.draw_stream_graph($('.streamChartTotal'), response, false)
+
+        console.log response.data[0]
+        console.log race.data[0]
+
+        response.data.sort (a, b) ->
+          sortBy('date', a, b, true)
+
+
+        draw_stream_graph($('.streamChartTotal'), response, false);
+#        vm.draw_stream_graph($('.streamChartTotal'), response, false)
       )
+
+  sortBy = (key, a, b, r) ->
+    r = if r then 1 else -1
+    return -1*r if a[key] > b[key]
+    return 1*r if a[key] < b[key]
+    return 0
 
   fit2Limits: (pckr, date, max) ->
     start = moment(pckr.datepicker('getStartDate'))

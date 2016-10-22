@@ -70,10 +70,11 @@ class Project < ActiveRecord::Base
 
     case chart
       when 'order_statuses'
-        project_order_statuses.where('date >= ? and date <= ?', date_from, date_to).each do |order_status|
-          finded = false
-          data_field = nil
-
+        project_order_statuses
+            .select("status, sum(count) as count, date_trunc('day', date) as date")
+            .where('date >= ? and date <= ?', date_from, date_to)
+            .group("status, date_trunc('day', date)")
+            .each do |order_status|
           # Назначим цвет статусу
           result[:items][order_status.status] ||= rand_color
 
@@ -81,52 +82,41 @@ class Project < ActiveRecord::Base
           temp[:key] = order_status.status
           temp[:date] = order_status.date.strftime("%m/%d/%y")
           temp[:value] = order_status.count
+          temp[order_status.status] = order_status.count
           result[:data] << temp
-
-          # Пройдемся по результату и найдем данные за дату
-          # result[:data].map {|r_data|
-          #   if r_data[:date] == order_status.date.strftime("%d-%b-%y")
-          #     data_field = r_data
-          #     finded = true
-          #   end
-          # }
-          #
-          # # Если данные за эту дату есть, то увеличиваем на
-          # if finded and data_field
-          #   data_field[order_status.status] = data_field[order_status.status] ? data_field[order_status.status] + order_status.count : 1
-          # else
-          #   temp = {}
-          #   temp[:date] = order_status.date.strftime("%d-%b-%y")
-          #   temp[order_status.status] = order_status.count
-          #   result[:data] << temp
-          # end
-          #
-          # data_field = nil
-          # finded = false
         end
 
-        # result[:data].map.with_index { |r_data, index|
-        #
-        #   # Добавим 0 статусы если их нет в хеше
-        #   result[:items].keys.map { |r_key|
-        #     r_data[r_key] = 0 if not r_data[r_key]
-        #   }
-        #
-        #   # Отсортируем
-        #   date = r_data[:date]
-        #   result[:data][index] = Hash[r_data.except(:date).sort]
-        #   result[:data][index][:date] = date
-        #
-        #   # Сумма количества всех статусов
-        #   data = result[:data][index]
-        #   @summ = 0
-        #   data.except(:date).keys.map { |k| @summ += data[k] }
-        #
-        #   # Высчитаем процентное соотношение
-        #   result[:items].keys.map { |r_key|
-        #     data[r_key] = (data[r_key] / @summ) * 100 if data[r_key] > 0
-        #   }
-        # }
+        result[:data].each do |order_status|
+          # Пройдемся по результату и найдем данные за дату
+          result[:data].map {|r_data|
+            if r_data[:date] == order_status[:date]
+              data_field = r_data
+              # raise '12'
+              finded = true
+              order_status[data_field[:key]] = data_field[:value]
+            end
+          }
+        end
+
+        result[:data].map.with_index { |r_data, index|
+
+          # Добавим 0 статусы если их нет в хеше
+          result[:items].keys.map { |r_key|
+            r_data[r_key] = 0 if not r_data[r_key]
+          }
+
+          # Отсортируем
+          date = r_data[:date]
+          result[:data][index] = Hash[r_data.except(:date)]#.sort]
+          result[:data][index][:date] = date
+
+          # Сумма количества всех статусов
+          data = result[:data][index]
+          @summ = 0
+          data.except(:date, :key, :value).keys.map { |k| @summ += data[k] }
+
+          data[:value] = (data[data[:key]] / @summ.to_f).round(2).to_s if data[data[:key]] > 0
+        }
     end
 
     result
@@ -318,46 +308,46 @@ class Project < ActiveRecord::Base
 
   def big_charts_data(scope, current_data, prev_data)
     result = [
-        {
-            "name": "Revenue",
-        "tr_name": "revenue",
-        "color": "#6AFFCB",
-        "value": "#{current_data.sum :total_gross_revenues}",
-        "diff": diff_sum(:total_gross_revenues, current_data, prev_data),
-        "data": current_data.send(scope).sum(:total_gross_revenues)
+    {
+        name: "Revenue",
+        tr_name: "revenue",
+        color: "#6AFFCB",
+        value: "#{current_data.sum :total_gross_revenues}",
+        diff: diff_sum(:total_gross_revenues, current_data, prev_data),
+        data: current_data.send(scope).sum(:total_gross_revenues)
     },
-        {
-            "name": "Orders",
-        "tr_name": "orders",
-        "color": "#FF1FA7",
-        "value": "#{current_data.sum :orders_number}",
-        "diff": diff_sum(:orders_number, current_data, prev_data),
-        "data": current_data.send(scope).sum(:orders_number)
+    {
+        name: "Orders",
+        tr_name: "orders",
+        color: "#FF1FA7",
+        value: "#{current_data.sum :orders_number}",
+        diff: diff_sum(:orders_number, current_data, prev_data),
+        data: current_data.send(scope).sum(:orders_number)
     },
-        {
-            "name": "Products sell",
-        "tr_name": "products_sell",
-        "color": "#FF7045",
-        "value": "#{current_data.sum :products_number}",
-        "diff": diff_sum(:products_number, current_data, prev_data),
-        "data": current_data.send(scope).sum(:products_number),
-        "top": top_5_products
+    {
+        name: "Products sell",
+        tr_name: "products_sell",
+        color: "#FF7045",
+        value: "#{current_data.sum :products_number}",
+        diff: diff_sum(:products_number, current_data, prev_data),
+        data: current_data.send(scope).sum(:products_number),
+        top: top_5_products
     },
-        {
-            "name": "Unic users",
-        "tr_name": "unic_users",
-        "color": "#3BD7FF",
-        "value": "#{current_data.sum :unique_users_number}",
-        "diff": diff_sum(:unique_users_number, current_data, prev_data),
-        "data": current_data.send(scope).sum(:unique_users_number)
+    {
+        name: "Unic users",
+        tr_name: "unic_users",
+        color: "#3BD7FF",
+        value: "#{current_data.sum :unique_users_number}",
+        diff: diff_sum(:unique_users_number, current_data, prev_data),
+        data: current_data.send(scope).sum(:unique_users_number)
     },
-        {
-            "name": "Customers",
-        "tr_name": "customers",
-        "color": "#FFD865",
-        "value": "#{current_data.sum :customers_number}",
-        "diff": diff_sum(:customers_number, current_data, prev_data),
-        "data": current_data.send(scope).sum(:customers_number)
+    {
+        name: "Customers",
+        tr_name: "customers",
+        color: "#FFD865",
+        value: "#{current_data.sum :customers_number}",
+        diff: diff_sum(:customers_number, current_data, prev_data),
+        data: current_data.send(scope).sum(:customers_number)
     }
     ]
 
@@ -421,12 +411,18 @@ class Project < ActiveRecord::Base
   # @return [DateTime] date of first project data for calendar filter
   # at frontend
   def first_project_data
+    if project_characteristics.minimum('date').nil?
+      return nil
+    end
     (project_characteristics.minimum('date').try(:to_datetime) || created_at.to_datetime)
   end
 
   # @return [DateTime] date of first product data for calendar filter
   # at frontend
   def first_product_data
+    if project_characteristics.minimum('date').nil?
+      return nil
+    end
     (product_characteristics.minimum('date').try(:to_datetime) || created_at.to_datetime)
   end
 
