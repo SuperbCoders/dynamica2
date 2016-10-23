@@ -240,15 +240,14 @@ class DonutChartController
         response.data.sort (a, b) ->
           sortBy('date', a, b, true)
 
-
         draw_stream_graph($('.streamChartTotal'), response, false);
 #        vm.draw_stream_graph($('.streamChartTotal'), response, false)
       )
 
   sortBy = (key, a, b, r) ->
     r = if r then 1 else -1
-    return -1*r if a[key] > b[key]
-    return 1*r if a[key] < b[key]
+    return -1*r if moment(a[key], "MM/DD/YY").toDate() > moment(b[key], "MM/DD/YY").toDate()
+    return 1*r if moment(a[key], "MM/DD/YY").toDate() < moment(b[key], "MM/DD/YY").toDate()
     return 0
 
   fit2Limits: (pckr, date, max) ->
