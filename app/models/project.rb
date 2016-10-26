@@ -91,18 +91,30 @@ class Project < ActiveRecord::Base
           result[:data].map {|r_data|
             if r_data[:date] == order_status[:date]
               data_field = r_data
-              # raise '12'
-              finded = true
               order_status[data_field[:key]] = data_field[:value]
             end
           }
         end
 
+        d = []
         result[:data].map.with_index { |r_data, index|
 
           # Добавим 0 статусы если их нет в хеше
           result[:items].keys.map { |r_key|
-            r_data[r_key] = 0 if not r_data[r_key]
+            # r_data[r_key] = 0 if not r_data[r_key]
+            if r_data[r_key].nil?
+              # r_data[r_key] = 0
+              #   raise '12'
+              temp = {}
+              temp[:key] = r_key
+              temp[:date] = r_data[:date]
+              temp[:value] = 0.to_s
+              # temp[order_status.status] = order_status.count
+              d << temp
+            end
+
+
+
           }
 
           # Отсортируем
@@ -111,13 +123,17 @@ class Project < ActiveRecord::Base
           result[:data][index][:date] = date
 
           # Сумма количества всех статусов
-          data = result[:data][index]
-          @summ = 0
-          data.except(:date, :key, :value).keys.map { |k| @summ += data[k] }
-
-          data[:value] = (data[data[:key]] / @summ.to_f).round(2).to_s if data[data[:key]] > 0
+          # data = result[:data][index]
+          # @summ = 0
+          # data.except(:date, :key, :value).keys.map { |k| @summ += data[k] }
+          #
+          # data[:value] = (data[data[:key]] / @summ.to_f).round(2).to_s if data[data[:key]] > 0
         }
-    end
+        # raise '12'
+        result[:data] = result[:data] + d.uniq { |e| [e[:key], e[:date], e[:key]]}
+
+
+      end
 
     result
   end
@@ -196,7 +212,7 @@ class Project < ActiveRecord::Base
     if @r[:data][0][:value]== 0 and @r[:data][1][:value] == 0
       @r[:data] = []
     end
-
+    raise '12'
     @r
   end
 
