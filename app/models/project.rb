@@ -212,7 +212,7 @@ class Project < ActiveRecord::Base
     if @r[:data][0][:value]== 0 and @r[:data][1][:value] == 0
       @r[:data] = []
     end
-    raise '12'
+    # raise '12'
     @r
   end
 
