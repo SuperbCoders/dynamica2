@@ -52,7 +52,7 @@ class ProfileController < ApplicationController
     true
   end
 
-  def email_exsists?
+  def email_exists?
     User.where(email: params[:email]).any?
   end
 

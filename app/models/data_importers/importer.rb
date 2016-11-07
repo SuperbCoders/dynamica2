@@ -10,7 +10,7 @@ module DataImporters
     end
 
     def import!(date)
-      orders = data[:orders].select { |order| order.created_at.to_date == date }
+      orders = data[:orders].select { |order| order.created_at.to_date == date.to_date }
       create_project_characteristics orders, date
       create_product_characteristics orders, date
     end
@@ -23,7 +23,7 @@ module DataImporters
         product = Product.where(remote_id: product_id, project_id: current_project.id).first
         next unless product
 
-        product_characteristic = ProductCharacteristic.find_or_initialize_by(date: date, product_id: product.id)
+        product_characteristic = ProductCharacteristic.find_or_initialize_by(date: date, product_id: product.id, project_id: current_project.id)
         product_characteristic.update_attributes!(
           price: line_items.first.price,
           sold_quantity: line_items.sum(&:quantity)

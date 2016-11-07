@@ -56,9 +56,8 @@ class ProjectsController
   update_data: () ->
     vm = @
     if vm.project.id
-      vm.project.$save({id: vm.project.id}, (project, response) ->
-
-      )
+      vm.http.get("/projects/"+vm.project.id+"/update_data").success (data) ->
+        vm.view_project(vm.project) if vm.project.id and vm.project.valid
 
   save: ->
     vm = @

@@ -1,7 +1,7 @@
 class ProjectsController < BaseController
   include Concerns::Resource
 
-  before_action :set_project, only: [:update, :destroy]
+  before_action :set_project, only: [:update, :destroy, :update_data]
   before_action :authorize_user
   before_action :find_resources, only: %w(index)
   before_action :new_resource, only: %w(create new)
@@ -18,6 +18,14 @@ class ProjectsController < BaseController
       current_user.permissions.create(project: @resource, all: true)
     end
     send_json serialize_resource(@resource, resource_serializer), @resource.valid?
+  end
+
+  def update_data
+    if @resource  
+      @resource.fetch_data
+      result = @resource.update_attributes(updated_at: DateTime.now)
+    end
+    send_json serialize_resource(@resource, resource_serializer), result
   end
 
   def resource_scope

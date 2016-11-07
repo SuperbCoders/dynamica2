@@ -60,6 +60,9 @@ Rails.application.routes.draw do
       collection do
         post 'search' => 'projects#search'
       end
+      member do
+        get 'update_data' => 'projects#update_data'
+      end
       resources :permissions, only: [:index, :update, :destroy], shallow: true, on: :member
       resources :pending_permissions, only: [:create, :destroy], on: :member
       resources :items, only: [:index, :create, :update, :destroy], on: :member do
