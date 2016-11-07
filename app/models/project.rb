@@ -396,19 +396,7 @@ class Project < ActiveRecord::Base
   end
 
   def fetch_data(time_period = Project::TIME_PERIOD)
-    self.calculate_characteristics(Time.now - time_period, Time.now)
-  end
-
-  def calculate_characteristics(date_from, date_to)
-    importer = DataImporters::Importer.new(self, data(date_from, date_to))
-
-    (date_from..date_to).each do |date|
-      importer.import! date
-    end
-  end
-
-  def data(date_from, date_to)
-    @data ||= self.integration.fetch(date_from, date_to)
+    CharacteristicsFetcherWorker.perform_async self.id, Time.now - time_period, Time.now
   end
 
   def parse_google_site_id

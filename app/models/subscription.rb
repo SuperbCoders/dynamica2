@@ -11,7 +11,7 @@ class Subscription < ActiveRecord::Base
   def renew!
     case sub_type
       when 'monthly' then period = Dynamica::Billing::MONTHLY_PERIOD
-      when 'yearly' then period = Dynamica::Billing::YEARLY_PERIOD
+      when 'yearly'  then period = Dynamica::Billing::YEARLY_PERIOD
     end
 
     update_attributes(expire_at: DateTime.now + period)
