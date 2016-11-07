@@ -1,0 +1,601 @@
+@mixin transition_all($property...) {
+  -webkit-transition: $property;
+  -ms-transition: $property;
+  transition: $property;
+}
+
+@keyframes zoom {
+  0%, 100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  50% {
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+  }
+}
+
+@-webkit-keyframes zoom {
+  0%, 100% {
+    -webkit-transform: scale(1);
+  }
+  50% {
+    -webkit-transform: scale(0.8);
+  }
+}
+
+@font-face {
+  font-family: 'PTRoubleSans';
+  src: url(../fonts/PTRoubleSans.eot);
+  src: url(../fonts/PTRoubleSans.eot?#iefix) format("embedded-opentype"),
+  url(../fonts/PTRoubleSans.woff) format("woff"),
+  url(../fonts/PTRoubleSans.ttf) format("truetype"),
+  url(../fonts/PTRoubleSans.svg) format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HelveticaNeueCyr-Bold';
+  src: url(../fonts/HelveticaNeueCyr-Bold.eot);
+  src: url(../fonts/HelveticaNeueCyr-Bold.eot?#iefix) format("embedded-opentype"),
+  url(../fonts/HelveticaNeueCyr-Bold.woff2) format("woff2"),
+  url(../fonts/HelveticaNeueCyr-Bold.woff) format("woff"),
+  url(../fonts/HelveticaNeueCyr-Bold.ttf) format("truetype"),
+  url(../fonts/HelveticaNeueCyr-Bold.svg) format("svg");
+}
+
+@font-face {
+  font-family: 'HelveticaNeueCyr-Light';
+  src: url(../fonts/HelveticaNeueCyr-Light.eot);
+  src: url(../fonts/HelveticaNeueCyr-Light.eot?#iefix) format("embedded-opentype"),
+  url(../fonts/HelveticaNeueCyr-Light.woff2) format("woff2"),
+  url(../fonts/HelveticaNeueCyr-Light.woff) format("woff"),
+  url(../fonts/HelveticaNeueCyr-Light.ttf) format("truetype"),
+  url(../fonts/HelveticaNeueCyr-Light.svg) format("svg");
+}
+
+@font-face {
+  font-family: 'HelveticaNeueCyr-Medium';
+  src: url(../fonts/HelveticaNeueCyr-Medium.eot);
+  src: url(../fonts/HelveticaNeueCyr-Medium.eot?#iefix) format("embedded-opentype"),
+  url(../fonts/HelveticaNeueCyr-Medium.woff2) format("woff2"),
+  url(../fonts/HelveticaNeueCyr-Medium.woff) format("woff"),
+  url(../fonts/HelveticaNeueCyr-Medium.ttf) format("truetype"),
+  url(../fonts/HelveticaNeueCyr-Medium.svg) format("svg");
+}
+
+@font-face {
+  font-family: 'HelveticaNeue';
+  src: url(../fonts/HelveticaNeue.eot);
+  src: url(../fonts/HelveticaNeue.eot?#iefix) format("embedded-opentype"),
+  url(../fonts/HelveticaNeue.woff2) format("woff2"),
+  url(../fonts/HelveticaNeue.woff) format("woff"),
+  url(../fonts/HelveticaNeue.ttf) format("truetype"),
+  url(../fonts/HelveticaNeue.svg) format("svg");
+}
+
+@font-face {
+  font-family: 'AGaramondProItalic';
+  src: url('../fonts/AGaramondPro-Italic.eot');
+  src: url('../fonts/AGaramondPro-Italic.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/AGaramondPro-Italic.woff2') format('woff2'),
+  url('../fonts/AGaramondPro-Italic.woff') format('woff'),
+  url('../fonts/AGaramondPro-Italic.ttf') format('truetype'),
+  url('../fonts/AGaramondPro-Italic.svg#futura_newdemi') format('svg');
+}
+
+@font-face {
+  font-family: 'AGaramondPro';
+  src: url('../fonts/Adobe-Garamond-Pro_2012.eot');
+  src: url('../fonts/Adobe-Garamond-Pro_2012.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/Adobe-Garamond-Pro_2012.woff2') format('woff2'),
+  url('../fonts/Adobe-Garamond-Pro_2012.woff') format('woff'),
+  url('../fonts/Adobe-Garamond-Pro_2012.ttf') format('truetype'),
+  url('../fonts/Adobe-Garamond-Pro_2012.svg#futura_newdemi') format('svg');
+}
+
+@font-face {
+  font-family: 'MontserratBold';
+  src: url('../fonts/Montserrat-Bold.eot');
+  src: url('../fonts/Montserrat-Bold.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/Montserrat-Bold.woff2') format('woff2'),
+  url('../fonts/Montserrat-Bold.woff') format('woff'),
+  url('../fonts/Montserrat-Bold.ttf') format('truetype'),
+  url('../fonts/Montserrat-Bold.svg#futura_newdemi') format('svg');
+}
+
+@font-face {
+  font-family: 'MontserratHairline';
+  src: url('../fonts/Montserrat-Hairline.eot');
+  src: url('../fonts/Montserrat-Hairline.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/Montserrat-Hairline.woff2') format('woff2'),
+  url('../fonts/Montserrat-Hairline.woff') format('woff'),
+  url('../fonts/Montserrat-Hairline.ttf') format('truetype'),
+  url('../fonts/Montserrat-Hairline.svg#futura_newdemi') format('svg');
+}
+
+@font-face {
+  font-family: 'MontserratRegular';
+  src: url('../fonts/Montserrat-Regular.eot');
+  src: url('../fonts/Montserrat-Regular.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/Montserrat-Regular.woff2') format('woff2'),
+  url('../fonts/Montserrat-Regular.woff') format('woff'),
+  url('../fonts/Montserrat-Regular.ttf') format('truetype'),
+  url('../fonts/Montserrat-Regular.svg#futura_newdemi') format('svg');
+}
+
+@font-face {
+  font-family: 'MontserratLight';
+  src: url('../fonts/Montserrat-Light.eot');
+  src: url('../fonts/Montserrat-Light.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/Montserrat-Light.woff2') format('woff2'),
+  url('../fonts/Montserrat-Light.woff') format('woff'),
+  url('../fonts/Montserrat-Light.ttf') format('truetype'),
+  url('../fonts/Montserrat-Light.svg#futura_newdemi') format('svg');
+}
+
+$AGaramondPro: 'AGaramondPro', sans-serif;
+$AGaramondProItalic: 'AGaramondProItalic', sans-serif;
+$MontserratBold: 'MontserratBold', sans-serif;
+$MontserratRegular: 'MontserratRegular', sans-serif;
+$MontserratLight: 'MontserratLight', sans-serif;
+$MontserratHairline: 'MontserratHairline', sans-serif;
+$HelveticaNeueCyrBold: 'HelveticaNeueCyr-Bold', sans-serif;
+$HelveticaNeueCyrThin: 'HelveticaNeueCyr-Thin', sans-serif;
+$HelveticaNeueCyrLight: 'HelveticaNeueCyr-Light', sans-serif;
+$HelveticaNeueCyrMedium: 'HelveticaNeueCyr-Medium', sans-serif;
+$HelveticaNeue: 'HelveticaNeue', sans-serif;
+
+.land_page_4 {
+  body {
+    font-family: $HelveticaNeue;
+  }
+
+  .page-header {
+    .globalwidth {
+      max-width: 1300px;
+    }
+  }
+
+  .wide_block {
+    max-width: 1260px;
+  }
+
+  .navbar-anon > li {
+    padding-left: 42px;
+  }
+
+  .nav > li {
+    position: relative;
+
+    &.active {
+
+      &:before {
+        content: '';
+        position: absolute;
+        border-radius: 100%;
+        width: 8px;
+        height: 8px;
+        background: #ff4f35;
+        top: 50%;
+        margin-top: -4px;
+        left: 23px;
+        transition: .2s;
+        -webkit-animation: zoom 1.5s infinite;
+        animation: zoom 1.5s infinite;
+      }
+    }
+
+    > a {
+      color: #2a2a2a;
+      opacity: 1;
+      font-family: $MontserratRegular;
+      //letter-spacing: -.5px;
+    }
+
+    .menu_link {
+      @include transition_all(color .3s, background .3s);
+
+      &:hover {
+        color: #ff4f35;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .gl_table_cell {
+    height: 100vh;
+  }
+
+  .login_btn {
+    @include transition_all(color .3s, background .3s);
+    background: none;
+    border: 1px solid #2a2a2a;
+    border-radius: 22px;
+    padding: 10px 18px;
+
+    &:hover {
+      background: #303030;
+      color: #fff;
+    }
+  }
+
+  .page-footer {
+    padding-top: 52px;
+  }
+
+  .footer_logo {
+    max-width: 200px;
+  }
+
+  .graph-unit-legend {
+    .legend_val {
+      font-family: $HelveticaNeueCyrThin;
+    }
+  }
+
+  .start_trial_btn,
+  .pricing_btn {
+    font-family: $MontserratRegular;
+  }
+
+  .g_tip_val {
+    font-family: $MontserratRegular;
+  }
+
+  .g_tip_date {
+    font-family: $MontserratLight;
+  }
+
+  .graph_tip.g_tip_orange {
+
+    .g_tip_val {
+      color: #3e3e3e;
+      font-size: 24px;
+    }
+
+    .g_tip_date {
+      color: #505050;
+      font-size: 18px;
+    }
+  }
+
+}
+
+.page-footer {
+  &.footer_v2 {
+    padding-top: 52px;
+    z-index: 100;
+    background: #242424;
+
+    .footer_logo {
+      max-width: 200px;
+    }
+  }
+}
+
+.land_v4 {
+  &.dashboard-title-row {
+    margin-top: 65px;
+  }
+
+  h1 {
+    color: #000;
+    font: 54px/1.05 $AGaramondPro;
+    margin-bottom: 75px;
+  }
+
+  h2 {
+    color: #000;
+    font: 44px/1.12 $AGaramondPro;
+    max-width: 740px;
+    margin: 0 auto 90px;
+
+    &.fz_60 {
+      font-size: 60px;
+    }
+  }
+
+  h3 {
+    color: #000;
+    font: 60px/1.1 $AGaramondPro;
+  }
+
+  .start_trial_btn {
+    font: 16px/1 $MontserratRegular;
+    padding: 20px 43px;
+    border-radius: 30px;
+    letter-spacing: 1.5px;
+  }
+
+  i {
+    font-family: $AGaramondProItalic;
+  }
+
+  p {
+    color: #3d3d3d;
+    margin-top: 25px;
+    font: 12px/1 $MontserratRegular;
+  }
+}
+
+.customers_orders {
+  margin: 0 auto;
+  max-width: 700px;
+
+  h3 {
+    font: 44px/1.15 $AGaramondPro;
+    color: #000;
+  }
+}
+
+.section_border {
+  position: absolute;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+
+  .container-fluid {
+    position: relative;
+
+    &:before {
+      margin: 0 auto;
+      width: 100%;
+      height: 1px;
+      max-width: 100%;
+      background: #d8d8d8;
+    }
+  }
+
+}
+
+.relevant_list {
+
+  &.land_v3 {
+    text-align: center;
+    color: #1c1c1c;
+    margin-top: 75px;
+    margin-bottom: 110px;
+
+    .relevant_caption {
+      font-size: 13px;
+      margin-bottom: 20px;
+      color: #1c1c1c;
+      font-family: $HelveticaNeueCyrBold;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .relevant_metrics {
+      color: #1c1c1c;
+      font-size: 15px;
+
+      li {
+        margin-bottom: 6px;
+      }
+    }
+  }
+}
+
+.metrics_section {
+  background: rgb(255, 255, 255);
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(227, 232, 236, 1) 100%);
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(227, 232, 236, 1) 100%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(227, 232, 236, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e3e8ec', GradientType=0);
+
+}
+
+.inventory_section {
+  padding: 50px 0;
+}
+
+.analitycs_table {
+  text-align: center;
+
+  img {
+    display: inline-block;
+    vertical-align: top;
+    max-width: 100%;
+  }
+
+}
+
+.land_page_4 {
+
+  .price_block {
+    background: #fff;
+    max-width: 388px;
+    margin-top: -20px;
+  }
+
+  .price_b_caption {
+    text-align: center;
+    color: #000;
+    margin: 20px 0 20px;
+    font: 44px $AGaramondPro;
+  }
+
+  .price_b_val {
+    font-size: 70px;
+    line-height: 1;
+    padding-bottom: 8px;
+    padding-top: 35px;
+  }
+
+  .price_block_inner {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .pricing_btn {
+    font-size: 16px;
+    width: 100%;
+    padding: 20px;
+    letter-spacing: 1.8px;
+  }
+
+  .price_box {
+    @extend %clearfix;
+    padding: 55px 40px 70px;
+
+    p {
+      font: 70px/1 $MontserratBold;
+    }
+
+    span {
+      font-size: 16px;
+    }
+  }
+
+  .price_b_text {
+    padding-bottom: 20px;
+    font: 12px $MontserratRegular;
+    color: #3d3d3d;
+  }
+}
+
+.price_month_val {
+  float: left;
+  position: relative;
+  width: 50%;
+  color: #a6afb7;
+
+  &:before {
+    @include transform_rotate(18);
+    content: '';
+    position: absolute;
+    top: -35px;
+    bottom: -30px;
+    right: 17px;
+    width: 3px;
+    background: #e0e1e2;
+  }
+}
+
+.price_year_val {
+  float: right;
+  width: 50%;
+  text-align: right;
+  color: #2bba65;
+}
+
+.price_b_period {
+  font-size: 16px;
+}
+
+.price_lemon_box {
+  text-align: center;
+  position: relative;
+  width: 166px;
+  height: 185px;
+  margin: 0 auto;
+  color: #fff;
+  font-weight: bold;
+  background: url(../img/lemon.png) no-repeat 0 0;
+
+  &:after {
+    right: 100%;
+    margin-right: -1px;
+  }
+
+  &:before {
+    left: 100%;
+    margin-left: -1px;
+  }
+
+  &:after,
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: #fff;
+    width: 300px;
+  }
+}
+
+.land_footer-links {
+  float: left;
+  width: 50%;
+}
+
+.land_footer-links-right {
+  float: right;
+}
+
+.footer_link_w {
+  float: left;
+  padding-right: 60px;
+  font: 100 14px/1.2 $HelveticaNeueCyrThin;
+
+  a {
+    @include transition_all(color .3s);
+    color: #fff;
+    text-decoration: none;
+
+    &:hover {
+      color: #ff4f35;
+    }
+  }
+}
+
+.land_copyright {
+  color: rgba(255, 255, 255, .4);
+}
+
+.retina_only {
+  display: none !important;
+}
+
+@media(-webkit-min-device-pixel-ratio: 1.25),
+(min-resolution: 120dpi) {
+  .retina_only {
+    display: block !important;
+
+    + .no_retina {
+      display: none !important;
+    }
+  }
+
+  .metrics_map {
+    background-image: url(../img/Cards@2x.png);
+    background-size: 1661px;
+  }
+}
+
+/* 1.3 dpr */
+@media(-webkit-min-device-pixel-ratio: 1.3),
+(min-resolution: 124.8dpi) {
+  .retina_only {
+    display: block !important;
+
+    + .no_retina {
+      display: none !important;
+    }
+  }
+
+  .metrics_map {
+    background-image: url(../img/Cards@2x.png);
+    background-size: 1661px;
+  }
+}
+
+/* 1.5 dpr */
+@media(-webkit-min-device-pixel-ratio: 1.5),
+(min-resolution: 144dpi) {
+  .retina_only {
+    display: block !important;
+
+    + .no_retina {
+      display: none !important;
+    }
+  }
+
+  .metrics_map {
+    background-image: url(../img/Cards@2x.png);
+    background-size: 1661px;
+  }
+}
+

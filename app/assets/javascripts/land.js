@@ -579,8 +579,8 @@ $(window).resize(function () {
 
     init_charts();
 
-    s = skrollr.init({
-        //forceHeight: false
-    });
+    // s = skrollr.init({
+    //     //forceHeight: false
+    // });
 
 });

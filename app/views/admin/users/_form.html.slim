@@ -1,15 +1,15 @@
 .clearfix
-  h4 #{@user.persisted? ? t('shared.edit') : t('shared.create')} пользователя
+  h4 #{@user.persisted? ? t('shared.edit') : t('shared.create')} user
 
 section class="panel pos-rlt clearfix"
-  header.panel-heading Информация
+  header.panel-heading Information
   .panel-body.clearfix
     = simple_form_for [:admin, @user], wrapper: :horizontal_form, html: { class: 'form-horizontal' } do |f|
       = f.input :email
       - if @user.new_record?
         = f.input :password
       = f.input :role, collection: User::ROLES.map { |role| [t("user.role.#{role}"), role] }, include_blank: false
-      = f.input :name
+      /= f.input :name
       = f.input :avatar, hint: (image_tag @user.avatar.medium if @user.avatar?), wrapper: :horizontal_file_input
       - if @user.persisted? && @user.avatar?
         .form-group
@@ -28,7 +28,7 @@ section class="panel pos-rlt clearfix"
   - if @user.persisted?
     .col-lg-6
       section class="panel pos-rlt clearfix"
-        header.panel-heading Смена пароля
+        header.panel-heading Change password
         .panel-body.clearfix
           = simple_form_for [:admin, @user], wrapper: :horizontal_form, html: { class: 'form-horizontal' } do |f|
             = f.input :password

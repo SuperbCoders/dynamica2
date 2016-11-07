@@ -13,14 +13,19 @@
 
     %nav.collapse.navbar-collapse.bs-navbar-collapse
       %ul.nav.navbar-nav
-        %li(ui-sref-active = "active")
-          %a{'ui-sref' => "projects.list"}= t('layouts.application.projects')
 
-        %li(ui-sref-active = "active")
+        %li(ui-sref-active = "active" ng-show="user.projects.length <= 1")
+          %a{'ui-sref' => "projects.list"}= t('layouts.application.my_store')
+
+        %li(ui-sref-active = "active" ng-show="user.projects.length > 1")
+          %a{'ui-sref' => "projects.list"}= t('layouts.application.my_stores')
+
+
+        -#%li(ui-sref-active = "active")
           %a{'href' => "#"}= t('layouts.application.team')
 
         %li(ui-sref-active = 'active' ng-show="project")
-          %a(ui-sref = "projects.settings({slug: project.slug})")= t('layouts.application.project_settings')
+          %a(ui-sref = "projects.settings({slug: project.slug})")= t('layouts.application.settings')
 
       %ul.nav.navbar-right.hidden-xs{id: 'user_dropdown'}
         %li

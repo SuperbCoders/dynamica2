@@ -3,32 +3,22 @@ section#content
     .clearfix
       h4
         i.icon-bar-chart
-        |  Проекты
+        |  Stores
     .row
       section.panel
         .panel-body
-          | Найдено <b>#{@projects.total_count}</b> #{Russian.p(@projects.total_count, 'проект', 'проекта', 'проектов')}
+          | Find <b>#{@projects.total_count}</b> stores
         .table-responsive
           table.table.table-striped.b-t.text-small
             thead
               tr
-                th Название
-                th Пользователь
-                th Прогнозы
-                th Дата создания
-                th
+                th Name
+                th User
             tbody
               - @projects.each do |project|
                 tr
                   td= link_to project.name, admin_project_path(project)
-                  td= link_to project.user.display_name, admin_users_path(project.user)
-                  td= project.forecasts_count
-                  td=l project.created_at, format: :long
-                  td
-                    .btn-group
-                      a.dropdown-toggle data-toggle="dropdown" href="#"
-                        i.icon-pencil
-                      ul.dropdown-menu.pull-right
+                  td= link_to(project.user.email, admin_users_path(project.user)) if !project.user.nil?
         footer.panel-footer
           .text-right.text-center-sm
             = paginate @projects, theme: 'twitter-bootstrap-3'

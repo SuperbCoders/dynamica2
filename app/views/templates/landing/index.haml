@@ -1,6 +1,9 @@
 / page 1
 .page.full_h_page
-  %header.page-header.navbar.navbar-default{"data--1" => "padding: 50px 0 20px; box-shadow: 0 0 0 rgba(0, 0, 0, 0); background-color: rgba(255,255,255,1);", "data-400" => "padding: 10px 0 10px; box-shadow: 0 0 1px rgba(0, 0, 0, .2); background-color: rgba(255,255,255,.98);", "data-50" => "box-shadow: 0 0 0 rgba(0, 0, 0, 0);"}
+  %header.page-header.navbar.navbar-default{ "data--1" => "padding: 45px 0 20px; box-shadow: 0 0 0 rgba(0, 0, 0, 0); background-color: rgba(255,255,255,1);",
+    "data-400" => "padding: 10px 0 10px; box-shadow: 0 0 1px rgba(0, 0, 0, .2); background-color: rgba(255,255,255,.98);",
+    "data-50" => "box-shadow: 0 0 0 rgba(0, 0, 0, 0);",
+    "style" => "padding: 45px 0 20px; box-shadow: 0 0 0 rgba(0, 0, 0, 0); background-color: rgba(255,255,255,1);"}
     .container-fluid.globalwidth
       .navbar-header
         %button.navbar-toggle.collapsed{"data-target" => ".bs-navbar-collapse", "data-toggle" => "collapse", :type => "button"}
@@ -8,7 +11,7 @@
           %span.icon-bar
           %span.icon-bar
         .navbar-project-switch
-          %a.navbar-brand(href = "")
+          %a.navbar-brand(href = "#")
             %img{:src => "img/logo.svg"}/
       %nav.collapse.navbar-collapse.bs-navbar-collapse
         %ul.nav.navbar-right.hidden-xs.navbar-anon
@@ -23,14 +26,18 @@
       .gl_table_cell
         %section.land_hero
           .container-fluid.globalwidth
-            .row.dashboard-title-row.land_v3
+            .row.dashboard-title-row.land_v4
               .col-sm-12
                 %h1.text-center
                   Carefully made analytics
                   %br/
-                  for your Shopify store
+                  for your
+                  %i Shopify
+                  store
                 .text-center
-                  %a.btn.btn-lg.btn-danger.start_trial_btn(href="" ng-click="vm.modal('welcome_auth_shops','show')")= t('landing.start_trial')
+                  %a.btn.btn-lg.btn-danger.start_trial_btn(href="" ng-click="vm.modal('welcome_auth_shops','show')") GET STARTED
+
+                %p.text-center Start a 30-day free trial. No credit card required.
     .hero_graph_block.heroGraph
       .graph_3.areaChart_2.d3graph.hide_x_axis{:style => "opacity: .2;"}
       .graph_3.areaChart_2.d3graph.hide_x_axis{:style => "opacity: .4;"}
@@ -44,104 +51,150 @@
 / page 2
 .page
   .page_inner.major_data_section_2
-    .gl_table
-      .gl_table_cell
-        %section
-          .container-fluid.globalwidth
-            .row.dashboard-title-row.land_v3
-              .col-sm-12
-                %h2.text-center{:style => "margin-top: 30px;"}
-                  All major data of your  store
-                  %br/
-                  in a single graph
-                .graph-unit-holder
-                  .graph-unit
-                    .graph-unit-large
-                      -#.graph-filters.graph-filter-v1
-                        .btn-group{:role => "group"}
-                          %input#graph_filter_1{:checked => "checked", :hidden => "", :name => "graph_filter", :type => "radio"}/
-                          %label.btn.btn-default.first{:for => "graph_filter_1"} Day
-                          %input#graph_filter_2{:hidden => "", :name => "graph_filter", :type => "radio"}/
-                          %label.btn.btn-default{:for => "graph_filter_2"} Week
-                          %input#graph_filter_3{:hidden => "", :name => "graph_filter", :type => "radio"}/
-                          %label.btn.btn-default.last{:for => "graph_filter_3"} Month
-                      .graph-block
-                        .graph_3.areaChartFamily_1.d3graph.hide_x_axis
-                          #tooltip.graph-tooltip-holder.hidden_
-                            #tooltip_dot.tooltip-dot
-                            #tooltip_content.graph-tooltip
-/ page 3
+    %section
+      .container-fluid.globalwidth
+        .row.dashboard-title-row.land_v4
+          .col-sm-12
+            %h2.text-center{ "data-100p-top"=>'transform: translate(0%,200%); opacity: 0;',
+              "data-70p-top"=>'transform: translate(0%,0%); opacity: 1;',
+              "data-10p-top"=>'transform: translate(0%,0%); opacity: 1;',
+              "data-0-top"=>'transform: translate(0%,-100%); opacity: 0;'}
+              Dynamica gathers raw data from your store. Then we process this data to calculate metrics and create charts. The setup is easy and takes 1 minute, then everything works by itself to provide you up to date information.
+    %section
+      .container-fluid.globalwidth
+        .row.dashboard-title-row.land_v4
+          .col-sm-12
+            %h3.text-center{ "data-100p-top"=>'transform: translate(0%,200%); opacity: 0;',
+              "data-70p-top"=>'transform: translate(0%,0%); opacity: 1;',
+              "data-10p-top"=>'transform: translate(0%,0%); opacity: 1;',
+              "data-0-top"=>'transform: translate(0%,-100%); opacity: 0;'}
+              Dynamica is a pretty and simple tool.
+
+/ page 4
 .page
   .page_inner.major_data_section_2
     .gl_table
       .gl_table_cell
         %section
-          .container-fluid.wide_block.land_v1
-            .row
-              .customers_orders
-                %h3.text-center You will know your customers and how often they making orders. Whether it’s new or returned users. Don’t forget to check out average sales
-    .section_border
-      .container-fluid.wide_block
-/ page 4
-.page
-  .page_inner
-    .gl_table
-      .gl_table_cell
-        %section.metrics_section
-          .container-fluid.narrow_block{:style => "position: relative; z-index: 10;"}
-            .row.dashboard-title-row.land_v3
+          .container-fluid.globalwidth
+            .row.dashboard-title-row.land_v4
               .col-sm-12
-                %h2.text-center{"data-0-top" => "transform: translate(0%,-100%); opacity: 0;", "data-100p-top" => "transform: translate(0%,200%); opacity: 0;", "data-10p-top" => "transform: translate(0%,0%); opacity: 1;", "data-70p-top" => "transform: translate(0%,0%); opacity: 1;"} Most relevant metrics
-                %ul.relevant_list.land_v3
-                  %li
-                    .relevant_block
-                      .relevant_caption Finance
-                      %ul.relevant_metrics
-                        %li Monthly Recurring
-                        %li Net Revenue
-                        %li Average Revenue Per User
-                        %li Failed Charges
-                        %li Lifetime Value
-                  %li
-                    .relevant_block
-                      .relevant_caption Customers
-                      %ul.relevant_metrics
-                        %li Monthly Recurring
-                        %li Net Revenue
-                        %li Average Revenue Per User
-                        %li Failed Charges
-                        %li Lifetime Value
-                  %li
-                    .relevant_block
-                      .relevant_caption Products
-                      %ul.relevant_metrics
-                        %li Monthly Recurring
-                        %li Net Revenue
-                        %li Average Revenue Per User
-                        %li Failed Charges
-                        %li Lifetime Value
-          .container-fluid
-            .metrics_map
-              / img(src='img/metrics_map.png')
-              .metric_unit{"data-100p-top" => "box-shadow: 0px 2px 2px rgba(0, 0, 0, .15);", "data-50p-top" => "box-shadow: 60px 60px 90px rgba(0, 0, 0, .45);", "data-70p-top" => "box-shadow: 0px 2px 2px rgba(0, 0, 0, .15);"}
-                %img.retina_only{:height => "277", :src => "img/metric_unit@2x.png", :width => "300"}/
-                %img.no_retina{:height => "277", :src => "img/metric_unit.png", :width => "300"}/
-/ page 4
+                %h2.text-center{ "style"=>'margin-top: 30px;',
+                  "data-100p-top"=>'transform: translate(0%,200%); opacity: 0;',
+                  "data-70p-top"=>'transform: translate(0%,0%); opacity: 1;',
+                  "data-10p-top"=>'transform: translate(0%,0%); opacity: 1;',
+                  "data-0-top"=>'transform: translate(0%,-100%); opacity: 0;'}
+                  There is a chart with main sales metrics.  You can see how metrics correspond with  each other and how they change with time.
+
+                .graph-unit-holder
+                  .graph-unit
+                    .graph-unit-large
+                      //-h5.graph-name Current status of your primary data
+                      .graph-filters.graph-filter-v1
+                        %div{"class"=>"btn-group", "role"=>"group"}
+                          %input#graph_filter_1(type='radio' name='graph_filter' checked hidden)
+                          %label{ "for"=>'graph_filter_1' ,"class"=>"btn btn-default first"} Day
+                          %input#graph_filter_2(type='radio' name='graph_filter' checked hidden)
+                          %label{ "for"=>'graph_filter_2', "class"=>"btn btn-default"} Week
+                          %input#graph_filter_3(type='radio' name='graph_filter' checked hidden)
+                          %label{ "for"=>'graph_filter_3', "class"=>"btn btn-default last"} Month
+
+                      .graph-block
+                        .graph_3.areaChartFamily_1.d3graph.hide_x_axis
+                          #tooltip.graph-tooltip-holder.hidden_
+                            #tooltip_dot.tooltip-dot
+                            #tooltip_content.graph-tooltip
+
+
+// page 5
 .page
-  .page_inner
-    .gl_table
-      .gl_table_cell
-        %section
-          .container-fluid.narrow_block{:style => "position: relative; z-index: 10;"}
-            .review_block
-              %p And provides us with invaluable information that allows us to improve our business in ways that weren't possible for us before. And provides us with invaluable.
-              .review_author
-                .review_photo
-                  %img{:src => "img/review_author.png"}/
-                .review_author_name Konstantin Osintsev
-                .review_author_post Founder
-/ page 8
-.page(id = 'price_page')
+  .page_inner.major_data_section_2
+    %section
+      .container-fluid.wide_block.land_v1
+        .row
+          .customers_orders
+            %h3.text-center{ "data-100p-top"=>'transform: translate(0%,200%); opacity: 0;',
+              "data-70p-top"=>'transform: translate(0%,0%); opacity: 1;',
+              "data-10p-top"=>'transform: translate(0%,0%); opacity: 1;',
+              "data-0-top"=>'transform: translate(0%,-100%); opacity: 0;'}
+              And you have special ecommerce metrics on your dashboard. Each of them has an individual chart.
+
+    %section.metrics_section
+      .container-fluid.narrow_block(style='position: relative; z-index: 10;')
+        .row.dashboard-title-row.land_v3
+          .col-sm-12
+            %h2.text-center{ "data-100p-top"=>'transform: translate(0%,200%); opacity: 0;',
+              "data-70p-top"=>'transform: translate(0%,0%); opacity: 1;',
+              "data-10p-top"=>'transform: translate(0%,0%); opacity: 1;',
+              "data-0-top"=>'transform: translate(0%,-100%); opacity: 0;'} Most relevant metrics
+
+            %ul.relevant_list.land_v3
+              %li
+                .relevant_block
+                  .relevant_caption Finance
+                  %ul.relevant_metrics
+                    %li Monthly Recurring
+                    %li Net Revenue
+                    %li Average Revenue Per User
+                    %li Failed Charges
+                    %li Lifetime Value
+              %li
+                .relevant_block
+                  .relevant_caption Customers
+                  %ul.relevant_metrics
+                    %li Monthly Recurring
+                    %li Net Revenue
+                    %li Average Revenue Per User
+                    %li Failed Charges
+                    %li Lifetime Value
+              %li
+                .relevant_block
+                  .relevant_caption Products
+                  %ul.relevant_metrics
+                    %li Monthly Recurring
+                    %li Net Revenue
+                    %li Average Revenue Per User
+                    %li Failed Charges
+                    %li Lifetime Value
+      .container-fluid
+        .metrics_map
+          / img(src='img/metrics_map.png')
+          .metric_unit{ "data-100p-top" => "box-shadow: 0px 2px 2px rgba(0, 0, 0, .15);",
+            "data-50p-top" => "box-shadow: 60px 60px 90px rgba(0, 0, 0, .45);",
+            "data-70p-top" => "box-shadow: 0px 2px 2px rgba(0, 0, 0, .15);"}
+            %img.retina_only{:height => "277", :src => "img/metric_unit@2x.png", :width => "300"}/
+            %img.no_retina{:height => "277", :src => "img/metric_unit.png", :width => "300"}/
+// page 7
+
+.page
+  .page_inner.major_data_section_2
+    .inventory_section
+      %section
+        .container-fluid.wide_block.land_v1
+          .row
+            .customers_orders
+              %h3.text-center Also we do inventory analysis simple. There is a table with all your goods and their sales in units and dollars. It's easy to understand what is best to sell and what is not.
+
+      %section
+        .container-fluid.wide_block
+          .analitycs_table
+            %img.retina_only{"src"=>'img/table@2x.jpg', "width"=>'895', "height"=>'585',
+            "data--35p-top"=>'box-shadow: 0 20px 40px rgba(60, 65, 98, .45);',
+            "data--20p-top"=>'box-shadow: 0px 0px 0px rgba(60, 65, 98, 0);',
+            "data--5p-top"=>'box-shadow: 0px 0px 0px rgba(60, 65, 98, 0);'}
+            %img.no_retina{"src"=>'img/table.png', "width"=>'895', "height"=>'585',
+             "data--35p-top"=>'box-shadow: 0 20px 40px rgba(60, 65, 98, .45);',
+            "data--20p-top"=>'box-shadow: 0px 0px 0px rgba(60, 65, 98, 0);',
+            "data--5p-top"=>'box-shadow: 0px 0px 0px rgba(60, 65, 98, 0);'}
+
+      %section
+        .container-fluid.wide_block.land_v1
+          .row
+            .customers_orders
+              %h3.text-center With Dynamica you get new insights and make better decisions.
+
+/ page 9
+.page
   .page_inner.price_section
     .gl_table
       .gl_table_cell
@@ -149,23 +202,21 @@
         .container-fluid.wide_block
           .price_block
             .price_block_inner
-              .price_b_caption Start free trial
-            .price_lemon_box
-              .price_b_val 
-                = "$"+SubscriptionPrice.monthly.first.cost.to_i.to_s
-              .price_b_period
-                per month
-                %br/
-                = succeed "trial" do
-                  %span.color_red after
+              .price_b_caption Pricing
+            .price_box
+              .price_month_val
+                %p
+                  = "$"+SubscriptionPrice.monthly.first.cost.to_i.to_s
+                %span a month
+              .price_year_val
+                %p
+                  = " $"+SubscriptionPrice.yearly.first.cost.to_i.to_s
+                %span a year
             .price_block_inner
               .text-center
-                %a.btn.btn-lg.btn-danger.start_trial_btn(href="" ng-click="vm.modal('welcome_auth_shops','show')")= t('landing.start_trial')
+                %a.btn.btn-lg.btn-danger.pricing_btn(href="" ng-click="vm.modal('welcome_auth_shops','show')") GET STARTED
               .price_b_text
-                %p
-                  For annual payment
-                  %nobr
-                    = " $"+SubscriptionPrice.yearly.first.cost.to_i.to_s
+                %p Start a 30-day free trial. No credit card required.
     .page-footer
       .container-fluid.wide_block
         .footer_logo
@@ -178,9 +229,9 @@
             %a{:href => "mailto:support@dynamica.cc"} support@dynamica.cc
         .land_footer-links-right
           .footer_link_w
-            %a{:href => "#"} Privacy Policy
+            %a{:href => "#"} Terms of Service
           .footer_link_w
-            .land_copyright Copyright © 2016
+            %a{:href => "#"} Privacy Policy
 
 
 / Popups

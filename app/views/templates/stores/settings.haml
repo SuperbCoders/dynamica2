@@ -1,5 +1,5 @@
 %section.subscribe_case.case
-  .case-capt
+  -#.case-capt
     %ul.nav.nav-pills
       %li
         %a(href = '' ng-click = "back()") Back
@@ -30,14 +30,14 @@
         -#      %input#ga_id.form-control(placeholder = 'ID' ng-model = 'vm.project.google_site_id')
 
         .form-group
-          %label.control-label.col-md-3.col-sm-3= t('projects.project.settings.data_updating')
+          %label.control-label.col-md-3.col-sm-3= t('projects.project.settings.data_import')
           .col-md-7.col-sm-9
             .control-box
               %b Last update {{vm.project.last_update}} hours ago
-              %a.btn.data_update_btn.btn-danger-w(href = '' ng-click = 'vm.update_data()')= t('projects.project.settings.update_data_imidiatelly')
+              %a.btn.data_update_btn.btn-danger-w(href = '' ng-click = 'vm.update_data()')= t('projects.project.settings.import_data_right_now')
 
         .form-group
           .col-md-offset-3.col-md-7.col-sm-offset-3.col-sm-9
             %button.btn.btn-lg.btn-danger(ng-click = 'vm.save()')= t('projects.project.settings.save')
             .pull-right
-              %a.project_rm_link(href = '' ng-click = 'vm.destroy(vm.project)')= t('projects.project.settings.delete_this_project')
+              %a.project_rm_link(href = '' ng-click = 'vm.destroy(vm.project)')= t('projects.project.settings.delete_this_store')

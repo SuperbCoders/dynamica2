@@ -8,7 +8,11 @@ class LandingController
       return
 
     @window.init_charts()
-    skrollr.init()
+    setTimeout (->
+      skrollr.init()
+      return
+    ), 1000
+#    skrollr.init()
     @window.init_page()
 
   modal: (name, action) ->

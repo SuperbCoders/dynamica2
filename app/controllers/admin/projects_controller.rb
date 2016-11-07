@@ -1,7 +1,7 @@
 class Admin::ProjectsController < Admin::ApplicationController
   # GET /admin/projects
   def index
-    @projects = Project.select('"projects".*, COUNT("forecasts"."id") AS forecasts_count').joins(:forecasts).group('"projects"."id"')
+    @projects = Project.select('"projects".*, COUNT("forecasts"."id") AS forecasts_count').joins('LEFT JOIN forecasts on forecasts.project_id=projects.id').group('"projects"."id"')
     @projects = @projects.where(demo: false)
     @projects = @projects.where(demo: false)
     @projects = @projects.includes(:user)

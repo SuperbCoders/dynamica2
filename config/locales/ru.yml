@@ -59,7 +59,7 @@ ru:
 
   projects:
     list: 
-      add_new: Добавить
+#      add_new: Добавить
       add_new_project: Добавить новый проект
     products_revenue:
       total: Всего

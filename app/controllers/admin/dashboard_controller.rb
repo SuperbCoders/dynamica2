@@ -4,5 +4,7 @@ class Admin::DashboardController < Admin::ApplicationController
     @users_count = User.count
     @projects_count = Project.where(demo: false).count
     @forecasts_count = Forecast.joins(:project).where(projects: { demo: false }).count
+
+    @users = User.all
   end
 end

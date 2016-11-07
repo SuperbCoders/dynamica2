@@ -33,6 +33,12 @@ svg:not(:root) {
   }
 }
 
+@mixin transform_rotate($deg : 0) {
+  -webkit-transform: rotate($deg+deg);
+  -ms-transform: rotate($deg+deg);
+  transform: rotate($deg+deg);
+}
+
 .dashboard_page {
   .globalwidth {
     max-width: 1280px;
@@ -50,7 +56,7 @@ svg:not(:root) {
 }
 
 .dashboard-body {
-  padding: 40px 0;
+  padding: 18px 0;
 }
 
 .dashboard {
@@ -761,7 +767,7 @@ svg:not(:root) {
     left: 0;
     right: 0;
     border-radius: 100px;
-    border: 10px solid #5284FF;
+    border: 10px solid #000;
   }
 }
 
