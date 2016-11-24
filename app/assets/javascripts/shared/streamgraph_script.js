@@ -1354,7 +1354,7 @@ function getSum(arr) {
     return ret;
 }
 
-function draw_stream_graph(el, data_files, needMath) {
+function draw_stream_graph(el, data_files, needMath, period, day_diff) {
 
     el.find('svg').remove();
 
@@ -1419,10 +1419,38 @@ function draw_stream_graph(el, data_files, needMath) {
     var z = d3.scale.ordinal()
         .range(colorrange);
 
+
+    var DATE_FORMAT;
+    var TICKS;
+
+    switch (period) {
+        case 'day':
+        case 'week':
+            DATE_FORMAT = '%b %d';
+            TICKS = 10;
+            if ((period === 'day') && (day_diff>=100) && (day_diff <=200)) {
+                TICKS = 15;
+            }
+            if ((period === 'day') && (day_diff>365)) {
+                DATE_FORMAT = '%b %d %y';
+            }
+            if ((period === 'day') && (day_diff>15)) {
+                DATE_FORMAT = '%b %d %y';
+                TICKS = 12;
+            }
+            break;
+
+        case 'month':
+            DATE_FORMAT = '%b %d %y';
+            TICKS = 10;
+            break;
+    }
+            
     var xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom")
-        .ticks(d3.time.days);
+        .ticks(TICKS).tickFormat(d3.time.format(DATE_FORMAT)).orient('bottom')
+        // .ticks(d3.time.days)
+    ;
 
     var yAxis = d3.svg.axis()
         .scale(y);
@@ -1491,9 +1519,19 @@ function draw_stream_graph(el, data_files, needMath) {
         for (var j = 0; j < datearray.length; j++) {
             var color = colors[j], data = datearray[j];
 
+            var ddd = {};
+            ddd.key='';
+            ddd.value='';
+            if (mousedate > -1) {
+                ddd = data[mousedate]
+            } else {
+                if (data.length > 0) {
+                    ddd = data[0]
+                }
+            }
             var tooltip_item = $('<tr class="tooltip_row" />').attr('data-graph', 'stream_area_' + j)
-                .append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(data[mousedate].key))))
-                .append($('<td class="tooltip_val" />').append($('<b class="" />').text(data[mousedate].value)));
+                .append($('<td class="tooltip_name" />').append($('<div class="legend_name" />').css('color', color).append($('<span/>').text(ddd.key))))
+                .append($('<td class="tooltip_val" />').append($('<b class="" />').text(ddd.value)));
 
             tool_table.prepend(tooltip_item);
         }
@@ -1512,7 +1550,54 @@ function draw_stream_graph(el, data_files, needMath) {
         d.value = +d.value;
     });
 
+    sortByKey = function(key, a,b ,r){
+        r = r ? 1: -1;
+        if(a[key]>b[key]){
+            return -1 * r
+        }
+        if(a[key]<b[key]){
+            return 1 * r
+        }
+        return 0;
+    };
+
     var layers = stack(nest.entries(data));
+    // console.log('-------------------layers');
+    // console.log(layers);
+
+    // костыль для отображения пустого графика
+    layers.sort(function(a,b){
+        return sortByKey('key',a,b, true)
+    });
+
+    if (((layers[0].key = 'zero') && (layers[1].key = 'other'))
+    || ((layers[1].key = 'zero') && (layers[0].key = 'other')))
+    {
+        if (layers[0].key == 'zero'){
+            for(var i1=0; i1<layers[0].values.length; i1++){
+                layers[0].values[i1].y0 = 0.01
+            }
+        }
+        if (layers[1].key == 'zero'){
+            for(var i1=0; i1<layers[1].values.length; i1++){
+                layers[1].values[i1].y0 = 0.01
+            }
+        }
+
+        if (layers[0].key == 'other'){
+            for(var i1=0; i1<layers[0].values.length; i1++){
+                layers[0].values[i1].y0 = 0
+            }
+        }
+
+        if (layers[1].key == 'other'){
+            for(var i1=0; i1<layers[1].values.length; i1++){
+                layers[1].values[i1].y0 = 0
+            }
+        }
+    }
+    // console.log(layers);
+
 
     x.domain(d3.extent(data, function (d) {
         return d.date;
@@ -1609,6 +1694,10 @@ $(window).resize(function () {
 
 }).scroll(function () {
     scrollParent = $('.scrollParent');
+
+    if ($('.scrollParent').length == 0){
+        return
+    }
 
     if (scrollParent.offset().top - doc.scrollTop() + scrollBottomFixed.height() + scrollBottomFixed.css('marginTop').replace('px', '') * 1 <= wnd.height()) {
         scrollBottomFixed.addClass('table-footer-fixed').removeClass('table-footer-bottom');

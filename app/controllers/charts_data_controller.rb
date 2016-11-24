@@ -49,7 +49,7 @@ class ChartsDataController < ApplicationController
   def full_donut_chart_data
     @chart = params[:chart]
 
-    @result = @project.full_donut_chart_data(@chart, date_from, date_to)
+    @result = @project.full_donut_chart_data(@chart, date_from, date_to, params[:period])
 
     render json: @result
   end

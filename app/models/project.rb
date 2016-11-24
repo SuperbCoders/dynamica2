@@ -61,20 +61,71 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def get_all_day_in_period(date_from, date_to, period_value)
+    query = <<-EOS
+          SELECT *
+          FROM generate_series('#{date_from.to_s(:db)}'::timestamp,
+            '#{date_to.to_s(:db)}'::timestamp,
+            '1 #{period_value}'
+          ) AS series
+    EOS
+    ActiveRecord::Base.connection.execute(query).to_a
+  end
 
-  def full_donut_chart_data(chart, date_from, date_to)
+  def _get_period_and_step(period)
+    period_value = 'day'
+    step = 1.day
+    if period == 'week'
+      step = 1.week
+      period_value = 'week'
+    end
+    if period == 'month'
+      step = 1.month
+      period_value = 'month'
+    end
+
+    return period_value, step
+  end
+
+
+  def full_donut_chart_data(chart, date_from, date_to, period)
     result = {
         items: {},
         data: []
     }
 
+    period_value, step = _get_period_and_step(period)
+
     case chart
       when 'order_statuses'
-        project_order_statuses
-            .select("status, sum(count) as count, date_trunc('day', date) as date")
-            .where('date >= ? and date <= ?', date_from, date_to)
-            .group("status, date_trunc('day', date)")
-            .each do |order_status|
+        series = get_all_day_in_period(date_from, date_to, period_value)
+
+        order1 = project_order_statuses
+            .select("status, sum(count) as count, date_trunc('#{period_value}', date) as date")
+            .where('date between ? and ? ', date_from, date_to)
+            .group("status, date_trunc('#{period_value}', date)")
+        is_empty = false
+        if order1.to_a.size == 0
+          is_empty = true
+
+          result[:items][:zero] ||= "#ffffff"
+          result[:items][:other] ||= rand_color
+          (date_from.to_i..date_to.to_i).step(step) do |date|
+            temp1 = {}
+            temp1[:key] = :zero
+            temp1[:date] = Time.at(date).strftime("%m/%d/%y")
+            temp1[:value] = 0.99
+            result[:data] << temp1
+
+            temp = {}
+            temp[:key] = :other
+            temp[:date] = Time.at(date).strftime("%m/%d/%y")
+            temp[:value] = 0.01
+            result[:data] << temp
+          end
+        end
+
+        order1.each do |order_status|
           # Назначим цвет статусу
           result[:items][order_status.status] ||= rand_color
 
@@ -86,14 +137,39 @@ class Project < ActiveRecord::Base
           result[:data] << temp
         end
 
-        result[:data].each do |order_status|
-          # Пройдемся по результату и найдем данные за дату
-          result[:data].map {|r_data|
-            if r_data[:date] == order_status[:date]
-              data_field = r_data
-              order_status[data_field[:key]] = data_field[:value]
+        if !is_empty
+          result[:data].each do |order_status|
+            # Пройдемся по результату и найдем данные за дату
+            result[:data].map {|r_data|
+              if r_data[:date] == order_status[:date]
+                data_field = r_data
+                order_status[data_field[:key]] = data_field[:value]
+              end
+            }
+          end
+        end
+
+
+        if !is_empty
+          series.each do |serie|
+            search = false
+            order1.each do |order_status|
+              if Date.parse(serie["series"]).strftime("%m/%d/%y") == order_status.date.strftime("%m/%d/%y")
+                search = true
+                break
+              end
             end
-          }
+            if !search
+              result[:items].each do |item|
+                temp = {}
+                temp[:key] = item[0]
+                temp[:date] = Date.parse(serie["series"]).strftime("%m/%d/%y")
+                temp[:value] = 0
+                temp[item[0]] = 0
+                result[:data] << temp
+              end
+            end
+          end
         end
 
         d = []
@@ -113,8 +189,6 @@ class Project < ActiveRecord::Base
               d << temp
             end
 
-
-
           }
 
           # Отсортируем
@@ -129,13 +203,96 @@ class Project < ActiveRecord::Base
           #
           # data[:value] = (data[data[:key]] / @summ.to_f).round(2).to_s if data[data[:key]] > 0
         }
-        # raise '12'
-        result[:data] = result[:data] + d.uniq { |e| [e[:key], e[:date], e[:key]]}
+        if !is_empty
+          result[:data] = result[:data] + d.uniq { |e| [e[:key], e[:date], e[:key]]}
+        end
+
+      when 'new_and_repeat_customers_number'
+        return ratio(date_from, date_to, period)
 
 
       end
 
     result
+  end
+
+  def ratio(date_from, date_to, period)
+    result = {
+        items: {},
+        data: []
+    }
+    period_value, step = _get_period_and_step(period)
+    series = get_all_day_in_period(date_from, date_to, period_value)
+
+
+    order1 = project_characteristics
+      .select("sum(new_customers_number) as new_customers_number, sum(repeat_customers_number) as repeat_customers_number, date_trunc('#{period_value}', date) as date")
+      .where('date between ? and ? ', date_from, date_to)
+      .group("date_trunc('#{period_value}', date)")
+    is_empty= false
+    if order1.to_a.size == 0
+      is_empty = true
+
+      result[:items][:zero] ||= "#ffffff"
+      result[:items][:other] ||= rand_color
+      (date_from.to_i..date_to.to_i).step(step) do |date|
+        temp1 = {}
+        temp1[:key] = :zero
+        temp1[:date] = Time.at(date).strftime("%m/%d/%y")
+        temp1[:value] = 0.99
+        result[:data] << temp1
+
+        temp = {}
+        temp[:key] = :other
+        temp[:date] = Time.at(date).strftime("%m/%d/%y")
+        temp[:value] = 0.01
+        result[:data] << temp
+      end
+    end
+
+    result[:items][:new] ||= rand_color
+    result[:items][:repeat] ||= rand_color
+
+    order1.each do |order_status|
+      new_customer = {}
+      new_customer[:key] = :new
+      new_customer[:date] = order_status.date.strftime("%m/%d/%y")
+      new_customer[:value] = order_status.new_customers_number
+      new_customer[:new] = order_status.new_customers_number
+      result[:data] << new_customer
+
+      repeat_customer = {}
+      repeat_customer[:key] = :repeat
+      repeat_customer[:date] = order_status.date.strftime("%m/%d/%y")
+      repeat_customer[:value] = order_status.repeat_customers_number
+      repeat_customer[:repeat] = order_status.repeat_customers_number
+      result[:data] << repeat_customer
+    end
+
+    if !is_empty
+      series.each do |serie|
+        search = false
+        order1.each do |order_status|
+          if Date.parse(serie["series"]).strftime("%m/%d/%y") == order_status.date.strftime("%m/%d/%y")
+            search = true
+            break
+          end
+        end
+        if !search
+          result[:items].each do |item|
+            temp = {}
+            temp[:key] = item[0]
+            temp[:date] = Date.parse(serie["series"]).strftime("%m/%d/%y")
+            temp[:value] = 0
+            temp[item[0]] = 0
+            result[:data] << temp
+          end
+        end
+      end
+    end
+
+    return result
+
   end
 
   # Число позиций в продаже | Number of Products in Stock
@@ -212,7 +369,7 @@ class Project < ActiveRecord::Base
     if @r[:data][0][:value]== 0 and @r[:data][1][:value] == 0
       @r[:data] = []
     end
-    # raise '12'
+
     @r
   end
 

@@ -20,6 +20,16 @@
           .graph-value
             %span.val 42,489$
             %sup.graph-dynamica.dynamica_up +8%
+
+          .graph-filters.graph-filter-v_donut
+            .btn-group{:role => "group"}
+              %input#graph_filter_1{:checked => "", :hidden => "", :name => "graph_filter", :type => "radio", 'ng-model' => "vm.range.period", value: 'day'}
+              %label.btn.btn-default.first{:for => "graph_filter_1", :type => "button"}= t('projects.dashboard.period.day')
+              %input#graph_filter_2{:hidden => "", :name => "graph_filter", :type => "radio", 'ng-model' => "vm.range.period", value: 'week'}
+              %label.btn.btn-default{:for => "graph_filter_2", :type => "button"}= t('projects.dashboard.period.week')
+              %input#graph_filter_3{:hidden => "", :name => "graph_filter", :type => "radio", 'ng-model' => "vm.range.period", value: 'month'}
+              %label.btn.btn-default.last{:for => "graph_filter_3", :type => "button"}= t('projects.dashboard.period.month')
+
           .graph-unit-large-v3
             .graph-block
               .streamChartTotal.hide_y_axis.hide_x_axis.d3graph.graph_3

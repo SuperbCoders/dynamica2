@@ -674,6 +674,34 @@ svg:not(:root) {
   }
 }
 
+.graph-filter-v_donut {
+  display: inline-block;
+  float: right;
+
+  .btn-group {
+    border: 1px solid #000000;
+    border-radius: 6px;
+  }
+
+  .btn {
+    background: none;
+    color: #000000;
+    font-size: 15px;
+    border-width: 0;
+    border-radius: 4px !important;
+
+    &:hover {
+      color: #5d1419;
+    }
+  }
+
+  input[type='radio']:checked + .btn {
+    background: #000000;
+    color: #fff3d3;
+    cursor: default;
+  }
+}
+
 .graph-name {
   color: #636363;
   letter-spacing: -.25px;
@@ -701,6 +729,7 @@ svg:not(:root) {
 
 .graph-value {
   color: #1f1f1f;
+  display: inline-block;
 
   .val {
     font-size: 30px;

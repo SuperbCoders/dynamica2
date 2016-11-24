@@ -14,13 +14,18 @@ class DonutChartController
       chart: vm.chart
       from: @rootScope.$stateParams.from
       to: @rootScope.$stateParams.to
+      period: @rootScope.$stateParams.period
 
     vm.datepicker = $('.datePicker')
 
     if not vm.range.from or not vm.range.to
       @rootScope.$state.go('projects.list')
 
+    if not vm.range.period
+      vm.range.period = 'day'
+
     @scope.$watch('vm.date_range', (old_val) -> vm.set_date_range(old_val) )
+    @scope.$watch('vm.range.period', (old_val) -> vm.set_period(old_val) )
 
     @init_dashboard()
 
@@ -55,11 +60,13 @@ class DonutChartController
     return if not vm.project
 
     console.log vm.chart
+    $('.streamChartTotal').find('svg').remove()
 
     chart_url = "/charts_data/full_donut_chart_data"
     chart_params =
       from: vm.range.from
       to: vm.range.to
+      period: vm.range.period
       project_id: vm.project.id
       chart: vm.chart
 
@@ -231,23 +238,30 @@ class DonutChartController
             {"key": "RI", "value": "0.1", "date": "01/28/13"}
           ]
         }
-#        vm.draw_stream_graph($('.streamChartTotal'), race, false)
-#        vm.draw_stream_graph($('.streamChartTotal'), response, false)
 
-        console.log response.data[0]
-        console.log race.data[0]
+        response.data.sort (a, b) ->
+          sortByKey('key', a, b, true)
 
         response.data.sort (a, b) ->
           sortBy('date', a, b, true)
 
-        draw_stream_graph($('.streamChartTotal'), response, false);
-#        vm.draw_stream_graph($('.streamChartTotal'), response, false)
+        # console.log response.items
+        start_date = moment(vm.range.from)
+        end_date = moment(vm.range.to)
+
+        draw_stream_graph($('.streamChartTotal'), response, false, vm.range.period, end_date.diff(start_date, 'days'));
       )
 
   sortBy = (key, a, b, r) ->
     r = if r then 1 else -1
     return -1*r if moment(a[key], "MM/DD/YY").toDate() > moment(b[key], "MM/DD/YY").toDate()
     return 1*r if moment(a[key], "MM/DD/YY").toDate() < moment(b[key], "MM/DD/YY").toDate()
+    return 0
+
+  sortByKey = (key, a, b, r) ->
+    r = if r then 1 else -1
+    return -1*r if a[key] > b[key]
+    return 1*r if a[key] < b[key]
     return 0
 
   fit2Limits: (pckr, date, max) ->
@@ -259,7 +273,7 @@ class DonutChartController
       moment.min(end, date).startOf('day')._d
 
   draw_stream_graph: (el, data_files, needMath) ->
-
+#    debugger
     mouseMoveCatcher = (that) ->
       console.log 'mouseMoveCatcher'
       #console.log(this);
@@ -807,6 +821,13 @@ class DonutChartController
 
     vm.rootScope.set_date_range(vm.range, parseInt(range_type))
     vm.rootScope.set_datepicker_date(vm.datepicker, vm.range.raw_start, vm.range.raw_end)
+    vm.fetch()
+    return
+
+  set_period: (period) ->
+    vm = @
+    return if period not in ["day","week","month"]
+
     vm.fetch()
     return
 
