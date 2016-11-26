@@ -1570,8 +1570,8 @@ function draw_stream_graph(el, data_files, needMath, period, day_diff) {
         return sortByKey('key',a,b, true)
     });
 
-    if (((layers[0].key = 'zero') && (layers[1].key = 'other'))
-    || ((layers[1].key = 'zero') && (layers[0].key = 'other')))
+    if (((layers[0].key === 'zero') && (layers[1].key === 'other'))
+    || ((layers[1].key === 'zero') && (layers[0].key === 'other')))
     {
         if (layers[0].key == 'zero'){
             for(var i1=0; i1<layers[0].values.length; i1++){
