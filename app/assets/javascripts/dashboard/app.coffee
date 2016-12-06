@@ -112,7 +112,7 @@
       ]
 
   .state 'projects.donut_chart',
-    url: '/:slug/donut/:chart/:from/:to',
+    url: '/:slug/donut/:chart/:from/:to/:period',
     templateUrl: '/templates/stores/donut_chart_dashboard'
     controller: 'DonutChartController'
     controllerAs: 'vm'
