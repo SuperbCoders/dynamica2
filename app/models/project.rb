@@ -592,7 +592,7 @@ class Project < ActiveRecord::Base
   end
 
   def last_update
-    ((DateTime.now.to_f - self.updated_at.to_f)/360).to_i
+    ((DateTime.now.to_f - (self.data_updated_at || self.created_at).to_f)/3600).to_i
   end
 
   private

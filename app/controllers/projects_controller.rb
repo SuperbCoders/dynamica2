@@ -23,7 +23,7 @@ class ProjectsController < BaseController
   def update_data
     if @resource  
       @resource.fetch_data
-      result = @resource.update_attributes(updated_at: DateTime.now)
+      result = @resource.update_attributes(data_updated_at: DateTime.now)
     end
     send_json serialize_resource(@resource, resource_serializer), result
   end

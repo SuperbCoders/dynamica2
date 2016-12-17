@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160728174619) do
+ActiveRecord::Schema.define(version: 20161217123943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -237,14 +237,15 @@ ActiveRecord::Schema.define(version: 20160728174619) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
-    t.boolean  "api_used",                 default: false
-    t.boolean  "demo",                     default: false
+    t.boolean  "api_used",                  default: false
+    t.boolean  "demo",                      default: false
     t.string   "guest_token"
     t.string   "google_site_id"
     t.integer  "shop_type"
     t.string   "shop_url"
-    t.string   "currency",       limit: 4, default: "USD"
-    t.boolean  "deleted",                  default: false
+    t.string   "currency",        limit: 4, default: "USD"
+    t.boolean  "deleted",                   default: false
+    t.datetime "data_updated_at"
   end
 
   add_index "projects", ["slug"], name: "index_projects_on_slug", unique: true, using: :btree
