@@ -84,7 +84,7 @@ check_options()
 
 # Request URL
 if options.env is 'staging'
-  host = 'http://dev-dyn2.onomnenado.ru/'
+  host = 'http://dev-dyn2.robo-t.ru/'
 else if options.env is 'development'
   host = 'http://localhost:3000/'
 

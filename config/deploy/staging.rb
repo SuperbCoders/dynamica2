@@ -9,5 +9,5 @@ role :web, %w{w3dev-dyn2@ono.rrv.ru:2223}
 role :db,  %w{w3dev-dyn2@ono.rrv.ru:2223}
 
 set :application, 'dev-dynamica2'
-set :deploy_to, '/www/dev-dyn2.onomnenado.ru'
+set :deploy_to, '/www/dev-dyn2.robo-t.ru'
 set :branch, :staging
