@@ -20,7 +20,7 @@ asset 'bootstrap-select'
 asset 'bootstrap-datepicker'
 
 asset 'ng-droplet'
-asset 'angular'
+asset 'angular', '1.5.7'
 asset 'angular-cookies'
 asset 'angular-sanitize'
 asset 'angular-route'
