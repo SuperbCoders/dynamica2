@@ -4,7 +4,8 @@
 #= require lodash/lodash
 #= require select2
 #= require bootstrap.min.js
-#= require angular
+# require angular
+#= require ./angular_1_5/angular.min
 #= require angular-ui-router
 #= require d3
 

@@ -9,7 +9,8 @@
 #= require bootstrap-datepicker
 #= require bootstrap-select.min.js
 
-#= require angular
+# require angular
+#= require ./angular_1_5/angular.min
 #= require angular-ui-router
 #= require angular-resource
 #= require angular-utils-pagination

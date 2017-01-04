@@ -11,7 +11,7 @@
 #= require swiper
 #= require skrollr
 
-#= require angular
+#= require ./angular_1_5/angular.min
 #= require angular-ui-router
 
 #= require ./landing/app
