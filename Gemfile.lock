@@ -9,14 +9,14 @@ GIT
       rails-observers (~> 0.1.2)
 
 GIT
-  remote: git@bitbucket.org:ImmaculatePine/first_admin_panel.git
-  revision: c806d5884c0a4f3a960a957b6b687d5f89bf52c6
+  remote: https://bitbucket.org/ImmaculatePine/first_admin_panel.git
+  revision: 4a764b88afffa2c7ab7a970c42289207072e152b
   specs:
     first_admin_panel (0.0.1)
-      coffee-rails (~> 4.0.0)
+      coffee-rails (> 4.0.0)
       jquery-rails
       rails (> 4.0, < 5.0)
-      sass-rails (~> 4.0.3)
+      sass-rails (> 4.0.3)
       slim
 
 GEM
@@ -560,3 +560,6 @@ DEPENDENCIES
   unicorn
   whenever
   workflow
+
+BUNDLED WITH
+   1.11.2

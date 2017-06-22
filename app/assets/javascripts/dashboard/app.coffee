@@ -195,7 +195,7 @@
   $('.user-toggle.dropdown-toggle').on('click', (element) -> $('.user.dropdown').toggleClass('open'))
 
   $('html').on('click', (element) ->
-    element_id = element.toElement.id
+    element_id = element.target.id
 
     # Close user menu in header
     if element_id != 'user_dropdown' and $('.user.dropdown').hasClass('open')
@@ -297,11 +297,12 @@
     return
 
   $rootScope.reload_state_params = (range) ->
-    $stateParams.from = range.from
-    $stateParams.to = range.to
-    $state.transitionTo($state.current, $stateParams, {
-      reload: true, inherit: false, notify: false
-    })
+    if ($stateParams.from && $stateParams.to) && ($stateParams.from != range.from || $stateParams.to != range.to)
+      $stateParams.from = range.from
+      $stateParams.to = range.to
+      $state.transitionTo($state.current, $stateParams, {
+        reload: true, inherit: false, notify: false
+      })
 
   $rootScope.fit2Limits = (pckr, date, max) ->
     start = moment(pckr.datepicker('getStartDate'))

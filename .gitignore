@@ -33,3 +33,5 @@ config/shopify.yml
 # Ignore application configuration
 /config/application.yml
 app/workers/tmp/*
+
+*~

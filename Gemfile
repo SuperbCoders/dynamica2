@@ -124,7 +124,7 @@ source 'https://rails-assets.org' do
 end
 
 # Admin panel
-gem 'first_admin_panel', git: 'git@bitbucket.org:ImmaculatePine/first_admin_panel.git'
+gem 'first_admin_panel', git: 'https://bitbucket.org/ImmaculatePine/first_admin_panel.git'
 gem 'kaminari'
 gem 'bootstrap-kaminari-views'
 
