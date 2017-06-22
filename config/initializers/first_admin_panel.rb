@@ -1,1 +1,1 @@
-FirstAdminPanel.config.name = 'Dynamica'
+# FirstAdminPanel.config.name = 'Dynamica'
